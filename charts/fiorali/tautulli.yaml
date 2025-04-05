@@ -11,7 +11,7 @@ podLabels:
 image:
   repository: tautulli/tautulli
   pullPolicy: IfNotPresent
-  tag: v2.15.1@sha256:7755360de25d5b60aaf67a0aa4f1f71fb4fc12a1a668bb9ced09e9f4ab5239cd
+  tag: latest@sha256:7f26e6a5811c7a7f394c9f5be04c0dafafb2112c7d72ea8a68c569473422e6a4
 containerPorts:
 - containerPort: 8181
   name: tautulli
