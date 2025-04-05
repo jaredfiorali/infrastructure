@@ -4,22 +4,18 @@ replicaCount: 1
 selectorLabels:
   app: tautulli
 strategyType: Recreate
-
 podAnnotations:
   diun.enable: "true"
 podLabels:
   app: tautulli
-
 image:
   repository: tautulli/tautulli
   pullPolicy: IfNotPresent
-  tag: "@sha256:7755360de25d5b60aaf67a0aa4f1f71fb4fc12a1a668bb9ced09e9f4ab5239cd"
-
+  tag: latest@sha256:7f26e6a5811c7a7f394c9f5be04c0dafafb2112c7d72ea8a68c569473422e6a4
 containerPorts:
-  - containerPort: 8181
-    name: tautulli
-    protocol: TCP
-
+- containerPort: 8181
+  name: tautulli
+  protocol: TCP
 resources:
   limits:
     cpu: 1000m
@@ -27,7 +23,6 @@ resources:
   requests:
     cpu: 250m
     memory: 500Mi
-
 startupProbe:
   failureThreshold: 18
   httpGet:
@@ -52,11 +47,8 @@ readinessProbe:
   periodSeconds: 10
   successThreshold: 2
   timeoutSeconds: 5
-
 podSecurityContext: {}
-
 securityContext: {}
-
 service:
   type: ClusterIP
   ports:
@@ -64,22 +56,16 @@ service:
     port: 8181
     protocol: TCP
     targetPort: 8181
-
 ingress:
   enabled: true
   port: 8181
-
 volumeMounts:
-  - mountPath: /config
-    name: tautulli-persistent-storage
-
+- mountPath: /config
+  name: tautulli-persistent-storage
 volumes:
 - name: tautulli-persistent-storage
   persistentVolumeClaim:
     claimName: tautulli
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
