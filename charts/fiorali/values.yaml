@@ -16,6 +16,7 @@ image:
 
 containerPorts: []
 
+probes: {}
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}

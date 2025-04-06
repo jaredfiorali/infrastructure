@@ -52,29 +52,29 @@ spec:
           name: tautulli
           protocol: TCP
         startupProbe:
-          failureThreshold: 18
           httpGet:
             path: /status
             port: 8181
+          failureThreshold: 15
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 15
         livenessProbe:
-          failureThreshold: 18
           httpGet:
             path: /status
             port: 8181
-          periodSeconds: 10
+          failureThreshold: 3
+          periodSeconds: 30
           successThreshold: 1
-          timeoutSeconds: 15
+          timeoutSeconds: 5
         readinessProbe:
-          failureThreshold: 18
           httpGet:
             path: /status
             port: 8181
+          failureThreshold: 2
           periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 15
+          successThreshold: 2
+          timeoutSeconds: 5
         env:
         - name: PUID
           value: "1000"

@@ -23,13 +23,7 @@ resources:
   requests:
     cpu: 500m
     memory: 1Gi
-startupProbe:
-  tcpSocket:
-    port: tcp445
-livenessProbe:
-  tcpSocket:
-    port: tcp445
-readinessProbe:
+probes:
   tcpSocket:
     port: tcp445
 service:

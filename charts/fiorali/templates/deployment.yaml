@@ -27,35 +27,50 @@ spec:
           {{- toYaml .Values.resources | nindent 10 }}
         {{- with .Values.containerPorts }}
         ports:
-            {{- toYaml . | nindent 8 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
         startupProbe:
-          failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
+          {{- with .Values.probes.httpGet }}
           httpGet:
-            path: {{ .Values.startupProbe.httpGet.path }}
-            port: {{ .Values.startupProbe.httpGet.port }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.probes.tcpSocket }}
+          tcpSocket:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
           timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds | default 15 }}
         livenessProbe:
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
+          {{- with .Values.probes.httpGet }}
           httpGet:
-            path: {{ .Values.livenessProbe.httpGet.path }}
-            port: {{ .Values.livenessProbe.httpGet.port }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.probes.tcpSocket }}
+          tcpSocket:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
           successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
         readinessProbe:
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
+          {{- with .Values.probes.httpGet }}
           httpGet:
-            path: {{ .Values.readinessProbe.httpGet.path }}
-            port: {{ .Values.readinessProbe.httpGet.port }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.probes.tcpSocket }}
+          tcpSocket:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.readinessProbe.successThreshold | default 2 }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
         {{- with .Values.env }}
         env:
-            {{- toYaml . | nindent 8 }}
+          {{- toYaml . | nindent 8 }}
         {{- end }}
         {{- with .Values.volumeMounts }}
         volumeMounts:

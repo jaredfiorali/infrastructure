@@ -16,15 +16,7 @@ resources:
   requests:
     cpu: 250m
     memory: 500Mi
-startupProbe:
-  httpGet:
-    path: /status
-    port: 8181
-livenessProbe:
-  httpGet:
-    path: /status
-    port: 8181
-readinessProbe:
+probes:
   httpGet:
     path: /status
     port: 8181
