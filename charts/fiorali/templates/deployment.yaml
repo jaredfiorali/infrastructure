@@ -24,7 +24,9 @@ spec:
       - name: {{ .Values.name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+        {{- if .Values.hostNetwork }}
         hostNetwork: {{ .Values.hostNetwork | default false }}
+        {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         {{- with .Values.containerPorts }}
