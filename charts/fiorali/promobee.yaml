@@ -31,7 +31,8 @@ service:
     targetPort: 8080
 command:
   enabled: true
-  exec: "/bin/sh -c mkdir -p /opt/promobee && cp /tmp/promobee.store /opt/promobee/promobee.store && ./promobee"
+  exec: "/bin/sh"
+  args: "-c mkdir -p /opt/promobee && cp /tmp/promobee.store /opt/promobee/promobee.store && ./promobee"
 env:
 - name: PROMOBEE_API_KEY
   valueFrom:
