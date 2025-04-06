@@ -34,7 +34,9 @@ podSecurityContext: {}
 
 securityContext: {}
 
-command: {}
+command:
+  enabled: false
+  exec: {}
 
 env:
   - name: PUID
