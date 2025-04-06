@@ -1,0 +1,40 @@
+name: influxdb
+namespace: monitoring
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: influxdb
+  tag: latest@sha256:e20505e98b485b5d764937ded954ef12d7f0888e5c36c4955747ef850c2b9f8b
+containerPorts:
+- containerPort: 8086
+  name: influxdb
+  protocol: TCP
+resources:
+  limits:
+    cpu: '1'
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+probes:
+  tcpSocket:
+    port: 8086
+service:
+  enabled: true
+  ports:
+  - name: influxdb
+    port: 8086
+    protocol: TCP
+    targetPort: 8086
+ingress:
+  enabled: true
+  port: 8086
+volumeMounts:
+- name: influxdb-storage
+  mountPath: /var/lib/influxdb2
+volumes:
+- name: influxdb-storage
+  persistentVolumeClaim:
+    claimName: influxdb
