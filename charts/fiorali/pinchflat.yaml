@@ -1,0 +1,58 @@
+name: pinchflat
+namespace: downloader
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: keglin/pinchflat
+  tag: latest@sha256:06e20be2ad935f1ee2b527f99d1492086d7b82713739abf016e46632992079ec
+containerPorts:
+- containerPort: 8945
+  name: pinchflat
+  protocol: TCP
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+probes:
+  httpGet:
+    path: /
+    port: pinchflat
+podSecurityContext: {}
+securityContext: {}
+service:
+  enabled: true
+  ports:
+  - name: pinchflat
+    port: 8945
+    protocol: TCP
+    targetPort: 8945
+env:
+  - name: TZ
+    value: "America/Toronto"
+  - name: LOG_LEVEL
+    value: "info"
+  - name: ENABLE_PROMETHEUS
+    value: "true"
+ingress:
+  enabled: true
+  port: 8945
+volumeMounts:
+  - name: pinchflat-persistent-storage
+    mountPath: /config
+  - name: media-youtube
+    mountPath: /downloads
+volumes:
+  - name: pinchflat-persistent-storage
+    persistentVolumeClaim:
+      claimName: pinchflat
+  - name: media-youtube
+    persistentVolumeClaim:
+      claimName: media-youtube
+nodeSelector: {}
+tolerations: []
+affinity: {}
