@@ -1,0 +1,86 @@
+name: emulatorjs
+namespace: emulatorjs
+replicaCount: 1
+selectorLabels:
+  app: emulatorjs
+strategyType: Recreate
+podAnnotations:
+  diun.enable: "true"
+podLabels:
+  app: emulatorjs
+image:
+  repository: ghcr.io/linuxserver/emulatorjs
+  pullPolicy: IfNotPresent
+  tag: latest@sha256:5a19e02c49dc8464c667044ff0ca0bf3a864aac7ed373683c9ab0e5d00388819
+containerPorts:
+- containerPort: 80
+  name: emulatorjs
+  protocol: TCP
+- containerPort: 3000
+  name: management
+  protocol: TCP
+resources:
+  limits:
+    cpu: 2000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+startupProbe:
+  failureThreshold: 18
+  httpGet:
+    path: /management
+    port: 80
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+livenessProbe:
+  failureThreshold: 3
+  httpGet:
+    path: /management
+    port: 80
+  periodSeconds: 30
+  successThreshold: 1
+  timeoutSeconds: 5
+readinessProbe:
+  failureThreshold: 2
+  httpGet:
+    path: /management
+    port: 80
+  periodSeconds: 10
+  successThreshold: 2
+  timeoutSeconds: 5
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  ports:
+  - name: emulatorjs
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: management
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+env:
+  - name: DISABLE_IPFS
+    value: "true"
+ingress:
+  enabled: true
+  port: 80
+volumeMounts:
+- name: config
+  mountPath: /config
+- name: roms
+  mountPath: /data
+volumes:
+- name: config
+  persistentVolumeClaim:
+    claimName: emulatorjs
+- name: roms
+  persistentVolumeClaim:
+    claimName: roms
+nodeSelector: {}
+tolerations: []
+affinity: {}
