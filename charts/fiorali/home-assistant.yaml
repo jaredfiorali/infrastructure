@@ -15,7 +15,7 @@ containerPorts:
   name: homekit-udp
   protocol: UDP
 - containerPort: 21063
-  name: homekit-udp
+  name: homekit-tcp
   protocol: TCP
 resources:
   limits:
