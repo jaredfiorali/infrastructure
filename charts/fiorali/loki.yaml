@@ -1,0 +1,209 @@
+loki:
+  analytics:
+    reporting_enabled: false
+  auth_enabled: false
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  ingester:
+    chunk_encoding: snappy
+  querier:
+    # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
+    max_concurrent: 8
+    tail_max_duration: 24h
+  pattern_ingester:
+    enabled: true
+  limits_config:
+    allow_structured_metadata: true
+    volume_enabled: true
+    max_concurrent_tail_requests: 15
+
+chunksCache:
+  allocatedMemory: 2048
+
+deploymentMode: Distributed
+
+ingester:
+  replicas: 2 # To ensure data durability with replication
+  zoneAwareReplication:
+    enabled: false
+querier:
+  replicas: 3 # Improve query performance via parallelism
+  maxUnavailable: 2
+queryFrontend:
+  replicas: 2
+  maxUnavailable: 1
+queryScheduler:
+  replicas: 2
+distributor:
+  replicas: 3
+  maxUnavailable: 2
+compactor:
+  replicas: 1
+indexGateway:
+  replicas: 2
+  maxUnavailable: 1
+
+bloomPlanner:
+  replicas: 0
+bloomBuilder:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+singleBinary:
+  replicas: 0
+
+ # This exposes the Loki gateway so it can be written to and queried externaly
+gateway:
+  service:
+    type: ClusterIP
+
+
+# Enable minio for storage
+minio:
+  enabled: true
+
+# v2 Config
+# analytics:
+#   reporting_enabled: false
+# auth_enabled: false
+# chunk_store_config:
+#   max_look_back_period: 0s
+# compactor:
+#   shared_store: filesystem
+#   working_directory: /data/loki/boltdb-shipper-compactor
+# ingester:
+#   chunk_block_size: 262144
+#   chunk_idle_period: 3m
+#   chunk_retain_period: 1m
+#   lifecycler:
+#     ring:
+#       replication_factor: 1
+#   max_transfer_retries: 0
+#   wal:
+#     dir: /data/loki/wal
+# limits_config:
+#   enforce_metric_name: false
+#   max_entries_limit_per_query: 5000
+#   reject_old_samples: true
+#   reject_old_samples_max_age: 168h
+#   max_concurrent_tail_requests: 15
+# memberlist:
+#   join_members:
+#   - 'loki-memberlist'
+# schema_config:
+#   configs:
+#   - from: "2020-10-24"
+#     index:
+#       period: 24h
+#       prefix: index_
+#     object_store: filesystem
+#     schema: v11
+#     store: boltdb-shipper
+# server:
+#   grpc_listen_port: 9095
+#   http_listen_port: 3100
+# storage_config:
+#   boltdb_shipper:
+#     active_index_directory: /data/loki/boltdb-shipper-active
+#     cache_location: /data/loki/boltdb-shipper-cache
+#     cache_ttl: 24h
+#     shared_store: filesystem
+#   filesystem:
+#     directory: /data/loki/chunks
+# table_manager:
+#   retention_deletes_enabled: false
+#   retention_period: 0s
+
+
+# v3 SingleBinaryConfig
+# loki:
+#   analytics:
+#     reporting_enabled: false
+#   auth_enabled: false
+#   commonConfig:
+#     replication_factor: 0
+#     path_prefix: /tmp/loki/common
+#   schemaConfig:
+#     configs:
+#       - from: "2024-04-01"
+#         store: tsdb
+#         object_store: filesystem
+#         schema: v13
+#         index:
+#           prefix: loki_index_
+#           period: 24h
+#   pattern_ingester:
+#       enabled: true
+#   limits_config:
+#     allow_structured_metadata: true
+#     volume_enabled: true
+#   ruler:
+#     enable_api: true
+#   storage:
+#     type: filesystem
+#   rulerConfig:
+#     storage:
+#       type: local
+#   commonStorageConfig:
+#     type: filesystem
+
+# chunksCache:
+#   allocatedMemory: 4096
+
+# minio:
+#   enabled: false
+
+# deploymentMode: SingleBinary
+
+# singleBinary:
+#   replicas: 0
+#   persistence:
+#     enabled: false
+#   extraVolumeMounts:
+#     - name: loki
+#       mountPath: /var/loki
+#   extraVolumes:
+#     - name: loki
+#       emptyDir: {}
+
+# # Zero out replica counts of other deployment modes
+# backend:
+#   replicas: 0
+# read:
+#   replicas: 0
+# write:
+#   replicas: 0
+
+# ingester:
+#   replicas: 0
+# querier:
+#   replicas: 0
+# queryFrontend:
+#   replicas: 0
+# queryScheduler:
+#   replicas: 0
+# distributor:
+#   replicas: 0
+# compactor:
+#   replicas: 0
+# indexGateway:
+#   replicas: 0
+# bloomCompactor:
+#   replicas: 0
+# bloomGateway:
+#   replicas: 0
