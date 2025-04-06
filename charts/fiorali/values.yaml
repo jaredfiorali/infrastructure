@@ -66,5 +66,10 @@ ingress:
   enabled: false
   port: ""
 
+configMap:
+  enabled: false
+  name: ""
+  value: ""
+
 tests:
   enabled: false

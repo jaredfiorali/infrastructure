@@ -62,3 +62,50 @@ volumes:
   configMap:
     name: home-assistant-configmap
     defaultMode: 511
+configMap:
+  enabled: true
+  name: configuration.yaml
+  value: |
+    # Loads default set of integrations. Do not remove.
+    default_config:
+
+    # Load frontend themes from the themes folder
+    frontend:
+      themes: !include_dir_merge_named themes
+
+    automation: !include automations.yaml
+    script: !include scripts.yaml
+    scene: !include scenes.yaml
+
+    http:
+      use_x_forwarded_for: true
+      trusted_proxies:
+        - 0.0.0.0/0
+
+    alarm_control_panel:
+      - platform: manual
+        name: Security System
+        unique_id: alarm_system
+        code_arm_required: false
+        delay_time: 0
+        arming_time: 0
+        arming_states:
+          - armed_home
+          - armed_away
+          - armed_night
+        disarmed:
+          trigger_time: 0
+        armed_away:
+          arming_time: 30
+          delay_time: 30
+      - platform: manual
+        name: Kid Alarm
+        unique_id: kid_system
+        code_arm_required: false
+        delay_time: 0
+        arming_time: 0
+        trigger_time: 300
+        arming_states:
+          - armed_home
+          - armed_away
+          - armed_night
