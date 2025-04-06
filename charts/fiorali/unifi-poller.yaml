@@ -1,0 +1,49 @@
+name: unifi-poller
+namespace: monitoring
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: ghcr.io/unpoller/unpoller
+  tag: latest@sha256:9ba73b1793ef332ae9b4b719ef0fc09f231d6276bc7b721cbb47961ed7792961
+containerPorts:
+- containerPort: 9130
+  name: unifi-poller
+  protocol: TCP
+resources:
+  limits:
+    cpu: 2000m
+    memory: 250Mi
+  requests:
+    cpu: 500m
+    memory: 100Mi
+probes:
+  tcpSocket:
+    port: 9130
+service:
+  enabled: true
+  ports:
+  - name: unifi-poller
+    port: 9130
+    protocol: TCP
+    targetPort: 9130
+env:
+- name: UP_UNIFI_DEFAULT_URL
+  value: "https://192.168.24.1"
+- name: UP_UNIFI_DEFAULT_USER
+  value: "read-only"
+- name: UP_UNIFI_DEFAULT_PASS
+  value: "t9X3DLokVGFl"
+- name: UP_UNIFI_DEFAULT_SAVE_DPI
+  value: "true"
+- name: UP_INFLUXDB_DISABLE
+  value: "true"
+- name: UP_PROMETHEUS_DEAD_PORTS
+  value: "true"
+- name: unifi-poller_PORT
+  value: "9130"
+- name: unifi-poller_TOKEN_STORE
+  value: "/opt/unifi-poller/unifi-poller.store"
+- name: UP_LOKI_DISABLE
+  value: "true"
