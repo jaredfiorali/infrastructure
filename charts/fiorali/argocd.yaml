@@ -1,5 +1,5 @@
 name: argo
-namespace: argo
+namespace: argocd
 deployment:
   enabled: false
 service:
