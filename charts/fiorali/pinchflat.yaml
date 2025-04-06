@@ -21,7 +21,7 @@ resources:
 probes:
   httpGet:
     path: /
-    port: pinchflat
+    port: 8945
 podSecurityContext: {}
 securityContext: {}
 service:

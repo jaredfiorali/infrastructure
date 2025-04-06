@@ -1,0 +1,41 @@
+name: prowlarr
+namespace: downloader
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: linuxserver/prowlarr
+  tag: latest@sha256:18e9801e4509e45873c1adb03adf0bf718743ff5147e19b4cdf7626f8bd2f752
+containerPorts:
+- containerPort: 9696
+  name: prowlarr
+  protocol: TCP
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+probes:
+  httpGet:
+    path: /system/status
+    port: 9696
+service:
+  enabled: true
+  ports:
+  - name: prowlarr
+    port: 9696
+    protocol: TCP
+    targetPort: 9696
+ingress:
+  enabled: true
+  port: 9696
+volumeMounts:
+- name: prowlarr-persistent-storage
+  mountPath: /config
+volumes:
+- name: prowlarr-persistent-storage
+  persistentVolumeClaim:
+    claimName: prowlarr
