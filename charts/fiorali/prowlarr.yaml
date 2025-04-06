@@ -6,7 +6,7 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: linuxserver/prowlarr
-  tag: latest@sha256:18e9801e4509e45873c1adb03adf0bf718743ff5147e19b4cdf7626f8bd2f752
+  tag: latest@sha256:81fb4868e9340f807d91a17012e467a274f7bfb86fe31190ad40c0723e2a22c5
 containerPorts:
 - containerPort: 9696
   name: prowlarr
