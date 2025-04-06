@@ -26,7 +26,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
         {{- if .Values.command.enabled }}
         command: [{{ .Values.command.exec | quote }}]
-        args: [{{ .Values.command.args | quote }}]
         {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}

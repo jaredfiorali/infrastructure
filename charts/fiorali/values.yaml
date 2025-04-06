@@ -37,7 +37,6 @@ securityContext: {}
 command:
   enabled: false
   exec: {}
-  args: {}
 
 env:
   - name: PUID
