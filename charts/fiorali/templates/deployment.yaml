@@ -33,7 +33,7 @@ spec:
           failureThreshold: {{ .Values.startupProbe.failureThreshold | default 18 }}
           httpGet:
             path: {{ .Values.startupProbe.httpGet.path }}
-            port: {{ .Values.startupProbe.httpGet.port | default .Values.name }}
+            port: {{ .Values.startupProbe.httpGet.port }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
           timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds | default 15 }}
@@ -41,7 +41,7 @@ spec:
           failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 18 }}
           httpGet:
             path: {{ .Values.livenessProbe.httpGet.path }}
-            port: {{ .Values.livenessProbe.httpGet.port | default .Values.name }}
+            port: {{ .Values.livenessProbe.httpGet.port }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 15 }}
@@ -49,7 +49,7 @@ spec:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 18 }}
           httpGet:
             path: {{ .Values.readinessProbe.httpGet.path }}
-            port: {{ .Values.readinessProbe.httpGet.port | default .Values.name }}
+            port: {{ .Values.readinessProbe.httpGet.port }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 15 }}

@@ -22,12 +22,15 @@ resources:
 startupProbe:
   httpGet:
     path: /management
+    port: 3000
 livenessProbe:
   httpGet:
     path: /management
+    port: 3000
 readinessProbe:
   httpGet:
     path: /management
+    port: 3000
 podSecurityContext: {}
 securityContext: {}
 service:
