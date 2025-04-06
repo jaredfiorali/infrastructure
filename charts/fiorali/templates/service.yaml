@@ -4,8 +4,9 @@ metadata:
   name: {{ .Values.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     {{- toYaml .Values.service.ports | nindent 2 }}
   selector:
-    {{- toYaml .Values.selectorLabels | nindent 4 }}
+    app:
+      {{ .Values.name }}

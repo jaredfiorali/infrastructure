@@ -4,12 +4,9 @@
 name: ""
 namespace: ""
 replicaCount: 1
-selectorLabels: {}
 strategyType: Recreate
 
-podAnnotations:
-  diun.enable: "true"
-podLabels: {}
+podAnnotations: {}
 
 image:
   repository: ""

@@ -1,0 +1,110 @@
+---
+# Source: fiorali/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tautulli
+  namespace: tautulli
+spec:
+  type: ClusterIP
+  ports:
+  - name: tautulli
+    port: 8181
+    protocol: TCP
+    targetPort: 8181
+  selector:
+    app:
+      tautulli
+---
+# Source: fiorali/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tautulli
+  namespace: tautulli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        diun.enable: "true"
+      labels:
+        app: tautulli
+    spec:
+      containers:
+      - name: tautulli
+        image: tautulli/tautulli:latest@sha256:7f26e6a5811c7a7f394c9f5be04c0dafafb2112c7d72ea8a68c569473422e6a4
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 500Mi
+        ports:
+        - containerPort: 8181
+          name: tautulli
+          protocol: TCP
+        startupProbe:
+          failureThreshold: 18
+          httpGet:
+            path: /status
+            port: 8181
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+        livenessProbe:
+          failureThreshold: 18
+          httpGet:
+            path: /status
+            port: 8181
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+        readinessProbe:
+          failureThreshold: 18
+          httpGet:
+            path: /status
+            port: 8181
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: America/Toronto
+        volumeMounts:
+        - mountPath: /config
+          name: tautulli-persistent-storage
+      volumes:
+      - name: tautulli-persistent-storage
+        persistentVolumeClaim:
+          claimName: tautulli
+---
+# Source: fiorali/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tautulli-ingress
+  namespace: tautulli
+spec:
+  rules:
+  - host: tautulli.fiora.li
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: tautulli
+            port:
+              number: 8181

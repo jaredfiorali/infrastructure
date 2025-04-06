@@ -1,16 +1,9 @@
 name: tautulli
 namespace: tautulli
-replicaCount: 1
-selectorLabels:
-  app: tautulli
-strategyType: Recreate
 podAnnotations:
   diun.enable: "true"
-podLabels:
-  app: tautulli
 image:
   repository: tautulli/tautulli
-  pullPolicy: IfNotPresent
   tag: latest@sha256:7f26e6a5811c7a7f394c9f5be04c0dafafb2112c7d72ea8a68c569473422e6a4
 containerPorts:
 - containerPort: 8181
@@ -24,33 +17,20 @@ resources:
     cpu: 250m
     memory: 500Mi
 startupProbe:
-  failureThreshold: 18
   httpGet:
     path: /status
     port: 8181
-  periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 5
 livenessProbe:
-  failureThreshold: 3
   httpGet:
     path: /status
     port: 8181
-  periodSeconds: 30
-  successThreshold: 1
-  timeoutSeconds: 5
 readinessProbe:
-  failureThreshold: 2
   httpGet:
     path: /status
     port: 8181
-  periodSeconds: 10
-  successThreshold: 2
-  timeoutSeconds: 5
 podSecurityContext: {}
 securityContext: {}
 service:
-  type: ClusterIP
   ports:
   - name: tautulli
     port: 8181
