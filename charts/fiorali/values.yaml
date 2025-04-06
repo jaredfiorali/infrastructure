@@ -42,6 +42,8 @@ env:
   - name: TZ
     value: "America/Toronto"
 
+hostNetwork: false
+
 resources: {}
 
 volumes: []
