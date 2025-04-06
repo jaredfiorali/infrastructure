@@ -1,0 +1,44 @@
+name: scrypted
+namespace: scrypted
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: koush/scrypted
+  tag: latest@sha256:ac43254c4c05681e8bc57102e21178cc4500cb68d2550ab13467c96eb70f8ab8
+containerPorts:
+- containerPort: 11080
+  name: scrypted
+  protocol: TCP
+resources:
+  limits:
+    cpu: '3'
+    memory: 4Gi
+  requests:
+    cpu: '2'
+    memory: 3Gi
+probes:
+  tcpSocket:
+    port: 11080
+service:
+  enabled: true
+  ports:
+  - name: scrypted
+    port: 11080
+    protocol: TCP
+    targetPort: 11080
+ingress:
+  enabled: true
+  port: 11080
+env:
+- name: SCRYPTED_DISABLE_AUTHENTICATION
+  value: "true"
+volumeMounts:
+  - name: scrypted-persistent-storage
+    mountPath: /server/volume
+hostNetwork: true
+volumes:
+- name: scrypted-persistent-storage
+  persistentVolumeClaim:
+    claimName: scrypted
