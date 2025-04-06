@@ -21,15 +21,15 @@ resources:
     memory: 500Mi
 startupProbe:
   httpGet:
-    path: /management
+    path: /
     port: 3000
 livenessProbe:
   httpGet:
-    path: /management
+    path: /
     port: 3000
 readinessProbe:
   httpGet:
-    path: /management
+    path: /
     port: 3000
 podSecurityContext: {}
 securityContext: {}
