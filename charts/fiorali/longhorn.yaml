@@ -1,0 +1,14 @@
+name: longhorn
+namespace: longhorn-system
+deployment:
+  enabled: false
+service:
+  enabled: false
+ingress:
+  enabled: true
+  port: 80
+  serviceName: longhorn-frontend
+serviceMonitor:
+  enabled: true
+  appSelector: longhorn-manager
+  port: manager

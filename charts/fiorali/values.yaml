@@ -71,5 +71,11 @@ configMap:
   name: ""
   value: ""
 
+serviceMonitor:
+  enabled: false
+  appSelector: ""
+  namespaceSelector: ""
+  port: ""
+
 tests:
   enabled: false
