@@ -2,7 +2,45 @@
 
 A central place to hold Fiorali infrastructure definitions
 
-## ArgoCD Updater
+## ArgoCD
+
+### ArgoCD Applications
+
+To create a basic application, simply update and deploy this manifest in ArgoCD:
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: <service-name>
+spec:
+  destination:
+    namespace: downloader
+    server: https://kubernetes.default.svc
+  source:
+    path: ''
+    repoURL: https://jaredfiorali.github.io/infrastructure/
+    targetRevision: '*'
+    chart: fiorali
+    helm:
+      valueFiles:
+        - values.yaml
+        - <service-name>.yaml
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+```
+
+Where:
+
+- `<service-name>`: is the name of the service you intend to deploy
+
+### ArgoCD Updater
 
 To add an application's image to the argocd updater, add the following annotations to the ArgoCD Application:
 
