@@ -21,15 +21,7 @@ resources:
   requests:
     cpu: 500m
     memory: 500Mi
-startupProbe:
-  httpGet:
-    path: /
-    port: 3000
-livenessProbe:
-  httpGet:
-    path: /
-    port: 3000
-readinessProbe:
+probes:
   httpGet:
     path: /
     port: 3000
