@@ -1,0 +1,61 @@
+name: radarr
+namespace: downloader
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: linuxserver/radarr
+  tag: latest@sha256:23677e1cb09bd957796f4521748f0eff9eb65d883949c10442635eabe64b750a
+containerPorts:
+- containerPort: 7878
+  name: radarr
+  protocol: TCP
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+probes:
+  httpGet:
+    path: /system/status
+    port: 7878
+service:
+  enabled: true
+  ports:
+  - name: radarr
+    port: 7878
+    protocol: TCP
+    targetPort: 7878
+ingress:
+  enabled: true
+  port: 7878
+volumeMounts:
+  - name: radarr-persistent-storage
+    mountPath: /config
+  - name: media-bittorrent
+    mountPath: /media-bittorrent
+  - name: media-movies-0
+    mountPath: /media-movies-0
+  - name: media-movies-1
+    mountPath: /media-movies-1
+  - name: media-movies-2
+    mountPath: /media-movies-2
+volumes:
+  - name: radarr-persistent-storage
+    persistentVolumeClaim:
+      claimName: radarr
+  - name: media-bittorrent
+    persistentVolumeClaim:
+      claimName: media-bittorrent
+  - name: media-movies-0
+    persistentVolumeClaim:
+      claimName: media-movies-0
+  - name: media-movies-1
+    persistentVolumeClaim:
+      claimName: media-movies-1
+  - name: media-movies-2
+    persistentVolumeClaim:
+      claimName: media-movies-2
