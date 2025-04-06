@@ -1,0 +1,52 @@
+name: linkding
+namespace: linkding
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: sissbruecker/linkding
+  tag: latest@sha256:f663de3765a89c96af5381e38cfbf8a75cabbb257716653a52163000421ca45a
+containerPorts:
+- containerPort: 9090
+  name: linkding
+  protocol: TCP
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+probes:
+  httpGet:
+    path: /health
+    port: 9090
+service:
+  enabled: true
+  ports:
+  - name: linkding
+    port: 9090
+    protocol: TCP
+    targetPort: 9090
+env:
+- name: LD_SUPERUSER_NAME
+  valueFrom:
+    secretKeyRef:
+      name: linkding-credentials
+      key: username
+- name: LD_SUPERUSER_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: linkding-credentials
+      key: password
+ingress:
+  enabled: true
+  port: 9090
+volumeMounts:
+- name: linkding-persistent-storage
+  mountPath: /etc/linkding/data
+volumes:
+- name: linkding-persistent-storage
+  persistentVolumeClaim:
+    claimName: linkding
