@@ -1,0 +1,95 @@
+name: timemachine
+namespace: timemachine
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: mbentley/timemachine
+  tag: latest@sha256:9ead45913f63f15a6eef41f6beabf886eb7970b9206c47fe3b8aaf3bcdb30244
+containerPorts:
+- containerPort: 137
+  name: udp137
+  protocol: UDP
+- containerPort: 138
+  name: udp138
+  protocol: UDP
+- containerPort: 139
+  name: tcp139
+- containerPort: 445
+  name: tcp445
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+startupProbe:
+  tcpSocket:
+    port: tcp445
+livenessProbe:
+  tcpSocket:
+    port: tcp445
+readinessProbe:
+  tcpSocket:
+    port: tcp445
+service:
+  ports:
+  - port: 139
+    name: tcp139
+    targetPort: 139
+  - port: 445
+    name: tcp445
+    targetPort: 445
+  type: LoadBalancer
+env:
+  - name: ADVERTISED_HOSTNAME
+    value: ""
+  - name: CUSTOM_SMB_CONF
+    value: "false"
+  - name: CUSTOM_USER
+    value: "false"
+  - name: DEBUG_LEVEL
+    value: "1"
+  - name: MIMIC_MODEL
+    value: "TimeCapsule8,119"
+  - name: EXTERNAL_CONF
+    value: ""
+  - name: HIDE_SHARES
+    value: "no"
+  - name: TM_USERNAME
+    value: "timemachine"
+  - name: TM_GROUPNAME
+    value: "timemachine"
+  - name: TM_UID
+    value: "817"
+  - name: TM_GID
+    value: "922"
+  - name: PASSWORD
+    value: "timemachine"
+  - name: SET_PERMISSIONS
+    value: "true"
+  - name: SHARE_NAME
+    value: "TimeMachine"
+  - name: SMB_INHERIT_PERMISSIONS
+    value: "no"
+  - name: SMB_NFS_ACES
+    value: "yes"
+  - name: SMB_METADATA
+    value: "stream"
+  - name: SMB_PORT
+    value: "445"
+  - name: SMB_VFS_OBJECTS
+    value: "acl_xattr fruit streams_xattr"
+  - name: VOLUME_SIZE_LIMIT
+    value: "0"
+  - name: WORKGROUP
+    value: "WORKGROUP"
+ingress:
+  enabled: false
+volumeMounts:
+  - name: timemachine-persistent-storage
+    mountPath: /opt/timemachine
+volumes:
+- name: timemachine-persistent-storage
+  persistentVolumeClaim:
+    claimName: timemachine
