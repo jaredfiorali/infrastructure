@@ -6,7 +6,7 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: homeassistant/home-assistant
-  tag: latest@sha256:5d510569a2ceaa2fa8f8a34b91bddd36f5f7f03e4cb23e942f245e4a5a98bbef
+  tag: latest@sha256:eecdfc57236ac9cfd9f296b61ae0c8ff65b8e483346e0f15ee14a75a3aa81efa
 containerPorts:
 - containerPort: 8123
   name: home-assistant
@@ -61,4 +61,4 @@ volumes:
 - name: home-assistant-configmap
   configMap:
     name: home-assistant-configmap
-    defaultMode: 0777
+    defaultMode: 511
