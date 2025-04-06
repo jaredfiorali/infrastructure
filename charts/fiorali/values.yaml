@@ -58,6 +58,7 @@ service:
   enabled: true
   type: ClusterIP
   ports: []
+  externalTrafficPolicy: ""
 
 ingress:
   enabled: false

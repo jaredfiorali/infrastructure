@@ -1,0 +1,134 @@
+name: plex
+namespace: downloader
+deployment:
+  enabled: true
+podAnnotations:
+  diun.enable: "true"
+image:
+  repository: plexinc/pms-docker
+  tag: latest@sha256:b3a376a04fa1912af17a61755089ad2324502fe1b2f8bbf042eab31afe36fc25
+containerPorts:
+- containerPort: 32400
+  name: plex
+  protocol: TCP
+resources:
+  limits:
+    cpu: 3000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+probes:
+  httpGet:
+    path: /identity
+    port: 32400
+service:
+  enabled: true
+  ports:
+  - name: plex
+    port: 32400
+    protocol: TCP
+    targetPort: 32400
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+env:
+  - name: TZ
+    value: "America/Toronto"
+  - name: ADVERTISE_IP
+    value: "http://192.168.20.10:32400/"
+  # - name: PLEX_CLAIM
+  #   value: "claim-X51fSrBNyfpF4TgeXTkR" # Taken from: https://www.plex.tv/claim/
+ingress:
+  enabled: true
+  port: 32400
+volumeMounts:
+  - name: plex-persistent-storage
+    mountPath: /config
+    subPath: config
+  - name: media-movies-0
+    mountPath: /media-movies-0
+    readOnly: true
+  - name: media-movies-1
+    mountPath: /media-movies-1
+    readOnly: true
+  - name: media-movies-2
+    mountPath: /media-movies-2
+    readOnly: true
+  - name: media-tv-0
+    mountPath: /media-tv-0
+    readOnly: true
+  - name: media-tv-1
+    mountPath: /media-tv-1
+    readOnly: true
+  - name: media-tv-2
+    mountPath: /media-tv-2
+    readOnly: true
+  - name: media-tv-4
+    mountPath: /media-tv-4
+    readOnly: true
+  - name: media-tv-5
+    mountPath: /media-tv-5
+    readOnly: true
+  - name: media-tv-6
+    mountPath: /media-tv-6
+    readOnly: true
+  - name: media-tv-7
+    mountPath: /media-tv-7
+    readOnly: true
+  - name: media-tv-8
+    mountPath: /media-tv-8
+    readOnly: true
+  - name: media-workout-0
+    mountPath: /media-workout-0
+    readOnly: true
+  - name: media-youtube
+    mountPath: /media-youtube
+    readOnly: true
+  - name: phototranscoder-cache
+    mountPath: "/config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder"
+volumes:
+  - name: plex-persistent-storage
+    persistentVolumeClaim:
+      claimName: plex
+  - name: media-movies-0
+    persistentVolumeClaim:
+      claimName: media-movies-0
+  - name: media-movies-1
+    persistentVolumeClaim:
+      claimName: media-movies-1
+  - name: media-movies-2
+    persistentVolumeClaim:
+      claimName: media-movies-2
+  - name: media-tv-0
+    persistentVolumeClaim:
+      claimName: media-tv-0
+  - name: media-tv-1
+    persistentVolumeClaim:
+      claimName: media-tv-1
+  - name: media-tv-2
+    persistentVolumeClaim:
+      claimName: media-tv-2
+  - name: media-tv-4
+    persistentVolumeClaim:
+      claimName: media-tv-4
+  - name: media-tv-5
+    persistentVolumeClaim:
+      claimName: media-tv-5
+  - name: media-tv-6
+    persistentVolumeClaim:
+      claimName: media-tv-6
+  - name: media-tv-7
+    persistentVolumeClaim:
+      claimName: media-tv-7
+  - name: media-tv-8
+    persistentVolumeClaim:
+      claimName: media-tv-8
+  - name: media-workout-0
+    persistentVolumeClaim:
+      claimName: media-workout-0
+  - name: media-youtube
+    persistentVolumeClaim:
+      claimName: media-youtube
+  - name: phototranscoder-cache
+    emptyDir:
+      sizeLimit: 2Gi
