@@ -12,10 +12,10 @@ To create a basic application, simply update and deploy this manifest in ArgoCD:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: linkding
+  name: <application>
 spec:
   destination:
-    namespace: linkding
+    namespace: <namespace>
     server: https://kubernetes.default.svc
   source:
     path: ''
@@ -25,7 +25,7 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-        - linkding.yaml
+        - <application>.yaml
   sources: []
   project: default
   syncPolicy:
@@ -38,7 +38,8 @@ spec:
 
 Where:
 
-- `<service-name>`: is the name of the service you intend to deploy
+- `<application>`: is the name of the service you intend to deploy
+- `<namespace>`: is the namespace that the application is assigned to
 
 ### ArgoCD Updater
 
