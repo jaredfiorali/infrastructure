@@ -20,7 +20,7 @@ resources:
     memory: 50Mi
 probes:
   httpGet:
-    name: speedtest
+    path: /
     port: 3000
 service:
   enabled: true
