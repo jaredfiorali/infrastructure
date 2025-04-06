@@ -12,10 +12,10 @@ containerPorts:
   name: home-assistant
   protocol: TCP
 - containerPort: 5353
-  name: home-assistant
+  name: home-assistant-udp
   protocol: UDP
 - containerPort: 21063
-  name: home-assistant
+  name: home-assistant-tcp
   protocol: TCP
 resources:
   limits:
