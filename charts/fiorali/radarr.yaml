@@ -6,14 +6,14 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: linuxserver/radarr
-  tag: latest@sha256:32235ce605d88a9d7dd881565286f358e657f6556b2c6ddc797c7ffbb717b432
+  tag: latest@sha256:fe049905ecdfaedf6f37698a3974261c1ef7e5bb165bed6c6d9616c7b9002a88
 containerPorts:
 - containerPort: 7878
   name: radarr
   protocol: TCP
 resources:
   limits:
-    cpu: '2'
+    cpu: "2"
     memory: 2Gi
   requests:
     cpu: 500m
