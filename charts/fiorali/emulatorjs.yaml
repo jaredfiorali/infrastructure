@@ -1,5 +1,7 @@
 name: emulatorjs
 namespace: emulatorjs
+deployment:
+  enabled: true
 podAnnotations:
   diun.enable: "true"
 image:
@@ -34,6 +36,7 @@ readinessProbe:
 podSecurityContext: {}
 securityContext: {}
 service:
+  enabled: true
   ports:
   - name: emulatorjs
     port: 80

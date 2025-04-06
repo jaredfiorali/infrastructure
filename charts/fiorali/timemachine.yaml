@@ -1,5 +1,7 @@
 name: timemachine
 namespace: timemachine
+deployment:
+  enabled: true
 podAnnotations:
   diun.enable: "true"
 image:
@@ -27,6 +29,7 @@ probes:
   tcpSocket:
     port: tcp445
 service:
+  enabled: true
   ports:
   - port: 139
     name: tcp139

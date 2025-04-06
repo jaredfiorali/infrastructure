@@ -1,6 +1,9 @@
 # Default values for fiorali.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+deployment:
+  enabled: true
+
 name: ""
 namespace: ""
 replicaCount: 1
@@ -16,7 +19,9 @@ image:
 
 containerPorts: []
 
-probes: {}
+probes:
+  httpGet: ""
+  tcpSocket: ""
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}
@@ -28,14 +33,6 @@ fullnameOverride: ""
 podSecurityContext: {}
 
 securityContext: {}
-
-service:
-  type: ClusterIP
-  ports: []
-
-ingress:
-  enabled: false
-  port: ""
 
 env:
   - name: PUID
@@ -56,6 +53,15 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+service:
+  enabled: true
+  type: ClusterIP
+  ports: []
+
+ingress:
+  enabled: false
+  port: ""
 
 tests:
   enabled: false

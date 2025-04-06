@@ -13,7 +13,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: {{ .Values.name }}
+            name: {{ .Values.ingress.serviceName | default .Values.name }}
             port:
               number: {{ .Values.ingress.port }}
 {{- end }}

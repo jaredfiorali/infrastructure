@@ -1,0 +1,10 @@
+name: argo
+namespace: argo
+deployment:
+  enabled: false
+service:
+  enabled: false
+ingress:
+  enabled: true
+  port: 80
+  serviceName: argocd-server

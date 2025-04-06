@@ -1,5 +1,7 @@
 name: tautulli
 namespace: tautulli
+deployment:
+  enabled: true
 podAnnotations:
   diun.enable: "true"
 image:
@@ -23,6 +25,7 @@ probes:
 podSecurityContext: {}
 securityContext: {}
 service:
+  enabled: true
   ports:
   - name: tautulli
     port: 8181
