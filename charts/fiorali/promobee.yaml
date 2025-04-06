@@ -5,8 +5,8 @@ deployment:
 podAnnotations:
   diun.enable: "true"
 image:
-  repository: jaredfiorali/promobee:v1
-  tag: v1@sha256:06e20be2ad935f1ee2b527f99d1492086d7b82713739abf016e46632992079ec
+  repository: jaredfiorali/promobee
+  tag: v1@sha256:ec4a2de97943cc8265e13747fc66563be55696622f05d44bc0a1d2b16b25b623
 containerPorts:
 - containerPort: 8080
   name: promobee
