@@ -6,7 +6,7 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: linuxserver/sonarr
-  tag: latest@sha256:7fe49f99201de94a277c577dcce5ef8f1789ead1056c8cf758fac7bf4e601d16
+  tag: latest@sha256:7342ef32dd9cd6d13638765cfb8034edd4c80b0584f427159fd7f5ddeef5399d
 containerPorts:
 - containerPort: 8989
   name: sonarr
@@ -33,57 +33,57 @@ ingress:
   enabled: true
   port: 8989
 volumeMounts:
-  - name: sonarr-persistent-storage
-    mountPath: /config
-  - name: media-bittorrent
-    mountPath: /media-bittorrent
-  - name: media-tv-0
-    mountPath: /media-tv-0
-  - name: media-tv-1
-    mountPath: /media-tv-1
-  - name: media-tv-2
-    mountPath: /media-tv-2
-  - name: media-tv-4
-    mountPath: /media-tv-4
-  - name: media-tv-5
-    mountPath: /media-tv-5
-  - name: media-tv-6
-    mountPath: /media-tv-6
-  - name: media-tv-7
-    mountPath: /media-tv-7
-  - name: media-tv-8
-    mountPath: /media-tv-8
+- name: sonarr-persistent-storage
+  mountPath: /config
+- name: media-bittorrent
+  mountPath: /media-bittorrent
+- name: media-tv-0
+  mountPath: /media-tv-0
+- name: media-tv-1
+  mountPath: /media-tv-1
+- name: media-tv-2
+  mountPath: /media-tv-2
+- name: media-tv-4
+  mountPath: /media-tv-4
+- name: media-tv-5
+  mountPath: /media-tv-5
+- name: media-tv-6
+  mountPath: /media-tv-6
+- name: media-tv-7
+  mountPath: /media-tv-7
+- name: media-tv-8
+  mountPath: /media-tv-8
 volumes:
-  - name: sonarr-persistent-storage
-    persistentVolumeClaim:
-      claimName: sonarr
-  - name: media-bittorrent
-    persistentVolumeClaim:
-      claimName: media-bittorrent
-  - name: media-bittorrent
-    persistentVolumeClaim:
-      claimName: media-bittorrent
-  - name: media-tv-0
-    persistentVolumeClaim:
-      claimName: media-tv-0
-  - name: media-tv-1
-    persistentVolumeClaim:
-      claimName: media-tv-1
-  - name: media-tv-2
-    persistentVolumeClaim:
-      claimName: media-tv-2
-  - name: media-tv-4
-    persistentVolumeClaim:
-      claimName: media-tv-4
-  - name: media-tv-5
-    persistentVolumeClaim:
-      claimName: media-tv-5
-  - name: media-tv-6
-    persistentVolumeClaim:
-      claimName: media-tv-6
-  - name: media-tv-7
-    persistentVolumeClaim:
-      claimName: media-tv-7
-  - name: media-tv-8
-    persistentVolumeClaim:
-      claimName: media-tv-8
+- name: sonarr-persistent-storage
+  persistentVolumeClaim:
+    claimName: sonarr
+- name: media-bittorrent
+  persistentVolumeClaim:
+    claimName: media-bittorrent
+- name: media-bittorrent
+  persistentVolumeClaim:
+    claimName: media-bittorrent
+- name: media-tv-0
+  persistentVolumeClaim:
+    claimName: media-tv-0
+- name: media-tv-1
+  persistentVolumeClaim:
+    claimName: media-tv-1
+- name: media-tv-2
+  persistentVolumeClaim:
+    claimName: media-tv-2
+- name: media-tv-4
+  persistentVolumeClaim:
+    claimName: media-tv-4
+- name: media-tv-5
+  persistentVolumeClaim:
+    claimName: media-tv-5
+- name: media-tv-6
+  persistentVolumeClaim:
+    claimName: media-tv-6
+- name: media-tv-7
+  persistentVolumeClaim:
+    claimName: media-tv-7
+- name: media-tv-8
+  persistentVolumeClaim:
+    claimName: media-tv-8
