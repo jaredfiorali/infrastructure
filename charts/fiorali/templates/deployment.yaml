@@ -25,7 +25,7 @@ spec:
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
         {{- if .Values.command.enabled }}
-        command: [{{ .Values.command.exec | quote }}]
+        command: {{- toYaml .Values.command.exec | nindent 10 }}
         {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
