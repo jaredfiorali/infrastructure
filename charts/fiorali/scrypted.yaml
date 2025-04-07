@@ -6,17 +6,17 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: koush/scrypted
-  tag: latest@sha256:ac43254c4c05681e8bc57102e21178cc4500cb68d2550ab13467c96eb70f8ab8
+  tag: latest@sha256:602d001ee8c1e31a22f4addb700e24d8133a8d7efef3493d6249a2e241f22b04
 containerPorts:
 - containerPort: 11080
   name: scrypted
   protocol: TCP
 resources:
   limits:
-    cpu: '3'
+    cpu: "3"
     memory: 4Gi
   requests:
-    cpu: '2'
+    cpu: "2"
     memory: 3Gi
 probes:
   tcpSocket:
@@ -35,8 +35,8 @@ env:
 - name: SCRYPTED_DISABLE_AUTHENTICATION
   value: "true"
 volumeMounts:
-  - name: scrypted-persistent-storage
-    mountPath: /server/volume
+- name: scrypted-persistent-storage
+  mountPath: /server/volume
 hostNetwork: true
 volumes:
 - name: scrypted-persistent-storage
