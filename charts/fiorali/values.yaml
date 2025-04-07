@@ -10,6 +10,7 @@ replicaCount: 1
 strategyType: Recreate
 
 podAnnotations: {}
+podLabels: {}
 
 image:
   repository: ""

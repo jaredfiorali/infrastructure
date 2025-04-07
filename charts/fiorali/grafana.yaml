@@ -24,6 +24,8 @@ probes:
     port: 3000
 podSecurityContext: {}
 securityContext: {}
+podLabels:
+  app.kubernetes.io/name: grafana
 service:
   enabled: true
   ports:
