@@ -38,7 +38,7 @@ service:
     targetPort: 3000
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "bin/rails server -p 3000 -b ::"]
+  exec: ["/bin/sh", "-c", "docker/web-entrypoint.sh bin/rails server -p 3000 -b ::"]
 env:
   RAILS_ENV: development
   REDIS_URL: redis://dawarich_redis:6379/0

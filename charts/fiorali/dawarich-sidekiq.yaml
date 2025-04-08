@@ -38,7 +38,7 @@ service:
     targetPort: 3000
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "sidekiq"]
+  exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
 env:
   RAILS_ENV: development
   REDIS_URL: redis://dawarich_redis:6379/0
