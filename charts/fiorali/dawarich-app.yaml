@@ -14,10 +14,10 @@ containerPorts:
   protocol: TCP
 resources:
   limits:
-    cpus: '1'
+    cpu: '1'
     memory: 2G
   requests:
-    cpus: 500m
+    cpu: 500m
     memory: 1G
 probes:
   httpGet:
