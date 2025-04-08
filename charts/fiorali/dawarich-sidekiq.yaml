@@ -54,7 +54,7 @@ env:
 - name: MIN_MINUTES_SPENT_IN_CITY
   value: '60'
 - name: APPLICATION_HOSTS
-  value: localhost
+  value: dawarich-app.fiora.li
 - name: TIME_ZONE
   value: America/Toronto
 - name: APPLICATION_PROTOCOL
