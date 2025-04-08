@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   rules:
-  - host: {{ .Values.name }}.fiora.li
+  - host: {{ .Values.ingress.name | default .Values.name }}.fiora.li
     http:
       paths:
       - pathType: Prefix
