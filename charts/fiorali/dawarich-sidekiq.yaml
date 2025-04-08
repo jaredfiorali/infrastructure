@@ -38,7 +38,7 @@ service:
     targetPort: 3000
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "docker/sidekiq-entrypoint.sh sidekiq"]
+  exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
 env:
 - name: RAILS_ENV
   value: development

@@ -38,7 +38,7 @@ service:
     targetPort: 3000
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "docker/web-entrypoint.sh bin/rails server -p 3000 -b ::"]
+  exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/rails server -p 3000 -b ::"]
 env:
 - name: RAILS_ENV
   value: development
