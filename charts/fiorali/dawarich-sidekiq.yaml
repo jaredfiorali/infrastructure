@@ -40,25 +40,38 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
 env:
-  RAILS_ENV: development
-  REDIS_URL: redis://dawarich_redis:6379/0
-  DATABASE_HOST: dawarich_db
-  DATABASE_USERNAME: postgres
-  DATABASE_PASSWORD: password
-  DATABASE_NAME: dawarich_development
-  MIN_MINUTES_SPENT_IN_CITY: 60
-  APPLICATION_HOSTS: localhost
-  TIME_ZONE: America/Toronto
-  APPLICATION_PROTOCOL: http
-  DISTANCE_UNIT: km
-  PROMETHEUS_EXPORTER_ENABLED: false
-  PROMETHEUS_EXPORTER_HOST: 0.0.0.0
-  PROMETHEUS_EXPORTER_PORT: 9394
-  ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
-  SELF_HOSTED: "true"
-ingress:
-  enabled: true
-  port: 3000
+- name: RAILS_ENV
+  value: development
+- name: REDIS_URL
+  value: redis://dawarich_redis:6379/0
+- name: DATABASE_HOST
+  value: dawarich_db
+- name: DATABASE_USERNAME
+  value: postgres
+- name: DATABASE_PASSWORD
+  value: password
+- name: DATABASE_NAME
+  value: dawarich_development
+- name: MIN_MINUTES_SPENT_IN_CITY
+  value: 60
+- name: APPLICATION_HOSTS
+  value: localhost
+- name: TIME_ZONE
+  value: America/Toronto
+- name: APPLICATION_PROTOCOL
+  value: http
+- name: DISTANCE_UNIT
+  value: km
+- name: PROMETHEUS_EXPORTER_ENABLED
+  value: false
+- name: PROMETHEUS_EXPORTER_HOST
+  value: 0.0.0.0
+- name: PROMETHEUS_EXPORTER_PORT
+  value: 9394
+- name: ENABLE_TELEMETRY
+  value: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+- name: SELF_HOSTED
+  value: "true"
 nodeSelector: {}
 tolerations: []
 affinity: {}
