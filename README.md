@@ -12,10 +12,10 @@ To create a basic application, simply update and deploy this manifest in ArgoCD:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dawarich
+  name: <application>
 spec:
   destination:
-    namespace: dawarich
+    namespace: <namespace>
     server: https://kubernetes.default.svc
   source:
     path: ''
@@ -25,7 +25,7 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-        - dawarich.yaml
+        - <application>.yaml
   sources: []
   project: default
   syncPolicy:
@@ -38,7 +38,7 @@ spec:
 
 Where:
 
-- `dawarich`: is the name of the service you intend to deploy
+- `<application>`: is the name of the service you intend to deploy
 - `<namespace>`: is the namespace that the application is assigned to
 
 ### ArgoCD Updater
@@ -55,10 +55,10 @@ To add an application's image to the argocd updater, add the following annotatio
     argocd-image-updater.argoproj.io/myalias.helm.image-tag: image.tag
     argocd-image-updater.argoproj.io/myalias.update-strategy: digest
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: helmvalues:charts/fiorali/dawarich.yaml
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:charts/fiorali/<application>.yaml
 ```
 
 Where:
 
 - `<image-name>`: is the name of the docker image you intend to have updated
-- `dawarich`: is the name of the application you are working with
+- `<application>`: is the name of the application you are working with
