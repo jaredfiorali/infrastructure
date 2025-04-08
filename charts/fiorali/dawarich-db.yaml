@@ -3,8 +3,8 @@ namespace: dawarich
 deployment:
   enabled: true
 image:
-  repository: postgis/postgis
-  tag: 14-3.5-alpine@sha256:8d61fa37cb3b63ca333fb1d9b4cedf5e0b86c92943cb3cdd28ddd7dcfe0c16af
+  repository: ghcr.io/baosystems/postgis
+  tag: 14-3.5@sha256:086bd514b8239f2374f0cb693d99665ce4aead5702be8504fee0aa69e64ceb98
 containerPorts:
 - containerPort: 5432
   name: db
