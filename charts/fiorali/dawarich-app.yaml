@@ -74,6 +74,7 @@ env:
   value: 'true'
 ingress:
   enabled: true
+  serviceName: dawarich
   port: 3000
 nodeSelector: {}
 tolerations: []
