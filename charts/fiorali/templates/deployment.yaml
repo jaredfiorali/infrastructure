@@ -45,6 +45,10 @@ spec:
           tcpSocket:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.probes.exec }}
+          exec:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
           periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
           successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
@@ -58,6 +62,10 @@ spec:
           tcpSocket:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- with .Values.probes.exec }}
+          exec:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
           successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
@@ -69,6 +77,10 @@ spec:
           {{- end }}
           {{- with .Values.probes.tcpSocket }}
           tcpSocket:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.probes.exec }}
+          exec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}

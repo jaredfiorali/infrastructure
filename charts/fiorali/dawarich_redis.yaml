@@ -1,0 +1,37 @@
+name: dawarich_redis
+namespace: dawarich
+deployment:
+  enabled: true
+image:
+  repository: redis
+  tag: 7.0-alpine@sha256:c9d92d840fd011c908f040592857c724ae6d877f2aba5c40ad963276507386b2
+containerPorts:
+- containerPort: 6379
+  name: dawarich_redis
+  protocol: TCP
+resources:
+  limits:
+    cpus: 500m
+    memory: 1G
+  requests:
+    cpus: 250m
+    memory: 500Mi
+probes:
+  exec:
+    command:
+      - sh
+      - -c
+      - redis-cli --raw incr ping
+podSecurityContext: {}
+securityContext: {}
+service:
+  enabled: true
+  ports:
+  - name: dawarich_redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+env: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

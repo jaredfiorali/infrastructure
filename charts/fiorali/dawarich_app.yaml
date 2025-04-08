@@ -1,0 +1,64 @@
+name: dawarich_app
+namespace: dawarich
+deployment:
+  enabled: true
+image:
+  repository: freikin/dawarich
+  tag: latest@sha256:bee3ddd092008d4e035ab0f8be0f1eff7ad7496767066e8e2738d59df301a692
+containerPorts:
+- containerPort: 3000
+  name: dawarich_app
+  protocol: TCP
+- containerPort: 9394
+  name: prometheus
+  protocol: TCP
+resources:
+  limits:
+    cpus: '1'
+    memory: 2G
+  requests:
+    cpus: 500m
+    memory: 1G
+probes:
+  httpGet:
+    path: /api/v1/health
+    port: 3000
+podSecurityContext: {}
+securityContext: {}
+service:
+  enabled: true
+  ports:
+  - name: dawarich_app
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: management
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+command:
+  enabled: true
+  exec: ["/bin/sh", "-c", "bin/rails server -p 3000 -b ::"]
+env:
+  RAILS_ENV: development
+  REDIS_URL: redis://dawarich_redis:6379/0
+  DATABASE_HOST: dawarich_db
+  DATABASE_USERNAME: postgres
+  DATABASE_PASSWORD: password
+  DATABASE_NAME: dawarich_development
+  MIN_MINUTES_SPENT_IN_CITY: 60
+  APPLICATION_HOSTS: localhost
+  TIME_ZONE: America/Toronto
+  APPLICATION_PROTOCOL: http
+  DISTANCE_UNIT: km
+  PROMETHEUS_EXPORTER_ENABLED: true
+  PROMETHEUS_EXPORTER_HOST: 0.0.0.0
+  PROMETHEUS_EXPORTER_PORT: 9394
+  ENABLE_TELEMETRY: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+  SELF_HOSTED: "true"
+ingress:
+  enabled: true
+  port: 3000
+nodeSelector: {}
+tolerations: []
+affinity: {}

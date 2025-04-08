@@ -23,6 +23,7 @@ containerPorts: []
 probes:
   httpGet: ""
   tcpSocket: ""
+  exec: ""
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}
