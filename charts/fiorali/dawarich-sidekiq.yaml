@@ -20,9 +20,8 @@ resources:
     cpu: 500m
     memory: 1G
 probes:
-  httpGet:
-    path: /api/v1/health
-    port: 3000
+  exec:
+    command: ["sh", "-c", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
 podSecurityContext: {}
 securityContext: {}
 service:
