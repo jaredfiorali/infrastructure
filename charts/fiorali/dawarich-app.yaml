@@ -55,7 +55,7 @@ env:
 - name: MIN_MINUTES_SPENT_IN_CITY
   value: '60'
 - name: APPLICATION_HOSTS
-  value: dawarich-app.fiora.li
+  value: dawarich.fiora.li
 - name: TIME_ZONE
   value: America/Toronto
 - name: APPLICATION_PROTOCOL
@@ -63,7 +63,7 @@ env:
 - name: DISTANCE_UNIT
   value: km
 - name: PROMETHEUS_EXPORTER_ENABLED
-  value: 'true'
+  value: 'false'
 - name: PROMETHEUS_EXPORTER_HOST
   value: '0.0.0.0'
 - name: PROMETHEUS_EXPORTER_PORT
