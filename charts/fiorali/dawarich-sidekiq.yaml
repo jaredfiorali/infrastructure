@@ -43,7 +43,7 @@ env:
 - name: RAILS_ENV
   value: development
 - name: REDIS_URL
-  value: redis://dawarich_redis:6379/0
+  value: 'redis://dawarich_redis:6379/0'
 - name: DATABASE_HOST
   value: dawarich_db
 - name: DATABASE_USERNAME
@@ -53,7 +53,7 @@ env:
 - name: DATABASE_NAME
   value: dawarich_development
 - name: MIN_MINUTES_SPENT_IN_CITY
-  value: 60
+  value: '60'
 - name: APPLICATION_HOSTS
   value: localhost
 - name: TIME_ZONE
@@ -63,15 +63,15 @@ env:
 - name: DISTANCE_UNIT
   value: km
 - name: PROMETHEUS_EXPORTER_ENABLED
-  value: false
+  value: 'false'
 - name: PROMETHEUS_EXPORTER_HOST
-  value: 0.0.0.0
+  value: '0.0.0.0'
 - name: PROMETHEUS_EXPORTER_PORT
-  value: 9394
+  value: '9394'
 - name: ENABLE_TELEMETRY
-  value: false # More on telemetry: https://dawarich.app/docs/tutorials/telemetry
+  value: 'false'
 - name: SELF_HOSTED
-  value: "true"
+  value: 'true'
 nodeSelector: {}
 tolerations: []
 affinity: {}
