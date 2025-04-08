@@ -6,7 +6,7 @@ podAnnotations:
   diun.enable: "true"
 image:
   repository: influxdb
-  tag: latest@sha256:9e555ba870e72b298db9edcadfa8a088715732e6be092dd9b7eac90119c17ccb
+  tag: latest@sha256:5abf7b1eb3839a7aa59ad8b0523503b25907bbfb7a4372ac542974e5a9a89e03
 containerPorts:
 - containerPort: 8086
   name: influxdb
