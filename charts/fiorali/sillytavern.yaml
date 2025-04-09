@@ -48,14 +48,14 @@ volumeMounts:
 - name: sillytavern-persistent-storage
   mountPath: /home/node/app/extensions
   subPath: data/extensions
-volumes:
-- name: sillytavern-persistent-storage
-  persistentVolumeClaim:
-    claimName: sillytavern
 - name: sillytavern-configmap
   mountPath: /home/node/app/config.yaml
   subPath: config.yaml
   readOnly: true
+volumes:
+- name: sillytavern-persistent-storage
+  persistentVolumeClaim:
+    claimName: sillytavern
 - name: sillytavern-configmap
   configMap:
     name: sillytavern-configmap
