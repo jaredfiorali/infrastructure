@@ -16,11 +16,11 @@ containerPorts:
   protocol: TCP
 resources:
   limits:
-    cpu: '2'
-    memory: 1Gi
+    cpu: '1'
+    memory: 500Mi
   requests:
     cpu: 500m
-    memory: 500Mi
+    memory: 250Mi
 probes:
   httpGet:
     path: /
