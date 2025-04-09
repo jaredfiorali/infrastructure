@@ -28,8 +28,10 @@ service:
     protocol: TCP
     targetPort: 8000
 env:
-  - NODE_ENV=production
-  - FORCE_COLOR=1
+  - name: NODE_ENV
+    value: production
+  - name: FORCE_COLOR
+    value: '1'
 ingress:
   enabled: true
   port: 8000
