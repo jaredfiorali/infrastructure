@@ -37,16 +37,16 @@ ingress:
   port: 8000
 volumeMounts:
 - name: sillytavern-persistent-storage
-  mountPath: /data/config
+  mountPath: /home/node/app/config
   subPath: data/config
 - name: sillytavern-persistent-storage
-  mountPath: /data/data
+  mountPath: /home/node/app/data
   subPath: data/data
 - name: sillytavern-persistent-storage
-  mountPath: /data/plugins
+  mountPath: /home/node/app/plugins
   subPath: data/plugins
 - name: sillytavern-persistent-storage
-  mountPath: /data/extensions
+  mountPath: /home/node/app/extensions
   subPath: data/extensions
 volumes:
 - name: sillytavern-persistent-storage
