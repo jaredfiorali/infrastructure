@@ -1,0 +1,52 @@
+name: sillytavern
+namespace: sillytavern
+deployment:
+  enabled: true
+image:
+  repository: ghcr.io/sillytavern/sillytavern
+  tag: latest
+containerPorts:
+- containerPort: 8000
+  name: sillytavern
+  protocol: TCP
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 500Mi
+probes:
+  httpGet:
+    path: /
+    port: 8000
+service:
+  enabled: true
+  ports:
+  - name: sillytavern
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+env:
+  - NODE_ENV=production
+  - FORCE_COLOR=1
+ingress:
+  enabled: true
+  port: 8000
+volumeMounts:
+- name: sillytavern-persistent-storage
+  mountPath: /data/config
+  subPath: data/config
+- name: sillytavern-persistent-storage
+  mountPath: /data/data
+  subPath: data/data
+- name: sillytavern-persistent-storage
+  mountPath: /data/plugins
+  subPath: data/plugins
+- name: sillytavern-persistent-storage
+  mountPath: /data/extensions
+  subPath: data/extensions
+volumes:
+- name: sillytavern-persistent-storage
+  persistentVolumeClaim:
+    claimName: sillytavern
