@@ -5,7 +5,9 @@ metadata:
   name: {{ .Values.name }}-netpol
   namespace: {{ .Values.namespace }}
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: {{ .Values.name }}
   ingress:
   - {}
   {{- if .Values.networkpolicy.internalOnly.enabled }}
