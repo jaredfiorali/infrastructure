@@ -85,3 +85,7 @@ serviceMonitor:
 
 tests:
   enabled: false
+
+networkpolicy:
+  internalOnly:
+    enabled: true
