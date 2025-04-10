@@ -29,3 +29,7 @@ service:
     port: 3000
     protocol: TCP
     targetPort: 3000
+networkpolicy:
+  enabled: true
+  internalOnly:
+    enabled: true

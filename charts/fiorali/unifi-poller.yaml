@@ -47,3 +47,7 @@ env:
   value: "/opt/unifi-poller/unifi-poller.store"
 - name: UP_LOKI_DISABLE
   value: "true"
+networkpolicy:
+  enabled: true
+  internalOnly:
+    enabled: true

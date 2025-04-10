@@ -57,6 +57,10 @@ volumes:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+networkpolicy:
+  enabled: true
+  internalOnly:
+    enabled: true
 configMap:
   enabled: true
   name: grafana.ini
