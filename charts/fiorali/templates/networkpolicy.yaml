@@ -6,6 +6,8 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   podSelector: {}
+  ingress:
+  - {}
   {{- if .Values.networkpolicy.internalOnly.enabled }}
   egress:
   - to:
