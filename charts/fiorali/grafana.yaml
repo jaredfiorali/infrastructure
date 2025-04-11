@@ -57,7 +57,11 @@ volumes:
 nodeSelector: {}
 tolerations: []
 affinity: {}
-
+networkpolicy:
+  egress:
+    namespaces:
+      - monitoring
+      - loki
 configMap:
   enabled: true
   name: grafana.ini

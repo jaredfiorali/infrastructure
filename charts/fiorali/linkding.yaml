@@ -51,10 +51,10 @@ volumes:
   persistentVolumeClaim:
     claimName: linkding
 networkpolicy:
-  enabled: true
   ingress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: false
+    internal: true
   egress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: false
+    internal: false
+    internet: true

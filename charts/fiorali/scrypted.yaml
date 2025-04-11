@@ -43,10 +43,7 @@ volumes:
   persistentVolumeClaim:
     claimName: scrypted
 networkpolicy:
-  enabled: true
   ingress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: true
   egress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: true

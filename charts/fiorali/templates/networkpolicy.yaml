@@ -1,4 +1,3 @@
-{{- if .Values.networkpolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -9,25 +8,87 @@ spec:
     matchLabels:
       app: {{ .Values.name }}
   ingress:
+  {{- if .Values.networkpolicy.ingress.allowAll }}
   - {}
-  egress:
-  {{- if .Values.networkpolicy.egress.internalOnly }}
-  - to:
-    - ipBlock:
-        cidr: 192.168.10.0/24 # IOT devices
-  - to:
-    - ipBlock:
-        cidr: 192.168.15.0/24 # Secure devices
-  - to:
-    - ipBlock:
-        cidr: 192.168.20.0/24 # Servers
-  - to:
-    - ipBlock:
-        cidr: 192.168.24.0/24 # Network Gear
+  {{- else }}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.namespace }}
+  {{- range $namespaces := .Values.networkpolicy.ingress.namespaces | }}
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ $namespaces }}
   {{- end }}
-  {{- if .Values.networkpolicy.egress.internetAccess }}
+  {{- if .Values.networkpolicy.ingress.internal }}
+  - from:
+    - ipBlock:
+        cidr: 10.0.0.0/8     # RFC1918 private network
+    - ipBlock:
+        cidr: 172.16.0.0/12  # RFC1918 private network
+    - ipBlock:
+        cidr: 192.168.0.0/16 # RFC1918 private network
+    - ipBlock:
+        cidr: 127.0.0.0/8    # Localhost
+    - ipBlock:
+        cidr: 169.254.0.0/16 # Link-local
+  {{- end }}
+  {{- if .Values.networkpolicy.ingress.internet }}
+  - from:
+    - ipBlock:
+        cidr: 0.0.0.0/0 # Allow internet
+        except:
+        - 10.0.0.0/8     # RFC1918 private network
+        - 172.16.0.0/12  # RFC1918 private network
+        - 192.168.0.0/16 # RFC1918 private network
+        - 127.0.0.0/8    # Localhost
+        - 169.254.0.0/16 # Link-local
+  {{- end }}
+  {{- end }}
+  egress:
+  {{- if .Values.networkpolicy.egress.allowAll }}
+  - {}
+  {{- else }}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ .Values.namespace }}
+  {{- range $namespaces := .Values.networkpolicy.egress.namespaces }}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: {{ $namespaces }}
+  {{- end }}
+  {{- if .Values.networkpolicy.egress.internal }}
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/8     # RFC1918 private network
+    - ipBlock:
+        cidr: 172.16.0.0/12  # RFC1918 private network
+    - ipBlock:
+        cidr: 192.168.0.0/16 # RFC1918 private network
+    - ipBlock:
+        cidr: 127.0.0.0/8    # Localhost
+    - ipBlock:
+        cidr: 169.254.0.0/16 # Link-local
+  {{- end }}
+  {{- if .Values.networkpolicy.egress.internet }}
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0 # Allow internet
+        except:
+        - 10.0.0.0/8     # RFC1918 private network
+        - 172.16.0.0/12  # RFC1918 private network
+        - 192.168.0.0/16 # RFC1918 private network
+        - 127.0.0.0/8    # Localhost
+        - 169.254.0.0/16 # Link-local
   {{- end }}
-{{- end }}
+  {{- end }}

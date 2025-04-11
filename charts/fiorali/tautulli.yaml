@@ -45,10 +45,13 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 networkpolicy:
-  enabled: true
   ingress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: false
+    internal: true
+    internet: false
   egress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: false
+    internal: false
+    internet: true
+    namespaces:
+      - downloader

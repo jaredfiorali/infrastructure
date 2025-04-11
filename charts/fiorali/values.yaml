@@ -87,10 +87,13 @@ tests:
   enabled: false
 
 networkpolicy:
-  enabled: true
   ingress:
-    internalOnly: false
-    internetAccess: true
+    allowAll: true # Temporary until I flesh out the ingress network policy
+    namespaces: []
+    internal: false
+    internetAccessOnly: false
   egress:
-    internalOnly: true
-    internetAccess: false
+    allowAll: false # Temporary until I flesh out the ingress network policy
+    namespaces: []
+    internal: true
+    internetAccessOnly: false
