@@ -5,5 +5,4 @@ deployment:
 service:
   enabled: false
 networkpolicy:
-  egress:
-    allowAll: true
+  enabled: false
