@@ -109,3 +109,11 @@ configMap:
           - armed_home
           - armed_away
           - armed_night
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

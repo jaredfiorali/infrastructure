@@ -87,5 +87,10 @@ tests:
   enabled: false
 
 networkpolicy:
-  internalOnly:
-    enabled: true
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: true
+    internetAccess: false

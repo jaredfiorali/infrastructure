@@ -90,7 +90,3 @@ volumes:
 - name: timemachine-persistent-storage
   persistentVolumeClaim:
     claimName: timemachine
-networkpolicy:
-  enabled: true
-  internalOnly:
-    enabled: true

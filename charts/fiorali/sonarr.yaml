@@ -87,3 +87,11 @@ volumes:
 - name: media-tv-8
   persistentVolumeClaim:
     claimName: media-tv-8
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

@@ -42,3 +42,11 @@ volumes:
 - name: scrypted-persistent-storage
   persistentVolumeClaim:
     claimName: scrypted
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

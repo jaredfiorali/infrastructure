@@ -10,10 +10,24 @@ spec:
       app: {{ .Values.name }}
   ingress:
   - {}
-  {{- if .Values.networkpolicy.internalOnly.enabled }}
   egress:
+  {{- if .Values.networkpolicy.egress.internalOnly }}
   - to:
     - ipBlock:
-        cidr: 192.168.15.0/19
+        cidr: 192.168.10.0/24 # IOT devices
+  - to:
+    - ipBlock:
+        cidr: 192.168.15.0/24 # Secure devices
+  - to:
+    - ipBlock:
+        cidr: 192.168.20.0/24 # Servers
+  - to:
+    - ipBlock:
+        cidr: 192.168.24.0/24 # Network Gear
+  {{- end }}
+  {{- if .Values.networkpolicy.egress.internetAccess }}
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0 # Allow internet
   {{- end }}
 {{- end }}

@@ -130,3 +130,11 @@ volumes:
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

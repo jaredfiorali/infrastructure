@@ -60,10 +60,7 @@ volumes:
   configMap:
     name: sillytavern-configmap
     defaultMode: 511
-networkpolicy:
-  enabled: true
-  internalOnly:
-    enabled: true
+
 configMap:
   enabled: true
   name: config.yaml

@@ -59,7 +59,3 @@ volumes:
 nodeSelector: {}
 tolerations: []
 affinity: {}
-networkpolicy:
-  enabled: true
-  internalOnly:
-    enabled: true

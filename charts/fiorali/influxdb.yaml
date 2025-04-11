@@ -38,7 +38,3 @@ volumes:
 - name: influxdb-storage
   persistentVolumeClaim:
     claimName: influxdb
-networkpolicy:
-  enabled: true
-  internalOnly:
-    enabled: true

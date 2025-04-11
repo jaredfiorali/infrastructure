@@ -56,3 +56,11 @@ volumes:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

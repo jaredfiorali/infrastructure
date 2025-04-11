@@ -59,3 +59,11 @@ volumes:
 - name: media-movies-2
   persistentVolumeClaim:
     claimName: media-movies-2
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true

@@ -50,3 +50,11 @@ volumes:
 - name: store
   secret:
     secretName: promobee-store
+networkpolicy:
+  enabled: true
+  ingress:
+    internalOnly: false
+    internetAccess: true
+  egress:
+    internalOnly: false
+    internetAccess: true
