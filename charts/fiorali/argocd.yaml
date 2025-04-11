@@ -8,3 +8,5 @@ ingress:
   enabled: true
   port: 80
   serviceName: argocd-server
+networkpolicy:
+  enabled: false

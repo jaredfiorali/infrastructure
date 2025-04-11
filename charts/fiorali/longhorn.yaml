@@ -12,3 +12,5 @@ serviceMonitor:
   enabled: true
   appSelector: longhorn-manager
   port: manager
+networkpolicy:
+  enabled: false

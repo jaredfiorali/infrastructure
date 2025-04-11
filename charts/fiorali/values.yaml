@@ -87,6 +87,7 @@ tests:
   enabled: false
 
 networkpolicy:
+  enabled: true
   ingress:
     allowAll: true # Temporary until I flesh out the ingress network policy
     namespaces: []
