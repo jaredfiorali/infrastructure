@@ -23,6 +23,10 @@ spec:
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.initContainers.enabled }}
+      initContainers:
+        {{- .Files.Get .Values.initContainers.file | nindent 6 }}
+      {{- end }}
       containers:
       - name: {{ .Values.name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
@@ -97,6 +101,14 @@ spec:
         {{- end }}
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork | default false }}
+      {{- end }}
+      {{- if .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig.nameservers }}
+      dnsConfig:
+        nameservers:
+          {{- toYaml .Values.dnsConfig.nameservers | nindent 8 }}
       {{- end }}
       {{- with .Values.volumes }}
       volumes:

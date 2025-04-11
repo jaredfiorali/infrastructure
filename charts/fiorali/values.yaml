@@ -62,6 +62,14 @@ tolerations: []
 
 affinity: {}
 
+initContainers:
+  enabled: false
+  file: ""
+
+dnsPolicy: ""
+dnsConfig:
+  nameservers: []
+
 service:
   enabled: true
   type: ClusterIP

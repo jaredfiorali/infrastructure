@@ -1,0 +1,56 @@
+name: transmission
+namespace: downloader
+deployment:
+  enabled: true
+image:
+  repository: linuxserver/transmission
+  tag: latest@sha256:b113477544d3bb89a656a2be9e46f9aaecff0e667c9fb797c1da50c8b4be317b
+containerPorts:
+- containerPort: 9091
+  name: transmission
+resources:
+  limits:
+    cpu: 1500m
+    memory: 2Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
+probes:
+  exec:
+    command:
+      - sh
+      - -c
+      - if [[ $(pgrep transmission | wc -l) -ne 1 ]]; then exit 1; fi
+service:
+  enabled: true
+  ports:
+  - port: 9091
+    name: transmission
+    targetPort: 9091
+ingress:
+  enabled: true
+  port: 9091
+volumeMounts:
+- name: media-bittorrent
+  mountPath: /media-bittorrent
+- name: transmission
+  mountPath: /config
+volumes:
+- name: media-bittorrent
+  persistentVolumeClaim:
+    claimName: media-bittorrent
+- name: transmission
+  persistentVolumeClaim:
+    claimName: transmission
+- name: port-forward
+  emptyDir: {}
+networkpolicy:
+  ingress:
+    internal: true
+initContainers:
+  enabled: true
+  file: "transmission-init.yaml"
+dnsPolicy: "None"
+dnsConfig:
+  nameservers:
+    - 127.0.0.1
