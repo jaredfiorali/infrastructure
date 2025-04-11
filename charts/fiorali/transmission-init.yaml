@@ -1,5 +1,5 @@
 - name: gluetun
-  image: qmcgaw/gluetun@sha256:183c74263a07f4c931979140ac99ff4fbc44dcb1ca5b055856ef580b0fafdf1c
+  image: qmcgaw/gluetun:latest@sha256:183c74263a07f4c931979140ac99ff4fbc44dcb1ca5b055856ef580b0fafdf1c
   resources:
     limits:
       cpu: 1500m
