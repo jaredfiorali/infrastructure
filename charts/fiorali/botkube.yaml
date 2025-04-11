@@ -1,0 +1,9 @@
+name: botkube
+namespace: botkube
+deployment:
+  enabled: false
+service:
+  enabled: false
+networkpolicy:
+  egress:
+    internet: true
