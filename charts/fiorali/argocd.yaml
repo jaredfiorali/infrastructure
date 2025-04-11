@@ -13,4 +13,4 @@ networkpolicy:
   ingress:
     internal: true
   egress:
-    internet: true
+    allowAll: true
