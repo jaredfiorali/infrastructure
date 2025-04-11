@@ -41,8 +41,6 @@ volumes:
     claimName: prowlarr
 networkpolicy:
   ingress:
-    allowAll: true
+    internal: true
   egress:
-    allowAll: false
-    internal: false
     internet: true

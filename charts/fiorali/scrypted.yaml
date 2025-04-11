@@ -44,6 +44,6 @@ volumes:
     claimName: scrypted
 networkpolicy:
   ingress:
-    allowAll: true
+    internal: true
   egress:
     allowAll: true

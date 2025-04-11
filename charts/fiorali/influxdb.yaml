@@ -38,3 +38,6 @@ volumes:
 - name: influxdb-storage
   persistentVolumeClaim:
     claimName: influxdb
+networkpolicy:
+  ingress:
+    internal: true

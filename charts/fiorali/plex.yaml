@@ -132,6 +132,6 @@ volumes:
     sizeLimit: 2Gi
 networkpolicy:
   ingress:
-    allowAll: true
+    internal: true
   egress:
-    allowAll: true
+    internet: true

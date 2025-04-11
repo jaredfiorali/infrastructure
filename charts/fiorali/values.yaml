@@ -21,9 +21,9 @@ image:
 containerPorts: []
 
 probes:
-  httpGet: ""
-  tcpSocket: ""
-  exec: ""
+  httpGet: {}
+  tcpSocket: {}
+  exec: {}
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}
@@ -41,12 +41,12 @@ command:
   exec: {}
 
 env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "America/Toronto"
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
 
 hostNetwork: false
 
@@ -89,12 +89,12 @@ tests:
 networkpolicy:
   enabled: true
   ingress:
-    allowAll: true # Temporary until I flesh out the ingress network policy
+    allowAll: false # Temporary until I flesh out the ingress network policy
     namespaces: []
     internal: false
-    internetAccessOnly: false
+    internet: false
   egress:
     allowAll: false # Temporary until I flesh out the ingress network policy
     namespaces: []
-    internal: true
-    internetAccessOnly: false
+    internal: false
+    internet: false

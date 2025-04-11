@@ -90,3 +90,6 @@ volumes:
 - name: timemachine-persistent-storage
   persistentVolumeClaim:
     claimName: timemachine
+networkpolicy:
+  ingress:
+    internal: true

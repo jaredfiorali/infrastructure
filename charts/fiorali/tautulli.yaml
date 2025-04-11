@@ -46,12 +46,8 @@ tolerations: []
 affinity: {}
 networkpolicy:
   ingress:
-    allowAll: false
     internal: true
-    internet: false
   egress:
-    allowAll: false
-    internal: false
     internet: true
     namespaces:
       - downloader

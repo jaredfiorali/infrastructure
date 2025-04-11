@@ -37,6 +37,6 @@ tolerations: []
 affinity: {}
 networkpolicy:
   ingress:
-    allowAll: true
+    internal: true
   egress:
     allowAll: true

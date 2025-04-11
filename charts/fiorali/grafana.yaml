@@ -58,6 +58,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 networkpolicy:
+  ingress:
+    internal: true
   egress:
     namespaces:
       - monitoring

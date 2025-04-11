@@ -60,7 +60,11 @@ volumes:
   configMap:
     name: sillytavern-configmap
     defaultMode: 511
-
+networkpolicy:
+  ingress:
+    internal: true
+  egress:
+    internal: true
 configMap:
   enabled: true
   name: config.yaml
