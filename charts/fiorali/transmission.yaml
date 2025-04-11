@@ -47,6 +47,8 @@ volumes:
 networkpolicy:
   ingress:
     internal: true
+  egress:
+    internet: true
 initContainers:
   enabled: true
   file: "transmission-init.yaml"
