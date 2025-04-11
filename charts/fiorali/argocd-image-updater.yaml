@@ -1,0 +1,9 @@
+name: argocd-image-updater
+namespace: argocd
+deployment:
+  enabled: false
+service:
+  enabled: false
+networkpolicy:
+  egress:
+    internet: true
