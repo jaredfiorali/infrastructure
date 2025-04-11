@@ -11,3 +11,5 @@ ingress:
 networkpolicy:
   ingress:
     internal: true
+  egress:
+    internet: true
