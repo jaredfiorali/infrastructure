@@ -1,0 +1,13 @@
+name: loki
+namespace: loki
+deployment:
+  enabled: false
+service:
+  enabled: false
+networkpolicy:
+  ingress:
+    internal: true
+    namespaces:
+      - monitoring
+  egress:
+    internal: true

@@ -50,3 +50,5 @@ env:
 networkpolicy:
   ingress:
     internal: true
+  egress:
+    internal: true
