@@ -9,6 +9,7 @@ ingress:
   port: 80
   serviceName: argocd-server
 networkpolicy:
+  podSelector: false
   ingress:
     internal: true
   egress:

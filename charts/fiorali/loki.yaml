@@ -5,6 +5,7 @@ deployment:
 service:
   enabled: false
 networkpolicy:
+  podSelector: false
   ingress:
     internal: true
     namespaces:

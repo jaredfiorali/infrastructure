@@ -13,6 +13,7 @@ serviceMonitor:
   appSelector: longhorn-manager
   port: manager
 networkpolicy:
+  podSelector: false
   ingress:
     internal: true
   egress:

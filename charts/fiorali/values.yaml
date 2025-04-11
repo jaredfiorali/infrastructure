@@ -96,6 +96,7 @@ tests:
 
 networkpolicy:
   enabled: true
+  podSelector: true
   ingress:
     allowAll: false # Temporary until I flesh out the ingress network policy
     namespaces: []
