@@ -6,4 +6,4 @@ service:
   enabled: false
 networkpolicy:
   egress:
-    internet: true
+    allowAll: true
