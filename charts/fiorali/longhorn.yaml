@@ -13,4 +13,7 @@ serviceMonitor:
   appSelector: longhorn-manager
   port: manager
 networkpolicy:
-  enabled: false
+  ingress:
+    internal: true
+  egress:
+    internet: true
