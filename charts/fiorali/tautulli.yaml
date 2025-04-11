@@ -2,8 +2,6 @@ name: tautulli
 namespace: tautulli
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: tautulli/tautulli
   tag: latest@sha256:7f26e6a5811c7a7f394c9f5be04c0dafafb2112c7d72ea8a68c569473422e6a4

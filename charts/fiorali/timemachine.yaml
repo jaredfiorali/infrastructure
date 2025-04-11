@@ -2,8 +2,6 @@ name: timemachine
 namespace: timemachine
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: mbentley/timemachine
   tag: latest@sha256:9ead45913f63f15a6eef41f6beabf886eb7970b9206c47fe3b8aaf3bcdb30244

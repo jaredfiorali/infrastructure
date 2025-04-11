@@ -2,8 +2,6 @@ name: influxdb
 namespace: monitoring
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: influxdb
   tag: latest@sha256:5abf7b1eb3839a7aa59ad8b0523503b25907bbfb7a4372ac542974e5a9a89e03

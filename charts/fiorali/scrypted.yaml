@@ -2,8 +2,6 @@ name: scrypted
 namespace: scrypted
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: koush/scrypted
   tag: lite@sha256:ac43254c4c05681e8bc57102e21178cc4500cb68d2550ab13467c96eb70f8ab8

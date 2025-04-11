@@ -2,8 +2,6 @@ name: plex
 namespace: downloader
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: plexinc/pms-docker
   tag: latest@sha256:a13f35ef4719603e65ce867df9056bf7f99993510b64aa7f91e94e4741482870

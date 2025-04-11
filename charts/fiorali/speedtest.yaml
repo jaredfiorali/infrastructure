@@ -2,8 +2,6 @@ name: speedtest
 namespace: speedtest
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: openspeedtest/latest
   tag: latest@sha256:1745e913f596fe98882b286a67751efdae74774e9caa742a4934bb056e8748d2

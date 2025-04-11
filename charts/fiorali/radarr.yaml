@@ -2,8 +2,6 @@ name: radarr
 namespace: downloader
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: linuxserver/radarr
   tag: latest@sha256:fe049905ecdfaedf6f37698a3974261c1ef7e5bb165bed6c6d9616c7b9002a88

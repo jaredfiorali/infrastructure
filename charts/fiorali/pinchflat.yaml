@@ -2,8 +2,6 @@ name: pinchflat
 namespace: downloader
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: keglin/pinchflat
   tag: latest@sha256:06e20be2ad935f1ee2b527f99d1492086d7b82713739abf016e46632992079ec

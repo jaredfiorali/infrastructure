@@ -2,8 +2,6 @@ name: unifi-poller
 namespace: monitoring
 deployment:
   enabled: true
-podAnnotations:
-  diun.enable: "true"
 image:
   repository: ghcr.io/unpoller/unpoller
   tag: latest@sha256:9ba73b1793ef332ae9b4b719ef0fc09f231d6276bc7b721cbb47961ed7792961
