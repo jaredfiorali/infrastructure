@@ -21,7 +21,7 @@ probes:
     command:
       - sh
       - -c
-      - if [[ $(pgrep Sonarr | wc -l) -ne 1 ]]; then exit 1; fi
+      - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
@@ -29,6 +29,12 @@ service:
     port: 8989
     protocol: TCP
     targetPort: 8989
+env:
+- name: API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-api-key
+      key: api-key
 ingress:
   enabled: true
   port: 8989
