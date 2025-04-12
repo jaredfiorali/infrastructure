@@ -18,8 +18,11 @@ resources:
     memory: 250Mi
 probes:
   httpGet:
-    path: /system/status
+    path: /api/v3/health
     port: 8989
+    httpHeaders:
+    - name: 'X-Api-Key'
+      value: '53937a3e68854b769df655384676d788'
 service:
   enabled: true
   ports:
