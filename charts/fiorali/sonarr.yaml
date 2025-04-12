@@ -12,17 +12,16 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 500Mi
+    memory: 1Gi
   requests:
     cpu: '1'
-    memory: 250Mi
+    memory: 500Mi
 probes:
-  httpGet:
-    path: /api/v3/health
-    port: 8989
-    httpHeaders:
-    - name: 'X-Api-Key'
-      value: '53937a3e68854b769df655384676d788'
+  exec:
+    command:
+      - sh
+      - -c
+      - if [[ $(pgrep Sonarr | wc -l) -ne 1 ]]; then exit 1; fi
 service:
   enabled: true
   ports:
