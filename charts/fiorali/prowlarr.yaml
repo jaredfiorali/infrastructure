@@ -21,7 +21,7 @@ probes:
     command:
       - sh
       - -c
-      - curl -f "http://localhost:9696/api/v3/health?apikey=$API_KEY" || exit 1
+      - curl -f "http://localhost:9696/api/v1/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
