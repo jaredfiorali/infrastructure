@@ -6,5 +6,7 @@ service:
   enabled: false
 networkpolicy:
   podSelector: false
+  ingress:
+    internal: true
   egress:
     allowAll: true
