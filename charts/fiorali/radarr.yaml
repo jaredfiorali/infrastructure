@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: linuxserver/radarr
-  tag: latest@sha256:fe049905ecdfaedf6f37698a3974261c1ef7e5bb165bed6c6d9616c7b9002a88
+  tag: latest@sha256:5ad8df1b0dc0bb0c2232a9278b85c3c230d82184415f83238b5969da8dc6a942
 containerPorts:
 - containerPort: 7878
   name: radarr
@@ -19,9 +19,9 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
+    - sh
+    - -c
+    - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
