@@ -17,9 +17,11 @@ resources:
     cpu: 250m
     memory: 250Mi
 probes:
-  httpGet:
-    path: /system/status
-    port: 9696
+  exec:
+    command:
+      - sh
+      - -c
+      - curl -f "http://localhost:9696/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
@@ -27,6 +29,12 @@ service:
     port: 9696
     protocol: TCP
     targetPort: 9696
+env:
+- name: API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-api-key
+      key: api-key
 ingress:
   enabled: true
   port: 9696

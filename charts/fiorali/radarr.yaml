@@ -17,9 +17,11 @@ resources:
     cpu: 500m
     memory: 250Mi
 probes:
-  httpGet:
-    path: /system/status
-    port: 7878
+  exec:
+    command:
+      - sh
+      - -c
+      - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
@@ -27,6 +29,12 @@ service:
     port: 7878
     protocol: TCP
     targetPort: 7878
+env:
+- name: API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: radarr-api-key
+      key: api-key
 ingress:
   enabled: true
   port: 7878
