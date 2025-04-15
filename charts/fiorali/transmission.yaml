@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: linuxserver/transmission
-  tag: latest@sha256:b113477544d3bb89a656a2be9e46f9aaecff0e667c9fb797c1da50c8b4be317b
+  tag: latest@sha256:8a7166930c889524e2fc7abb16671c253c1ca7d634d8bf88c6c04a15a1ed44bb
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -18,9 +18,9 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - if [[ $(pgrep transmission | wc -l) -ne 1 ]]; then exit 1; fi
+    - sh
+    - -c
+    - if [[ $(pgrep transmission | wc -l) -ne 1 ]]; then exit 1; fi
 service:
   enabled: true
   ports:
@@ -55,4 +55,4 @@ initContainers:
 dnsPolicy: "None"
 dnsConfig:
   nameservers:
-    - 127.0.0.1
+  - 127.0.0.1
