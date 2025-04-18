@@ -1,0 +1,17 @@
+{{- if .Values.prometheusRules.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: {{ .Values.name }}
+    role: alert-rules
+  name: {{ .Values.name }}-prometheus-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: {{ .Values.name }}.rules
+    {{- with .Values.prometheusRules.rules }}
+    rules:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+{{- end }}

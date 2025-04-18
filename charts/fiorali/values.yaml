@@ -107,3 +107,7 @@ networkpolicy:
     namespaces: []
     internal: false
     internet: false
+
+prometheusRules:
+  enabled: false
+  rules: []
