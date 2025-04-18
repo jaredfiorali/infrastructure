@@ -35,6 +35,12 @@ env:
     secretKeyRef:
       name: radarr-api-key
       key: api-key
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
 ingress:
   enabled: true
   port: 7878
