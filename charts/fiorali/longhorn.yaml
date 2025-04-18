@@ -14,6 +14,8 @@ networkpolicy:
     internal: true
   egress:
     internet: true
+namespaceChart:
+  enabled: true
 prometheusRules:
   enabled: true
   rules:

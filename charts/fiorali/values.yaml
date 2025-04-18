@@ -111,3 +111,6 @@ networkpolicy:
 prometheusRules:
   enabled: false
   rules: []
+
+namespaceChart:
+  enabled: false

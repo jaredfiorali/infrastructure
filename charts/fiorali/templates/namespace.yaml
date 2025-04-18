@@ -1,0 +1,12 @@
+{{- if .Values.namespaceChart.enabled -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    argocd.argoproj.io/instance: {{ .Values.name }}
+    kubernetes.io/metadata.name: {{ .Values.namespace }}
+  name: {{ .Values.namespace }}
+spec:
+  finalizers:
+    - kubernetes
+{{- end }}
