@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: linuxserver/sonarr
-  tag: latest@sha256:5c6e66c36fd0afe1323b3478b2289b5bff6e9ff17ee2c315feee29316ddb9140
+  tag: latest@sha256:cefa1c97ba8f5db60c1c89d04015ead764d3b850b4fbdc5784bdde2a02d72350
 containerPorts:
 - containerPort: 8989
   name: sonarr
@@ -19,9 +19,9 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
+    - sh
+    - -c
+    - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
