@@ -96,4 +96,4 @@ affinity: {}
 networkpolicy:
   podSelector: false
   ingress:
-    internet: true
+    allowAll: true
