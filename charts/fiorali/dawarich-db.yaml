@@ -31,6 +31,17 @@ service:
     port: 5432
     protocol: TCP
     targetPort: 5432
+volumeMounts:
+- name: dawarich-persistent-storage
+  mountPath: /var/lib/postgresql/data
+  subPath: db_data
+- name: dawarich-persistent-storage
+  mountPath: /var/shared
+  subPath: shared
+volumes:
+- name: dawarich-persistent-storage
+  persistentVolumeClaim:
+    claimName: dawarich
 env:
 - name: POSTGRES_USER
   value: postgres
@@ -41,8 +52,3 @@ env:
 nodeSelector: {}
 tolerations: []
 affinity: {}
-networkpolicy:
-  ingress:
-    internal: true
-  egress:
-    allowAll: true

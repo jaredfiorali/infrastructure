@@ -38,6 +38,20 @@ service:
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
+volumeMounts:
+- name: dawarich-persistent-storage
+  mountPath: /var/app/public
+  subPath: public
+- name: dawarich-persistent-storage
+  mountPath: /var/app/tmp/imports/watched
+  subPath: watched
+- name: dawarich-persistent-storage
+  mountPath: /var/app/storage
+  subPath: storage
+volumes:
+- name: dawarich-persistent-storage
+  persistentVolumeClaim:
+    claimName: dawarich
 env:
 - name: RAILS_ENV
   value: development
@@ -74,8 +88,3 @@ env:
 nodeSelector: {}
 tolerations: []
 affinity: {}
-networkpolicy:
-  ingress:
-    internal: true
-  egress:
-    allowAll: true

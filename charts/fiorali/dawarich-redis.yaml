@@ -31,12 +31,15 @@ service:
     port: 6379
     protocol: TCP
     targetPort: 6379
+volumeMounts:
+- name: dawarich-persistent-storage
+  mountPath: /data
+  subPath: shared
+volumes:
+- name: dawarich-persistent-storage
+  persistentVolumeClaim:
+    claimName: dawarich
 env: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
-networkpolicy:
-  ingress:
-    internal: true
-  egress:
-    allowAll: true
