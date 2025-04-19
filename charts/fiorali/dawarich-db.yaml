@@ -52,3 +52,5 @@ env:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+networkpolicy:
+  enabled: false
