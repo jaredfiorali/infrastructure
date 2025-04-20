@@ -14,11 +14,11 @@ containerPorts:
   protocol: TCP
 resources:
   limits:
+    cpu: '2'
+    memory: 3G
+  requests:
     cpu: '1'
     memory: 2G
-  requests:
-    cpu: 500m
-    memory: 1G
 probes:
   httpGet:
     path: /api/v1/health
@@ -77,7 +77,7 @@ env:
 - name: DISTANCE_UNIT
   value: km
 - name: PROMETHEUS_EXPORTER_ENABLED
-  value: 'false'
+  value: 'true'
 - name: PROMETHEUS_EXPORTER_HOST
   value: '0.0.0.0'
 - name: PROMETHEUS_EXPORTER_PORT
