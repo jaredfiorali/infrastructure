@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/baosystems/postgis
-  tag: 17-3.5@sha256:1ffff2cae68bcc47f49dc13b7bff275fcf2767bde654661d8cd52399a3da89b7
+  tag: latest@sha256:76fb70e94fb2d663947a7ff7ae995f8a4c5bcb34f14ed9f092f7a288d671e182
 containerPorts:
 - containerPort: 5432
   name: db
@@ -19,9 +19,9 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - pg_isready -U postgres -d dawarich_development
+    - sh
+    - -c
+    - pg_isready -U postgres -d dawarich_development
 podSecurityContext: {}
 securityContext: {}
 service:
