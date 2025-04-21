@@ -30,3 +30,12 @@ service:
 networkpolicy:
   ingress:
     internal: true
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  runAsNonRoot: true
