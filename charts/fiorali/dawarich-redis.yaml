@@ -44,4 +44,6 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 networkpolicy:
-  enabled: false
+  podSelector: true
+  ingress:
+    allowAll: true

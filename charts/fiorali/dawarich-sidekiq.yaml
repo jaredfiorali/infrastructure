@@ -28,13 +28,13 @@ service:
   enabled: true
   ports:
   - name: sidekiq
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  - name: management
     port: 3000
     protocol: TCP
     targetPort: 3000
+  - name: prometheus
+    port: 9394
+    protocol: TCP
+    targetPort: 9394
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
@@ -89,4 +89,6 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 networkpolicy:
-  enabled: false
+  podSelector: true
+  ingress:
+    allowAll: true
