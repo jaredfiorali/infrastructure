@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/sillytavern/sillytavern
-  tag: latest@sha256:800cbfc06d53ca8a4d66236199f1b960e61c58615bde7891586b8a1ef5f02425
+  tag: latest@sha256:06c9885fe4a3aaad51eccdcb394fd0940f36f6828fcdba96b124f1f18266f892
 containerPorts:
 - containerPort: 8000
   name: sillytavern
@@ -28,10 +28,10 @@ service:
     protocol: TCP
     targetPort: 8000
 env:
-  - name: NODE_ENV
-    value: production
-  - name: FORCE_COLOR
-    value: '1'
+- name: NODE_ENV
+  value: production
+- name: FORCE_COLOR
+  value: '1'
 ingress:
   enabled: true
   port: 8000
