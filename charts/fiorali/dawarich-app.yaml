@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: freikin/dawarich
-  tag: latest@sha256:bee3ddd092008d4e035ab0f8be0f1eff7ad7496767066e8e2738d59df301a692
+  tag: latest@sha256:7a5ad1d7cc7a53335b590d640c41262b6e33e652c88e6b15defeaa6d764d61fc
 containerPorts:
 - containerPort: 3000
   name: app
