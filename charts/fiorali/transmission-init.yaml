@@ -77,6 +77,13 @@
     mountPath: /gluetun
 - name: ping
   image: busybox:stable
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
   command:
   - sh
   - -c
@@ -88,6 +95,13 @@
     echo "ping successful, exiting"
 - name: update-peer-port
   image: busybox:stable
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
   command:
   - sh
   - -c
