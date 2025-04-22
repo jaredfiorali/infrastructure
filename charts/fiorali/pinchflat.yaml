@@ -20,8 +20,6 @@ probes:
   httpGet:
     path: /healthcheck
     port: 8945
-podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:
@@ -36,6 +34,8 @@ env:
     value: "info"
   - name: ENABLE_PROMETHEUS
     value: "true"
+  - name: TMPDIR
+    value: "/tmp"
 ingress:
   enabled: true
   port: 8945
@@ -44,6 +44,10 @@ volumeMounts:
     mountPath: /config
   - name: media-youtube
     mountPath: /downloads
+  - name: tmp
+    mountPath: /tmp
+  - name: yt-dlp
+    mountPath: /etc/yt-dlp
 volumes:
   - name: pinchflat-persistent-storage
     persistentVolumeClaim:
@@ -51,6 +55,10 @@ volumes:
   - name: media-youtube
     persistentVolumeClaim:
       claimName: media-youtube
+  - name: tmp
+    emptyDir: {}
+  - name: yt-dlp
+    emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -59,3 +67,14 @@ networkpolicy:
     internal: true
   egress:
     internet: true
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
