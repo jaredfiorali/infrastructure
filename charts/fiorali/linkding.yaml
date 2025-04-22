@@ -3,7 +3,7 @@ namespace: linkding
 deployment:
   enabled: true
 image:
-  repository: sissbruecker/linkding
+  repository: docker.io/sissbruecker/linkding
   tag: latest@sha256:f663de3765a89c96af5381e38cfbf8a75cabbb257716653a52163000421ca45a
 containerPorts:
 - containerPort: 9090
