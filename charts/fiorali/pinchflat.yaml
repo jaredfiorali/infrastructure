@@ -3,7 +3,7 @@ namespace: downloader
 deployment:
   enabled: true
 image:
-  repository: docker.io/keglin/pinchflat
+  repository: keglin/pinchflat
   tag: latest@sha256:06e20be2ad935f1ee2b527f99d1492086d7b82713739abf016e46632992079ec
 containerPorts:
 - containerPort: 8945
@@ -28,36 +28,36 @@ service:
     protocol: TCP
     targetPort: pinchflat
 env:
-  - name: TZ
-    value: "America/Toronto"
-  - name: LOG_LEVEL
-    value: "info"
-  - name: ENABLE_PROMETHEUS
-    value: "true"
-  - name: TMPDIR
-    value: "/tmp"
+- name: TZ
+  value: "America/Toronto"
+- name: LOG_LEVEL
+  value: "info"
+- name: ENABLE_PROMETHEUS
+  value: "true"
+- name: TMPDIR
+  value: "/tmp"
 ingress:
   enabled: true
 volumeMounts:
-  - name: pinchflat-persistent-storage
-    mountPath: /config
-  - name: media-youtube
-    mountPath: /downloads
-  - name: tmp
-    mountPath: /tmp
-  - name: yt-dlp
-    mountPath: /etc/yt-dlp
+- name: pinchflat-persistent-storage
+  mountPath: /config
+- name: media-youtube
+  mountPath: /downloads
+- name: tmp
+  mountPath: /tmp
+- name: yt-dlp
+  mountPath: /etc/yt-dlp
 volumes:
-  - name: pinchflat-persistent-storage
-    persistentVolumeClaim:
-      claimName: pinchflat
-  - name: media-youtube
-    persistentVolumeClaim:
-      claimName: media-youtube
-  - name: tmp
-    emptyDir: {}
-  - name: yt-dlp
-    emptyDir: {}
+- name: pinchflat-persistent-storage
+  persistentVolumeClaim:
+    claimName: pinchflat
+- name: media-youtube
+  persistentVolumeClaim:
+    claimName: media-youtube
+- name: tmp
+  emptyDir: {}
+- name: yt-dlp
+  emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -70,7 +70,7 @@ podSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 securityContext:
