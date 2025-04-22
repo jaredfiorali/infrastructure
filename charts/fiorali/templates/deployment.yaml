@@ -23,6 +23,7 @@ spec:
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ .Values.name }}-serviceaccount
       {{- with .Values.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

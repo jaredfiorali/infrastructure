@@ -27,39 +27,20 @@ spec:
   {{- if .Values.networkpolicy.ingress.internal }}
   - from:
     - ipBlock:
-        cidr: 10.0.0.0/8     # RFC1918 private network
-    - ipBlock:
-        cidr: 172.16.0.0/12  # RFC1918 private network
-    - ipBlock:
-        cidr: 192.168.0.0/16 # RFC1918 private network
-    - ipBlock:
-        cidr: 127.0.0.0/8    # Localhost
-    - ipBlock:
-        cidr: 169.254.0.0/16 # Link-local
+        cidr: 10.0.0.0/8 # RFC1918 private network
   {{- end }}
   {{- if .Values.networkpolicy.ingress.internet }}
   - from:
     - ipBlock:
         cidr: 0.0.0.0/0 # Allow internet
         except:
-        - 10.0.0.0/8     # RFC1918 private network
-        - 172.16.0.0/12  # RFC1918 private network
-        - 192.168.0.0/16 # RFC1918 private network
-        - 127.0.0.0/8    # Localhost
-        - 169.254.0.0/16 # Link-local
+        - 10.0.0.0/8 # RFC1918 private network
   {{- end }}
   {{- end }}
   egress:
   {{- if .Values.networkpolicy.egress.allowAll }}
   - {}
   {{- else }}
-  - to:
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: kube-system
-      podSelector:
-        matchLabels:
-          k8s-app: kube-dns
   - to:
     - namespaceSelector:
         matchLabels:
@@ -73,26 +54,14 @@ spec:
   {{- if .Values.networkpolicy.egress.internal }}
   - to:
     - ipBlock:
-        cidr: 10.0.0.0/8     # RFC1918 private network
-    - ipBlock:
-        cidr: 172.16.0.0/12  # RFC1918 private network
-    - ipBlock:
-        cidr: 192.168.0.0/16 # RFC1918 private network
-    - ipBlock:
-        cidr: 127.0.0.0/8    # Localhost
-    - ipBlock:
-        cidr: 169.254.0.0/16 # Link-local
+        cidr: 10.0.0.0/8 # RFC1918 private network
   {{- end }}
   {{- if .Values.networkpolicy.egress.internet }}
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0 # Allow internet
         except:
-        - 10.0.0.0/8     # RFC1918 private network
-        - 172.16.0.0/12  # RFC1918 private network
-        - 192.168.0.0/16 # RFC1918 private network
-        - 127.0.0.0/8    # Localhost
-        - 169.254.0.0/16 # Link-local
+        - 10.0.0.0/8 # RFC1918 private network
   {{- end }}
   {{- end }}
 {{- end }}
