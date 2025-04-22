@@ -14,13 +14,13 @@ service:
 podDisruptionBudget:
   enabled: true
 command:
-  args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/tmp/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
+  args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
 cronjob:
   enabled: true
   schedule: "5 */1 * * *"
 volumeMounts:
 - name: popeye-configmap
-  mountPath: /tmp/spinach.yaml
+  mountPath: /spinach.yaml
   subPath: spinach.yaml
   readOnly: true
 - name: tmp
