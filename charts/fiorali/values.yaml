@@ -39,6 +39,7 @@ securityContext: {}
 command:
   enabled: false
   exec: {}
+  args: []
 
 env: []
 
@@ -59,6 +60,13 @@ affinity: {}
 initContainers:
   enabled: false
   file: ""
+
+clusterRole:
+  enabled: false
+  rules: {}
+
+clusterRoleBinding:
+  enabled: false
 
 dnsPolicy: ""
 dnsConfig:
@@ -117,3 +125,13 @@ podDisruptionBudget:
   enabled: true
   minAvailable: 1
   maxUnavailable: 1
+
+cronjob:
+  enabled: false
+  schedule: ""
+  suspend: false
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  restartPolicy: Never
+  startingDeadlineSeconds: 0

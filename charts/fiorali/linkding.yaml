@@ -44,12 +44,27 @@ ingress:
 volumeMounts:
 - name: linkding-persistent-storage
   mountPath: /etc/linkding/data
+- name: tmp
+  mountPath: /tmp
 volumes:
 - name: linkding-persistent-storage
   persistentVolumeClaim:
     claimName: linkding
+- name: tmp
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
   egress:
     internet: true
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
