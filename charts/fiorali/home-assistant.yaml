@@ -59,6 +59,7 @@ volumes:
   configMap:
     name: home-assistant-configmap
     defaultMode: 511
+dnsPolicy: ClusterFirstWithHostNet
 configMap:
   enabled: true
   name: configuration.yaml
@@ -109,7 +110,7 @@ configMap:
 
     rest_command:
       push_position_to_dawarich:
-        url: http://dawarich.fiora.li/api/v1/overland/batches?api_key={{ api_key }}
+        url: http://dawarich-app.dawarich:3000/api/v1/overland/batches?api_key={{ api_key }}
         method: POST
         content_type: 'application/json'
         payload: >

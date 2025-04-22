@@ -69,7 +69,7 @@ env:
 - name: MIN_MINUTES_SPENT_IN_CITY
   value: '60'
 - name: APPLICATION_HOSTS
-  value: dawarich.fiora.li
+  value: dawarich.fiora.li,dawarich-app.dawarich
 - name: TIME_ZONE
   value: America/Toronto
 - name: APPLICATION_PROTOCOL
@@ -88,6 +88,8 @@ env:
   value: 'true'
 ingress:
   enabled: true
+  name: dawarich
+  portName: dawarich
 nodeSelector: {}
 tolerations: []
 affinity: {}
