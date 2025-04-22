@@ -3,7 +3,7 @@ namespace: monitoring
 deployment:
   enabled: true
 image:
-  repository: docker.io/influxdb
+  repository: influxdb
   tag: latest@sha256:5abf7b1eb3839a7aa59ad8b0523503b25907bbfb7a4372ac542974e5a9a89e03
 containerPorts:
 - containerPort: 8086
