@@ -31,10 +31,10 @@ service:
   ports:
   - port: 139
     name: tcp139
-    targetPort: 139
+    targetPort: tcp139
   - port: 445
     name: tcp445
-    targetPort: 445
+    targetPort: tcp445
   type: LoadBalancer
 env:
   - name: ADVERTISED_HOSTNAME

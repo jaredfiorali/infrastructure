@@ -18,14 +18,14 @@ resources:
     memory: 100Mi
 probes:
   tcpSocket:
-    port: 9130
+    port: poller
 service:
   enabled: true
   ports:
   - name: poller
     port: 9130
     protocol: TCP
-    targetPort: 9130
+    targetPort: poller
 env:
 - name: UP_UNIFI_DEFAULT_URL
   value: "https://192.168.24.1"

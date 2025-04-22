@@ -30,11 +30,11 @@ service:
   - name: sidekiq
     port: 3000
     protocol: TCP
-    targetPort: 3000
+    targetPort: sidekiq
   - name: prometheus
     port: 9394
     protocol: TCP
-    targetPort: 9394
+    targetPort: prometheus
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]

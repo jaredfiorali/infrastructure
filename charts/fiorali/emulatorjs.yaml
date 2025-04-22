@@ -35,7 +35,7 @@ service:
   - name: management
     port: 3000
     protocol: TCP
-    targetPort: 3000
+    targetPort: management
 env:
 - name: DISABLE_IPFS
   value: "true"

@@ -35,7 +35,7 @@ service:
   - name: prometheus
     port: 9394
     protocol: TCP
-    targetPort: 9394
+    targetPort: prometheus
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]

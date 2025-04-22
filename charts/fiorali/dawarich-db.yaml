@@ -30,7 +30,7 @@ service:
   - name: db
     port: 5432
     protocol: TCP
-    targetPort: 5432
+    targetPort: db
 volumeMounts:
 - name: dawarich-persistent-storage
   mountPath: /var/lib/postgresql/data

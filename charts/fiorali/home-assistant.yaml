@@ -32,15 +32,15 @@ service:
   - name: home-assistant
     port: 8123
     protocol: TCP
-    targetPort: 8123
+    targetPort: home-assistant
   - port: 5353
     name: homekit-udp
     protocol: UDP
-    targetPort: 5353
+    targetPort: homekit-udp
   - port: 21063
     name: homekit-tcp
     protocol: TCP
-    targetPort: 21063
+    targetPort: homekit-tcp
 ingress:
   enabled: true
 hostNetwork: true
