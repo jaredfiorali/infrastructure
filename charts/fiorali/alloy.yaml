@@ -8,6 +8,10 @@ networkpolicy:
   ingress:
     namespaces:
       - monitoring
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
 configMap:
   enabled: true
   name: config.alloy

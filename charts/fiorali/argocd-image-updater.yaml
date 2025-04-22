@@ -6,3 +6,7 @@ service:
   enabled: false
 networkpolicy:
   enabled: false
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false

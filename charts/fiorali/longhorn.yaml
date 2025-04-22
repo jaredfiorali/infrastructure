@@ -16,6 +16,10 @@ networkpolicy:
     internet: true
 namespaceChart:
   enabled: true
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
 prometheusRules:
   enabled: true
   rules:

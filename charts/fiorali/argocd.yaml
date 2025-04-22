@@ -14,3 +14,7 @@ networkpolicy:
     internal: true
   egress:
     allowAll: true
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false

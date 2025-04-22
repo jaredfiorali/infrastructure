@@ -12,3 +12,7 @@ networkpolicy:
       - monitoring
   egress:
     internal: true
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
