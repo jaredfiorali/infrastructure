@@ -26,10 +26,10 @@ service:
   ports:
   - port: 9091
     name: transmission
-    targetPort: 9091
+    targetPort: transmission
 ingress:
   enabled: true
-  port: 9091
+  port: transmission
 volumeMounts:
 - name: media-bittorrent
   mountPath: /media-bittorrent

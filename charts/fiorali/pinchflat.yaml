@@ -19,14 +19,14 @@ resources:
 probes:
   httpGet:
     path: /healthcheck
-    port: 8945
+    port: pinchflat
 service:
   enabled: true
   ports:
   - name: pinchflat
     port: 8945
     protocol: TCP
-    targetPort: 8945
+    targetPort: pinchflat
 env:
   - name: TZ
     value: "America/Toronto"
@@ -38,7 +38,7 @@ env:
     value: "/tmp"
 ingress:
   enabled: true
-  port: 8945
+  name: pinchflat
 volumeMounts:
   - name: pinchflat-persistent-storage
     mountPath: /config

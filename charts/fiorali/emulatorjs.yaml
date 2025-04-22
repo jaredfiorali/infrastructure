@@ -22,7 +22,7 @@ resources:
 probes:
   httpGet:
     path: /
-    port: 3000
+    port: management
 podSecurityContext: {}
 securityContext: {}
 service:
@@ -31,7 +31,7 @@ service:
   - name: emulatorjs
     port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: emulatorjs
   - name: management
     port: 3000
     protocol: TCP
@@ -41,7 +41,7 @@ env:
   value: "true"
 ingress:
   enabled: true
-  port: 80
+  name: emulatorjs
 volumeMounts:
 - name: config
   mountPath: /config

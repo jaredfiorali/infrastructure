@@ -19,14 +19,14 @@ resources:
 probes:
   httpGet:
     path: /identity
-    port: 32400
+    port: plex
 service:
   enabled: true
   ports:
   - name: plex
     port: 32400
     protocol: TCP
-    targetPort: 32400
+    targetPort: plex
   externalTrafficPolicy: Local
   type: LoadBalancer
 env:
@@ -36,7 +36,7 @@ env:
   value: http://192.168.20.10:32400/
 ingress:
   enabled: true
-  port: 32400
+  name: plex
 volumeMounts:
 - name: plex-persistent-storage
   mountPath: /config

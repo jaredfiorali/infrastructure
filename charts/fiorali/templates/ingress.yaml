@@ -15,5 +15,5 @@ spec:
           service:
             name: {{ .Values.ingress.serviceName | default .Values.name }}
             port:
-              number: {{ .Values.ingress.port }}
+              name: {{ .Values.ingress.name | default .Values.name }}
 {{- end }}

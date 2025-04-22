@@ -19,7 +19,7 @@ resources:
 probes:
   httpGet:
     path: /status
-    port: 8181
+    port: tautulli
 podSecurityContext: {}
 securityContext: {}
 service:
@@ -28,10 +28,10 @@ service:
   - name: tautulli
     port: 8181
     protocol: TCP
-    targetPort: 8181
+    targetPort: tautulli
 ingress:
   enabled: true
-  port: 8181
+  name: tautulli
 volumeMounts:
 - mountPath: /config
   name: tautulli-persistent-storage

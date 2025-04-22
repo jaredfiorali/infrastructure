@@ -19,14 +19,14 @@ resources:
 probes:
   httpGet:
     path: /
-    port: 8000
+    port: sillytavern
 service:
   enabled: true
   ports:
   - name: sillytavern
     port: 8000
     protocol: TCP
-    targetPort: 8000
+    targetPort: sillytavern
 env:
 - name: NODE_ENV
   value: production
@@ -34,7 +34,7 @@ env:
   value: '1'
 ingress:
   enabled: true
-  port: 8000
+  name: sillytavern
 volumeMounts:
 - name: sillytavern-persistent-storage
   mountPath: /home/node/app/config

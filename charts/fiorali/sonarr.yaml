@@ -28,7 +28,7 @@ service:
   - name: sonarr
     port: 8989
     protocol: TCP
-    targetPort: 8989
+    targetPort: sonarr
 env:
 - name: API_KEY
   valueFrom:
@@ -43,7 +43,7 @@ env:
   value: "America/Toronto"
 ingress:
   enabled: true
-  port: 8989
+  name: sonarr
 volumeMounts:
 - name: sonarr-persistent-storage
   mountPath: /config

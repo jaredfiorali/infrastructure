@@ -25,7 +25,7 @@ resources:
 probes:
   httpGet:
     path: /
-    port: 8123
+    port: home-assistant
 service:
   enabled: true
   ports:
@@ -43,7 +43,7 @@ service:
     targetPort: 21063
 ingress:
   enabled: true
-  port: 8123
+  name: home-assistant
 hostNetwork: true
 volumeMounts:
 - name: home-assistant-persistent-storage

@@ -28,7 +28,7 @@ service:
   - name: radarr
     port: 7878
     protocol: TCP
-    targetPort: 7878
+    targetPort: radarr
 env:
 - name: API_KEY
   valueFrom:
@@ -43,7 +43,7 @@ env:
   value: "America/Toronto"
 ingress:
   enabled: true
-  port: 7878
+  name: radarr
 volumeMounts:
 - name: radarr-persistent-storage
   mountPath: /config

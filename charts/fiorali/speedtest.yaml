@@ -19,20 +19,20 @@ resources:
 probes:
   httpGet:
     path: /
-    port: 3000
+    port: speedtest
 service:
   enabled: true
   ports:
   - name: speedtest
     port: 3000
     protocol: TCP
-    targetPort: 3000
+    targetPort: speedtest
 networkpolicy:
   ingress:
     internal: true
 ingress:
   enabled: true
-  port: 3000
+  name: speedtest
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "cp /OpenSpeedTest-Server.conf /etc/nginx/conf.d/ && ./entrypoint.sh"]

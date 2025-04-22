@@ -18,17 +18,17 @@ resources:
     memory: 250Mi
 probes:
   tcpSocket:
-    port: 8086
+    port: influxdb
 service:
   enabled: true
   ports:
   - name: influxdb
     port: 8086
     protocol: TCP
-    targetPort: 8086
+    targetPort: influxdb
 ingress:
   enabled: true
-  port: 8086
+  name: influxdb
 volumeMounts:
 - name: influxdb-storage
   mountPath: /var/lib/influxdb2

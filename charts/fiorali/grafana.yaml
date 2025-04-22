@@ -19,7 +19,7 @@ resources:
 probes:
   httpGet:
     path: /api/health
-    port: 3000
+    port: grafana
 podSecurityContext: {}
 securityContext: {}
 podLabels:
@@ -30,13 +30,13 @@ service:
   - name: grafana
     port: 3000
     protocol: TCP
-    targetPort: 3000
+    targetPort: grafana
 env:
 - name: GF_PATHS_CONFIG
   value: /tmp/grafana.ini
 ingress:
   enabled: true
-  port: 3000
+  name: grafana
 volumeMounts:
 - name: grafana-storage
   mountPath: /var/lib/grafana

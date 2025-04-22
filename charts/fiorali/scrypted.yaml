@@ -18,17 +18,17 @@ resources:
     memory: 2Gi
 probes:
   tcpSocket:
-    port: 11080
+    port: scrypted
 service:
   enabled: true
   ports:
   - name: scrypted
     port: 11080
     protocol: TCP
-    targetPort: 11080
+    targetPort: scrypted
 ingress:
   enabled: true
-  port: 11080
+  name: scrypted
 env:
 - name: SCRYPTED_DISABLE_AUTHENTICATION
   value: "true"

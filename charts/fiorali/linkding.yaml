@@ -19,14 +19,14 @@ resources:
 probes:
   httpGet:
     path: /health
-    port: 9090
+    port: linkding
 service:
   enabled: true
   ports:
   - name: linkding
     port: 9090
     protocol: TCP
-    targetPort: 9090
+    targetPort: linkding
 env:
 - name: LD_SUPERUSER_NAME
   valueFrom:
@@ -40,7 +40,7 @@ env:
       key: password
 ingress:
   enabled: true
-  port: 9090
+  name: linkding
 volumeMounts:
 - name: linkding-persistent-storage
   mountPath: /etc/linkding/data

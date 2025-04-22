@@ -28,7 +28,7 @@ service:
   - name: prowlarr
     port: 9696
     protocol: TCP
-    targetPort: 9696
+    targetPort: prowlarr
 env:
 - name: API_KEY
   valueFrom:
@@ -43,7 +43,7 @@ env:
   value: "America/Toronto"
 ingress:
   enabled: true
-  port: 9696
+  name: prowlarr
 volumeMounts:
 - name: prowlarr-persistent-storage
   mountPath: /config
