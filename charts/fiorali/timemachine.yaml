@@ -3,7 +3,7 @@ namespace: timemachine
 deployment:
   enabled: true
 image:
-  repository: mbentley/timemachine
+  repository: docker.io/mbentley/timemachine
   tag: latest@sha256:9ead45913f63f15a6eef41f6beabf886eb7970b9206c47fe3b8aaf3bcdb30244
 containerPorts:
 - containerPort: 137

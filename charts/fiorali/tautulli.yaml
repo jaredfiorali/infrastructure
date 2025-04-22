@@ -3,7 +3,7 @@ namespace: tautulli
 deployment:
   enabled: true
 image:
-  repository: tautulli/tautulli
+  repository: docker.io/tautulli/tautulli
   tag: latest@sha256:631ead87bb2c2be2b8e3f91bc1ae1afae9eedf11f18e5d769b98fd2bf507f970
 containerPorts:
 - containerPort: 8181

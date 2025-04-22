@@ -3,7 +3,7 @@ namespace: monitoring
 deployment:
   enabled: true
 image:
-  repository: jaredfiorali/promobee
+  repository: docker.io/jaredfiorali/promobee
   tag: v1@sha256:ec4a2de97943cc8265e13747fc66563be55696622f05d44bc0a1d2b16b25b623
 containerPorts:
 - containerPort: 8080

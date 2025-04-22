@@ -1,7 +1,7 @@
 name: popeye
 namespace: popeye
 image:
-  repository: derailed/popeye
+  repository: docker.io/derailed/popeye
   tag: v0.22.0@sha256:885992c4a6db77a9ffceddea840f6a4b29f60381d87d5ae74bd814af84f5b65d
 deployment:
   enabled: false
@@ -45,6 +45,7 @@ clusterRole:
       - secrets
       - serviceaccounts
       - services
+      - events
       verbs: ["get", "list"]
     - apiGroups: ["apps"]
       resources:
