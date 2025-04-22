@@ -88,7 +88,7 @@ env:
   value: 'true'
 ingress:
   enabled: true
-  name: dawarich
+  name: app
 nodeSelector: {}
 tolerations: []
 affinity: {}
