@@ -14,7 +14,7 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  args: ["-A", "-o", "yaml", "--force-exit-zero"]
+  args: ["-A", "-o", "json", "--force-exit-zero"]
 cronjob:
   enabled: true
   schedule: "5 */1 * * *"
