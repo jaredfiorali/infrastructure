@@ -14,7 +14,7 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  args: ["-A", "-o", "json", "--force-exit-zero"]
+  args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/tmp/spinach.yaml"]
 cronjob:
   enabled: true
   schedule: "5 */1 * * *"

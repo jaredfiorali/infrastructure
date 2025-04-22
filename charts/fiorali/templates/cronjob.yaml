@@ -23,4 +23,12 @@ spec:
               {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              {{- with .Values.volumeMounts }}
+              volumeMounts:
+                {{- toYaml . | nindent 14 }}
+              {{- end }}
+          {{- with .Values.volumes }}
+          volumes:
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
 {{- end }}
