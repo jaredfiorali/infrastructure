@@ -3,7 +3,7 @@ namespace: downloader
 deployment:
   enabled: true
 image:
-  repository: docker.io/linuxserver/prowlarr
+  repository: linuxserver/prowlarr
   tag: latest@sha256:cc04fd226d3418e493c015eb9ad66857066a4ddf024d7214ab2b39712e19e74c
 containerPorts:
 - containerPort: 9696
