@@ -41,7 +41,6 @@ env:
   value: "true"
 ingress:
   enabled: true
-  name: emulatorjs
 volumeMounts:
 - name: config
   mountPath: /config

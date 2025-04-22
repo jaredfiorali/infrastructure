@@ -36,7 +36,6 @@ env:
   value: http://192.168.20.10:32400/
 ingress:
   enabled: true
-  name: plex
 volumeMounts:
 - name: plex-persistent-storage
   mountPath: /config

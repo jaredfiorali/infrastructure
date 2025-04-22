@@ -40,7 +40,6 @@ env:
       key: password
 ingress:
   enabled: true
-  name: linkding
 volumeMounts:
 - name: linkding-persistent-storage
   mountPath: /etc/linkding/data

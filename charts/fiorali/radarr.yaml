@@ -43,7 +43,6 @@ env:
   value: "America/Toronto"
 ingress:
   enabled: true
-  name: radarr
 volumeMounts:
 - name: radarr-persistent-storage
   mountPath: /config

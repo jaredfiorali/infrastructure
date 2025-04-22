@@ -80,8 +80,9 @@ service:
 
 ingress:
   enabled: false
-  port: ""
+  portNumber: ""
   name: ""
+  portName: ""
 
 configMap:
   enabled: false

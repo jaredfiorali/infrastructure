@@ -31,7 +31,6 @@ service:
     targetPort: tautulli
 ingress:
   enabled: true
-  name: tautulli
 volumeMounts:
 - mountPath: /config
   name: tautulli-persistent-storage

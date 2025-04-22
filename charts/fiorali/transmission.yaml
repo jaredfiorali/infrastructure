@@ -29,7 +29,6 @@ service:
     targetPort: transmission
 ingress:
   enabled: true
-  port: transmission
 volumeMounts:
 - name: media-bittorrent
   mountPath: /media-bittorrent

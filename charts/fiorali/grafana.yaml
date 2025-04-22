@@ -36,7 +36,6 @@ env:
   value: /tmp/grafana.ini
 ingress:
   enabled: true
-  name: grafana
 volumeMounts:
 - name: grafana-storage
   mountPath: /var/lib/grafana

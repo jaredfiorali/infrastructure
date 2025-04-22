@@ -43,7 +43,6 @@ service:
     targetPort: 21063
 ingress:
   enabled: true
-  name: home-assistant
 hostNetwork: true
 volumeMounts:
 - name: home-assistant-persistent-storage

@@ -34,7 +34,6 @@ env:
   value: '1'
 ingress:
   enabled: true
-  name: sillytavern
 volumeMounts:
 - name: sillytavern-persistent-storage
   mountPath: /home/node/app/config

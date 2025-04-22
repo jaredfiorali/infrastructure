@@ -32,7 +32,6 @@ networkpolicy:
     internal: true
 ingress:
   enabled: true
-  name: speedtest
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "cp /OpenSpeedTest-Server.conf /etc/nginx/conf.d/ && ./entrypoint.sh"]

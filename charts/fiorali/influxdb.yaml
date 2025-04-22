@@ -28,7 +28,6 @@ service:
     targetPort: influxdb
 ingress:
   enabled: true
-  name: influxdb
 volumeMounts:
 - name: influxdb-storage
   mountPath: /var/lib/influxdb2

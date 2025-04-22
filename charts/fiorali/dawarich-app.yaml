@@ -7,7 +7,7 @@ image:
   tag: latest@sha256:7a5ad1d7cc7a53335b590d640c41262b6e33e652c88e6b15defeaa6d764d61fc
 containerPorts:
 - containerPort: 3000
-  name: app
+  name: dawarich
   protocol: TCP
 - containerPort: 9394
   name: prometheus
@@ -22,16 +22,16 @@ resources:
 probes:
   httpGet:
     path: /api/v1/health
-    port: app
+    port: dawarich
 podSecurityContext: {}
 securityContext: {}
 service:
   enabled: true
   ports:
-  - name: app
+  - name: dawarich
     port: 3000
     protocol: TCP
-    targetPort: app
+    targetPort: dawarich
   - name: prometheus
     port: 9394
     protocol: TCP
@@ -88,7 +88,6 @@ env:
   value: 'true'
 ingress:
   enabled: true
-  name: app
 nodeSelector: {}
 tolerations: []
 affinity: {}
