@@ -3,7 +3,7 @@ namespace: downloader
 deployment:
   enabled: true
 image:
-  repository: docker.io/linuxserver/transmission
+  repository: linuxserver/transmission
   tag: latest@sha256:2b8ab10e04a17108f63995246efceb6e890d50b7e848efbca305217a016288e7
 containerPorts:
 - containerPort: 9091
