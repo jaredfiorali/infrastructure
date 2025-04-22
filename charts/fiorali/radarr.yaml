@@ -3,7 +3,7 @@ namespace: downloader
 deployment:
   enabled: true
 image:
-  repository: linuxserver/radarr
+  repository: docker.io/linuxserver/radarr
   tag: latest@sha256:9a4a7ed79dee5fcc9940b57ddfddfe7c87dea2d13a221ca2fdd2c1c8d9e75c2e
 containerPorts:
 - containerPort: 7878
