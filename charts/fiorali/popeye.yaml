@@ -23,11 +23,15 @@ volumeMounts:
   mountPath: /tmp/spinach.yaml
   subPath: spinach.yaml
   readOnly: true
+- name: tmp
+  mountPath: /tmp
 volumes:
 - name: popeye-configmap
   configMap:
     name: popeye-configmap
     defaultMode: 511
+- name: tmp
+  emptyDir: {}
 networkpolicy:
   egress:
     namespaces:
