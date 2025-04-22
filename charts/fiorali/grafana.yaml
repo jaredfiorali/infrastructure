@@ -12,10 +12,10 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 500Mi
+    memory: 1Gi
   requests:
     cpu: '1'
-    memory: 250Mi
+    memory: 500Mi
 probes:
   httpGet:
     path: /api/health
