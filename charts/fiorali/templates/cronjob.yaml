@@ -1,0 +1,26 @@
+{{- if .Values.cronjob.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: {{ .Values.cronjob.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | default "Forbid" }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.name }}-serviceaccount
+          restartPolicy: {{ .Values.cronjob.restartPolicy }}
+          containers:
+            - name: {{ .Values.name }}
+              image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+              imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+              args:
+              {{- range .Values.command.args }}
+                - {{ . | quote }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+{{- end }}

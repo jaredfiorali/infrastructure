@@ -1,0 +1,182 @@
+name: popeye
+namespace: popeye
+image:
+  repository: derailed/popeye
+  tag: v0.22.0@sha256:885992c4a6db77a9ffceddea840f6a4b29f60381d87d5ae74bd814af84f5b65d
+deployment:
+  enabled: false
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+service:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
+command:
+  args: ["-A", "-o", "yaml", "--force-exit-zero"]
+cronjob:
+  enabled: true
+  schedule: "5 */1 * * *"
+volumeMounts:
+- name: popeye-configmap
+  mountPath: /tmp/spinach.yaml
+  subPath: spinach.yaml
+  readOnly: true
+volumes:
+- name: popeye-configmap
+  configMap:
+    name: popeye-configmap
+    defaultMode: 511
+clusterRoleBinding:
+  enabled: true
+clusterRole:
+  enabled: true
+  rules:
+    - apiGroups: [""]
+      resources:
+      - configmaps
+      - endpoints
+      - namespaces
+      - nodes
+      - persistentvolumes
+      - persistentvolumeclaims
+      - pods
+      - secrets
+      - serviceaccounts
+      - services
+      verbs: ["get", "list"]
+    - apiGroups: ["apps"]
+      resources:
+      - daemonsets
+      - deployments
+      - statefulsets
+      - replicasets
+      verbs: ["get", "list"]
+    - apiGroups: ["networking.k8s.io"]
+      resources:
+      - ingresses
+      - networkpolicies
+      verbs: ["get", "list"]
+    - apiGroups: ["batch"]
+      resources:
+      - cronjobs
+      - jobs
+      verbs: ["get", "list"]
+    - apiGroups: ["gateway.networking.k8s.io"]
+      resources:
+      - gatewayclasses
+      - gateways
+      - httproutes
+      verbs: ["get", "list"]
+    - apiGroups: ["autoscaling"]
+      resources:
+      - horizontalpodautoscalers
+      verbs: ["get", "list"]
+    - apiGroups: ["policy"]
+      resources:
+      - poddisruptionbudgets
+      - podsecuritypolicies
+      verbs: ["get", "list"]
+    - apiGroups: ["rbac.authorization.k8s.io"]
+      resources:
+      - clusterroles
+      - clusterrolebindings
+      - roles
+      - rolebindings
+      verbs: ["get", "list"]
+    - apiGroups: ["metrics.k8s.io"]
+      resources:
+      - pods
+      - nodes
+      verbs: ["get", "list"]
+configMap:
+  enabled: true
+  name: spinach.yaml
+  value: |-
+    popeye:
+      # Checks resources against reported metrics usage.
+      # If over/under these thresholds a linter warning will be issued.
+      # Your cluster must run a metrics-server for these to take place!
+      allocations:
+        cpu:
+          underPercUtilization: 200 # Checks if cpu is under allocated by more than 200% at current load.
+          overPercUtilization: 50   # Checks if cpu is over allocated by more than 50% at current load.
+        memory:
+          underPercUtilization: 200 # Checks if mem is under allocated by more than 200% at current load.
+          overPercUtilization: 50   # Checks if mem is over allocated by more than 50% usage at current load.
+
+      # Excludes excludes certain resources from Popeye scans
+      excludes:
+        # [NEW!] Global exclude resources and codes globally of any linters.
+        global:
+          fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd] # => excludes all resources in kube-system, kube-public, etc..
+          # [NEW!] Exclude resources for all linters matching these labels
+          labels:
+            app: [bozo, bono] #=> exclude any resources with labels matching either app=bozo or app=bono
+            app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] #=> exclude any resources with labels matching either app=bozo or app=bono
+            managed-by: [prometheus-operator] #=> exclude any resources with labels matching either app=bozo or app=bono
+          # [NEW!] Exclude resources for all linters matching these annotations
+          annotations:
+            fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
+          # [NEW!] Exclude scan codes globally via straight codes or regex!
+          codes: ["1109"] # => exclude issue codes 300, 206, 410, 415 (Note: regex match!)
+
+        # [NEW!] Configure individual resource linters
+        linters:
+          # Configure the namespaces linter for v1/namespaces
+          namespaces:
+            # [NEW!] Exclude these codes for all namespace resources straight up or via regex.
+            codes: ["1109"] # => exclude codes 100, 220, 225, ...
+            # [NEW!] Excludes specific namespaces from the scan
+            instances:
+              - fqns: [kube-public, kube-system] # => skip ns kube-public and kube-system
+              - fqns: [blee-ns]
+                codes: [106] # => skip code 106 for namespace blee-ns
+
+          # Skip secrets in namespace bozo.
+          secrets:
+            instances:
+              - fqns: [rx:^bozo]
+
+          # Configure the pods linter for v1/pods.
+          pods:
+            instances:
+              # [NEW!] exclude all pods matching these labels.
+              - labels:
+                  app: [fred,blee] # Exclude codes 102, 105 for any pods with labels app=fred or app=blee
+                codes: [102, 105]
+
+      resources:
+        # Configure node resources.
+        node:
+          # Limits set a cpu/mem threshold in % ie if cpu|mem > limit a lint warning is triggered.
+          limits:
+            # CPU checks if current CPU utilization on a node is greater than 90%.
+            cpu:    90
+            # Memory checks if current Memory utilization on a node is greater than 80%.
+            memory: 80
+
+        # Configure pod resources
+        pod:
+          # Restarts check the restarts count and triggers a lint warning if above threshold.
+          restarts: 3
+          # Check container resource utilization in percent.
+          # Issues a lint warning if about these threshold.
+          limits:
+            cpu:    80
+            memory: 75
+
+
+      # [New!] overrides code severity
+      overrides:
+        # Code specifies a custom severity level ie critical=3, warn=2, info=1
+        - code: 206
+          severity: 1
+
+      # Configure a list of allowed registries to pull images from.
+      # Any resources not using the following registries will be flagged!
+      registries:
+        - quay.io
+        - docker.io
+        - ghcr.io
