@@ -12,9 +12,9 @@ resources:
 service:
   enabled: false
 podDisruptionBudget:
-  enabled: false
+  enabled: true
 command:
-  args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/tmp/spinach.yaml"]
+  args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/tmp/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
 cronjob:
   enabled: true
   schedule: "5 */1 * * *"
@@ -28,6 +28,21 @@ volumes:
   configMap:
     name: popeye-configmap
     defaultMode: 511
+networkpolicy:
+  egress:
+    namespaces:
+      - monitoring
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
 clusterRoleBinding:
   enabled: true
 clusterRole:
@@ -114,9 +129,10 @@ configMap:
           fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd] # => excludes all resources in kube-system, kube-public, etc..
           # [NEW!] Exclude resources for all linters matching these labels
           labels:
-            app: [bozo, bono] #=> exclude any resources with labels matching either app=bozo or app=bono
-            app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] #=> exclude any resources with labels matching either app=bozo or app=bono
-            managed-by: [prometheus-operator] #=> exclude any resources with labels matching either app=bozo or app=bono
+            app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] #=> exclude any resources with labels matching
+            app.kubernetes.io/managed-by: [prometheus-operator] #=> exclude any resources with labels
+            managed-by: [prometheus-operator] #=> exclude any resources with labels matching
+            skip-popeye: ["true"] #=> exclude any resources with labels matching
           # [NEW!] Exclude resources for all linters matching these annotations
           annotations:
             fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
@@ -172,7 +188,9 @@ configMap:
       # [New!] overrides code severity
       overrides:
         # Code specifies a custom severity level ie critical=3, warn=2, info=1
-        - code: 206
+        - code: 1206
+          severity: 1
+        - code: 1207
           severity: 1
 
       # Configure a list of allowed registries to pull images from.

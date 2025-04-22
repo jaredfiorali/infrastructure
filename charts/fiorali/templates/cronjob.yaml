@@ -10,6 +10,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            app: {{ .Values.name }}
         spec:
           serviceAccountName: {{ .Values.name }}-serviceaccount
           restartPolicy: {{ .Values.cronjob.restartPolicy }}
