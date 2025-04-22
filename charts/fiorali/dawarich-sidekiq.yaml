@@ -21,7 +21,7 @@ resources:
     memory: 1G
 probes:
   exec:
-    command: ["sh", "-c", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
+    command: ["sh", "-c", "if [[ $(pgrep sidekiq | wc -l) -ne 1 ]]; then exit 1; fi"]
 podSecurityContext: {}
 securityContext: {}
 service:
