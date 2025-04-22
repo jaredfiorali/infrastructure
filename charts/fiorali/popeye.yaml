@@ -132,6 +132,7 @@ configMap:
             app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] #=> exclude any resources with labels matching
             app.kubernetes.io/managed-by: [prometheus-operator] #=> exclude any resources with labels
             managed-by: [prometheus-operator] #=> exclude any resources with labels matching
+            app.kubernetes.io/name: [prometheus-pushgateway] #=> exclude any resources with labels matching
             skip-popeye: ["true"] #=> exclude any resources with labels matching
           # [NEW!] Exclude resources for all linters matching these annotations
           annotations:
