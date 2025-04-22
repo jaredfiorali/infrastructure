@@ -47,6 +47,6 @@ env:
   value: "true"
 networkpolicy:
   ingress:
-    internal: true
+    network: true
   egress:
-    internal: true
+    network: true

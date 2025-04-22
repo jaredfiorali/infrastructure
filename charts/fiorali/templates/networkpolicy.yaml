@@ -29,12 +29,18 @@ spec:
     - ipBlock:
         cidr: 10.0.0.0/8 # RFC1918 private network
   {{- end }}
+  {{- if .Values.networkpolicy.ingress.network }}
+  - from:
+    - ipBlock:
+        cidr: 192.168.0.0/16 # RFC1918 private network
+  {{- end }}
   {{- if .Values.networkpolicy.ingress.internet }}
   - from:
     - ipBlock:
         cidr: 0.0.0.0/0 # Allow internet
         except:
         - 10.0.0.0/8 # RFC1918 private network
+        - 192.168.0.0/16 # RFC1918 private network
   {{- end }}
   {{- end }}
   egress:
@@ -63,12 +69,18 @@ spec:
     - ipBlock:
         cidr: 10.0.0.0/8 # RFC1918 private network
   {{- end }}
+  {{- if .Values.networkpolicy.egress.network }}
+  - to:
+    - ipBlock:
+        cidr: 192.168.0.0/16 # RFC1918 private network
+  {{- end }}
   {{- if .Values.networkpolicy.egress.internet }}
   - to:
     - ipBlock:
         cidr: 0.0.0.0/0 # Allow internet
         except:
         - 10.0.0.0/8 # RFC1918 private network
+        - 192.168.0.0/16 # RFC1918 private network
   {{- end }}
   {{- end }}
 {{- end }}

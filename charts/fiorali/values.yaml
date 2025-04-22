@@ -104,11 +104,13 @@ networkpolicy:
     allowAll: false # Temporary until I flesh out the ingress network policy
     namespaces: []
     internal: false
+    network: false
     internet: false
   egress:
     allowAll: false # Temporary until I flesh out the ingress network policy
     namespaces: []
     internal: false
+    network: false
     internet: false
 
 prometheusRules:
