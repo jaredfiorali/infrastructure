@@ -5,6 +5,7 @@ metadata:
   name: {{ .Values.name }}
   namespace: {{ .Values.namespace }}
 spec:
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | default "Local" }}
   type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     {{- toYaml .Values.service.ports | nindent 2 }}

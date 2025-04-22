@@ -35,6 +35,7 @@ service:
   - port: 445
     name: tcp445
     targetPort: tcp445
+  externalTrafficPolicy: Local
   type: LoadBalancer
 env:
 - name: ADVERTISED_HOSTNAME
