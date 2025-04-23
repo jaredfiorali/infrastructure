@@ -35,12 +35,12 @@ volumes:
 networkpolicy:
   egress:
     namespaces:
-      - monitoring
+    - monitoring
 podSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 securityContext:
@@ -51,64 +51,64 @@ clusterRoleBinding:
 clusterRole:
   enabled: true
   rules:
-    - apiGroups: [""]
-      resources:
-      - configmaps
-      - endpoints
-      - namespaces
-      - nodes
-      - persistentvolumes
-      - persistentvolumeclaims
-      - pods
-      - secrets
-      - serviceaccounts
-      - services
-      - events
-      verbs: ["get", "list"]
-    - apiGroups: ["apps"]
-      resources:
-      - daemonsets
-      - deployments
-      - statefulsets
-      - replicasets
-      verbs: ["get", "list"]
-    - apiGroups: ["networking.k8s.io"]
-      resources:
-      - ingresses
-      - networkpolicies
-      verbs: ["get", "list"]
-    - apiGroups: ["batch"]
-      resources:
-      - cronjobs
-      - jobs
-      verbs: ["get", "list"]
-    - apiGroups: ["gateway.networking.k8s.io"]
-      resources:
-      - gatewayclasses
-      - gateways
-      - httproutes
-      verbs: ["get", "list"]
-    - apiGroups: ["autoscaling"]
-      resources:
-      - horizontalpodautoscalers
-      verbs: ["get", "list"]
-    - apiGroups: ["policy"]
-      resources:
-      - poddisruptionbudgets
-      - podsecuritypolicies
-      verbs: ["get", "list"]
-    - apiGroups: ["rbac.authorization.k8s.io"]
-      resources:
-      - clusterroles
-      - clusterrolebindings
-      - roles
-      - rolebindings
-      verbs: ["get", "list"]
-    - apiGroups: ["metrics.k8s.io"]
-      resources:
-      - pods
-      - nodes
-      verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources:
+    - configmaps
+    - endpoints
+    - namespaces
+    - nodes
+    - persistentvolumes
+    - persistentvolumeclaims
+    - pods
+    - secrets
+    - serviceaccounts
+    - services
+    - events
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources:
+    - daemonsets
+    - deployments
+    - statefulsets
+    - replicasets
+    verbs: ["get", "list"]
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+    - ingresses
+    - networkpolicies
+    verbs: ["get", "list"]
+  - apiGroups: ["batch"]
+    resources:
+    - cronjobs
+    - jobs
+    verbs: ["get", "list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources:
+    - gatewayclasses
+    - gateways
+    - httproutes
+    verbs: ["get", "list"]
+  - apiGroups: ["autoscaling"]
+    resources:
+    - horizontalpodautoscalers
+    verbs: ["get", "list"]
+  - apiGroups: ["policy"]
+    resources:
+    - poddisruptionbudgets
+    - podsecuritypolicies
+    verbs: ["get", "list"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+    - clusterroles
+    - clusterrolebindings
+    - roles
+    - rolebindings
+    verbs: ["get", "list"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources:
+    - pods
+    - nodes
+    verbs: ["get", "list"]
 configMap:
   enabled: true
   name: spinach.yaml
