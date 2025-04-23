@@ -83,7 +83,7 @@ networkpolicy:
   ingress:
     internal: true
   egress:
-    internal: true
+    network: true
 podSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
