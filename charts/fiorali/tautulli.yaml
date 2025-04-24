@@ -20,8 +20,6 @@ probes:
   httpGet:
     path: /status
     port: tautulli
-podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:
@@ -29,6 +27,16 @@ service:
     port: 8181
     protocol: TCP
     targetPort: tautulli
+command:
+  enabled: true
+  exec: ["/usr/bin/env", "bash", "-c", "python Tautulli.py --datadir /config"]
+env:
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "2000"
+- name: TZ
+  value: "America/Toronto"
 ingress:
   enabled: true
 volumeMounts:
@@ -48,3 +56,14 @@ networkpolicy:
     internet: true
     namespaces:
     - downloader
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000

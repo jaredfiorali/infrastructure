@@ -38,7 +38,7 @@ securityContext: {}
 
 command:
   enabled: false
-  exec: {}
+  exec: []
   args: []
 
 env: []
