@@ -50,3 +50,14 @@ networkpolicy:
     network: true
   egress:
     network: true
+podSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+securityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
