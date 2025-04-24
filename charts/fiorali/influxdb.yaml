@@ -38,3 +38,4 @@ volumes:
 networkpolicy:
   ingress:
     internal: true
+    network: true

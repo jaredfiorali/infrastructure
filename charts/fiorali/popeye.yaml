@@ -152,13 +152,19 @@ configMap:
             # [NEW!] Excludes specific namespaces from the scan
             instances:
               - fqns: [kube-public, kube-system] # => skip ns kube-public and kube-system
-              - fqns: [blee-ns]
-                codes: [106] # => skip code 106 for namespace blee-ns
+              - fqns: [popeye]
+                codes: [207, 203] # => skip code 207 for namespace popeye
 
           # Skip secrets in namespace bozo.
           secrets:
             instances:
               - fqns: [rx:^bozo]
+
+          # Skip services in namespace timemachine.
+          services:
+            instances:
+              - fqns: [rx:^timemachine, rx:^downloader]
+                codes: [1103] # => skip code 1103 for namespace timemachine
 
           # Configure the pods linter for v1/pods.
           pods:
