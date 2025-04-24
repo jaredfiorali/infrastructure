@@ -152,8 +152,6 @@ configMap:
             # [NEW!] Excludes specific namespaces from the scan
             instances:
               - fqns: [kube-public, kube-system] # => skip ns kube-public and kube-system
-              - fqns: [popeye]
-                codes: [207, 203] # => skip code 207 for namespace popeye
 
           # Skip secrets in namespace bozo.
           secrets:
@@ -170,6 +168,8 @@ configMap:
           pods:
             instances:
               # [NEW!] exclude all pods matching these labels.
+              - fqns: [popeye]
+                codes: [207, 203] # => skip code 207 for namespace popeye
               - labels:
                   app: [fred,blee] # Exclude codes 102, 105 for any pods with labels app=fred or app=blee
                 codes: [102, 105]
