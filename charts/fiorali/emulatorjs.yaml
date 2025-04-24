@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/emulatorjs
-  tag: latest@sha256:3072e31fc44633120dce2b60a2bdfc4150d69b978bd794f756093f1699a81eba
+  tag: latest@sha256:2e2e56063d3d671c2caa593fba6ff6c9954a8a463b864923bbdd2a9781cb371e
 containerPorts:
 - containerPort: 80
   name: emulatorjs
