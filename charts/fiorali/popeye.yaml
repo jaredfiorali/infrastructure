@@ -164,12 +164,21 @@ configMap:
               - fqns: [rx:^timemachine, rx:^downloader]
                 codes: [1103] # => skip code 1103 for namespace timemachine
 
+          networkpolicies:
+            instances:
+              # TODO: jfiorali - This needs to be more specific
+              - fqns: [rx:^downloader, rx:^home-assistant, rx:^linkding, rx:^monitoring, rx:^scrypted, rx:^sillytavern, rx:^tautulli]
+                codes: [1207, 1206]
+              - labels:
+                  app: [fred,blee] # Exclude codes 102, 105 for any networkpolicies with labels app=fred or app=blee
+                codes: [102, 105]
+
           # Configure the pods linter for v1/pods.
           pods:
             instances:
-              # [NEW!] exclude all pods matching these labels.
-              - fqns: [popeye]
-                codes: [207, 203] # => skip code 207 for namespace popeye
+              # TODO: jfiorali - This needs to be more specific, and hopefully eliminated once ro is rolled out
+              - fqns: [rx:^dawarich, rx:^downloader, rx:^emulatorjs, rx:^home-assistant, rx:^timemachine]
+                codes: [302, 306] # => skip code 207 for namespace popeye
               - labels:
                   app: [fred,blee] # Exclude codes 102, 105 for any pods with labels app=fred or app=blee
                 codes: [102, 105]

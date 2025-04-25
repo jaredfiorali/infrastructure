@@ -63,7 +63,7 @@ initContainers:
 
 clusterRole:
   enabled: false
-  rules: {}
+  rules: []
 
 clusterRoleBinding:
   enabled: false
