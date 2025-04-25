@@ -22,8 +22,6 @@ probes:
     - sh
     - -c
     - pg_isready -U postgres -d dawarich_development
-containerSecurityContext: {}
-podSecurityContext: {}
 service:
   enabled: true
   ports:
@@ -38,10 +36,18 @@ volumeMounts:
 - name: dawarich-persistent-storage
   mountPath: /var/shared
   subPath: shared
+- name: tmp
+  mountPath: /tmp
+- name: postgresql
+  mountPath: /var/run/postgresql
 volumes:
 - name: dawarich-persistent-storage
   persistentVolumeClaim:
     claimName: dawarich
+- name: tmp
+  emptyDir: {}
+- name: postgresql
+  emptyDir: {}
 env:
 - name: POSTGRES_USER
   value: postgres
@@ -56,3 +62,14 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 999
+  runAsNonRoot: true
+  runAsUser: 999

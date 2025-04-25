@@ -20,8 +20,6 @@ probes:
   httpGet:
     path: /api/health
     port: grafana
-containerSecurityContext: {}
-podSecurityContext: {}
 podLabels:
   app.kubernetes.io/name: grafana
 service:
@@ -61,6 +59,17 @@ networkpolicy:
     namespaces:
     - monitoring
     - loki
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
 configMap:
   enabled: true
   name: grafana.ini

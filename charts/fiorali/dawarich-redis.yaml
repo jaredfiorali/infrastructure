@@ -22,8 +22,6 @@ probes:
     - sh
     - -c
     - redis-cli --raw incr ping
-containerSecurityContext: {}
-podSecurityContext: {}
 service:
   enabled: true
   ports:
@@ -39,7 +37,6 @@ volumes:
 - name: dawarich-persistent-storage
   persistentVolumeClaim:
     claimName: dawarich
-env: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -47,3 +44,14 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 999
+  runAsNonRoot: true
+  runAsUser: 999
