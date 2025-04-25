@@ -27,6 +27,15 @@ service:
   - port: 9091
     name: transmission
     targetPort: transmission
+env:
+- name: PUID
+  value: "911"
+- name: PGID
+  value: "911"
+- name: TZ
+  value: "America/Toronto"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
 ingress:
   enabled: true
 volumeMounts:
@@ -34,6 +43,8 @@ volumeMounts:
   mountPath: /media-bittorrent
 - name: transmission
   mountPath: /config
+- name: run
+  mountPath: /run
 volumes:
 - name: media-bittorrent
   persistentVolumeClaim:
@@ -42,6 +53,8 @@ volumes:
   persistentVolumeClaim:
     claimName: transmission
 - name: port-forward
+  emptyDir: {}
+- name: run
   emptyDir: {}
 networkpolicy:
   ingress:
@@ -55,3 +68,13 @@ dnsPolicy: "None"
 dnsConfig:
   nameservers:
   - 127.0.0.1
+containerSecurityContext: {}
+  # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # privileged: false
+  # runAsUser: 911
+podSecurityContext: {} #gluetun needs root access to make changes to network settings

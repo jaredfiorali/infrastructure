@@ -77,6 +77,13 @@
     mountPath: /gluetun
 - name: ping
   image: docker.io/busybox:stable
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      add:
+      - NET_ADMIN
+    privileged: false
+    readOnlyRootFilesystem: true
   resources:
     limits:
       cpu: 100m
@@ -95,6 +102,14 @@
     echo "ping successful, exiting"
 - name: update-peer-port
   image: docker.io/busybox:stable
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsUser: 911
   resources:
     limits:
       cpu: 100m
