@@ -24,7 +24,7 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.name }}-serviceaccount
-      {{- with .Values.securityContext }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -104,7 +104,7 @@ spec:
         volumeMounts:
           {{- toYaml . | nindent 8 }}
         {{- end }}
-        {{- with .Values.podSecurityContext }}
+        {{- with .Values.containerSecurityContext }}
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}

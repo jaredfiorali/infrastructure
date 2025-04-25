@@ -30,7 +30,7 @@ spec:
               volumeMounts:
                 {{- toYaml . | nindent 14 }}
               {{- end }}
-              {{- with .Values.podSecurityContext }}
+              {{- with .Values.containerSecurityContext }}
               securityContext:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
@@ -38,7 +38,7 @@ spec:
           volumes:
             {{- toYaml . | nindent 10 }}
           {{- end }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.podSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}

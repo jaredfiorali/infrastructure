@@ -22,8 +22,8 @@ probes:
     - sh
     - -c
     - pg_isready -U postgres -d dawarich_development
+containerSecurityContext: {}
 podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:

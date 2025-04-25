@@ -22,8 +22,8 @@ resources:
 probes:
   exec:
     command: ["sh", "-c", "if [[ $(pgrep sidekiq | wc -l) -ne 1 ]]; then exit 1; fi"]
+containerSecurityContext: {}
 podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:

@@ -73,14 +73,14 @@ volumes:
   emptyDir: {}
 - name: tmp
   emptyDir: {}
-podSecurityContext:
+containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - ALL
   readOnlyRootFilesystem: true
   privileged: false
-securityContext:
+podSecurityContext:
   runAsNonRoot: true
 configMap:
   enabled: true

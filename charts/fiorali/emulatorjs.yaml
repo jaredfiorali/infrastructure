@@ -23,8 +23,8 @@ probes:
   httpGet:
     path: /
     port: management
+containerSecurityContext: {}
 podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:

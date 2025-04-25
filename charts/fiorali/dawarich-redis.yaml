@@ -22,8 +22,8 @@ probes:
     - sh
     - -c
     - redis-cli --raw incr ping
+containerSecurityContext: {}
 podSecurityContext: {}
-securityContext: {}
 service:
   enabled: true
   ports:

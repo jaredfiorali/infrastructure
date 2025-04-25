@@ -20,8 +20,8 @@ probes:
   httpGet:
     path: /api/health
     port: grafana
+containerSecurityContext: {}
 podSecurityContext: {}
-securityContext: {}
 podLabels:
   app.kubernetes.io/name: grafana
 service:

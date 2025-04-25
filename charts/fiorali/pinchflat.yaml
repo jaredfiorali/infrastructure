@@ -66,14 +66,14 @@ networkpolicy:
     internal: true
   egress:
     internet: true
-podSecurityContext:
+containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
     - ALL
   readOnlyRootFilesystem: true
   privileged: false
-securityContext:
+podSecurityContext:
   fsGroup: 2000
   runAsNonRoot: true
   runAsUser: 1000

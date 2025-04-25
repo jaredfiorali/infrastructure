@@ -32,9 +32,9 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-podSecurityContext: {}
+containerSecurityContext: {}
 
-securityContext: {}
+podSecurityContext: {}
 
 command:
   enabled: false
