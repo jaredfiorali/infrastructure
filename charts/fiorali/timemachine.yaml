@@ -92,3 +92,7 @@ volumes:
 networkpolicy:
   ingress:
     internal: true
+# Attempted to adjust the security context,
+# however the pod does need root permission to be able to add users and update passwords
+containerSecurityContext: {}
+podSecurityContext: {}
