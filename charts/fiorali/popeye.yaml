@@ -158,6 +158,12 @@ configMap:
             instances:
               - fqns: [rx:^bozo]
 
+          # Skip secrets in namespace bozo.
+          cronjobs:
+            instances:
+              - fqns: [rx:^popeye]
+                codes: [1503] # => skip code 1503 for namespace popeye
+
           # Skip services in namespace timemachine.
           services:
             instances:
@@ -179,6 +185,8 @@ configMap:
               # TODO: jfiorali - This needs to be more specific, and hopefully eliminated once ro is rolled out
               - fqns: [rx:^dawarich, rx:^downloader, rx:^emulatorjs, rx:^home-assistant, rx:^timemachine]
                 codes: [302, 306] # => skip code 207 for namespace popeye
+              - fqns: [rx:^popeye]
+                codes: [203, 207] # => skip code 207 for namespace popeye
               - labels:
                   app: [fred,blee] # Exclude codes 102, 105 for any pods with labels app=fred or app=blee
                 codes: [102, 105]
