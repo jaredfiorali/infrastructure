@@ -118,8 +118,19 @@ prometheusRules:
         summary: Popeye linter score is low.
       expr: popeye_report_score < 100
       for: 5m
+      keep_firing_for: 10m
       labels:
         issue: Popeye score is less than 100.
+        severity: critical
+    - alert: PopeyeErrorsDetected
+      annotations:
+        description: If the popeye linter has detected errors, it indicates that the cluster is not healthy.
+        summary: Popeye has detected errors.
+      expr: popeye_severity_total{severity="error"} > 0 or popeye_severity_total{severity="warn"} > 0
+      for: 5m
+      keep_firing_for: 10m
+      labels:
+        issue: Popeye has detected errors in the {{$labels.namespace}} namespace.
         severity: critical
 configMap:
   enabled: true
