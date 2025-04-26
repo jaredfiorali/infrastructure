@@ -109,6 +109,18 @@ clusterRole:
     - pods
     - nodes
     verbs: ["get", "list"]
+prometheusRules:
+  enabled: true
+  rules:
+    - alert: PopeyeLowScore
+      annotations:
+        description: If the popeye linter has a low score, it indicates that the cluster is not healthy.
+        summary: Popeye linter score is low.
+      expr: popeye_report_score < 100
+      for: 5m
+      labels:
+        issue: Popeye score is less than 100.
+        severity: critical
 configMap:
   enabled: true
   name: spinach.yaml
