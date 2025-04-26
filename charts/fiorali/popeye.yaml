@@ -126,11 +126,21 @@ prometheusRules:
       annotations:
         description: If the popeye linter has detected errors, it indicates that the cluster is not healthy.
         summary: Popeye has detected errors.
-      expr: popeye_severity_total{severity="error"} > 0 or popeye_severity_total{severity="warn"} > 0
+      expr: popeye_severity_total{severity="error"} > 0
       for: 5m
       keep_firing_for: 10m
       labels:
         issue: Popeye has detected errors in the {{$labels.namespace}} namespace.
+        severity: critical
+    - alert: PopeyeWarningDetected
+      annotations:
+        description: If the popeye linter has detected warnings, it indicates that the cluster is not healthy.
+        summary: Popeye has detected warnings.
+      expr: popeye_severity_total{severity="warn"} > 0
+      for: 5m
+      keep_firing_for: 10m
+      labels:
+        issue: Popeye has detected warnings in the {{$labels.namespace}} namespace.
         severity: critical
 configMap:
   enabled: true
