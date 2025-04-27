@@ -17,7 +17,7 @@ command:
   args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
 cronjob:
   enabled: true
-  schedule: "5 */1 * * *"
+  schedule: "*/10 * * * *"
 volumeMounts:
 - name: popeye-configmap
   mountPath: /spinach.yaml
