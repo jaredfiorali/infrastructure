@@ -174,7 +174,7 @@ configMap:
           annotations:
             fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
           # [NEW!] Exclude scan codes globally via straight codes or regex!
-          codes: ["1109"] # => exclude issue codes 300, 206, 410, 415 (Note: regex match!)
+          codes: ["1109", "406"] # => exclude issue codes 300, 206, 410, 415 (Note: regex match!)
 
         # [NEW!] Configure individual resource linters
         linters:
