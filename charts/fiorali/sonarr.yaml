@@ -12,10 +12,10 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 1Gi
+    memory: 1500Mi
   requests:
     cpu: '1'
-    memory: 500Mi
+    memory: 1Gi
 probes:
   exec:
     command:
