@@ -76,9 +76,6 @@ volumeMounts:
 - name: media-workout-0
   mountPath: /media-workout-0
   readOnly: true
-- name: media-youtube
-  mountPath: /media-youtube
-  readOnly: true
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 volumes:
@@ -121,9 +118,6 @@ volumes:
 - name: media-workout-0
   persistentVolumeClaim:
     claimName: media-workout-0
-- name: media-youtube
-  persistentVolumeClaim:
-    claimName: media-youtube
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi
