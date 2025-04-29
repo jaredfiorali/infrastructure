@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:2b8ab10e04a17108f63995246efceb6e890d50b7e848efbca305217a016288e7
+  tag: latest@sha256:2c277e09e5157905b798489c7161fdc08422635db091f8b55ef4f246384c3ce0
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -69,12 +69,12 @@ dnsConfig:
   nameservers:
   - 127.0.0.1
 containerSecurityContext: {}
-  # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
-  # allowPrivilegeEscalation: false
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # privileged: false
-  # runAsUser: 911
+# Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
+# allowPrivilegeEscalation: false
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# privileged: false
+# runAsUser: 911
 podSecurityContext: {} #gluetun needs root access to make changes to network settings
