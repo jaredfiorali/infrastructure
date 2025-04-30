@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/unpoller/unpoller
-  tag: latest@sha256:9ba73b1793ef332ae9b4b719ef0fc09f231d6276bc7b721cbb47961ed7792961
+  tag: latest@sha256:3226b31ac169da1880a3d1617ec209b3659770b16771165e87b622e07a58dbf5
 containerPorts:
 - containerPort: 9130
   name: poller
