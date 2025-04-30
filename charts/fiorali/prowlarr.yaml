@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/prowlarr
-  tag: latest@sha256:6c9f08dafe16eb5025040ce3add6fd688746755f8e4f802da3238415d119d14b
+  tag: latest@sha256:126ead562b0fb1716e5c07db1df81f96351ae4de07b0101423cbc9317ccf012d
 containerPorts:
 - containerPort: 9696
   name: prowlarr
