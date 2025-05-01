@@ -4,6 +4,8 @@ kind: NetworkPolicy
 metadata:
   name: {{ .Values.name }}-netpol
   namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
 spec:
   {{- if .Values.networkpolicy.podSelector }}
   podSelector:
