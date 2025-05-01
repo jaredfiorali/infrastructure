@@ -202,21 +202,25 @@ configMap:
               #   codes: [1207, 1206]
               - labels:
                   app: [home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller] # Exclude codes for any networkpolicies with specified labels
-                  codes: [1206]
+                codes: [1206]
+              - labels:
                   app: [linkding, plex, prowlarr, radarr, sonarr, transmission, tautulli] # Exclude codes for any networkpolicies with specified labels
-                  codes: [1207]
+                codes: [1207]
 
           # Configure the pods linter for v1/pods.
           pods:
             instances:
-              # TODO: jfiorali - This needs to be more specific, and hopefully eliminated once ro is rolled out
-              - fqns: [rx:^dawarich, rx:^downloader, rx:^emulatorjs, rx:^home-assistant, rx:^timemachine]
-                codes: [302, 306] # => skip code 207 for namespace popeye
-              - fqns: [rx:^popeye]
-                codes: [203, 207] # => skip code 207 for namespace popeye
+              # - fqns: [rx:^dawarich, rx:^downloader, rx:^emulatorjs, rx:^home-assistant, rx:^timemachine]
+              #   codes: [306] # => skip code 207 for namespace popeye
               - labels:
-                  app: [fred,blee] # Exclude codes 102, 105 for any pods with labels app=fred or app=blee
-                codes: [102, 105]
+                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, prowlarr, radarr, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
+                codes: [302]
+              - labels:
+                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, gluetun, home-assistant, ping, plex, prowlarr, radarr, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
+                codes: [306]
+              - labels:
+                  app: [popeye] # Exclude codes for any pods with specified labels
+                codes: [203, 207]
 
       resources:
         # Configure node resources.
@@ -242,10 +246,8 @@ configMap:
       # [New!] overrides code severity
       overrides:
         # Code specifies a custom severity level ie critical=3, warn=2, info=1
-        - code: 1206
-          severity: 1
-        - code: 1207
-          severity: 1
+        # - code: 1206
+        #   severity: 1
 
       # Configure a list of allowed registries to pull images from.
       # Any resources not using the following registries will be flagged!
