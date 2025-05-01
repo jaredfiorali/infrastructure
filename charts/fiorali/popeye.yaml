@@ -7,7 +7,7 @@ deployment:
   enabled: false
 resources:
   limits:
-    cpu: 500m
+    cpu: '1'
     memory: 1Gi
 service:
   enabled: false
@@ -153,45 +153,38 @@ configMap:
       allocations:
         cpu:
           underPercUtilization: 200 # Checks if cpu is under allocated by more than 200% at current load.
-          overPercUtilization: 50   # Checks if cpu is over allocated by more than 50% at current load.
+          overPercUtilization:  50  # Checks if cpu is over allocated by more than 50% at current load.
         memory:
           underPercUtilization: 200 # Checks if mem is under allocated by more than 200% at current load.
-          overPercUtilization: 50   # Checks if mem is over allocated by more than 50% usage at current load.
+          overPercUtilization:  50  # Checks if mem is over allocated by more than 50% usage at current load.
 
       # Excludes excludes certain resources from Popeye scans
       excludes:
-        # [NEW!] Global exclude resources and codes globally of any linters.
         global:
-          fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd] # => excludes all resources in kube-system, kube-public, etc..
-          # [NEW!] Exclude resources for all linters matching these labels
+          fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd] # => excludes all third party resources
           labels:
-            app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] #=> exclude any resources with labels matching
-            app.kubernetes.io/managed-by: [prometheus-operator] #=> exclude any resources with labels
-            managed-by: [prometheus-operator] #=> exclude any resources with labels matching
-            app.kubernetes.io/name: [prometheus-pushgateway] #=> exclude any resources with labels matching
-            skip-popeye: ["true"] #=> exclude any resources with labels matching
-          # [NEW!] Exclude resources for all linters matching these annotations
+            app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] # => excludes all third party resources
+            app.kubernetes.io/managed-by: [prometheus-operator] # => excludes all third party resources
+            managed-by: [prometheus-operator] # => excludes all third party resources
+            app.kubernetes.io/name: [prometheus-pushgateway] # => excludes all third party resources
+            skip-popeye: ["true"] # => excludes all resources with labels skip-popeye=true
+          # [Sample]
           annotations:
             fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
-          # [NEW!] Exclude scan codes globally via straight codes or regex!
-          codes: ["1109", "406"] # => exclude issue codes 300, 206, 410, 415 (Note: regex match!)
+          # => exclude specified codes (https://popeyecli.io/docs/codes.html)
+          codes: ["1109", "406"]
 
-        # [NEW!] Configure individual resource linters
+        # Configure individual resource linters
         linters:
           # Configure the namespaces linter for v1/namespaces
           namespaces:
-            # [NEW!] Exclude these codes for all namespace resources straight up or via regex.
+            # Exclude these codes for all namespace resources straight up or via regex.
             codes: ["1109"] # => exclude codes 100, 220, 225, ...
-            # [NEW!] Excludes specific namespaces from the scan
+            #  Excludes specific namespaces from the scan
             instances:
               - fqns: [kube-public, kube-system] # => skip ns kube-public and kube-system
 
-          # Skip secrets in namespace bozo.
-          secrets:
-            instances:
-              - fqns: [rx:^bozo]
-
-          # Skip secrets in namespace bozo.
+          # Skip secrets
           cronjobs:
             instances:
               - fqns: [rx:^popeye]
@@ -201,16 +194,17 @@ configMap:
           services:
             instances:
               - fqns: [rx:^timemachine, rx:^downloader]
-                codes: [1103] # => skip code 1103 for namespace timemachine
+                codes: [1103] # => skip code 1103 for timemachine service
 
           networkpolicies:
             instances:
-              # TODO: jfiorali - This needs to be more specific
-              - fqns: [rx:^downloader, rx:^home-assistant, rx:^linkding, rx:^monitoring, rx:^scrypted, rx:^sillytavern, rx:^tautulli]
-                codes: [1207, 1206]
+              # - fqns: [rx:^downloader]
+              #   codes: [1207, 1206]
               - labels:
-                  app: [fred,blee] # Exclude codes 102, 105 for any networkpolicies with labels app=fred or app=blee
-                codes: [102, 105]
+                  app: [home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller] # Exclude codes for any networkpolicies with specified labels
+                  codes: [1206]
+                  app: [linkding, plex, prowlarr, radarr, sonarr, transmission, tautulli] # Exclude codes for any networkpolicies with specified labels
+                  codes: [1207]
 
           # Configure the pods linter for v1/pods.
           pods:
