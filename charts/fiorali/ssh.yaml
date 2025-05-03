@@ -1,0 +1,54 @@
+name: ssh
+namespace: ssh
+deployment:
+  enabled: true
+image:
+  repository: finalgene/openssh
+  tag: latest@sha256:3488c5dd43ec2bd7125b75bd2904775ae84ab3e6e24a1e99b802d6ac7abaa267
+containerPorts:
+- containerPort: 22
+  name: ssh
+  protocol: TCP
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 500Mi
+probes:
+  tcpSocket:
+    port: ssh
+service:
+  enabled: true
+  ports:
+  - name: ssh
+    port: 10022
+    protocol: TCP
+    targetPort: ssh
+env:
+- name: SSH_DEPLOY_KEY
+  value: ''
+ingress:
+  enabled: true
+volumeMounts:
+- name: ssh-storage
+  mountPath: /mnt/ssh
+volumes:
+- name: ssh-storage
+  persistentVolumeClaim:
+    claimName: ssh
+networkpolicy:
+  ingress:
+    internet: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
