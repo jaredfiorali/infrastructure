@@ -3,10 +3,10 @@ namespace: ssh
 deployment:
   enabled: true
 image:
-  repository: finalgene/openssh
-  tag: latest@sha256:3488c5dd43ec2bd7125b75bd2904775ae84ab3e6e24a1e99b802d6ac7abaa267
+  repository: ghcr.io/linuxserver/openssh-server
+  tag: latest@sha256:b8497525b4ef1931bbf04e05e97901fc2a4689736dc2fcbda47cba90a8f8f70c
 containerPorts:
-- containerPort: 22
+- containerPort: 2222
   name: ssh
   protocol: TCP
 resources:
@@ -23,12 +23,31 @@ service:
   enabled: true
   ports:
   - name: ssh
-    port: 10022
+    port: 2222
     protocol: TCP
     targetPort: ssh
+  externalTrafficPolicy: Local
+  type: LoadBalancer
 env:
-- name: SSH_DEPLOY_KEY
-  value: ''
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
+- name: PUBLIC_KEY
+  valueFrom:
+    secretKeyRef:
+      name: ssh-credentials
+      key: public-key
+- name: SUDO_ACCESS
+  value: "false"
+- name: PASSWORD_ACCESS
+  value: "false"
+- name: USER_NAME
+  value: "rameez"
+- name: LOG_STDOUT
+  value: "true"
 ingress:
   enabled: true
 volumeMounts:
@@ -43,12 +62,5 @@ networkpolicy:
     internet: true
 containerSecurityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
   privileged: false
-podSecurityContext:
-  fsGroup: 1000
-  runAsNonRoot: true
-  runAsUser: 1000
+podSecurityContext: {}
