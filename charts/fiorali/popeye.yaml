@@ -172,14 +172,14 @@ configMap:
             annotations:
               fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
             # => exclude specified codes (https://popeyecli.io/docs/codes.html)
-            codes: ["1109", "406"]
+            codes: ["1109", "406"] # => Only one Pod associated with this endpoint, K8s version OK
 
           # Configure individual resource linters
           linters:
             # Configure the namespaces linter for v1/namespaces
             namespaces:
               # Exclude these codes for all namespace resources straight up or via regex.
-              codes: ["1109"] # => exclude codes 100, 220, 225, ...
+              codes: ["1109"] # => Only one Pod associated with this endpoint
               #  Excludes specific namespaces from the scan
               instances:
                 - fqns: [kube-public, kube-system] # => skip ns kube-public and kube-system
@@ -188,27 +188,25 @@ configMap:
             cronjobs:
               instances:
                 - fqns: [rx:^popeye]
-                  codes: [1503] # => skip code 1503 for namespace popeye
+                  codes: [1503] # => Cronjob not ready
 
             # Skip services in namespace timemachine.
             services:
               instances:
-                # - fqns: [rx:^timemachine, rx:^downloader]
-                #   codes: [1103] # => skip code 1103 for timemachine service
                 - labels:
-                    app: [timemachine, ssh, plex] # Exclude codes for any networkpolicies with specified labels
-                  codes: [1103]
+                    app: [timemachine, ssh, plex]
+                  codes: [1103] # Load balancer services
 
             networkpolicies:
               instances:
                 # - fqns: [rx:^downloader]
                 #   codes: [1207, 1206]
                 - labels:
-                    app: [home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller] # Exclude codes for any networkpolicies with specified labels
-                  codes: [1206]
+                    app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
+                  codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [linkding, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli] # Exclude codes for any networkpolicies with specified labels
-                  codes: [1207]
+                    app: [linkding, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
+                  codes: [1207] # => Can't match 192.168.0.0/16 (egress)
 
             # Configure the pods linter for v1/pods.
             pods:
@@ -217,13 +215,13 @@ configMap:
                 #   codes: [306] # => skip code 207 for namespace popeye
                 - labels:
                     app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, prowlarr, radarr, ssh, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
-                  codes: [302]
+                  codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
                 - labels:
                     app: [dawarich-app, dawarich-sidekiq, emulatorjs, gluetun, home-assistant, ping, plex, prowlarr, radarr, ssh, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
-                  codes: [306]
+                  codes: [306] # => Container could be running as root user. Check SecurityContext/Image
                 - labels:
                     app: [popeye] # Exclude codes for any pods with specified labels
-                  codes: [203, 207]
+                  codes: [203, 207] # => Pod is waiting, Pod is unhappy
 
         resources:
           # Configure node resources.
