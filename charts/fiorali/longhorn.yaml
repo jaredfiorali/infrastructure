@@ -9,17 +9,14 @@ ingress:
 serviceMonitor:
   enabled: false
 networkpolicy:
-  podSelector: false
-  ingress:
-    internal: true
-  egress:
-    internet: true
-namespaceChart:
-  enabled: true
+  enabled: false
 serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
+
+namespaceChart:
+  enabled: true
 prometheusRules:
   enabled: true
   rules:
