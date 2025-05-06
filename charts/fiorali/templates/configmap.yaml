@@ -4,7 +4,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.name }}-configmap
   namespace: {{ .Values.namespace }}
+{{ with .Values.configMap.data -}}
 data:
-  {{ .Values.configMap.name }}: |
-  	{{- .Values.configMap.value | nindent 4}}
+  {{- toYaml . | nindent 2 }}
+{{- end }}
 {{- end }}

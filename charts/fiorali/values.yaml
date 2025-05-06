@@ -87,7 +87,7 @@ ingress:
 configMap:
   enabled: false
   name: ""
-  value: ""
+  data: {}
 
 serviceMonitor:
   enabled: false
