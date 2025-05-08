@@ -34,11 +34,15 @@ env:
 volumeMounts:
 - name: scrypted-persistent-storage
   mountPath: /server/volume
+- name: logs
+  mountPath: /home/ubuntu/.npm/_logs
 hostNetwork: true
 volumes:
 - name: scrypted-persistent-storage
   persistentVolumeClaim:
     claimName: scrypted
+- name: logs
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
