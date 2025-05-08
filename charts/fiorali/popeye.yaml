@@ -13,6 +13,7 @@ service:
   enabled: false
 podDisruptionBudget:
   enabled: true
+  minAvailable: 0
 command:
   args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
 cronjob:
