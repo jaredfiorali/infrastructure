@@ -40,12 +40,16 @@ env:
 ingress:
   enabled: true
 volumeMounts:
-- mountPath: /config
-  name: tautulli-persistent-storage
+- name: tautulli-persistent-storage
+  mountPath: /config
+- name: tmp
+  mountPath: /tmp
 volumes:
 - name: tautulli-persistent-storage
   persistentVolumeClaim:
     claimName: tautulli
+- name: tmp
+  emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
