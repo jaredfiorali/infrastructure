@@ -212,7 +212,7 @@ configMap:
                 codes: [306] # => Container could be running as root user. Check SecurityContext/Image
               - labels:
                   app: [popeye] # Exclude codes for any pods with specified labels
-                codes: [203, 207] # => Pod is waiting, Pod is unhappy
+                codes: [203, 206, 207] # => Pod is waiting, Pod missing Pdb, Pod is unhappy
 
       resources:
         # Configure node resources.
