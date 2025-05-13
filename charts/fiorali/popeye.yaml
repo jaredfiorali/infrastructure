@@ -12,8 +12,7 @@ resources:
 service:
   enabled: false
 podDisruptionBudget:
-  enabled: true
-  minAvailable: 0
+  enabled: false
 command:
   args: ["-A", "-o", "json", "--force-exit-zero", "-f", "/spinach.yaml", "--push-gtwy-url", "http://prometheus-prometheus-pushgateway.monitoring:9091"]
 cronjob:
@@ -132,16 +131,6 @@ prometheusRules:
       keep_firing_for: 10m
       labels:
         issue: Popeye has detected errors in the {{$labels.namespace}} namespace.
-        severity: critical
-    - alert: PopeyeWarningDetected
-      annotations:
-        description: If the popeye linter has detected warnings, it indicates that the cluster is not healthy.
-        summary: Popeye has detected warnings.
-      expr: popeye_severity_total{severity="warn"} > 0
-      for: 5m
-      keep_firing_for: 10m
-      labels:
-        issue: Popeye has detected warnings in the {{$labels.namespace}} namespace.
         severity: critical
 configMap:
   enabled: true
