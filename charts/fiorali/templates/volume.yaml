@@ -1,0 +1,27 @@
+{{- if .Values.volume.enabled -}}
+apiVersion: longhorn.io/v1beta2
+kind: Volume
+metadata:
+  finalizers:
+  - longhorn.io
+  labels:
+    backup-target: default
+    longhornvolume: {{ .Values.name }}
+    {{- if .Values.volume.snapshots.daily }}
+    recurring-job-group.longhorn.io/daily: enabled
+    {{- end }}
+    setting.longhorn.io/remove-snapshots-during-filesystem-trim: ignored
+    setting.longhorn.io/replica-auto-balance: ignored
+    setting.longhorn.io/snapshot-data-integrity: ignored
+  name: {{ .Values.name }}
+  namespace: longhorn-system
+spec:
+  accessMode: {{ .Values.volume.accessMode | default "rwo" }}
+  dataEngine: {{ .Values.volume.dataEngine | default "v1" }}
+  diskSelector:
+    {{- toYaml .Values.volume.diskSelector | nindent 4 }}
+  encrypted: {{ .Values.volume.encrypted | default true }}
+  frontend: blockdev
+  numberOfReplicas: {{ .Values.volume.numberOfReplicas | default 2 }}
+  size: {{ quote .Values.volume.size }}
+{{- end }}
