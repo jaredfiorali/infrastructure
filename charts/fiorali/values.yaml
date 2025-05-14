@@ -150,5 +150,5 @@ volume:
   - SSD
   encrypted: true
   numberOfReplicas: 2
-  snapshotMaxCount: 14
+  snapshotMaxCount: 15
   size: 0

@@ -152,3 +152,6 @@ configMap:
             }
             ]
           }
+volume:
+  enabled: true
+  size: "5368709120"

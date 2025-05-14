@@ -107,3 +107,6 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+volume:
+  enabled: true
+  size: "1073741824"
