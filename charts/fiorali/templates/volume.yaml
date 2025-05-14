@@ -6,7 +6,7 @@ metadata:
   - longhorn.io
   labels:
     backup-target: default
-    longhornvolume: {{ .Values.name }}
+    longhornvolume: {{ .Values.volume.name | default .Values.name }}
     {{- if .Values.volume.snapshots.daily }}
     recurring-job-group.longhorn.io/daily: enabled
     {{- else if .Values.volume.snapshots.weekly }}
@@ -17,7 +17,7 @@ metadata:
     setting.longhorn.io/remove-snapshots-during-filesystem-trim: ignored
     setting.longhorn.io/replica-auto-balance: ignored
     setting.longhorn.io/snapshot-data-integrity: ignored
-  name: {{ .Values.name }}
+  name: {{ .Values.volume.name | default .Values.name }}
   namespace: longhorn-system
 spec:
   accessMode: {{ .Values.volume.accessMode }}

@@ -109,4 +109,5 @@ networkpolicy:
     allowAll: true
 volume:
   enabled: true
+  name: dawarich
   size: "1073741824"
