@@ -34,6 +34,10 @@ env:
   value: America/Toronto
 - name: ADVERTISE_IP
   value: http://192.168.20.10:32400/
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
 ingress:
   enabled: true
 volumeMounts:

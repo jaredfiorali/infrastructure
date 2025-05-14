@@ -39,6 +39,10 @@ service:
 env:
 - name: DISABLE_IPFS
   value: "true"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
 ingress:
   enabled: true
 volumeMounts:

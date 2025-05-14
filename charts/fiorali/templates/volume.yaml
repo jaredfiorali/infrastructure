@@ -19,7 +19,7 @@ spec:
   accessMode: {{ .Values.volume.accessMode | default "rwo" }}
   dataEngine: {{ .Values.volume.dataEngine | default "v1" }}
   diskSelector:
-    {{- toYaml .Values.volume.diskSelector | nindent 4 }}
+    {{- toYaml .Values.volume.diskSelector | nindent 2 }}
   encrypted: {{ .Values.volume.encrypted | default true }}
   frontend: blockdev
   numberOfReplicas: {{ .Values.volume.numberOfReplicas | default 2 }}
