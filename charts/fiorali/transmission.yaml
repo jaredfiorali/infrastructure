@@ -70,6 +70,18 @@ dnsPolicy: "None"
 dnsConfig:
   nameservers:
   - 127.0.0.1
+volume:
+  enabled: true
+  snapshots:
+    daily: true
+    weekly: false
+  accessMode: rwo
+  dataEngine: v1
+  diskSelector:
+    - SSD
+  encrypted: true
+  numberOfReplicas: 2
+  size: "1073741824"
 containerSecurityContext: {}
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 # allowPrivilegeEscalation: false
