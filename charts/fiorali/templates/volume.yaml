@@ -9,6 +9,10 @@ metadata:
     longhornvolume: {{ .Values.name }}
     {{- if .Values.volume.snapshots.daily }}
     recurring-job-group.longhorn.io/daily: enabled
+    {{- else if .Values.volume.snapshots.weekly }}
+    recurring-job-group.longhorn.io/weekly: enabled
+    {{- else }}
+    recurring-job-group.longhorn.io/default: enabled
     {{- end }}
     setting.longhorn.io/remove-snapshots-during-filesystem-trim: ignored
     setting.longhorn.io/replica-auto-balance: ignored
@@ -16,12 +20,13 @@ metadata:
   name: {{ .Values.name }}
   namespace: longhorn-system
 spec:
-  accessMode: {{ .Values.volume.accessMode | default "rwo" }}
-  dataEngine: {{ .Values.volume.dataEngine | default "v1" }}
+  accessMode: {{ .Values.volume.accessMode }}
+  dataEngine: {{ .Values.volume.dataEngine }}
   diskSelector:
     {{- toYaml .Values.volume.diskSelector | nindent 2 }}
-  encrypted: {{ .Values.volume.encrypted | default true }}
+  encrypted: {{ .Values.volume.encrypted }}
   frontend: blockdev
-  numberOfReplicas: {{ .Values.volume.numberOfReplicas | default 2 }}
+  numberOfReplicas: {{ .Values.volume.numberOfReplicas }}
+  snapshotMaxCount: {{ .Values.volume.snapshotMaxCount }}
   size: {{ quote .Values.volume.size }}
 {{- end }}
