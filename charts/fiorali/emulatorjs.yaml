@@ -23,8 +23,6 @@ probes:
   httpGet:
     path: /
     port: management
-containerSecurityContext: {}
-podSecurityContext: {}
 service:
   enabled: true
   ports:
@@ -63,3 +61,15 @@ affinity: {}
 networkpolicy:
   ingress:
     internal: true
+# Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
+# containerSecurityContext:
+#   allowPrivilegeEscalation: false
+#   capabilities:
+#     drop:
+#     - ALL
+#   readOnlyRootFilesystem: true
+#   privileged: false
+# podSecurityContext:
+#   fsGroup: 2000
+#   runAsNonRoot: true
+#   runAsUser: 1000
