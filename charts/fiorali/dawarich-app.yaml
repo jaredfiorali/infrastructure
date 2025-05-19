@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:56c3997d3b47d1169faff20fdd2d26644398cf83368d8b84830047636b757435
+  tag: latest@sha256:5629784f59e85632e71bc8b1a90802987c8baf516d31ba0582e32c2956f978e8
 containerPorts:
 - containerPort: 3000
   name: dawarich
