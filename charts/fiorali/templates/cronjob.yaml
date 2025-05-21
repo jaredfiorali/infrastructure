@@ -4,6 +4,8 @@ kind: CronJob
 metadata:
   name: {{ .Values.name }}
   namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
 spec:
   schedule: {{ .Values.cronjob.schedule | quote }}
   concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | default "Forbid" }}
@@ -20,9 +22,11 @@ spec:
             - name: {{ .Values.name }}
               image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
               imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-              args:
-              {{- range .Values.command.args }}
+              {{- if .Values.command.enabled }}
+              command:
+              {{- range .Values.command.exec }}
                 - {{ . | quote }}
+              {{- end }}
               {{- end }}
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}

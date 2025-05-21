@@ -1,0 +1,98 @@
+name: git-sync
+namespace: monitoring
+image:
+  repository: docker.io/alpine/git
+  tag: latest@sha256:97d9cf9f903c2a636cd7e984550eef6d894776fdae26a9456cdd368c0151d1db
+deployment:
+  enabled: false
+resources:
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 250m
+    memory: 250Mi
+service:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
+command:
+  enabled: true
+  exec: ["/bin/sh", "-c", "/tmp/git-sync.sh"]
+  # exec: ["/bin/sh", "-c", "sleep 1000000"]
+cronjob:
+  enabled: true
+  schedule: "5 23 * * 0"
+volumeMounts:
+- name: git-sync-ssh-key
+  mountPath: "/tmp/id_rsa"
+  subPath: id_rsa
+- name: git-sync-gitconfig
+  mountPath: "/root/.gitconfig"
+  subPath: .gitconfig
+- name: git
+  mountPath: /git
+- name: ssh
+  mountPath: /root/.ssh
+- name: git-sync-configmap
+  mountPath: /tmp/git-sync.sh
+  subPath: git-sync.sh
+  readOnly: true
+volumes:
+- name: git-sync-ssh-key
+  secret:
+    secretName: git-sync-ssh-key
+    defaultMode: 0600
+- name: git-sync-gitconfig
+  secret:
+    secretName: git-sync-gitconfig
+    defaultMode: 0600
+- name: git-sync-configmap
+  configMap:
+    name: git-sync-configmap
+    defaultMode: 511
+- name: git
+  emptyDir: {}
+- name: ssh
+  emptyDir: {}
+networkpolicy:
+  egress:
+    internet: true
+    internal: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 2000
+  # runAsNonRoot: true
+configMap:
+  enabled: true
+  name: git-sync.sh
+  value: |-
+    #!/bin/sh
+    set -x
+
+    echo "Copying SSH key to /root/.ssh/id_rsa"
+    cp /tmp/id_rsa /root/.ssh/id_rsa
+
+    echo "Downloading SSH key scan for github.com"
+    ssh-keyscan github.com > ~/.ssh/known_hosts
+
+    echo "Updating permissions for SSH key"
+    chmod 0600 /root/.ssh/id_rsa
+
+    echo "Cloning git repository"
+    git clone --depth 5 git@github.com:jaredfiorali/infrastructure.git --single-branch --branch=gh-pages .
+
+    echo "Downloading metrics"
+    wget -O /git/node_cpu_usage.json http://kromgo.monitoring:8080/node_cpu_usage
+
+    echo "Commit metrics to git"
+    git add . && git commit -m "Metrics update"
+
+    echo "Push new metrics"
+    git push
