@@ -17,7 +17,6 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  enabled: true
   exec: ["/bin/sh", "-c", "/tmp/git-sync.sh"]
   # exec: ["/bin/sh", "-c", "sleep 1000000"]
 cronjob:

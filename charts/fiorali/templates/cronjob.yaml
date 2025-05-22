@@ -22,9 +22,15 @@ spec:
             - name: {{ .Values.name }}
               image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
               imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-              {{- if .Values.command.enabled }}
+              {{- if .Values.command.exec }}
               command:
               {{- range .Values.command.exec }}
+                - {{ . | quote }}
+              {{- end }}
+              {{- end }}
+              {{- if .Values.command.args }}
+              args:
+              {{- range .Values.command.args }}
                 - {{ . | quote }}
               {{- end }}
               {{- end }}
