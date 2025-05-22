@@ -22,39 +22,29 @@ command:
 cronjob:
   enabled: true
   schedule: "5 23 * * 0"
+env:
+- name: GITHUB_PAT
+  valueFrom:
+    secretKeyRef:
+      name: github-pat
+      key: github-pat
 volumeMounts:
-- name: git-sync-ssh-key
-  mountPath: "/tmp/id_rsa"
-  subPath: id_rsa
-- name: git-sync-gitconfig
-  mountPath: "/root/.gitconfig"
-  subPath: .gitconfig
 - name: git
   mountPath: /git
-- name: ssh
-  mountPath: /root/.ssh
 - name: git-sync-configmap
   mountPath: /tmp/git-sync.sh
   subPath: git-sync.sh
   readOnly: true
 volumes:
-- name: git-sync-ssh-key
-  secret:
-    secretName: git-sync-ssh-key
-    defaultMode: 0600
-- name: git-sync-gitconfig
-  secret:
-    secretName: git-sync-gitconfig
-    defaultMode: 0600
 - name: git-sync-configmap
   configMap:
     name: git-sync-configmap
     defaultMode: 511
 - name: git
   emptyDir: {}
-- name: ssh
-  emptyDir: {}
 networkpolicy:
+  ingress:
+    internet: true
   egress:
     internet: true
     internal: true
@@ -67,7 +57,8 @@ containerSecurityContext:
   privileged: false
 podSecurityContext:
   fsGroup: 2000
-  # runAsNonRoot: true
+  runAsNonRoot: true
+  runAsUser: 1000
 configMap:
   enabled: true
   name: git-sync.sh
@@ -75,20 +66,27 @@ configMap:
     #!/bin/sh
     set -x
 
-    echo "Copying SSH key to /root/.ssh/id_rsa"
-    cp /tmp/id_rsa /root/.ssh/id_rsa
+    # echo "Copying SSH key to /root/.ssh/id_rsa"
+    # cp /tmp/id_rsa /root/.ssh/id_rsa
 
-    echo "Downloading SSH key scan for github.com"
-    ssh-keyscan github.com > ~/.ssh/known_hosts
+    # echo "Downloading SSH key scan for github.com"
+    # ssh-keyscan github.com > ~/.ssh/known_hosts
 
-    echo "Updating permissions for SSH key"
-    chmod 0600 /root/.ssh/id_rsa
+    # echo "Updating permissions for SSH key"
+    # chmod 0600 /root/.ssh/id_rsa
 
     echo "Cloning git repository"
-    git clone --depth 5 git@github.com:jaredfiorali/infrastructure.git --single-branch --branch=gh-pages .
+    git clone --depth 5 "https://jaredfiorali:$GITHUB_PAT@github.com/jaredfiorali/infrastructure.git" --single-branch --branch=gh-pages
+
+    # Move into the new directory
+    cd /git/infrastructure
 
     echo "Downloading metrics"
-    wget -O /git/node_cpu_usage.json http://kromgo.monitoring:8080/node_cpu_usage
+    wget -O node_cpu_usage.json http://kromgo.monitoring:8080/node_cpu_usage
+
+    # echo "Set email and username for git push"
+    git config user.email "jaredfiorali@gmail.com"
+    git config user.name "Jared Fiorali"
 
     echo "Commit metrics to git"
     git add . && git commit -m "Metrics update"
