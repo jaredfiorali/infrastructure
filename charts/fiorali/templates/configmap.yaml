@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.name }}-configmap
   namespace: {{ .Values.namespace }}
-    labels:
+  labels:
     app: {{ .Values.name }}
 data:
   {{ .Values.configMap.name }}: |
