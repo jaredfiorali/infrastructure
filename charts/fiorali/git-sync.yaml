@@ -17,12 +17,14 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  exec: ["/bin/sh", "-c", "/tmp/git-sync.sh"]
+  exec: ["/bin/sh", "-c", "/git-sync.sh"]
   # exec: ["/bin/sh", "-c", "sleep 1000000"]
 cronjob:
   enabled: true
   schedule: "5 23 * * 0"
 env:
+- name: QUERIES
+  value: "node_cpu_usage,node_memory_usage,popeye_report_score,longhorn_volume_state,kubernetes_build_version,argocd_info"
 - name: GITHUB_PAT
   valueFrom:
     secretKeyRef:
@@ -32,7 +34,7 @@ volumeMounts:
 - name: git
   mountPath: /git
 - name: git-sync-configmap
-  mountPath: /tmp/git-sync.sh
+  mountPath: /git-sync.sh
   subPath: git-sync.sh
   readOnly: true
 volumes:
@@ -66,23 +68,19 @@ configMap:
     #!/bin/sh
     set -x
 
-    # echo "Copying SSH key to /root/.ssh/id_rsa"
-    # cp /tmp/id_rsa /root/.ssh/id_rsa
-
-    # echo "Downloading SSH key scan for github.com"
-    # ssh-keyscan github.com > ~/.ssh/known_hosts
-
-    # echo "Updating permissions for SSH key"
-    # chmod 0600 /root/.ssh/id_rsa
-
     echo "Cloning git repository"
     git clone --depth 5 "https://jaredfiorali:$GITHUB_PAT@github.com/jaredfiorali/infrastructure.git" --single-branch --branch=gh-pages
 
     # Move into the new directory
     cd /git/infrastructure
 
+    # Set the IFS to comma
+    IFS=','
+
     echo "Downloading metrics"
-    wget -O node_cpu_usage.json http://kromgo.monitoring:8080/node_cpu_usage
+    for query in $QUERIES; do
+        wget -O "$query.json" "http://kromgo.monitoring:8080/$query"
+    done
 
     # echo "Set email and username for git push"
     git config user.email "jaredfiorali@gmail.com"

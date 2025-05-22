@@ -77,19 +77,47 @@ configMap:
         colors:         # Optional
           - color: "green"
             min: 0
-            max: 35
+            max: 50
           - color: "orange"
-            min: 36
+            min: 51
             max: 75
           - color: "red"
             min: 76
             max: 1000
+      - name: node_memory_usage
+        query: "sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)"
+        prefix: ""      # Optional
+        suffix: "%"     # Optional
+        colors:         # Optional
+          - color: "green"
+            min: 0
+            max: 50
+          - color: "orange"
+            min: 51
+            max: 75
+          - color: "red"
+            min: 76
+            max: 1000
+      - name: popeye_report_score
+        query: popeye_report_score{}
+        prefix: ""      # Optional
+        suffix: "%"     # Optional
+        colors:         # Optional
+          - color: "red"
+            min: 0
+            max: 99
+          - color: "green"
+            min: 100
+            max: 1000
+      - name: longhorn_volume_state
+        query: longhorn_volume_state{}
+        colors:
+          - { valueOverride: 'Healthy', color: "green", min: 2, max: 2 }
+          - { valueOverride: 'Degraded', color: "red", min: 0, max: 1 }
+          - { valueOverride: 'Unmounted', color: "orange", min: 3, max: 3 }
       - name: kubernetes_build_version
         query: kubernetes_build_info{service="kubernetes"}
         label: git_version
-      - name: ceph_health_status
-        query: ceph_health_status{}
-        colors:
-          - { valueOverride: 'Ok', color: "green", min: 0, max: 0 }
-          - { valueOverride: 'Not good', color: "orange", min: 1, max: 1 }
-          - { valueOverride: 'Whoops', color: "red", min: 2, max: 2 }
+      - name: argocd_info
+        query: argocd_info{}
+        label: version
