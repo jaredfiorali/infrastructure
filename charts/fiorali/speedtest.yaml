@@ -2,6 +2,7 @@ name: speedtest
 namespace: speedtest
 deployment:
   enabled: true
+strategyType: RollingUpdate
 image:
   repository: docker.io/openspeedtest/latest
   tag: latest@sha256:1745e913f596fe98882b286a67751efdae74774e9caa742a4934bb056e8748d2

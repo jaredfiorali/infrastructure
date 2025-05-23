@@ -2,6 +2,7 @@ name: unifi-poller
 namespace: monitoring
 deployment:
   enabled: true
+strategyType: RollingUpdate
 image:
   repository: ghcr.io/unpoller/unpoller
   tag: latest@sha256:56069bd90291a7c63e58b594e877c5f868a58f082e20c4c533e4e546ed3b42b3

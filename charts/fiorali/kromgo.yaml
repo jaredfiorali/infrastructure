@@ -2,6 +2,7 @@ name: kromgo
 namespace: monitoring
 deployment:
   enabled: true
+strategyType: RollingUpdate
 image:
   repository: ghcr.io/kashalls/kromgo
   tag: latest@sha256:4b908ea0be5acd61e67ce38d8f1342d0731296b00b8ca2c35533aa519d804cc6
@@ -85,15 +86,27 @@ configMap:
 
       - name: cluster_uptime_days
         query: ceil(avg(node_time_seconds - node_boot_time_seconds)/60/60/24)
+        colors:
+          - color: "green"
+            min: 0
+            max: 100
       - name: cluster_node_count
         query: count(count by (node) (kube_node_info))
+        colors:
+          - color: "green"
+            min: 0
+            max: 100
       - name: cluster_pod_count
         query: sum(kube_pod_status_phase{phase="Running"})
+        colors:
+          - color: "green"
+            min: 0
+            max: 100
       - name: cluster_cpu_usage
         query: "round(cluster:node_cpu:ratio_rate5m * 100, 0.1)"
-        prefix: ""      # Optional
-        suffix: "%"     # Optional
-        colors:         # Optional
+        prefix: ""
+        suffix: "%"
+        colors:
           - color: "green"
             min: 0
             max: 50
@@ -104,10 +117,10 @@ configMap:
             min: 76
             max: 1000
       - name: cluster_memory_usage
-        query: "sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)"
-        prefix: ""      # Optional
-        suffix: "%"     # Optional
-        colors:         # Optional
+        query: "round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)*100, 0.1)"
+        prefix: ""
+        suffix: "%"
+        colors:
           - color: "green"
             min: 0
             max: 50
@@ -119,13 +132,20 @@ configMap:
             max: 1000
       - name: cluster_power_usage
         query: unpoller_device_outlet_ac_power_consumption{}
-        prefix: ""      # Optional
-        suffix: "W"     # Optional
+        prefix: ""
+        suffix: "W"
+        colors:
+        - color: "green"
+          min: 0
+          max: 230
+        - color: "red"
+          min: 231
+          max: 1000
       - name: cluster_popeye_score
         query: popeye_report_score{}
-        prefix: ""      # Optional
-        suffix: "%"     # Optional
-        colors:         # Optional
+        prefix: ""
+        suffix: "%"
+        colors:
           - color: "red"
             min: 0
             max: 99
