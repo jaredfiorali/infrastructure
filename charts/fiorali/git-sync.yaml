@@ -24,7 +24,7 @@ cronjob:
   schedule: "5 23 * * 0"
 env:
 - name: QUERIES
-  value: "node_cpu_usage,node_memory_usage,popeye_report_score,longhorn_volume_state,kubernetes_build_version,argocd_info"
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
 - name: GITHUB_PAT
   valueFrom:
     secretKeyRef:

@@ -70,7 +70,26 @@ configMap:
       font: Verdana.ttf # Relative to /kromgo - Verdana.ttf is available in the container
       size: 12
     metrics:
-      - name: node_cpu_usage
+      # - name: longhorn_volume_state
+      #   query: longhorn_volume_state{}
+      #   colors:
+      #     - { valueOverride: 'Healthy', color: "green", min: 2, max: 2 }
+      #     - { valueOverride: 'Degraded', color: "red", min: 0, max: 1 }
+      #     - { valueOverride: 'Unmounted', color: "orange", min: 3, max: 3 }
+      - name: kubernetes_version
+        query: kubernetes_build_info{service="kubernetes"}
+        label: git_version
+      - name: argocd_version
+        query: argocd_info{}
+        label: version
+
+      - name: cluster_uptime_days
+        query: ceil(avg(node_time_seconds - node_boot_time_seconds)/60/60/24)
+      - name: cluster_node_count
+        query: count(count by (node) (kube_node_info))
+      - name: cluster_pod_count
+        query: sum(kube_pod_status_phase{phase="Running"})
+      - name: cluster_cpu_usage
         query: "round(cluster:node_cpu:ratio_rate5m * 100, 0.1)"
         prefix: ""      # Optional
         suffix: "%"     # Optional
@@ -84,7 +103,7 @@ configMap:
           - color: "red"
             min: 76
             max: 1000
-      - name: node_memory_usage
+      - name: cluster_memory_usage
         query: "sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)"
         prefix: ""      # Optional
         suffix: "%"     # Optional
@@ -98,7 +117,11 @@ configMap:
           - color: "red"
             min: 76
             max: 1000
-      - name: popeye_report_score
+      - name: cluster_power_usage
+        query: unpoller_device_outlet_ac_power_consumption{}
+        prefix: ""      # Optional
+        suffix: "W"     # Optional
+      - name: cluster_popeye_score
         query: popeye_report_score{}
         prefix: ""      # Optional
         suffix: "%"     # Optional
@@ -109,15 +132,3 @@ configMap:
           - color: "green"
             min: 100
             max: 1000
-      - name: longhorn_volume_state
-        query: longhorn_volume_state{}
-        colors:
-          - { valueOverride: 'Healthy', color: "green", min: 2, max: 2 }
-          - { valueOverride: 'Degraded', color: "red", min: 0, max: 1 }
-          - { valueOverride: 'Unmounted', color: "orange", min: 3, max: 3 }
-      - name: kubernetes_build_version
-        query: kubernetes_build_info{service="kubernetes"}
-        label: git_version
-      - name: argocd_info
-        query: argocd_info{}
-        label: version
