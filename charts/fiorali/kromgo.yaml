@@ -86,6 +86,8 @@ configMap:
 
       - name: cluster_uptime_days
         query: ceil(avg(node_time_seconds - node_boot_time_seconds)/60/60/24)
+        prefix: ""
+        suffix: "d"
         colors:
           - color: "green"
             min: 0
@@ -101,7 +103,7 @@ configMap:
         colors:
           - color: "green"
             min: 0
-            max: 100
+            max: 1000
       - name: cluster_cpu_usage
         query: "round(cluster:node_cpu:ratio_rate5m * 100, 0.1)"
         prefix: ""
