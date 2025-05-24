@@ -21,7 +21,7 @@ command:
   # exec: ["/bin/sh", "-c", "sleep 1000000"]
 cronjob:
   enabled: true
-  schedule: "5 23 * * 0"
+  schedule: "5 23 * * *"
 env:
 - name: QUERIES
   value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
