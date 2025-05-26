@@ -152,17 +152,17 @@ In order to apply the updated image, an update to the [Chart.yaml](./charts/fior
 
 ```mermaid
 graph TD
-    A>User] ->|Commits| B(Github Repo)
-    B>Github Repo] ->|Compiles Helm Charts| C>Github Pages]
-    D>ArgoCD] ->|Reads| C(Github Pages)
-    D>ArgoCD] ->|Deploys| E(Kubernetes Cluster)
-    F>External Repo] ->|Watched By| G(ArgoCD Image Updater)
-    G>ArgoCD Image Updater] ->|Updates| C(Github Pages)
+    A>User] -->|Commits| B(Github Repo)
+    B>Github Repo] -->|Compiles Helm Charts| C>Github Pages]
+    D>ArgoCD] -->|Reads| C(Github Pages)
+    D>ArgoCD] -->|Deploys| E(Kubernetes Cluster)
+    F>External Repo] -->|Watched By| G(ArgoCD Image Updater)
+    G>ArgoCD Image Updater] -->|Updates| C(Github Pages)
 ```
 
 ## Network
 
-The network infrastructure consists largely of Unifi hardware.
+The network infrastructure consists largely of [Unifi hardware](#hardware).
 
 ### DNS
 
