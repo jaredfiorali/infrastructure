@@ -1,64 +1,185 @@
-# Fiorali Infrastructure README
+# Fiorali Infrastructure Operations Repository
 
-A central place to hold Fiorali infrastructure definitions
+Managed with ArgoCD, and GitHub Actions
 
-## ArgoCD
+[![k3s](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/kubernetes_version.json&style=for-the-badge&logo=kubernetes&logoColor=white&labelColor=blue&color=green&label=k3s)](https://k3s.io)
+[![DietPi](https://img.shields.io/endpoint?url=https%3A%2F%2Fjaredfiorali.github.io%2Finfrastructure%2Fdietpi_version.json&style=for-the-badge&logo=raspberrypi&logoColor=white&labelColor=blue&color=green&label=dietpi)](https://dietpi.com)
+[![ArgoCD](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/argocd_version.json&style=for-the-badge&logo=argo&logoColor=white&labelColor=blue&color=green&label=argocd)](https://argo-cd.readthedocs.io/en/stable)
 
-### ArgoCD Applications
+![Uptime](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_uptime_days.json&style=flat-square&label=Uptime)
+![Nodes](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_node_count.json&style=flat-square&label=Nodes)
+![Pods](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_pod_count.json&style=flat-square&label=Pods)
+![CPU](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_cpu_usage.json&style=flat-square&label=CPU)
+![Memory](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_memory_usage.json&style=flat-square&label=Memory)
+![Power](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_power_usage.json&style=flat-square&label=Power)
+![Popeye](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_popeye_score.json&style=flat-square&label=Popeye)
 
-To create a basic application, simply update and deploy this manifest in ArgoCD:
+This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/), [Kubernetes](https://kubernetes.io/), and [GitHub Actions](https://github.com/features/actions).
 
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: <application>
-spec:
-  destination:
-    namespace: <namespace>
-    server: https://kubernetes.default.svc
-  source:
-    path: ''
-    repoURL: https://jaredfiorali.github.io/infrastructure/
-    targetRevision: '*'
-    chart: fiorali
-    helm:
-      valueFiles:
-        - values.yaml
-        - <application>.yaml
-  sources: []
-  project: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+## Kubernetes
+
+The Kubernetes cluster is running across 10 Raspberry Pi's, where 5 of the nodes are Raspberry Pi 4's (worker nodes), and the other 5 are Raspberry Pi 5's (master nodes). Node names are denoted with a numeric suffix, depending on their physical placement in the server room.
+
+| Hardware Model  | Node Name   | Role   | Storage   |
+|-----------------|-------------|--------|-----------|
+| Raspberry Pi 4  | rpi4-node-x | worker | 500GB USB |
+| Raspberry Pi 5  | rpi5-node-x | master | 2TB SSD   |
+
+In a typical setup, workloads are only provisioned on worker nodes. However given the compute requirements for the entire cluster, workloads are provisioned across all nodes. In essence the only discernable difference between master and worker nodes is that `kubectl` commands can be run against the master nodes.
+
+## Storage
+
+Storage is handled by [Longhorn](https://longhorn.io). Storage is split between node types (you can reference the [Kubernetes hardware for details](#kubernetes)).
+
+Given the speed difference between the two disk types (SSD vs USB), slower long term volumes are provisioned on the USB drives while the volumes that require speed are stored on the SSD's. The majority of volumes are configured with 2 replicas in the event a single node goes down.
+
+## Applications
+
+| Media Management                            | Importance | Purpose                                              |
+|---------------------------------------------|------------|------------------------------------------------------|
+| [plex](https://www.plex.tv)                 | 🟠         | Serves local media (Movies, TV, Workout Videos, etc) |
+| [prowlarr](https://prowlarr.com)            | 🔴         | Supplements radarr/sonarr with additional indexers   |
+| [radarr](https://radarr.video)              | 🔴         | Movie indexer                                        |
+| [sonarr](https://sonarr.tv)                 | 🔴         | TV Show indexer                                      |
+| [tautulli](https://tautulli.com)            | 🔴         | Keeps track of various statistics for Plex           |
+| [transmission](https://transmissionbt.com)  | 🔴         | Torrent downloader                                   |
+| [gluetun](https://github.com/qdm12/gluetun) | 🔴         | VPN sidecar for transmission                         |
+
+| Kubernetes Core                                                     | Importance | Purpose                                                    |
+|---------------------------------------------------------------------|------------|------------------------------------------------------------|
+| [longhorn](https://longhorn.io)                                     | 🟢         | Provisions persistent storage for Applications             |
+| [argocd](https://argo-cd.readthedocs.io)                            | 🟠         | Deploys changes to this repo to the cluster                |
+| [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs this repo if there are updates |
+
+| Monitoring                                               | Importance | Purpose                                                            |
+|----------------------------------------------------------|------------|--------------------------------------------------------------------|
+| [alloy](https://grafana.com/docs/alloy)                  | 🔴         | Scans pod logs and saves them to loki                              |
+| git-sync                                                 | 🔴         | Reads kromgo endpoints and saves them to git for public view       |
+| [grafana](https://grafana.com/docs/grafana/latest)       | 🔴         | Create and display various dashboards for monitoring the cluster   |
+| [influxdb](https://www.influxdata.com/products/influxdb) | 🟢         | Stores data for the "reflection" app                               |
+| [kromgo](https://github.com/kashalls/kromgo)             | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
+| [loki](https://grafana.com/docs/loki)                    | 🔴         | Aggregates alloy output and log query tool                         |
+| [prometheus](https://prometheus.io)                      | 🔴         | Queryable bucket for cluster metrics                               |
+| [popeye](https://popeyecli.io)                           | 🔴         | "linter" for the cluster                                           |
+| [unifi-poller](https://unpoller.com)                     | 🔴         | Scans the Unifi network equipment and stores metrics in prometheus |
+
+| Home Security                                   | Importance | Purpose |
+|-------------------------------------------------|------------|---------------------------------------------------------------------|
+| [scrypted](https://www.scrypted.app)            | 🟠         | Reads Unifi camera feed and exposes it to HomeKit                   |
+| [home-assistant](https://www.home-assistant.io) | 🟠         | Allows for complex automation to be written for various IoT devices |
+
+| Other                                                         | Importance | Purpose                                                          |
+|---------------------------------------------------------------|------------|------------------------------------------------------------------|
+| [dawarich](https://github.com/Freika/dawarich)                | 🔴         | Stores ingested location data (from HA) and displays it on a map |
+| [emulatorjs](https://emulatorjs.org)                          | 🔴         | Console emulator written in JS                                   |
+| [linkding](https://github.com/sissbruecker/linkding)          | 🔴         | Bookmark manager                                                 |
+| [sillytavern](https://github.com/SillyTavern/SillyTavern)     | 🔴         | LLM chat frontend                                                |
+| [speedtest](https://openspeedtest.com)                        | 🔴         | Local speedtest server to check internal network speeds          |
+| [timemachine](https://github.com/mbentley/docker-timemachine) | 🔴         | Stores MacOS backups                                             |
+
+### Application Dependency Diagram
+
+```mermaid
+graph LR
+A[plex]:::red -----> |depends| H[replicated\nvolumes]
+B[prowlarr]:::red -----> |depends| H[replicated\nvolumes]
+C[radarr]:::red -----> |depends| H[replicated\nvolumes]
+C[radarr]:::red ---> |depends| B[prowlarr]
+C[radarr]:::red ---> |depends| F[transmission]
+D[sonarr]:::red -----> |depends| H[replicated\nvolumes]
+D[sonarr]:::red ---> |depends| B[prowlarr]
+D[sonarr]:::red ---> |depends| F[transmission]
+E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
+E[tautulli]:::red ---> |depends| A[plex]
+F[transmission]:::red ---> |depends| G[gluetun]
+F[transmission]:::red -----> |depends| H[replicated\nvolumes]
+L[grafana]:::blue -----> |depends| H[replicated\nvolumes]
+M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
+O[loki]:::blue ---> |depends| K[alloy]
+R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
+S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
+T[dawarich]:::orange -----> |depends| H[replicated\nvolumes]
+U[emulatorjs]:::orange -----> |depends| H[replicated\nvolumes]
+V[linkding]:::orange -----> |depends| H[replicated\nvolumes]
+Y[timemachine]:::orange -----> |depends| H[replicated\nvolumes]
+Z[git-sync]:::blue --> |depends| N[kromgo]
+N[kromgo]:::blue --> |depends| I[prometheus]
+I[prometheus]:::blue
+G[gluetun]:::red
+K[alloy]:::blue
+H:::pink@{ shape: processes, label: "replicated\nvolumes" } <--- |< provisions| J[longhorn]:::pink
+
+classDef red stroke:#f00
+classDef blue stroke:#00f
+classDef green stroke:#0f0
+classDef orange stroke:#f96
+classDef pink stroke:#f9f
 ```
 
-Where:
+### Directories
 
-- `<application>`: is the name of the service you intend to deploy
-- `<namespace>`: is the namespace that the application is assigned to
+This Git repository contains the following directories for the  [Kubernetes](./charts/fiorali/) deployments.
 
-### ArgoCD Updater
-
-To add an application's image to the argocd updater, add the following annotations to the ArgoCD Application:
-
-```yaml
-  annotations:
-    argocd-image-updater.argoproj.io/git-branch: main
-    argocd-image-updater.argoproj.io/git-repository: git@github.com:jaredfiorali/infrastructure.git
-    argocd-image-updater.argoproj.io/image-list: myalias=<image-name>:latest
-    argocd-image-updater.argoproj.io/myalias.force-update: "true"
-    argocd-image-updater.argoproj.io/myalias.helm.image-name: image.repository
-    argocd-image-updater.argoproj.io/myalias.helm.image-tag: image.tag
-    argocd-image-updater.argoproj.io/myalias.update-strategy: digest
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: helmvalues:charts/fiorali/<application>.yaml
+```sh
+📁 charts
+├── 📁 fiorali        # application value definitions
+   ├── 📄 Chart.yaml  # sets the version of the compiled helm charts
+   ├── 📁 templates   # helm charts use to populate values
+   ├── 📁 scripts     # various helper scripts
 ```
 
-Where:
+### Deployment workflow
 
-- `<image-name>`: is the name of the docker image you intend to have updated
-- `<application>`: is the name of the application you are working with
+#### Codebase (Helm)
+
+Each application is defined by a unique helm chart. The helm chart defines what kind of resources each application will need (deployment, service, networkPolicy, etc).
+
+#### Compiling Charts (Github Action)
+
+When code is pushed to the `master` branch, it triggers a Github action which compiles the helm charts into actual kubernetes yaml files that can be used in deployments.
+
+#### CD Pipeline (ArgoCD)
+
+[ArgoCD](https://argo-cd.readthedocs.io) is the deployment automation tool that I use to keep each defined application in sync with the code defined in this repo. ArgoCD will watch for any code changes, and if any changes are discovered, it will auto-sync the updated application code with the cluster.
+
+Most applications are configured to automatically sync with the latest version, with Longhorn as a notable exception. Given how critical that application is (as it manages the storage for most other applications), I have decided it makes sense to have it manually updated.
+
+#### Updates (argocd-image-updater)
+
+The last piece of this system is the [argocd-image-updater](https://argocd-image-updater.readthedocs.io). Within each application is a definition to scan a specific docker image, and if an update is found, then the argocd-image-updater will update the code repo with the updated image.
+
+In order to apply the updated image, an update to the [Chart.yaml](./charts/fiorali/Chart.yaml) file will need to be done, as ArgoCD will only deploy when there's a chart update. This is helpful, as it means updates are as frequent as I want them to be.
+
+```mermaid
+graph TD
+    A>User] ->|Commits| B(Github Repo)
+    B>Github Repo] ->|Compiles Helm Charts| C>Github Pages]
+    D>ArgoCD] ->|Reads| C(Github Pages)
+    D>ArgoCD] ->|Deploys| E(Kubernetes Cluster)
+    F>External Repo] ->|Watched By| G(ArgoCD Image Updater)
+    G>ArgoCD Image Updater] ->|Updates| C(Github Pages)
+```
+
+## Network
+
+The network infrastructure consists largely of Unifi hardware.
+
+### DNS
+
+There is a network wide configuration which forces all traffic on port 53 to route to a specific CloudFlare endpoint. This endpoint was configured in using [CloudFlare's Zero Trust feature](https://one.dash.cloudflare.com), and essentially acts as an ad blocker across the network.
+
+### VPN
+
+Trusted devices are configured with a [wireguard client provided by Unifi](https://help.ui.com/hc/en-us/articles/115005445768-UniFi-Gateway-WireGuard-VPN-Server), which automatically connects to the VPN when the device has left the local network.
+
+## Hardware
+
+| Device                   | Function                        |
+|--------------------------|---------------------------------|
+| Raspberry Pi 5           | Kubernetes master nodes         |
+| Unifi USW Pro Max 24 PoE | Network Switch                  |
+| Raspberry Pi 4           | Kubernetes worker nodes         |
+| Unifi UDM SE (Backup)    | Network Gateway (Backup)        |
+| Unifi UDM SE (Primary)   | Network Gateway (Primary) & NVR |
+| UniFi USP PDU Pro        | Monitored power outlets         |
+| CyberPower CP1500PFCRM2U | Uninterruptible Power Supply    |

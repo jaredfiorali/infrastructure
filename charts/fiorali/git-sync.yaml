@@ -77,6 +77,7 @@ configMap:
     # Set the IFS to comma
     IFS=','
 
+    # TODO: jfiorali - This needs to exit 1 if there are any issues pulling the metrics
     echo "Downloading metrics"
     for query in $QUERIES; do
         wget -O "$query.json" "http://kromgo.monitoring:8080/$query"
