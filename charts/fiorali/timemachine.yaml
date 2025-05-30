@@ -95,6 +95,7 @@ networkpolicy:
 volume:
   enabled: true
   size: "214748364800"
+  numberOfReplicas: 1
   snapshots:
     daily: false
 # Attempted to adjust the security context,
