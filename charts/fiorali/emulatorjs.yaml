@@ -44,14 +44,17 @@ env:
 ingress:
   enabled: true
 volumeMounts:
-- name: config
-  mountPath: /config
+- name: emulatorjs-configmap
+  mountPath: /config/profile/default/retroarch.cfg
+  subPath: retroarch.cfg
+  readOnly: true
 - name: roms
   mountPath: /data
 volumes:
-- name: config
-  persistentVolumeClaim:
-    claimName: emulatorjs
+- name: emulatorjs-configmap
+  configMap:
+    name: emulatorjs-configmap
+    defaultMode: 511
 - name: roms
   persistentVolumeClaim:
     claimName: roms
@@ -73,6 +76,9 @@ networkpolicy:
 #   fsGroup: 2000
 #   runAsNonRoot: true
 #   runAsUser: 1000
-volume:
+configMap:
   enabled: true
-  size: "104857600"
+  name: retroarch.cfg
+  value: |
+    input_menu_toggle_gamepad_combo = 3
+    system_directory = /home/web_user/retroarch/system/

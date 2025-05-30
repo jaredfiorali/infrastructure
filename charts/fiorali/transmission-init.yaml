@@ -125,12 +125,17 @@
       echo "Waiting for port forward..."
       sleep 5
     done
+    cp /tmp/settings.json /config/settings.json
     export FORWARDED_PORT="$(cat /gluetun/forwarded_port.txt)"
     sed -i "s/\"peer-port\":.*/\"peer-port\": $FORWARDED_PORT,/g" /config/settings.json
     echo "transmission port updated to $FORWARDED_PORT"
     cat /config/settings.json
   volumeMounts:
-  - name: transmission
-    mountPath: /config
+  - name: transmission-configmap
+    mountPath: /tmp/settings.json
+    subPath: settings.json
+    readOnly: true
   - name: port-forward
     mountPath: /gluetun
+  - name: config
+    mountPath: /config
