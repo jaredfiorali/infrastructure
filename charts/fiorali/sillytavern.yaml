@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/sillytavern/sillytavern
-  tag: latest@sha256:02080267328603cd153653113f8d4eee20fe710b210f635943766433dfac98f7
+  tag: latest@sha256:013118f22a04181467a33e3ad58ef17643df2d5920e05c4416d5dd258c48f10c
 containerPorts:
 - containerPort: 8000
   name: sillytavern
