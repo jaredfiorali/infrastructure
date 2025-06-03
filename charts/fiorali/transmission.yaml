@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:a4d7d6f283649e8a7d0279130d59a3e16d9c6ba19cf5cd53faac3024dc1122dd
+  tag: latest@sha256:0075191862b4b6144904f447153adba8eacfa1fca4309e407778c7b23a8af4ed
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -83,7 +83,7 @@ podSecurityContext: {} #gluetun needs root access to make changes to network set
 configMap:
   enabled: true
   name: settings.json
-  value: |
+  value: |-
     {
       "alt-speed-down": 50,
       "alt-speed-enabled": false,
