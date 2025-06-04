@@ -1,6 +1,6 @@
 # Fiorali Infrastructure Operations Repository
 
-Managed with ArgoCD, and GitHub Actions
+Kubernetes cluster managed with ArgoCD and GitHub Actions, using Longhorn for persistent storage
 
 [![k3s](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/kubernetes_version.json&style=for-the-badge&logo=kubernetes&logoColor=white&labelColor=blue&color=green&label=k3s)](https://k3s.io)
 [![DietPi](https://img.shields.io/endpoint?url=https%3A%2F%2Fjaredfiorali.github.io%2Finfrastructure%2Fdietpi_version.json&style=for-the-badge&logo=raspberrypi&logoColor=white&labelColor=blue&color=green&label=dietpi)](https://dietpi.com)
@@ -56,7 +56,6 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 | [alloy](https://grafana.com/docs/alloy)                  | 🔴         | Scans pod logs and saves them to loki                              |
 | git-sync                                                 | 🔴         | Reads kromgo endpoints and saves them to git for public view       |
 | [grafana](https://grafana.com/docs/grafana/latest)       | 🔴         | Create and display various dashboards for monitoring the cluster   |
-| [influxdb](https://www.influxdata.com/products/influxdb) | 🟢         | Stores data for the "reflection" app                               |
 | [kromgo](https://github.com/kashalls/kromgo)             | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
 | [loki](https://grafana.com/docs/loki)                    | 🔴         | Aggregates alloy output and log query tool                         |
 | [prometheus](https://prometheus.io)                      | 🔴         | Queryable bucket for cluster metrics                               |
@@ -72,6 +71,7 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 |---------------------------------------------------------------|------------|------------------------------------------------------------------|
 | [dawarich](https://github.com/Freika/dawarich)                | 🔴         | Stores ingested location data (from HA) and displays it on a map |
 | [emulatorjs](https://emulatorjs.org)                          | 🔴         | Console emulator written in JS                                   |
+| [influxdb](https://www.influxdata.com/products/influxdb)      | 🟢         | Stores data for the "reflection" app                             |
 | [linkding](https://github.com/sissbruecker/linkding)          | 🔴         | Bookmark manager                                                 |
 | [sillytavern](https://github.com/SillyTavern/SillyTavern)     | 🔴         | LLM chat frontend                                                |
 | [speedtest](https://openspeedtest.com)                        | 🔴         | Local speedtest server to check internal network speeds          |
@@ -81,6 +81,9 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 
 ```mermaid
 graph LR
+L[grafana]:::blue -----> |depends| H[replicated\nvolumes]
+Z[git-sync]:::blue --> |depends| N[kromgo]
+N[kromgo]:::blue --> |depends| I[prometheus]
 A[plex]:::red -----> |depends| H[replicated\nvolumes]
 B[prowlarr]:::red -----> |depends| H[replicated\nvolumes]
 C[radarr]:::red -----> |depends| H[replicated\nvolumes]
@@ -91,19 +94,15 @@ D[sonarr]:::red ---> |depends| B[prowlarr]
 D[sonarr]:::red ---> |depends| F[transmission]
 E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
 E[tautulli]:::red ---> |depends| A[plex]
-F[transmission]:::red ---> |depends| G[gluetun]
 F[transmission]:::red -----> |depends| H[replicated\nvolumes]
-L[grafana]:::blue -----> |depends| H[replicated\nvolumes]
-M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
+F[transmission]:::red ---> |depends| G[gluetun]
 O[loki]:::blue ---> |depends| K[alloy]
-R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
-S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
+M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
 T[dawarich]:::orange -----> |depends| H[replicated\nvolumes]
-U[emulatorjs]:::orange -----> |depends| H[replicated\nvolumes]
 V[linkding]:::orange -----> |depends| H[replicated\nvolumes]
 Y[timemachine]:::orange -----> |depends| H[replicated\nvolumes]
-Z[git-sync]:::blue --> |depends| N[kromgo]
-N[kromgo]:::blue --> |depends| I[prometheus]
+R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
+S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
 I[prometheus]:::blue
 G[gluetun]:::red
 K[alloy]:::blue
@@ -148,7 +147,7 @@ Most applications are configured to automatically sync with the latest version, 
 
 The last piece of this system is the [argocd-image-updater](https://argocd-image-updater.readthedocs.io). Within each application is a definition to scan a specific docker image, and if an update is found, then the argocd-image-updater will update the code repo with the updated image.
 
-In order to apply the updated image, an update to the [Chart.yaml](./charts/fiorali/Chart.yaml) file will need to be done, as ArgoCD will only deploy when there's a chart update. This is helpful, as it means updates are as frequent as I want them to be.
+In order to apply the updated image to the cluster, an update to the [Chart.yaml](./charts/fiorali/Chart.yaml) file will need to be done, as ArgoCD will only deploy when there's a chart version update, not a repo commit. This is helpful, as it means updates are as frequent as I want them to be.
 
 ```mermaid
 graph TD
@@ -162,24 +161,66 @@ graph TD
 
 ## Network
 
-The network infrastructure consists largely of [Unifi hardware](#hardware).
+The network infrastructure consists largely of [Unifi hardware](#hardware), which is managed through the [Unifi App portal](https://unifi.ui.com).
+
+High level network diagram can be found below. Note that each connection denotes an ethernet connection.
+
+```mermaid
+graph TD
+    A(Modem) --> B(Gateway UDM SE - Backup)
+    A(Modem) --> C(Gateway UDM SE - Primary)
+    B(Gateway UDM SE - Backup) --> D(USW Pro Max 24 PoE)
+    C(Gateway UDM SE - Primary) --> D(USW Pro Max 24 PoE)
+    D(USW Pro Max 24 PoE) --> E(U7 Pro XG - Family Room)
+    D(USW Pro Max 24 PoE) --> F(U6 Mesh - Dining Room)
+    D(USW Pro Max 24 PoE) --> G(USW-Ultra - Theatre)
+    G(USW-Ultra - Theatre) --> H(U6-IW - Theatre)
+    D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
+    D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
+    D(USW Pro Max 24 PoE) --> K(USW-Ultra - Garage)
+    K(USW-Ultra - Garage) --> L(U6-IW - Office)
+    K(USW-Ultra - Garage) --> M(G5 PTZ - Driveway Camera)
+    K(USW-Ultra - Garage) --> N(UP FloodLight - West Light)
+```
 
 ### DNS
 
 There is a network wide configuration which forces all traffic on port 53 to route to a specific CloudFlare endpoint. This endpoint was configured in using [CloudFlare's Zero Trust feature](https://one.dash.cloudflare.com), and essentially acts as an ad blocker across the network.
 
+[There is a GitHub Action in this repo](https://github.com/jaredfiorali/Cloudflare-Gateway-Pihole) which runs every so often and updates the block list on CloudFlare's end. In rare cases the block list will incidentally block legitimate applications, which will need to be added to the Allow List.
+
 ### VPN
 
 Trusted devices are configured with a [wireguard client provided by Unifi](https://help.ui.com/hc/en-us/articles/115005445768-UniFi-Gateway-WireGuard-VPN-Server), which automatically connects to the VPN when the device has left the local network.
 
+Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get the Ad Blocker blocking over VPN) some WiFi networks (typically enterprise networks) do not work, since they have their own DNS block to force users to use their own DNS entry. At this point I usually skip connecting to enterprise WiFi networks for this reason.
+
 ## Hardware
+
+### Server Rack
 
 | Device                   | Function                        |
 |--------------------------|---------------------------------|
-| Raspberry Pi 5           | Kubernetes master nodes         |
+| Raspberry Pi 5 (x5)      | Kubernetes master nodes         |
 | Unifi USW Pro Max 24 PoE | Network Switch                  |
-| Raspberry Pi 4           | Kubernetes worker nodes         |
+| Raspberry Pi 4 (x5)      | Kubernetes worker nodes         |
 | Unifi UDM SE (Backup)    | Network Gateway (Backup)        |
 | Unifi UDM SE (Primary)   | Network Gateway (Primary) & NVR |
 | UniFi USP PDU Pro        | Monitored power outlets         |
 | CyberPower CP1500PFCRM2U | Uninterruptible Power Supply    |
+
+### Additional Devices
+
+| Device          | Function                   |
+|-----------------|----------------------------|
+| Mac Studio      | Personal PC, hosts LLM     |
+| Unifi U6-IW     | Access Point - Office      |
+| Unifi U6-IW     | Access Point - Theatre     |
+| Unifi U7 Pro XG | Access Point - Family Room |
+| Unifi U6-Mesh   | Access Point - Dining Room |
+| Unifi USW-Ultra | Network Switch - Theatre   |
+| Unifi USW-Ultra | Network Switch - Garage    |
+| G5 PTZ          | Driveway Camera            |
+| G4 Dome         | East Side Camera           |
+| UP FloodLight   | East Side Floodlight       |
+| UP FloodLight   | West Side Floodlight       |
