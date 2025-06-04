@@ -40,23 +40,11 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
 volumeMounts:
-- name: dawarich-app-persistent-storage
-  mountPath: /var/app/public
-  subPath: public
-- name: dawarich-app-persistent-storage
-  mountPath: /var/app/tmp/imports/watched
-  subPath: watched
-- name: dawarich-app-persistent-storage
-  mountPath: /var/app/storage
-  subPath: storage
 - name: tmp
   mountPath: /tmp
 - name: app-tmp
   mountPath: /var/app/tmp
 volumes:
-- name: dawarich-app-persistent-storage
-  persistentVolumeClaim:
-    claimName: dawarich-app
 - name: tmp
   emptyDir: {}
 - name: app-tmp
@@ -66,8 +54,6 @@ env:
   value: development
 - name: RAILS_LOG_LEVEL
   value: info
-- name: REDIS_URL
-  value: 'redis://dawarich-redis:6379/0'
 - name: DATABASE_HOST
   value: dawarich-db
 - name: DATABASE_USERNAME
@@ -107,8 +93,3 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
-volume:
-  enabled: true
-  accessMode: rwo
-  name: dawarich-app
-  size: "524288000"
