@@ -67,15 +67,15 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 | [scrypted](https://www.scrypted.app)            | 🟠         | Reads Unifi camera feed and exposes it to HomeKit                   |
 | [home-assistant](https://www.home-assistant.io) | 🟠         | Allows for complex automation to be written for various IoT devices |
 
-| Other                                                         | Importance | Purpose                                                          |
-|---------------------------------------------------------------|------------|------------------------------------------------------------------|
-| [dawarich](https://github.com/Freika/dawarich)                | 🔴         | Stores ingested location data (from HA) and displays it on a map |
-| [emulatorjs](https://emulatorjs.org)                          | 🔴         | Console emulator written in JS                                   |
-| [influxdb](https://www.influxdata.com/products/influxdb)      | 🟢         | Stores data for the "reflection" app                             |
-| [linkding](https://github.com/sissbruecker/linkding)          | 🔴         | Bookmark manager                                                 |
-| [sillytavern](https://github.com/SillyTavern/SillyTavern)     | 🔴         | LLM chat frontend                                                |
-| [speedtest](https://openspeedtest.com)                        | 🔴         | Local speedtest server to check internal network speeds          |
-| [timemachine](https://github.com/mbentley/docker-timemachine) | 🔴         | Stores MacOS backups                                             |
+| Other                                                          | Importance | Purpose                                                          |
+|----------------------------------------------------------------|------------|------------------------------------------------------------------|
+| [dawarich-app/dawarich-db](https://github.com/Freika/dawarich) | 🔴         | Stores ingested location data (from HA) and displays it on a map |
+| [emulatorjs](https://emulatorjs.org)                           | 🔴         | Console emulator written in JS                                   |
+| [influxdb](https://www.influxdata.com/products/influxdb)       | 🟢         | Stores data for the "reflection" app                             |
+| [linkding](https://github.com/sissbruecker/linkding)           | 🔴         | Bookmark manager                                                 |
+| [sillytavern](https://github.com/SillyTavern/SillyTavern)      | 🔴         | LLM chat frontend                                                |
+| [speedtest](https://openspeedtest.com)                         | 🔴         | Local speedtest server to check internal network speeds          |
+| [timemachine](https://github.com/mbentley/docker-timemachine)  | 🔴         | Stores MacOS backups                                             |
 
 ### Application Dependency Diagram
 
@@ -97,8 +97,9 @@ E[tautulli]:::red ---> |depends| A[plex]
 F[transmission]:::red -----> |depends| H[replicated\nvolumes]
 F[transmission]:::red ---> |depends| G[gluetun]
 O[loki]:::blue ---> |depends| K[alloy]
+T[dawarich-app]:::orange ---> |depends| U[dawarich-db]
 M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
-T[dawarich]:::orange -----> |depends| H[replicated\nvolumes]
+U[dawarich-db]:::orange ---> |depends| H[replicated\nvolumes]
 V[linkding]:::orange -----> |depends| H[replicated\nvolumes]
 Y[timemachine]:::orange -----> |depends| H[replicated\nvolumes]
 R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
