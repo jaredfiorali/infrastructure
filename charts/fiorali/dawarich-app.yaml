@@ -40,13 +40,13 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
 volumeMounts:
-- name: dawarich-persistent-storage
+- name: dawarich-app-persistent-storage
   mountPath: /var/app/public
   subPath: public
-- name: dawarich-persistent-storage
+- name: dawarich-app-persistent-storage
   mountPath: /var/app/tmp/imports/watched
   subPath: watched
-- name: dawarich-persistent-storage
+- name: dawarich-app-persistent-storage
   mountPath: /var/app/storage
   subPath: storage
 - name: tmp
@@ -54,9 +54,9 @@ volumeMounts:
 - name: app-tmp
   mountPath: /var/app/tmp
 volumes:
-- name: dawarich-persistent-storage
+- name: dawarich-app-persistent-storage
   persistentVolumeClaim:
-    claimName: dawarich
+    claimName: dawarich-app
 - name: tmp
   emptyDir: {}
 - name: app-tmp
@@ -109,6 +109,6 @@ networkpolicy:
     allowAll: true
 volume:
   enabled: true
-  accessMode: rwx
-  name: dawarich
-  size: "1073741824"
+  accessMode: rwo
+  name: dawarich-app
+  size: "524288000"

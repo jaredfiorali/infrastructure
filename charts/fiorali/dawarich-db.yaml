@@ -30,20 +30,16 @@ service:
     protocol: TCP
     targetPort: db
 volumeMounts:
-- name: dawarich-persistent-storage
+- name: dawarich-db-persistent-storage
   mountPath: /var/lib/postgresql/data
-  subPath: db_data
-- name: dawarich-persistent-storage
-  mountPath: /var/shared
-  subPath: shared
 - name: tmp
   mountPath: /tmp
 - name: postgresql
   mountPath: /var/run/postgresql
 volumes:
-- name: dawarich-persistent-storage
+- name: dawarich-db-persistent-storage
   persistentVolumeClaim:
-    claimName: dawarich
+    claimName: dawarich-db
 - name: tmp
   emptyDir: {}
 - name: postgresql
@@ -73,3 +69,8 @@ podSecurityContext:
   fsGroup: 999
   runAsNonRoot: true
   runAsUser: 999
+volume:
+  enabled: true
+  accessMode: rwo
+  name: dawarich-db
+  size: "524288000"
