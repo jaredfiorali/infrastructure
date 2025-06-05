@@ -35,7 +35,9 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 
 ## Applications
 
-| Media Management                            | Importance | Purpose                                              |
+### Media Management
+
+| Application                                 | Importance | Purpose                                              |
 |---------------------------------------------|------------|------------------------------------------------------|
 | [plex](https://www.plex.tv)                 | 🟠         | Serves local media (Movies, TV, Workout Videos, etc) |
 | [prowlarr](https://prowlarr.com)            | 🔴         | Supplements radarr/sonarr with additional indexers   |
@@ -45,29 +47,37 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 | [transmission](https://transmissionbt.com)  | 🔴         | Torrent downloader                                   |
 | [gluetun](https://github.com/qdm12/gluetun) | 🔴         | VPN sidecar for transmission                         |
 
-| Kubernetes Core                                                     | Importance | Purpose                                                    |
+### Kubernetes Core
+
+| Application                                                         | Importance | Purpose                                                    |
 |---------------------------------------------------------------------|------------|------------------------------------------------------------|
 | [longhorn](https://longhorn.io)                                     | 🟢         | Provisions persistent storage for Applications             |
 | [argocd](https://argo-cd.readthedocs.io)                            | 🟠         | Deploys changes to this repo to the cluster                |
 | [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs this repo if there are updates |
 
-| Monitoring                                               | Importance | Purpose                                                            |
-|----------------------------------------------------------|------------|--------------------------------------------------------------------|
-| [alloy](https://grafana.com/docs/alloy)                  | 🔴         | Scans pod logs and saves them to loki                              |
-| git-sync                                                 | 🔴         | Reads kromgo endpoints and saves them to git for public view       |
-| [grafana](https://grafana.com/docs/grafana/latest)       | 🔴         | Create and display various dashboards for monitoring the cluster   |
-| [kromgo](https://github.com/kashalls/kromgo)             | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
-| [loki](https://grafana.com/docs/loki)                    | 🔴         | Aggregates alloy output and log query tool                         |
-| [prometheus](https://prometheus.io)                      | 🔴         | Queryable bucket for cluster metrics                               |
-| [popeye](https://popeyecli.io)                           | 🔴         | "linter" for the cluster                                           |
-| [unifi-poller](https://unpoller.com)                     | 🔴         | Scans the Unifi network equipment and stores metrics in prometheus |
+### Monitoring
 
-| Home Security                                   | Importance | Purpose |
+| Application                                        | Importance | Purpose                                                            |
+|----------------------------------------------------|------------|--------------------------------------------------------------------|
+| [alloy](https://grafana.com/docs/alloy)            | 🔴         | Scans pod logs and saves them to loki                              |
+| git-sync                                           | 🔴         | Reads kromgo endpoints and saves them to git for public view       |
+| [grafana](https://grafana.com/docs/grafana/latest) | 🔴         | Create and display various dashboards for monitoring the cluster   |
+| [kromgo](https://github.com/kashalls/kromgo)       | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
+| [loki](https://grafana.com/docs/loki)              | 🔴         | Aggregates alloy output and log query tool                         |
+| [prometheus](https://prometheus.io)                | 🔴         | Queryable bucket for cluster metrics                               |
+| [popeye](https://popeyecli.io)                     | 🔴         | "linter" for the cluster                                           |
+| [unifi-poller](https://unpoller.com)               | 🔴         | Scans the Unifi network equipment and stores metrics in prometheus |
+
+### Home Security
+
+| Application                                     | Importance | Purpose |
 |-------------------------------------------------|------------|---------------------------------------------------------------------|
 | [scrypted](https://www.scrypted.app)            | 🟠         | Reads Unifi camera feed and exposes it to HomeKit                   |
 | [home-assistant](https://www.home-assistant.io) | 🟠         | Allows for complex automation to be written for various IoT devices |
 
-| Other                                                          | Importance | Purpose                                                          |
+### Other
+
+| Application                                                    | Importance | Purpose                                                          |
 |----------------------------------------------------------------|------------|------------------------------------------------------------------|
 | [dawarich-app/dawarich-db](https://github.com/Freika/dawarich) | 🔴         | Stores ingested location data (from HA) and displays it on a map |
 | [emulatorjs](https://emulatorjs.org)                           | 🔴         | Console emulator written in JS                                   |
@@ -116,9 +126,9 @@ classDef orange stroke:#f96
 classDef pink stroke:#f9f
 ```
 
-### Directories
+## Directories
 
-This Git repository contains the following directories for the  [Kubernetes](./charts/fiorali/) deployments.
+This Git repository contains the following directories for the [Kubernetes](./charts/fiorali/) deployments.
 
 ```sh
 📁 charts
@@ -128,23 +138,23 @@ This Git repository contains the following directories for the  [Kubernetes](./c
    ├── 📁 scripts     # various helper scripts
 ```
 
-### Deployment workflow
+## Deployment workflow
 
-#### Codebase (Helm)
+### Codebase (Helm)
 
 Each application is defined by a unique helm chart. The helm chart defines what kind of resources each application will need (deployment, service, networkPolicy, etc).
 
-#### Compiling Charts (Github Action)
+### Compiling Charts (Github Action)
 
 When code is pushed to the `master` branch, it triggers a Github action which compiles the helm charts into actual kubernetes yaml files that can be used in deployments.
 
-#### CD Pipeline (ArgoCD)
+### CD Pipeline (ArgoCD)
 
 [ArgoCD](https://argo-cd.readthedocs.io) is the deployment automation tool that I use to keep each defined application in sync with the code defined in this repo. ArgoCD will watch for any code changes, and if any changes are discovered, it will auto-sync the updated application code with the cluster.
 
 Most applications are configured to automatically sync with the latest version, with Longhorn as a notable exception. Given how critical that application is (as it manages the storage for most other applications), I have decided it makes sense to have it manually updated.
 
-#### Updates (argocd-image-updater)
+### Updates (argocd-image-updater)
 
 The last piece of this system is the [argocd-image-updater](https://argocd-image-updater.readthedocs.io). Within each application is a definition to scan a specific docker image, and if an update is found, then the argocd-image-updater will update the code repo with the updated image.
 
