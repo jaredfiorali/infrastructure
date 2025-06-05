@@ -14,7 +14,7 @@ Kubernetes cluster managed with ArgoCD and GitHub Actions, using Longhorn for pe
 ![Power](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_power_usage.json&style=flat-square&label=Power)
 ![Popeye](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_popeye_score.json&style=flat-square&label=Popeye)
 
-This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/), [Kubernetes](https://kubernetes.io/), and [GitHub Actions](https://github.com/features/actions).
+This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable), [Kubernetes](https://kubernetes.io), and [GitHub Actions](https://github.com/features/actions).
 
 ## Kubernetes
 
@@ -36,6 +36,8 @@ Given the speed difference between the two disk types (SSD vs USB), slower long 
 A small subset (~10G) of "critical" data is [sent to an Amazon S3 bucket](https://ca-central-1.console.aws.amazon.com/console/home), in order to ensure that data will be secure in the event of an unrecoverable error in the cluster. Data being backed up includes (but is not limited to): dawarich, home-assistant, influxdb.
 
 ## Applications
+
+Each application is defined in the [charts/fiorali](./charts/fiorali) directory. Below you will find a quick explainer on each application.
 
 ### Media Management
 
@@ -62,7 +64,7 @@ A small subset (~10G) of "critical" data is [sent to an Amazon S3 bucket](https:
 | Application                                        | Importance | Purpose                                                            |
 |----------------------------------------------------|------------|--------------------------------------------------------------------|
 | [alloy](https://grafana.com/docs/alloy)            | 🔴         | Scans pod logs and saves them to loki                              |
-| git-sync                                           | 🔴         | Reads kromgo endpoints and saves them to git for public view       |
+| git-sync                                           | 🔴         | Custom script to read kromgo endpoints and save metrics to git     |
 | [grafana](https://grafana.com/docs/grafana/latest) | 🔴         | Create and display various dashboards for monitoring the cluster   |
 | [kromgo](https://github.com/kashalls/kromgo)       | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
 | [loki](https://grafana.com/docs/loki)              | 🔴         | Aggregates alloy output and log query tool                         |
@@ -130,7 +132,7 @@ classDef pink stroke:#f9f
 
 ## Directories
 
-This Git repository contains the following directories for the [Kubernetes](./charts/fiorali/) deployments.
+This Git repository contains the following directories for the [Kubernetes](./charts/fiorali) deployments.
 
 ```sh
 📁 charts
