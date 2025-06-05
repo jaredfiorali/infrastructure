@@ -33,6 +33,8 @@ Storage is handled by [Longhorn](https://longhorn.io). Storage is split between 
 
 Given the speed difference between the two disk types (SSD vs USB), slower long term volumes are provisioned on the USB drives while the volumes that require speed are stored on the SSD's. The majority of volumes are configured with 2 replicas in the event a single node goes down.
 
+A small subset (~10G) of "critical" data is [sent to an Amazon S3 bucket](https://ca-central-1.console.aws.amazon.com/console/home), in order to ensure that data will be secure in the event of an unrecoverable error in the cluster. Data being backed up includes (but is not limited to): dawarich, home-assistant, influxdb.
+
 ## Applications
 
 ### Media Management
@@ -146,7 +148,7 @@ Each application is defined by a unique helm chart. The helm chart defines what 
 
 ### Compiling Charts (Github Action)
 
-When code is pushed to the `master` branch, it triggers a Github action which compiles the helm charts into actual kubernetes yaml files that can be used in deployments.
+When code is pushed to the `master` branch, it triggers a Github action which [compiles and packages](https://github.com/jaredfiorali/infrastructure/releases) the helm charts into actual kubernetes yaml files that can be used in deployments, and then publishes them via [github pages](https://github.com/jaredfiorali/infrastructure/deployments/github-pages).
 
 ### CD Pipeline (ArgoCD)
 
@@ -188,7 +190,7 @@ graph TD
     G(USW-Ultra - Theatre) --> H(U6-IW - Theatre)
     D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
     D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
-    D(USW Pro Max 24 PoE) --> K(USW-Ultra - Garage)
+    D(USW Pro Max 24 PoE) ---> K(USW-Ultra - Garage)
     K(USW-Ultra - Garage) --> L(U6-IW - Office)
     K(USW-Ultra - Garage) --> M(G5 PTZ - Driveway Camera)
     K(USW-Ultra - Garage) --> N(UP FloodLight - West Light)
@@ -235,3 +237,29 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 | G4 Dome         | East Side Camera           |
 | UP FloodLight   | East Side Floodlight       |
 | UP FloodLight   | West Side Floodlight       |
+
+## Handy Links
+
+Here's a list of all the services that can be reached via a web portal (within the network):
+
+- [argocd](http://argo.fiora.li)
+- [dawarich](http://dawarich.fiora.li)
+- [plex](http://plex.fiora.li)
+- [prowlarr](http://prowlarr.fiora.li)
+- [radarr](http://radarr.fiora.li)
+- [sonarr](http://sonarr.fiora.li)
+- [transmission](http://transmission.fiora.li)
+- [emulatorjs](http://emulatorjs.fiora.li)
+- [home-assistant](http://home-assistant.fiora.li)
+- [linkding](http://linkding.fiora.li)
+- [longhorn](http://longhorn.fiora.li)
+- [grafana](http://grafana.fiora.li)
+- [influxdb](http://influxdb.fiora.li)
+- [kromgo](http://kromgo.fiora.li)
+- [prometheus](http://prometheus.fiora.li)
+- [scrypted](http://scrypted.fiora.li)
+- [sillytavern](http://sillytavern.fiora.li)
+- [speedtest](http://speedtest.fiora.li)
+- [tautulli](http://tautulli.fiora.li)
+
+I also use [k9s](http://k9scli.io) to easily run kubernetes commands against the cluster. Easier than remembering/aliasing kubectl commands :D
