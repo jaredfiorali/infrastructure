@@ -15,10 +15,10 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 3G
+    memory: 4G
   requests:
     cpu: '1'
-    memory: 2G
+    memory: 3G
 probes:
   httpGet:
     path: /api/v1/health
@@ -62,6 +62,14 @@ env:
   value: password
 - name: DATABASE_NAME
   value: dawarich_development
+- name: QUEUE_DATABASE_NAME
+  value: dawarich_development_queue
+- name: QUEUE_DATABASE_PASSWORD
+  value: password
+- name: QUEUE_DATABASE_USERNAME
+  value: postgres
+- name: QUEUE_DATABASE_HOST
+  value: dawarich-db
 - name: MIN_MINUTES_SPENT_IN_CITY
   value: '60'
 - name: APPLICATION_HOSTS
@@ -81,6 +89,8 @@ env:
 - name: ENABLE_TELEMETRY
   value: 'false'
 - name: SELF_HOSTED
+  value: 'true'
+- name: STORE_GEODATA
   value: 'true'
 ingress:
   enabled: true
