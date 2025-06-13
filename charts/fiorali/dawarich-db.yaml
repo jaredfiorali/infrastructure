@@ -30,16 +30,20 @@ service:
     protocol: TCP
     targetPort: db
 volumeMounts:
-- name: dawarich-db-persistent-storage
+- name: dawarich-persistent-storage
   mountPath: /var/lib/postgresql/data
+  subPath: db_data
+- name: dawarich-persistent-storage
+  mountPath: /var/shared
+  subPath: shared
 - name: tmp
   mountPath: /tmp
 - name: postgresql
   mountPath: /var/run/postgresql
 volumes:
-- name: dawarich-db-persistent-storage
+- name: dawarich-persistent-storage
   persistentVolumeClaim:
-    claimName: dawarich-db
+    claimName: dawarich
 - name: tmp
   emptyDir: {}
 - name: postgresql

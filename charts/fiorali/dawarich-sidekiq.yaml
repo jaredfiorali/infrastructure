@@ -1,13 +1,13 @@
-name: dawarich-app
+name: dawarich-sidekiq
 namespace: dawarich
 deployment:
   enabled: true
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:eae812ab6db4bede84061b197c1eddb617be8b6af96a6bc98c8495740c6b1daa
+  tag: latest@sha256:8e092b7d9085450878864251d7c921d6a408291270401a127e48b11dd97b5e20
 containerPorts:
 - containerPort: 3000
-  name: dawarich
+  name: sidekiq
   protocol: TCP
 - containerPort: 9394
   name: prometheus
@@ -15,31 +15,27 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 4G
+    memory: 2G
   requests:
     cpu: '1'
-    memory: 3G
+    memory: 1G
 probes:
-  httpGet:
-    path: /api/v1/health
-    port: dawarich
-containerSecurityContext: {}
-podSecurityContext: {}
+  exec:
+    command: ["sh", "-c", "if [[ $(pgrep sidekiq | wc -l) -ne 1 ]]; then exit 1; fi"]
 service:
   enabled: true
   ports:
-  - name: dawarich
+  - name: sidekiq
     port: 3000
     protocol: TCP
-    targetPort: dawarich
+    targetPort: sidekiq
   - name: prometheus
     port: 9394
     protocol: TCP
     targetPort: prometheus
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
-  # exec: ["/bin/sh", "-c", "sleep 100d"]
+  exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
 volumeMounts:
 - name: dawarich-persistent-storage
   mountPath: /var/app/public
@@ -50,30 +46,15 @@ volumeMounts:
 - name: dawarich-persistent-storage
   mountPath: /var/app/storage
   subPath: storage
-- name: tmp
-  mountPath: /tmp
-- name: app-tmp
-  mountPath: /var/app/tmp
-# - name: dawarich-persistent-storage
-#   mountPath: /mnt/dawarich
-# - name: dawarich-db-persistent-storage
-#   mountPath: /mnt/db
 volumes:
 - name: dawarich-persistent-storage
   persistentVolumeClaim:
     claimName: dawarich
-# - name: dawarich-db-persistent-storage
-#   persistentVolumeClaim:
-#     claimName: dawarich-db
-- name: tmp
-  emptyDir: {}
-- name: app-tmp
-  emptyDir: {}
 env:
 - name: RAILS_ENV
   value: development
-- name: RAILS_LOG_LEVEL
-  value: info
+- name: REDIS_URL
+  value: 'redis://dawarich-redis:6379/0'
 - name: DATABASE_HOST
   value: dawarich-db
 - name: DATABASE_USERNAME
@@ -82,18 +63,10 @@ env:
   value: password
 - name: DATABASE_NAME
   value: dawarich_development
-- name: QUEUE_DATABASE_NAME
-  value: dawarich_development_queue
-- name: QUEUE_DATABASE_PASSWORD
-  value: password
-- name: QUEUE_DATABASE_USERNAME
-  value: postgres
-- name: QUEUE_DATABASE_HOST
-  value: dawarich-db
 - name: MIN_MINUTES_SPENT_IN_CITY
   value: '60'
 - name: APPLICATION_HOSTS
-  value: dawarich.fiora.li,dawarich-app.dawarich
+  value: dawarich.fiora.li
 - name: TIME_ZONE
   value: America/Toronto
 - name: APPLICATION_PROTOCOL
@@ -101,7 +74,7 @@ env:
 - name: DISTANCE_UNIT
   value: km
 - name: PROMETHEUS_EXPORTER_ENABLED
-  value: 'true'
+  value: 'false'
 - name: PROMETHEUS_EXPORTER_HOST
   value: '0.0.0.0'
 - name: PROMETHEUS_EXPORTER_PORT
@@ -110,12 +83,6 @@ env:
   value: 'false'
 - name: SELF_HOSTED
   value: 'true'
-- name: STORE_GEODATA
-  value: 'true'
-ingress:
-  enabled: true
-  name: dawarich
-  portName: dawarich
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -123,8 +90,3 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
-volume:
-  enabled: true
-  accessMode: rwx
-  name: dawarich
-  size: "1073741824"
