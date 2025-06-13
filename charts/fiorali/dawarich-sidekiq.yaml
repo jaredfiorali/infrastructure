@@ -14,11 +14,11 @@ containerPorts:
   protocol: TCP
 resources:
   limits:
-    cpu: '2'
-    memory: 2G
-  requests:
-    cpu: '1'
+    cpu: 500m
     memory: 1G
+  requests:
+    cpu: 250m
+    memory: 500Mi
 probes:
   exec:
     command: ["sh", "-c", "if [[ $(pgrep sidekiq | wc -l) -ne 1 ]]; then exit 1; fi"]
