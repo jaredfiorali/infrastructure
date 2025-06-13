@@ -15,10 +15,10 @@ containerPorts:
 resources:
   limits:
     cpu: '2'
-    memory: 4G
+    memory: 3G
   requests:
     cpu: '1'
-    memory: 3G
+    memory: 2G
 probes:
   httpGet:
     path: /api/v1/health
@@ -39,7 +39,6 @@ service:
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
-  # exec: ["/bin/sh", "-c", "sleep 100d"]
 volumeMounts:
 - name: dawarich-persistent-storage
   mountPath: /var/app/public
@@ -54,17 +53,10 @@ volumeMounts:
   mountPath: /tmp
 - name: app-tmp
   mountPath: /var/app/tmp
-# - name: dawarich-persistent-storage
-#   mountPath: /mnt/dawarich
-# - name: dawarich-db-persistent-storage
-#   mountPath: /mnt/db
 volumes:
 - name: dawarich-persistent-storage
   persistentVolumeClaim:
     claimName: dawarich
-# - name: dawarich-db-persistent-storage
-#   persistentVolumeClaim:
-#     claimName: dawarich-db
 - name: tmp
   emptyDir: {}
 - name: app-tmp

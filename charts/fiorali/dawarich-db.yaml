@@ -73,8 +73,3 @@ podSecurityContext:
   fsGroup: 999
   runAsNonRoot: true
   runAsUser: 999
-volume:
-  enabled: true
-  accessMode: rwo
-  name: dawarich-db
-  size: "524288000"
