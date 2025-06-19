@@ -4,7 +4,7 @@ deployment:
   enabled: true
 strategyType: RollingUpdate
 image:
-  repository: shawly/nut:latest
+  repository: shawly/nut
   tag: latest@sha256:5145c737fba38cd597c93a45b63ce72c368b6fb50da4ca8ae84be1ee6d7fec40
 containerPorts:
 - containerPort: 9000
