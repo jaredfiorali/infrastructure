@@ -112,8 +112,13 @@ F[transmission]:::red -----> |depends| H[replicated\nvolumes]
 F[transmission]:::red ---> |depends| G[gluetun]
 O[loki]:::blue ---> |depends| K[alloy]
 T[dawarich-app]:::orange ---> |depends| U[dawarich-db]
+T[dawarich-app]:::orange ---> |depends| P[dawarich-redis]
+T[dawarich-app]:::orange ---> |depends| Q[dawarich-sidekiq]
+T[dawarich-app]:::orange ---> |depends| H[replicated\nvolumes]
 M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
 U[dawarich-db]:::orange ---> |depends| H[replicated\nvolumes]
+P[dawarich-redis]:::orange ---> |depends| H[replicated\nvolumes]
+Q[dawarich-sidekiq]:::orange ---> |depends| H[replicated\nvolumes]
 V[linkding]:::orange -----> |depends| H[replicated\nvolumes]
 Y[timemachine]:::orange -----> |depends| H[replicated\nvolumes]
 R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
@@ -192,10 +197,10 @@ graph TD
     G(USW-Ultra - Theatre) --> H(U6-IW - Theatre)
     D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
     D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
-    D(USW Pro Max 24 PoE) ---> K(USW-Ultra - Garage)
-    K(USW-Ultra - Garage) --> L(U6-IW - Office)
-    K(USW-Ultra - Garage) --> M(G5 PTZ - Driveway Camera)
-    K(USW-Ultra - Garage) --> N(UP FloodLight - West Light)
+    D(USW Pro Max 24 PoE) ---> K(USW Flex 2.5G - Garage)
+    K(USW Flex 2.5G - Garage) --> L(U6-IW - Office)
+    K(USW Flex 2.5G - Garage) --> M(G5 PTZ - Driveway Camera)
+    K(USW Flex 2.5G - Garage) --> N(UP FloodLight - West Light)
 ```
 
 ### DNS
@@ -226,19 +231,19 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 
 ### Additional Devices
 
-| Device          | Function                   |
-|-----------------|----------------------------|
-| Mac Studio      | Personal PC, hosts LLM     |
-| Unifi U6-IW     | Access Point - Office      |
-| Unifi U6-IW     | Access Point - Theatre     |
-| Unifi U7 Pro XG | Access Point - Family Room |
-| Unifi U6-Mesh   | Access Point - Dining Room |
-| Unifi USW-Ultra | Network Switch - Theatre   |
-| Unifi USW-Ultra | Network Switch - Garage    |
-| G5 PTZ          | Driveway Camera            |
-| G4 Dome         | East Side Camera           |
-| UP FloodLight   | East Side Floodlight       |
-| UP FloodLight   | West Side Floodlight       |
+| Device              | Function                   |
+|---------------------|----------------------------|
+| Mac Studio          | Personal PC, hosts LLM     |
+| Unifi U6-IW         | Access Point - Office      |
+| Unifi U6-IW         | Access Point - Theatre     |
+| Unifi U7 Pro XG     | Access Point - Family Room |
+| Unifi U6-Mesh       | Access Point - Dining Room |
+| Unifi USW-Ultra     | Network Switch - Theatre   |
+| Unifi USW Flex 2.5G | Network Switch - Garage    |
+| G5 PTZ              | Driveway Camera            |
+| G4 Dome             | East Side Camera           |
+| UP FloodLight       | East Side Floodlight       |
+| UP FloodLight       | West Side Floodlight       |
 
 ## Handy Links
 
