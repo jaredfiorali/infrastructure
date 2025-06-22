@@ -5,6 +5,8 @@ deployment:
 service:
   enabled: false
 networkpolicy:
+  egress:
+    internal: true
   ingress:
     namespaces:
       - monitoring
