@@ -131,13 +131,13 @@ configMap:
       # Checks resources against reported metrics usage.
       # If over/under these thresholds a linter warning will be issued.
       # Your cluster must run a metrics-server for these to take place!
-      allocations:
-        cpu:
-          underPercUtilization: 200 # Checks if cpu is under allocated by more than 200% at current load.
-          overPercUtilization:  50  # Checks if cpu is over allocated by more than 50% at current load.
-        memory:
-          underPercUtilization: 200 # Checks if mem is under allocated by more than 200% at current load.
-          overPercUtilization:  50  # Checks if mem is over allocated by more than 50% usage at current load.
+      # allocations:
+      #   cpu:
+      #     underPercUtilization: 200 # Checks if cpu is under allocated by more than 200% at current load.
+      #     overPercUtilization:  50  # Checks if cpu is over allocated by more than 50% at current load.
+      #   memory:
+      #     underPercUtilization: 200 # Checks if mem is under allocated by more than 200% at current load.
+      #     overPercUtilization:  50  # Checks if mem is over allocated by more than 50% usage at current load.
 
       # Excludes excludes certain resources from Popeye scans
       excludes:
