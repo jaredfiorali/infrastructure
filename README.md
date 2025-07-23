@@ -195,6 +195,7 @@ graph TD
     D(USW Pro Max 24 PoE) --> F(U6 Mesh - Dining Room)
     D(USW Pro Max 24 PoE) --> G(USW-Ultra - Theatre)
     G(USW-Ultra - Theatre) --> H(U6-IW - Theatre)
+    G(USW-Ultra - Theatre - 1) --> O(USW-Ultra - Theatre - 2)
     D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
     D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
     D(USW Pro Max 24 PoE) ---> K(USW Flex 2.5G - Garage)
@@ -231,19 +232,20 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 
 ### Additional Devices
 
-| Device              | Function                   |
-|---------------------|----------------------------|
-| Mac Studio          | Personal PC, hosts LLM     |
-| Unifi U6-IW         | Access Point - Office      |
-| Unifi U6-IW         | Access Point - Theatre     |
-| Unifi U7 Pro XG     | Access Point - Family Room |
-| Unifi U6-Mesh       | Access Point - Dining Room |
-| Unifi USW-Ultra     | Network Switch - Theatre   |
-| Unifi USW Flex 2.5G | Network Switch - Garage    |
-| G5 PTZ              | Driveway Camera            |
-| G4 Dome             | East Side Camera           |
-| UP FloodLight       | East Side Floodlight       |
-| UP FloodLight       | West Side Floodlight       |
+| Device              | Function                     |
+|---------------------|------------------------------|
+| Mac Studio          | Personal PC, hosts LLM       |
+| Unifi U6-IW         | Access Point - Office        |
+| Unifi U6-IW         | Access Point - Theatre       |
+| Unifi U7 Pro XG     | Access Point - Family Room   |
+| Unifi U6-Mesh       | Access Point - Dining Room   |
+| Unifi USW-Ultra     | Network Switch - Theatre (1) |
+| Unifi USW-Ultra     | Network Switch - Theatre (2) |
+| Unifi USW Flex 2.5G | Network Switch - Garage      |
+| G5 PTZ              | Driveway Camera              |
+| G4 Dome             | East Side Camera             |
+| UP FloodLight       | East Side Floodlight         |
+| UP FloodLight       | West Side Floodlight         |
 
 ## Handy Links
 
