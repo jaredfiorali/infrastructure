@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/koush/scrypted
-  tag: lite@sha256:89084a05267b3511eeffa9a0f0c0fd95a0343f2fc7adb74afb89f41fe9260146
+  tag: lite@sha256:bf114d38a8a4c2d977f2caf64e65ec8d8eca7aee26fd7f458540e810779716ca
 containerPorts:
 - containerPort: 11080
   name: scrypted
