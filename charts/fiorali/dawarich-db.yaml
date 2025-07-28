@@ -11,7 +11,7 @@ containerPorts:
   protocol: TCP
 resources:
   limits:
-    cpu: 500m
+    cpu: 1
     memory: 500Mi
   requests:
     cpu: 250m
