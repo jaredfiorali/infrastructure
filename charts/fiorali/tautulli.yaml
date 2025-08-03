@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/tautulli/tautulli
-  tag: latest@sha256:631ead87bb2c2be2b8e3f91bc1ae1afae9eedf11f18e5d769b98fd2bf507f970
+  tag: latest@sha256:d5493374e9b48b27d45f64262acad1430e523ee73b707d563b87fb79cc2c57d4
 containerPorts:
 - containerPort: 8181
   name: tautulli
