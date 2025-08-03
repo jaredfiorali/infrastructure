@@ -5,7 +5,7 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/kashalls/kromgo
-  tag: latest@sha256:98202ba862023c1f78c6bc227f1de89d7777e5f621333511241a6242a230880e
+  tag: latest@sha256:d8fca4ff9b696abc4ca019c76fa629c39e844e4d9435f4afac87a97b1eeae152
 containerPorts:
 - containerPort: 8080
   name: kromgo
