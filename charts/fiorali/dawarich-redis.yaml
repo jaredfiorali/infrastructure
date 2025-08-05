@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/redis
-  tag: latest@sha256:68285a060161e1658538ca43a778f40cd5db7aa2be428b3e96f163a392c038ac
+  tag: latest@sha256:d942bbdfb383d088b029664750cb4dc5aaa287e65c945fc4b99d2b404425f404
 containerPorts:
 - containerPort: 6379
   name: redis
