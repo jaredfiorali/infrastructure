@@ -75,9 +75,6 @@ volumes:
 - name: media-bittorrent
   persistentVolumeClaim:
     claimName: media-bittorrent
-- name: media-bittorrent
-  persistentVolumeClaim:
-    claimName: media-bittorrent
 - name: media-tv-0
   persistentVolumeClaim:
     claimName: media-tv-0
@@ -121,4 +118,4 @@ networkpolicy:
 #   runAsUser: 1000
 volume:
   enabled: true
-  size: "5368709120"
+  size: "1073741824"
