@@ -93,4 +93,4 @@ networkpolicy:
 #   runAsUser: 1000
 volume:
   enabled: true
-  size: "2147483648"
+  size: "1073741824"
