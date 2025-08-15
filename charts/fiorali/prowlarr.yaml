@@ -45,27 +45,33 @@ env:
   value: "1"
 - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
   value: "1"
+- name: S6_VERBOSITY
+  value: "2"
 ingress:
   enabled: true
 volumeMounts:
 - name: prowlarr-persistent-storage
   mountPath: /config
+- name: run
+  mountPath: /run
 volumes:
 - name: prowlarr-persistent-storage
   persistentVolumeClaim:
     claimName: prowlarr
+- name: run
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
   egress:
     internet: true
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
-# containerSecurityContext:
+containerSecurityContext:
+  readOnlyRootFilesystem: true
 #   allowPrivilegeEscalation: false
 #   capabilities:
 #     drop:
 #     - ALL
-#   readOnlyRootFilesystem: true
 #   privileged: false
 # podSecurityContext:
 #   fsGroup: 2000

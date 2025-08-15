@@ -128,6 +128,8 @@ configMap:
   name: spinach.yaml
   value: |-
     popeye:
+      # Popeye codes can be found here: https://popeyecli.io/docs/codes.html
+      #
       # Checks resources against reported metrics usage.
       # If over/under these thresholds a linter warning will be issued.
       # Your cluster must run a metrics-server for these to take place!
@@ -212,8 +214,6 @@ configMap:
           # Configure the pods linter for v1/pods.
           pods:
             instances:
-              # - fqns: [rx:^dawarich, rx:^downloader, rx:^emulatorjs, rx:^home-assistant, rx:^timemachine]
-              #   codes: [306] # => skip code 207 for namespace popeye
               - labels:
                   app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, prowlarr, radarr, ssh, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
                 codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
@@ -225,7 +225,7 @@ configMap:
                 codes: [203, 206, 207] # => Pod is waiting, Pod missing Pdb, Pod is unhappy
               - labels:
                   app: [timemachine] # Exclude codes for any pods with specified labels
-                codes: [110] # => Pod is waiting, Pod missing Pdb, Pod is unhappy
+                codes: [110] # => Memory Current/Request (%s/%s) reached user %d%% threshold (%d%%)
 
       resources:
         # Configure node resources.
