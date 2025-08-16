@@ -215,10 +215,10 @@ configMap:
           pods:
             instances:
               - labels:
-                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, prowlarr, radarr, ssh, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
+                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, ssh, timemachine, transmission] # Exclude codes for any pods with specified labels
                 codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
               - labels:
-                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, gluetun, home-assistant, ping, plex, prowlarr, radarr, ssh, sonarr, timemachine, transmission] # Exclude codes for any pods with specified labels
+                  app: [dawarich-app, dawarich-sidekiq, emulatorjs, home-assistant, plex, ssh, timemachine, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
                 codes: [306] # => Container could be running as root user. Check SecurityContext/Image
               - labels:
                   app: [popeye, git-sync] # Exclude codes for any pods with specified labels

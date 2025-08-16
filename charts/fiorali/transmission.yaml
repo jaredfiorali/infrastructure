@@ -78,12 +78,11 @@ dnsConfig:
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   readOnlyRootFilesystem: true
-#   allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: false
+  privileged: false
 #   capabilities:
 #     drop:
 #     - ALL
-#   privileged: false
-#   runAsUser: 911
 podSecurityContext: {} #gluetun needs root access to make changes to network settings
 configMap:
   enabled: true

@@ -68,15 +68,15 @@ networkpolicy:
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   readOnlyRootFilesystem: true
-#   allowPrivilegeEscalation: false
-#   capabilities:
-#     drop:
-#     - ALL
-#   privileged: false
-# podSecurityContext:
-#   fsGroup: 2000
-#   runAsNonRoot: true
-#   runAsUser: 1000
+  privileged: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # allowPrivilegeEscalation: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
 volume:
   enabled: true
   size: "1073741824"
