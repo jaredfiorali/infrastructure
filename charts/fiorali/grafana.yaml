@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/grafana/grafana-oss
-  tag: latest@sha256:6ac590e7cabc2fbe8d7b8fc1ce9c9f0582177b334e0df9c927ebd9670469440f
+  tag: latest@sha256:1b9ca4bbc4a2eebda7de79834d61106efe57402a7720b3fb95f27b2b6793374f
 containerPorts:
 - containerPort: 3000
   name: grafana
