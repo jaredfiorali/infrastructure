@@ -217,7 +217,7 @@ configMap:
         numberOfBackups: 50
       chat:
         # Enable automatic chat backups
-        enabled: true
+        enabled: false
         # Maximum number of chat backups to keep per user (starting from the most recent). Set to -1 to keep all backups.
         maxTotalBackups: -1
         # Interval in milliseconds to throttle chat backups per user
@@ -244,7 +244,7 @@ configMap:
       # May have compatibility issues with some extensions.
       lazyLoadCharacters: false
       # The maximum amount of memory that parsed character cards can use. Set to 0 to disable memory caching.
-      memoryCacheCapacity: '100mb'
+      memoryCacheCapacity: 0
       useDiskCache: true
 
     # Allow secret keys exposure via API
