@@ -2,7 +2,7 @@ name: git-sync
 namespace: monitoring
 image:
   repository: docker.io/alpine/git
-  tag: latest@sha256:9ba6b031a433c74a4691a4bba9b7e44f6a425d462d2031447959852e2ccec39b
+  tag: latest@sha256:58686456a7c75d09f51a31fba4a0eedd3dce8530e2c263a84c094f81583b6b09
 deployment:
   enabled: false
 resources:
