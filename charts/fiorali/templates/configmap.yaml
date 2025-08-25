@@ -2,11 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.name }}-configmap
+  name: {{ .Values.configMap.name | default (printf "%s-configmap" .Values.name) }}
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
 data:
-  {{ .Values.configMap.name }}: |
-  	{{- .Values.configMap.value | nindent 4}}
+  {{- .Values.configMap.value | nindent 2 }}
 {{- end }}

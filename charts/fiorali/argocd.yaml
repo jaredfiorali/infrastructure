@@ -14,3 +14,59 @@ serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
+configMap:
+  enabled: true
+  name: argocd-notifications-cm
+  value: |-
+    # Context holds list of variables that can be referenced in templates
+    context: |
+      argocdUrl: http://argo.fiora.li/
+    service.slack: |
+      token: $slack-token
+      username: argocd-bot
+      icon: ":rocket:"
+    trigger.on_sync-succeeded: |
+      - when: app.status.sync.status == 'Synced'
+        send: [app-sync-succeeded-slack]
+    template.app-sync-succeeded-slack: |
+      message: |
+        Application {{ .app.metadata.name }} is now {{ .app.status.sync.status }}
+      slack:
+        attachments: |
+        [{
+          "title": "{{ .app.metadata.name }}",
+          "title_link": "{{ .context.argocdUrl }}/applications/{{ .app.metadata.name }}",
+          "color": "#18be52",
+          "fields": [
+            {
+              "title": "Sync Status",
+              "value": "{{ .app.status.sync.status }}",
+              "short": false
+            },
+            {
+              "title": "Repository",
+              "value": "{{ .app.spec.source.repoURL }}",
+              "short": false
+            },
+            {
+              "title": "Revision",
+              "value": "{{ .app.status.sync.revision }}",
+              "short": false
+            },
+            {
+              "title": "Commit Author",
+              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Author }}",
+              "short": false
+            },
+            {
+              "title": "Commit Message",
+              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Message }}",
+              "short": false
+            },
+            {
+              "title": "Commit Date Time",
+              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Date }}",
+              "short": false
+            }
+          ]
+        }]

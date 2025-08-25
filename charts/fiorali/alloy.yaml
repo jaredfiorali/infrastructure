@@ -16,7 +16,7 @@ podDisruptionBudget:
   enabled: false
 configMap:
   enabled: true
-  name: config.alloy
+  valueName: config.alloy
   value: |-
     logging {
       level  = "info"

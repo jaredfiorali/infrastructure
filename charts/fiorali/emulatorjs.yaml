@@ -78,7 +78,7 @@ networkpolicy:
 #   runAsUser: 1000
 configMap:
   enabled: true
-  name: retroarch.cfg
   value: |
-    input_menu_toggle_gamepad_combo = 3
-    system_directory = /home/web_user/retroarch/system/
+    retroarch.cfg: |
+      input_menu_toggle_gamepad_combo = 3
+      system_directory = /home/web_user/retroarch/system/
