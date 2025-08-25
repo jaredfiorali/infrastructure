@@ -33,40 +33,40 @@ configMap:
         Application {{ .app.metadata.name }} is now {{ .app.status.sync.status }}
       slack:
         attachments: |
-        [{
-          "title": "{{ .app.metadata.name }}",
-          "title_link": "{{ .context.argocdUrl }}/applications/{{ .app.metadata.name }}",
-          "color": "#18be52",
-          "fields": [
-            {
-              "title": "Sync Status",
-              "value": "{{ .app.status.sync.status }}",
-              "short": false
-            },
-            {
-              "title": "Repository",
-              "value": "{{ .app.spec.source.repoURL }}",
-              "short": false
-            },
-            {
-              "title": "Revision",
-              "value": "{{ .app.status.sync.revision }}",
-              "short": false
-            },
-            {
-              "title": "Commit Author",
-              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Author }}",
-              "short": false
-            },
-            {
-              "title": "Commit Message",
-              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Message }}",
-              "short": false
-            },
-            {
-              "title": "Commit Date Time",
-              "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Date }}",
-              "short": false
-            }
-          ]
-        }]
+          [{
+            "title": "{{ .app.metadata.name }}",
+            "title_link": "{{ .context.argocdUrl }}/applications/{{ .app.metadata.name }}",
+            "color": "#18be52",
+            "fields": [
+              {
+                "title": "Sync Status",
+                "value": "{{ .app.status.sync.status }}",
+                "short": false
+              },
+              {
+                "title": "Repository",
+                "value": "{{ .app.spec.source.repoURL }}",
+                "short": false
+              },
+              {
+                "title": "Revision",
+                "value": "{{ .app.status.sync.revision }}",
+                "short": false
+              },
+              {
+                "title": "Commit Author",
+                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Author }}",
+                "short": false
+              },
+              {
+                "title": "Commit Message",
+                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Message }}",
+                "short": false
+              },
+              {
+                "title": "Commit Date Time",
+                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Date }}",
+                "short": false
+              }
+            ]
+          }]
