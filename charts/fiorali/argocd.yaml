@@ -18,55 +18,151 @@ configMap:
   enabled: true
   name: argocd-notifications-cm
   value: |-
-    # Context holds list of variables that can be referenced in templates
+    # --- Context ---
     context: |
       argocdUrl: http://argo.fiora.li/
+
+    # --- Slack service definition ---
     service.slack: |
       token: $slack-token
-      username: argocd-bot
-      icon: ":rocket:"
-    trigger.on_sync-succeeded: |
-      - when: app.status.sync.status == 'Synced'
-        send: [app-sync-succeeded-slack]
-    template.app-sync-succeeded-slack: |
+      defaultRecipients: [jared-notifications]
+
+    # --- Triggers ---
+    trigger.on-sync-succeeded: |
+      - when: app.status.operationState.phase in ['Succeeded'] and app.status.sync.status == 'Synced'
+        send: [app-sync-succeeded]
+
+    trigger.on-sync-failed: |
+      - when: app.status.operationState.phase in ['Failed']
+        send: [app-sync-failed]
+
+    trigger.on-deployed: |
+      - when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+        send: [app-deployed]
+
+    trigger.on-deleted: |
+      - when: app.metadata.deletionTimestamp != nil
+        send: [app-deleted]
+
+    trigger.on-health-degraded: |
+      - when: app.status.health.status == 'Degraded'
+        send: [app-health-degraded]
+
+    trigger.on-sync-status-unknown: |
+      - when: app.status.sync.status == 'Unknown'
+        send: [app-sync-status-unknown]
+
+    trigger.on-sync-status-out-of-sync: |
+      - when: app.status.sync.status == 'OutOfSync'
+        send: [app-sync-status-out-of-sync]
+
+    # --- Templates ---
+    template.app-sync-succeeded: |
       message: |
-        Application {{ .app.metadata.name }} is now {{ .app.status.sync.status }}
+        :white_check_mark: *{{.app.metadata.name}}* sync succeeded
       slack:
         attachments: |
           [{
-            "title": "{{ .app.metadata.name }}",
-            "title_link": "{{ .context.argocdUrl }}/applications/{{ .app.metadata.name }}",
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
             "color": "#18be52",
             "fields": [
-              {
-                "title": "Sync Status",
-                "value": "{{ .app.status.sync.status }}",
-                "short": false
-              },
-              {
-                "title": "Repository",
-                "value": "{{ .app.spec.source.repoURL }}",
-                "short": false
-              },
-              {
-                "title": "Revision",
-                "value": "{{ .app.status.sync.revision }}",
-                "short": false
-              },
-              {
-                "title": "Commit Author",
-                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Author }}",
-                "short": false
-              },
-              {
-                "title": "Commit Message",
-                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Message }}",
-                "short": false
-              },
-              {
-                "title": "Commit Date Time",
-                "value": "{{ (call .repo.GetCommitMetadata .app.status.sync.revision).Date }}",
-                "short": false
-              }
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Health", "value": "{{.app.status.health.status}}", "short": true},
+              {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true},
+              {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
+            ]
+          }]
+
+    template.app-sync-failed: |
+      message: |
+        :x: *{{.app.metadata.name}}* sync failed
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#E96D76",
+            "fields": [
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Health", "value": "{{.app.status.health.status}}", "short": true},
+              {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true},
+              {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
+            ]
+          }]
+
+    template.app-deployed: |
+      message: |
+        :rocket: *{{.app.metadata.name}}* successfully deployed
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#4BB543",
+            "fields": [
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Health", "value": "{{.app.status.health.status}}", "short": true},
+              {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true},
+              {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
+            ]
+          }]
+
+    template.app-deleted: |
+      message: |
+        :wastebasket: *{{.app.metadata.name}}* was deleted
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "color": "#AAAAAA",
+            "fields": [
+              {"title": "Project", "value": "{{.app.spec.project}}", "short": true}
+            ]
+          }]
+
+    template.app-health-degraded: |
+      message: |
+        :warning: *{{.app.metadata.name}}* health degraded
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#FFA500",
+            "fields": [
+              {"title": "Health", "value": "{{.app.status.health.status}}", "short": true},
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true}
+            ]
+          }]
+
+    template.app-sync-status-unknown: |
+      message: |
+        :grey_question: *{{.app.metadata.name}}* sync status unknown
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "color": "#808080",
+            "fields": [
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true}
+            ]
+          }]
+
+    template.app-sync-status-out-of-sync: |
+      message: |
+        :arrows_counterclockwise: *{{.app.metadata.name}}* is out of sync
+      slack:
+        attachments: |
+          [{
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+            "color": "#FFD700",
+            "fields": [
+              {"title": "Sync Status", "value": "{{.app.status.sync.status}}", "short": true},
+              {"title": "Health", "value": "{{.app.status.health.status}}", "short": true},
+              {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
             ]
           }]
