@@ -17,7 +17,7 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  args: [ "--run", "--read-only-config" ]
+  args: ["--run", "--read-only-config"]
 cronjob:
   enabled: true
   schedule: "0 0 * * *"
