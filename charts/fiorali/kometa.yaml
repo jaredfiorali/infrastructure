@@ -59,7 +59,9 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
 networkpolicy:
-  enabled: false
+  egress:
+    internet: true
+    namespaces: [tautulli]
 configMap:
   enabled: true
   value: |-
