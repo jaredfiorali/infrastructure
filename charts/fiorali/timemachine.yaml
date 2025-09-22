@@ -63,32 +63,42 @@ env:
 - name: PASSWORD
   value: "timemachine"
 - name: SET_PERMISSIONS
-  value: "true"
+  value: "false"
 - name: SHARE_NAME
   value: "TimeMachine"
 - name: SMB_INHERIT_PERMISSIONS
   value: "no"
 - name: SMB_NFS_ACES
-  value: "yes"
+  value: "no"
 - name: SMB_METADATA
   value: "stream"
 - name: SMB_PORT
   value: "445"
 - name: SMB_VFS_OBJECTS
-  value: "acl_xattr fruit streams_xattr"
+  value: "fruit streams_xattr"
 - name: VOLUME_SIZE_LIMIT
   value: "0"
 - name: WORKGROUP
   value: "WORKGROUP"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
 ingress:
   enabled: false
 volumeMounts:
 - name: timemachine-persistent-storage
   mountPath: /opt/timemachine
+- name: run-samba
+  mountPath: /run/samba
 volumes:
 - name: timemachine-persistent-storage
   persistentVolumeClaim:
     claimName: timemachine
+- name: run-samba
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -100,5 +110,14 @@ volume:
     daily: false
 # Attempted to adjust the security context,
 # however the pod does need root permission to be able to add users and update passwords
-containerSecurityContext: {}
-podSecurityContext: {}
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  privileged: false
+# podSecurityContext:
+#   fsGroup: 922
+#   runAsNonRoot: true
+#   runAsUser: 817
