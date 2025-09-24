@@ -104,7 +104,7 @@ configMap:
         verify_ssl: false
       plex:
         url: http://plex.downloader:32400
-        token: mc2Yki9h4Bi5XkXrS3iC
+        token: d8MULqf1R7GExALSUKLZ
         timeout: 60
         db_cache:
         clean_bundles: false
