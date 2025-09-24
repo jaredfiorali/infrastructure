@@ -158,9 +158,9 @@ configMap:
 
           # Configure individual resource linters
           linters:
-            clusterRoleBindings:
+            clusterrolebindings:
               instances:
-                - fqns: [system:kube-dns,system:controller:route-controller,system:controller:selinux-warning-controller,system:controller:service-controller] # => exclude all system:node clusterrolebindings
+                - fqns: [system:kube-dns, system:controller:route-controller, system:controller:selinux-warning-controller, system:controller:service-controller]
                   codes: [1300] # => References a ServiceAccount which does not exist
 
             # Configure the namespaces linter for v1/namespaces
