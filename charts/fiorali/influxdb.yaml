@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/influxdb
-  tag: latest@sha256:4b420bab57e838178886bacf70de8a6da398497718511da1e637780eeee41106
+  tag: latest@sha256:674911452ada77ca762662d50dd0594c8823312f59b376500623a4f82c44f9be
 containerPorts:
 - containerPort: 8086
   name: influxdb
