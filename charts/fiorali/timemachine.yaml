@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/mbentley/timemachine
-  tag: latest@sha256:f88e7f5eb867a55fd9ceada5da90528c1ffda4bc1abead5082fcf6ab894a98d0
+  tag: latest@sha256:42c9ac54e9f7bbbf7fbbcbe2a7cb6c170a27adaf1b4e247b0f08a1a7eecf0a06
 containerPorts:
 - containerPort: 137
   name: udp137
