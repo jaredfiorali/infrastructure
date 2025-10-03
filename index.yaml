@@ -3,6 +3,16 @@ entries:
   fiorali:
   - apiVersion: v2
     appVersion: 22.0.4
+    created: "2025-10-03T15:05:24.076031811Z"
+    description: Services for the Fiorali Kubernetes cluster
+    digest: a6d3f2fefeab51defebbbcb61dff206246799f6412bd8ddb501178a255b73030
+    name: fiorali
+    type: application
+    urls:
+    - fiorali-0.1.324.tgz
+    version: 0.1.324
+  - apiVersion: v2
+    appVersion: 22.0.4
     created: "2025-09-30T12:40:16.672879189Z"
     description: Services for the Fiorali Kubernetes cluster
     digest: 83cb8adbd31a48f36a658d02cc0657b13924f1fa8aeab65f6d64929e1de47424
@@ -1031,4 +1041,4 @@ entries:
     urls:
     - fiorali-0.1.220.tgz
     version: 0.1.220
-generated: "2025-09-30T12:40:16.673454646Z"
+generated: "2025-10-03T15:05:24.076339676Z"
