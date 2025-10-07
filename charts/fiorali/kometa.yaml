@@ -20,16 +20,16 @@ command:
   args: ["--run", "--read-only-config"]
 cronjob:
   enabled: true
-  schedule: "0 0 * * *"
+  schedule: "35 2 * * *"
 volumeMounts:
 - name: config
   mountPath: /config
 - name: assets
   mountPath: /assets
-- name: kometa-configmap
-  mountPath: /config/config.yml
-  subPath: config.yml
-  readOnly: true
+# - name: kometa-configmap
+#   mountPath: /config/config.yml
+#   subPath: config.yml
+#   readOnly: true
 - name: kometa-configmap
   mountPath: /config/movies.yml
   subPath: movies.yml
@@ -42,6 +42,8 @@ volumes:
 - name: config
   emptyDir: {}
 - name: assets
+  emptyDir: {}
+- name: tmp
   emptyDir: {}
 - name: kometa-configmap
   configMap:
@@ -62,6 +64,9 @@ networkpolicy:
   egress:
     internet: true
     namespaces: [tautulli]
+initContainers:
+  enabled: true
+  file: "kometa-init.yaml"
 configMap:
   enabled: true
   value: |-
@@ -104,21 +109,21 @@ configMap:
         verify_ssl: false
       plex:
         url: http://plex.downloader:32400
-        token: d8MULqf1R7GExALSUKLZ
+        token: ${PLEX_TOKEN}
         timeout: 60
         db_cache:
         clean_bundles: false
         empty_trash: false
         optimize: false
       tmdb:
-        apikey: 6b517f9d6c305d4770038744af90568e
+        apikey: ${TMDB_APIKEY}
         language: en
       tautulli:
         url: http://tautulli.tautulli:8181
-        apikey: b05e89db83f945909ef830d586a9c546
+        apikey: ${TAUTULLI_APIKEY}
       radarr:
         url: http://radarr.downloader:7878
-        token: e85d0f58ba9440e981ea03bc91a5b994
+        token: ${RADARR_TOKEN}
         add_missing: false
         root_folder_path: /media-movies-2
         monitor: false
@@ -131,7 +136,7 @@ configMap:
         plex_path:
       sonarr:
         url: http://sonarr.downloader:8989
-        token: 4f865d3aa8c3454abe29e6c8f3385128
+        token: ${SONARR_TOKEN}
         add_missing: false
         add_existing: false
         root_folder_path: /media-tv-2
