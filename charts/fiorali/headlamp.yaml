@@ -8,3 +8,15 @@ ingress:
   enabled: true
   name: headlamp
   portName: http
+networkpolicy:
+  podSelector: true
+  ingress:
+    allowAll: false
+    internal: false
+    network: false
+    internet: false
+  egress:
+    allowAll: false
+    internal: false
+    network: false
+    internet: false
