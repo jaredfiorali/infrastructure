@@ -1,0 +1,10 @@
+name: headlamp
+namespace: kube-system
+deployment:
+  enabled: false
+service:
+  enabled: false
+ingress:
+  enabled: true
+  name: headlamp
+  portName: http
