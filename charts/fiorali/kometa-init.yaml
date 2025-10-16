@@ -61,3 +61,5 @@
     subPath: config.yml
   - name: config
     mountPath: /config
+  - name: tmp
+    mountPath: /tmp
