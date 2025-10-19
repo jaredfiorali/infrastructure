@@ -33,12 +33,10 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
 volumeMounts:
-- name: dawarich-persistent-storage
+- name: public
   mountPath: /var/app/public
-  subPath: public
-- name: dawarich-persistent-storage
+- name: watched
   mountPath: /var/app/tmp/imports/watched
-  subPath: watched
 - name: dawarich-persistent-storage
   mountPath: /var/app/storage
   subPath: storage
@@ -50,13 +48,17 @@ volumes:
 - name: dawarich-persistent-storage
   persistentVolumeClaim:
     claimName: dawarich
+- name: public
+  emptyDir: {}
+- name: watched
+  emptyDir: {}
 - name: tmp
   emptyDir: {}
 - name: app-tmp
   emptyDir: {}
 env:
 - name: RAILS_ENV
-  value: production
+  value: development
 - name: REDIS_URL
   value: 'redis://dawarich-redis:6379'
 - name: RAILS_LOG_LEVEL
