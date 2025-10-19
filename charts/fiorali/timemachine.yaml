@@ -61,7 +61,10 @@ env:
 - name: TM_GID
   value: "922"
 - name: PASSWORD
-  value: "timemachine"
+  valueFrom:
+    secretKeyRef:
+      name: timemachine-credentials
+      key: PASSWORD
 - name: SET_PERMISSIONS
   value: "false"
 - name: SHARE_NAME

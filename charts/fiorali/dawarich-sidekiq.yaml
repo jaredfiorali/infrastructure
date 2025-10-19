@@ -60,7 +60,10 @@ env:
 - name: DATABASE_USERNAME
   value: postgres
 - name: DATABASE_PASSWORD
-  value: password
+  valueFrom:
+    secretKeyRef:
+      name: dawarich-credentials
+      key: DATABASE_PASSWORD
 - name: DATABASE_NAME
   value: dawarich_development
 - name: MIN_MINUTES_SPENT_IN_CITY

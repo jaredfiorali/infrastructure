@@ -65,14 +65,20 @@ env:
   value: dawarich-db
 - name: DATABASE_USERNAME
   value: postgres
-- name: DATABASE_PASSWORD
-  value: password
 - name: DATABASE_NAME
   value: dawarich_development
+- name: DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: dawarich-credentials
+      key: DATABASE_PASSWORD
+- name: QUEUE_DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: dawarich-credentials
+      key: QUEUE_DATABASE_PASSWORD
 - name: QUEUE_DATABASE_NAME
   value: dawarich_development_queue
-- name: QUEUE_DATABASE_PASSWORD
-  value: password
 - name: QUEUE_DATABASE_USERNAME
   value: postgres
 - name: QUEUE_DATABASE_HOST
