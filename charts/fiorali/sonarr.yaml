@@ -117,7 +117,7 @@ containerSecurityContext:
 podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
-  runAsUser: 1000
+  runAsUser: 911
 volume:
   enabled: true
   size: "1073741824"
