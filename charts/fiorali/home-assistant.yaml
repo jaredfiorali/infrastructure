@@ -152,6 +152,16 @@ configMap:
               }
               ]
             }
+
+      rest_command:
+        trigger_garage_siren:
+          url: https://192.168.24.1/proxy/protect/integration/v1/alarm-manager/webhook/f3c88d19-abfb-4ef1-8fc7-ed900d3666fa
+          method: POST
+          verify_ssl: false
+          headers:
+            'X-API-KEY: {{ api_key }}'
+            'Accept: application/json'
+
 volume:
   enabled: true
   size: "5368709120"
