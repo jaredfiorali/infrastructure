@@ -159,8 +159,7 @@ configMap:
           method: POST
           verify_ssl: false
           headers:
-            'X-API-KEY: {{ api_key }}'
-            'Accept: application/json'
+            X-API-KEY: '{{ api_key }}'
 
 volume:
   enabled: true
