@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:d74effa653514ed76047cf3b4c11e19faef1678769844782e0db3c9294701870
+  tag: latest@sha256:15e45476b75c4693a26d36ea148ad1b559e184c5d09dfc19192a8c78caea668d
 containerPorts:
 - containerPort: 9091
   name: transmission
