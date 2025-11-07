@@ -66,6 +66,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [alloy](https://grafana.com/docs/alloy)            | 🔴         | Scans pod logs and saves them to loki                              |
 | git-sync                                           | 🔴         | Custom script to read kromgo endpoints and save metrics to git     |
 | [grafana](https://grafana.com/docs/grafana/latest) | 🔴         | Create and display various dashboards for monitoring the cluster   |
+| [kometa](https://github.com/Kometa-Team/Kometa)    | 🔴         | Scans IMDB and other sites to auto-downloads them                  |
 | [kromgo](https://github.com/kashalls/kromgo)       | 🔴         | Easily surfaces and formats pre-defined prometheus queries         |
 | [loki](https://grafana.com/docs/loki)              | 🔴         | Aggregates alloy output and log query tool                         |
 | [prometheus](https://prometheus.io)                | 🔴         | Queryable bucket for cluster metrics                               |
@@ -192,16 +193,17 @@ graph TD
     B(Gateway UDM SE - Backup) --> D(USW Pro Max 24 PoE)
     C(Gateway UDM SE - Primary) --> D(USW Pro Max 24 PoE)
     D(USW Pro Max 24 PoE) --> E(U7 Pro XG - Family Room)
-    D(USW Pro Max 24 PoE) --> F(U6 Mesh - Dining Room)
+    D(USW Pro Max 24 PoE) --> F(U7 Pro XG - Dining Room)
     D(USW Pro Max 24 PoE) --> G(USW-Ultra - Theatre)
-    G(USW-Ultra - Theatre) --> H(U6-IW - Theatre)
+    G(USW-Ultra - Theatre) --> H(U6 Mesh - Theatre)
     G(USW-Ultra - Theatre - 1) --> O(USW-Ultra - Theatre - 2)
     D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
     D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
     D(USW Pro Max 24 PoE) ---> K(USW Flex 2.5G - Garage)
-    K(USW Flex 2.5G - Garage) --> L(U6-IW - Office)
+    K(USW Flex 2.5G - Garage) --> L(U7 Pro XG - Office)
     K(USW Flex 2.5G - Garage) --> M(G5 PTZ - Driveway Camera)
     K(USW Flex 2.5G - Garage) --> N(UP FloodLight - West Light)
+    K(USW Flex 2.5G - Garage) --> P(UP Siren - Garage Alarm)
 ```
 
 ### DNS
@@ -220,32 +222,33 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 
 ### Server Rack
 
-| Device                   | Function                        |
-|--------------------------|---------------------------------|
-| Raspberry Pi 5 (x5)      | Kubernetes master nodes         |
-| Unifi USW Pro Max 24 PoE | Network Switch                  |
-| Raspberry Pi 4 (x5)      | Kubernetes worker nodes         |
-| Unifi UDM SE (Backup)    | Network Gateway (Backup)        |
-| Unifi UDM SE (Primary)   | Network Gateway (Primary) & NVR |
-| UniFi USP PDU Pro        | Monitored power outlets         |
-| CyberPower CP1500PFCRM2U | Uninterruptible Power Supply    |
+| Device                                                                                                                                                        | Function                        |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| [Raspberry Pi 5 (x5)](https://www.raspberrypi.com/products/raspberry-pi-5/)                                                                                   | Kubernetes master nodes         |
+| [Unifi USW Pro Max 24 PoE](https://ca.store.ui.com/ca/en/category/all-switching/products/usw-pro-max-24-poe)                                                  | Network Switch                  |
+| [Raspberry Pi 4 (x5)](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)                                                                           | Kubernetes worker nodes         |
+| [Unifi UDM SE (Backup)](https://ca.store.ui.com/ca/en/category/all-cloud-gateways/products/udm-se)                                                            | Network Gateway (Backup)        |
+| [Unifi UDM SE (Primary)](https://ca.store.ui.com/ca/en/category/all-cloud-gateways/products/udm-se)                                                           | Network Gateway (Primary) & NVR |
+| [UniFi USP PDU Pro](https://ca.store.ui.com/ca/en/category/integrations-power-tech/collections/unifi-power-tech-power-distribution/products/usp-pdu-pro?c=CA) | Monitored power outlets         |
+| [CyberPower CP1500PFCRM2U](https://www.cyberpowersystems.com/product/ups/pfc-sinewave/cp1500pfcrm2u/)                                                         | Uninterruptible Power Supply    |
 
 ### Additional Devices
 
-| Device              | Function                     |
-|---------------------|------------------------------|
-| Mac Studio          | Personal PC, hosts LLM       |
-| Unifi U6-IW         | Access Point - Office        |
-| Unifi U6-IW         | Access Point - Theatre       |
-| Unifi U7 Pro XG     | Access Point - Family Room   |
-| Unifi U6-Mesh       | Access Point - Dining Room   |
-| Unifi USW-Ultra     | Network Switch - Theatre (1) |
-| Unifi USW-Ultra     | Network Switch - Theatre (2) |
-| Unifi USW Flex 2.5G | Network Switch - Garage      |
-| G5 PTZ              | Driveway Camera              |
-| G4 Dome             | East Side Camera             |
-| UP FloodLight       | East Side Floodlight         |
-| UP FloodLight       | West Side Floodlight         |
+| Device                                                                                                                                  | Function                     |
+|-----------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
+| [Mac Studio](https://www.apple.com/mac-studio/)                                                                                         | Personal PC, hosts LLM       |
+| [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Office        |
+| [Unifi U6-Mesh](https://ca.store.ui.com/ca/en/category/all-wifi/products/u6-mesh)                                                       | Access Point - Theatre       |
+| [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Family Room   |
+| [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Dining Room   |
+| [Unifi USW-Ultra](https://ca.store.ui.com/ca/en/category/switching-utility/collections/pro-ultra)                                       | Network Switch - Theatre (1) |
+| [Unifi USW-Ultra](https://ca.store.ui.com/ca/en/category/switching-utility/collections/pro-ultra)                                       | Network Switch - Theatre (2) |
+| [Unifi USW Flex 2.5G](https://ca.store.ui.com/ca/en/category/all-switching/products/usw-flex-2-5g-8-poe)                                | Network Switch - Garage      |
+| [UP-Siren-PoE](https://ca.store.ui.com/ca/en/category/cameras-special-devices/collections/special-devices-sirens/products/up-siren-poe) | Garage Siren                 |
+| [G5 PTZ](https://ca.store.ui.com/ca/en/category/all-cameras-nvrs/products/uvc-g5-ptz)                                                   | Driveway Camera              |
+| [G4 Dome](https://ca.store.ui.com/ca/en/category/all-cameras-nvrs/products/uvc-g4-dome)                                                 | East Side Camera             |
+| [UP FloodLight](https://ca.store.ui.com/ca/en/category/all-cameras-nvrs/products/up-floodlight)                                         | East Side Floodlight         |
+| [UP FloodLight](https://ca.store.ui.com/ca/en/category/all-cameras-nvrs/products/up-floodlight)                                         | West Side Floodlight         |
 
 ## Handy Links
 
