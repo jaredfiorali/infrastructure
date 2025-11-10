@@ -172,12 +172,13 @@ In order to apply the updated image to the cluster, an update to the [Chart.yaml
 
 ```mermaid
 graph TD
-    A>User] -->|Commits| B(Github Repo)
-    B>Github Repo] -->|Compiles Helm Charts| C>Github Pages]
+    A(User) -->|Commits| B(Github Repo)
+    B(Github Repo) -->|Triggers| F>Github Actions]
+    F>Github Actions] -->|Compiles Helm Charts| C>Github Pages]
+    B(Github Repo) -->|Watched By| G(ArgoCD Image Updater)
+    G>ArgoCD Image Updater] -->|Updates| C(Github Pages)
     D>ArgoCD] -->|Reads| C(Github Pages)
     D>ArgoCD] -->|Deploys| E(Kubernetes Cluster)
-    F>External Repo] -->|Watched By| G(ArgoCD Image Updater)
-    G>ArgoCD Image Updater] -->|Updates| C(Github Pages)
 ```
 
 ## Network
