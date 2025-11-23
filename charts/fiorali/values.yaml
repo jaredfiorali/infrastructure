@@ -154,7 +154,7 @@ volume:
   size: 0
 
 imageUpdater:
-  enabled: true
+  enabled: false
   alias: ""
   rootImageTag: "latest"
   updateStrategy: "digest"
