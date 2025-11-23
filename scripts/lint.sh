@@ -3,7 +3,7 @@
 clear
 for chart in charts/fiorali/*; do
   # Skip: Charts.yaml, values.yaml, transmission-init.yaml, and templates folder
-  if [ $chart == "charts/fiorali/Chart.yaml" ] || [ $chart == "charts/fiorali/values.yaml" ] || [ $chart == "charts/fiorali/transmission-init.yaml" ] || [ $chart == "charts/fiorali/templates" ]; then
+  if [ $chart == "charts/fiorali/Chart.yaml" ] || [ $chart == "charts/fiorali/values.yaml" ] || [ $chart == "charts/fiorali/transmission-init.yaml" ] || [ $chart == "charts/fiorali/kometa-init.yaml" ] || [ $chart == "charts/fiorali/templates" ]; then
     echo "Skipping $chart"
   else
     echo "Linting ${chart}"
