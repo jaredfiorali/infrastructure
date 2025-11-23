@@ -67,6 +67,8 @@ networkpolicy:
 initContainers:
   enabled: true
   file: "kometa-init.yaml"
+imageUpdater:
+  enabled: true
 configMap:
   enabled: true
   value: |-

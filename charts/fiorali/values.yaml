@@ -152,3 +152,17 @@ volume:
   numberOfReplicas: 2
   snapshotMaxCount: 15
   size: 0
+
+imageUpdater:
+  enabled: true
+  alias: ""
+  rootImageTag: "latest"
+  updateStrategy: "digest"
+  forceUpdate: true
+  helm:
+    imageNameField: "image.repository"
+    imageTagField: "image.tag"
+  writeBack:
+    method: git
+    repoURL: git@github.com:jaredfiorali/infrastructure.git
+    branch: main

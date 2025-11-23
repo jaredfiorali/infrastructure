@@ -76,3 +76,6 @@ podSecurityContext:
   fsGroup: 999
   runAsNonRoot: true
   runAsUser: 999
+imageUpdater:
+  enabled: true
+  rootImageTag: "17"

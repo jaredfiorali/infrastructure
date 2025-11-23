@@ -62,3 +62,6 @@ podSecurityContext:
 volume:
   enabled: true
   size: "1073741824"
+imageUpdater:
+  enabled: true
+  rootImageTag: "lite"

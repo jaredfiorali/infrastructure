@@ -92,3 +92,5 @@ configMap:
 
       echo "Push new metrics"
       git push
+imageUpdater:
+  enabled: true

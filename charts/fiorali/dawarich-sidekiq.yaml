@@ -93,3 +93,5 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+imageUpdater:
+  enabled: true

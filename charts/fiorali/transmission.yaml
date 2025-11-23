@@ -84,6 +84,8 @@ containerSecurityContext:
 #     drop:
 #     - ALL
 podSecurityContext: {} #gluetun needs root access to make changes to network settings
+imageUpdater:
+  enabled: true
 configMap:
   enabled: true
   value: |-

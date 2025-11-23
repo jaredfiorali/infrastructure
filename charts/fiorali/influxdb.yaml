@@ -53,3 +53,5 @@ podSecurityContext:
 volume:
   enabled: true
   size: "524288000"
+imageUpdater:
+  enabled: true

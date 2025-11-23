@@ -60,6 +60,8 @@ volumes:
   configMap:
     name: kromgo-configmap
     defaultMode: 511
+imageUpdater:
+  enabled: true
 configMap:
   enabled: true
   value: |-

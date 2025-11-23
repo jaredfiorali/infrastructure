@@ -1,0 +1,29 @@
+{{- if .Values.imageUpdater.enabled -}}
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: {{ .Values.name }}
+spec:
+  namespace: "argocd"
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      repository: "git@github.com:jaredfiorali/infrastructure.git"
+      branch: "main"
+      writeBackTarget: "charts/fiorali/{{ .Values.name }}.yaml"
+  applicationRefs:
+    - namePattern: {{ .Values.name | quote }}
+      images:
+        - alias: {{ .Values.name | quote }}
+          imageName: "{{ .Values.image.repository }}:{{ .Values.imageUpdater.rootImageTag }}"
+          commonUpdateSettings:
+            updateStrategy: {{ .Values.imageUpdater.updateStrategy | quote }}
+          manifestTargets:
+            helm:
+              name: {{ .Values.imageUpdater.helm.imageNameField | quote }}
+              tag: {{ .Values.imageUpdater.helm.imageTagField | quote }}
+      writeBackConfig:
+        method: {{ .Values.imageUpdater.writeBack.method | quote }}
+        gitConfig:
+          branch: {{ .Values.imageUpdater.writeBack.branch | quote }}
+{{- end }}

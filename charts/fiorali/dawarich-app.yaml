@@ -127,3 +127,5 @@ volume:
   accessMode: rwx
   name: dawarich
   size: "1073741824"
+imageUpdater:
+  enabled: true
