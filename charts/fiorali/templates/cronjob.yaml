@@ -20,7 +20,9 @@ spec:
           restartPolicy: {{ .Values.cronjob.restartPolicy }}
           {{- if .Values.initContainers.enabled }}
           initContainers:
-            {{- .Files.Get .Values.initContainers.file | nindent 10 }}
+            {{- with .Values.initContainers }}
+              {{- toYaml .containers | nindent 12 }}
+            {{- end }}
           {{- end }}
           containers:
             - name: {{ .Values.name }}

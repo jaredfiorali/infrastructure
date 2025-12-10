@@ -59,7 +59,17 @@ affinity: {}
 
 initContainers:
   enabled: false
-  file: ""
+  containers:
+  - name: ""
+    image:
+      repository: ""
+      tag: ""
+    securityContext: {}
+    imagePullPolicy: IfNotPresent
+    command: []
+    args: []
+    resources: {}
+    volumeMounts: []
 
 clusterRole:
   enabled: false
