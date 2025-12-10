@@ -1,5 +1,5 @@
 - name: gluetun
-  image: docker.io/qmcgaw/gluetun:latest@sha256:183c74263a07f4c931979140ac99ff4fbc44dcb1ca5b055856ef580b0fafdf1c
+  image: docker.io/qmcgaw/gluetun:latest@sha256:6a59b7901068b7c50ef52200152db3afd4b9cebc13e272b2169de4cdcad91006
   resources:
     limits:
       cpu: 1500m
