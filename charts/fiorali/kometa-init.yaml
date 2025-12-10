@@ -1,5 +1,5 @@
 - name: kometa-init
-  image: docker.io/alpine/curl:latest@sha256:2f0ecea48fe8e7131314d6655f99d001f798cf566d57de0075c387a88487acc2
+  image: docker.io/alpine/curl:latest@sha256:bd3d6bf85a478818cb858cce42c87fcecbac141249f10814be96309e4abeb807
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
