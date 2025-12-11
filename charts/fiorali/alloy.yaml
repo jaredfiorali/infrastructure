@@ -8,12 +8,16 @@ networkpolicy:
   egress:
     internal: true
   ingress:
+    internal: true
     namespaces:
       - monitoring
 serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
+ingress:
+  enabled: true
+  portName: http-metrics
 configMap:
   enabled: true
   value: |-
