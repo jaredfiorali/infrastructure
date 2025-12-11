@@ -23,7 +23,7 @@ configMap:
         format = "logfmt"
       }
 
-      # Loki write endpoint
+      // Loki write endpoint
       loki.write "fiorali" {
         endpoint {
           url = "http://loki-gateway.loki/loki/api/v1/push"
@@ -31,8 +31,8 @@ configMap:
         }
       }
 
-      # Kubernetes discovery
-      # Pod discovery (DaemonSet, node-local)
+      // Kubernetes discovery
+      // Pod discovery (DaemonSet, node-local)
       discovery.kubernetes "pods" {
         role = "pod"
         selectors {
@@ -41,22 +41,22 @@ configMap:
         }
       }
 
-      # Cluster-wide discovery
+      // Cluster-wide discovery
       discovery.kubernetes "services" {
         role = "service"
-        # No node filter; discovers all services cluster-wide
+        // No node filter; discovers all services cluster-wide
       }
 
       discovery.kubernetes "ingresses" {
         role = "ingress"
-        # No node filter; discovers all ingresses cluster-wide
+        // No node filter; discovers all ingresses cluster-wide
       }
 
-      # Relabel rules for pod logs
+      // Relabel rules for pod logs
       discovery.relabel "pod_logs" {
         targets = discovery.kubernetes.pods.targets
 
-        # Standard labels
+        // Standard labels
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
           action = "replace"
@@ -81,7 +81,7 @@ configMap:
           target_label = "app"
         }
 
-        # Job label: namespace/container
+        // Job label: namespace/container
         rule {
           source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
           action = "replace"
@@ -90,7 +90,7 @@ configMap:
           replacement = "$1/$2"
         }
 
-        # Path to container logs
+        // Path to container logs
         rule {
           source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
           action = "replace"
@@ -99,7 +99,7 @@ configMap:
           replacement = "/var/log/pods/*$1/$2/*.log"
         }
 
-        # Container runtime
+        // Container runtime
         rule {
           source_labels = ["__meta_kubernetes_pod_container_id"]
           action = "replace"
@@ -109,24 +109,24 @@ configMap:
         }
       }
 
-      # Pod logs source
+      // Pod logs source
       loki.source.kubernetes "pod_logs" {
         targets    = discovery.relabel.pod_logs.output
         forward_to = [loki.process.pod_logs.receiver]
       }
 
-      # Pod logs processing
+      // Pod logs processing
       loki.process "pod_logs" {
         stage.static_labels {
           values = {
-            cluster     = "default"
-            environment = "prod"  # optional, adjust as needed
+            cluster     = "default",
+            environment = "prod",
           }
         }
         forward_to = [loki.write.fiorali.receiver]
       }
 
-      # Kubernetes events
+      // Kubernetes events
       loki.source.kubernetes_events "cluster_events" {
         job_name   = "integrations/kubernetes/eventhandler"
         log_format = "logfmt"
@@ -137,18 +137,18 @@ configMap:
         forward_to = [loki.write.fiorali.receiver]
         stage.static_labels {
           values = {
-            cluster     = "default"
-            environment = "prod"
+            cluster     = "default",
+            environment = "prod",
           }
         }
         stage.labels {
           values = {
-            event_type = "job"
+            event_type = "job",
           }
         }
       }
 
-      # Node-local file logs (syslog)
+      // Node-local file logs (syslog)
       local.file_match "node_logs" {
         path_targets = [{
             __path__  = "/var/log/syslog",
