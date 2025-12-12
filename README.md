@@ -145,7 +145,9 @@ This Git repository contains the following directories for the [Kubernetes](./ch
 ├── 📁 fiorali        # application value definitions
    ├── 📄 Chart.yaml  # sets the version of the compiled helm charts
    ├── 📁 templates   # helm charts use to populate values
-   ├── 📁 scripts     # various helper scripts
+   ├── 📁 other       # various non-helm utilities
+       ├── 📁 scripts     # various helper scripts
+       ├── 📁 configs     # anything that might be used for external configs
 ```
 
 ## Deployment workflow

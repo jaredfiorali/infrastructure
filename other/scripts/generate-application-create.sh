@@ -29,4 +29,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-" > scripts/tmp/create.yaml
+" > /other/scripts/tmp/create.yaml
