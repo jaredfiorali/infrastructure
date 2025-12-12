@@ -1,0 +1,12 @@
+{{- if .Values.bgpAdvertisement.enabled -}}
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: {{ .Values.bgpAdvertisement.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ipAddressPools:
+  {{- with .Values.bgpAdvertisement.ipAddressPools }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

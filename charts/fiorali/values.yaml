@@ -188,3 +188,8 @@ bgpPeer:
   peerAddress: ""
   peerASN: ""
   myASN: ""
+
+bgpAdvertisement:
+  enabled: false
+  name: ""
+  ipAddressPools: []

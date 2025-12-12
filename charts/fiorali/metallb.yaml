@@ -20,3 +20,7 @@ bgpPeer:
   peerAddress: 192.168.20.1
   peerASN: 65000
   myASN: 65001
+bgpAdvertisement:
+  enabled: true
+  name: "default"
+  ipAddressPools: ["pi-vips"]
