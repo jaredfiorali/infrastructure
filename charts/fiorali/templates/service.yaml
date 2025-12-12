@@ -10,6 +10,9 @@ spec:
   {{- if .Values.service.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | default "Cluster" }}
   {{- end }}
+  {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP | default "" }}
+  {{- end }}
   type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     {{- toYaml .Values.service.ports | nindent 2 }}
