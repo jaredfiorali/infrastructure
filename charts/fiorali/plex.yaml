@@ -28,7 +28,7 @@ service:
     port: 32400
     protocol: TCP
     targetPort: plex
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   type: LoadBalancer
 env:
 - name: ADVERTISE_IP
