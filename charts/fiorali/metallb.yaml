@@ -1,0 +1,22 @@
+name: metallb
+namespace: metallb-system
+deployment:
+  enabled: false
+service:
+  enabled: false
+networkpolicy:
+  enabled: false
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
+ipAddressPool:
+  enabled: true
+  name: "pi-vips"
+  addresses: ["192.168.20.20-192.168.20.25"]
+bgpPeer:
+  enabled: true
+  name: "unifi"
+  peerAddress: 192.168.20.1
+  peerASN: 65000
+  myASN: 65001

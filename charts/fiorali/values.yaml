@@ -176,3 +176,15 @@ imageUpdater:
     method: git
     repoURL: git@github.com:jaredfiorali/infrastructure.git
     branch: main
+
+ipAddressPool:
+  enabled: false
+  name: ""
+  addresses: []
+
+bgpPeer:
+  enabled: false
+  name: ""
+  peerAddress: ""
+  peerASN: ""
+  myASN: ""
