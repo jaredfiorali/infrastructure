@@ -190,7 +190,7 @@ configMap:
               instances:
                 - labels:
                     app: [timemachine, ssh, plex]
-                  codes: [1103] # Load balancer services
+                  codes: [1103, 1107] # Load balancer services
 
             serviceaccounts:
               instances:
