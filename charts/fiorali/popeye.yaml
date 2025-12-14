@@ -146,7 +146,7 @@ configMap:
         # Excludes excludes certain resources from Popeye scans
         excludes:
           global:
-            fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd, rx:^kyverno] # => excludes all third party resources
+            fqns: [rx:^kube-, rx:^loki, rx:^longhorn-system, rx:^argocd, rx:^metallb-system] # => excludes all third party resources
             labels:
               app.kubernetes.io/part-of: [kube-state-metrics, kube-prometheus-stack, prometheus-node-exporter] # => excludes all third party resources
               app.kubernetes.io/managed-by: [prometheus-operator] # => excludes all third party resources
