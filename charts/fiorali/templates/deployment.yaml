@@ -110,6 +110,11 @@ spec:
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+        {{- if .Values.sidecarContainers.enabled }}
+          {{- with .Values.sidecarContainers }}
+            {{- toYaml .containers | nindent 6 }}
+          {{- end }}
+        {{- end }}
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork | default false }}
       {{- end }}

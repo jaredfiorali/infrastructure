@@ -194,3 +194,7 @@ bgpAdvertisement:
   enabled: false
   name: ""
   ipAddressPools: []
+
+sidecarContainers:
+  enabled: false
+  containers: []

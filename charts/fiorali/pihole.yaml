@@ -1,0 +1,109 @@
+name: pihole
+namespace: pihole
+deployment:
+  enabled: true
+strategyType: RollingUpdate
+image:
+  repository: pihole/pihole
+  tag: latest@sha256:91dc91ddd413bf461c283204558f8f21839851e9824799075a7ceff7c77eea40
+containerPorts:
+- containerPort: 8082
+  name: pihole
+  protocol: TCP
+- containerPort: 53
+  name: dns-tcp
+  protocol: TCP
+- containerPort: 53
+  name: dns-udp
+  protocol: UDP
+- containerPort: 67
+  name: client-udp
+  protocol: UDP
+resources:
+  limits:
+    cpu: 250m
+    memory: 250Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+probes:
+  tcpSocket:
+    port: 53
+service:
+  enabled: true
+  loadBalancerIP: 192.168.20.21
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  ports:
+  - name: pihole
+    port: 80
+    protocol: TCP
+    targetPort: pihole
+  - name: tcp-dns
+    port: 53
+    protocol: TCP
+    targetPort: dns-tcp
+  - name: udp-dns
+    port: 53
+    protocol: UDP
+    targetPort: dns-udp
+env:
+- name: TZ
+  value: "America/Toronto"
+- name: FTLCONF_dns_revServers
+  value: 'true,192.168.0.0/16,192.168.0.1,lan'
+- name: FTLCONF_dns_upstreams
+  value: '1.1.1.1;8.8.8.8'
+- name: FTLCONF_webserver_api_password
+  value: ''
+- name: FTLCONF_webserver_port
+  value: '8082,443s'
+- name: FTLCONF_debug_api
+  value: 'true'
+ingress:
+  enabled: true
+networkpolicy:
+  ingress:
+    allowAll: true
+  egress:
+    internet: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+imageUpdater:
+  enabled: true
+sidecarContainers:
+  enabled: true
+  containers:
+  - name: cloudflared
+    image: crazymax/cloudflared:latest@sha256:9b4e856d18f6f6367330c56d91452f5fe3b6bd235f1210dcd9f6bd7373cad9be
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 1000
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      ports:
+        - containerPort: 5053
+          name: cloudflared-udp
+          protocol: UDP
+        - containerPort: 49312
+          name: cloudflared-met
+          protocol: TCP
