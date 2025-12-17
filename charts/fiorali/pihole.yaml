@@ -1,8 +1,9 @@
 name: pihole
 namespace: pihole
 deployment:
+  enabled: false
+daemonSet:
   enabled: true
-strategyType: RollingUpdate
 image:
   repository: pihole/pihole
   tag: latest@sha256:91dc91ddd413bf461c283204558f8f21839851e9824799075a7ceff7c77eea40
@@ -21,10 +22,10 @@ containerPorts:
   protocol: UDP
 resources:
   limits:
-    cpu: 250m
-    memory: 250Mi
-  requests:
     cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 50m
     memory: 128Mi
 probes:
   tcpSocket:
@@ -39,14 +40,14 @@ service:
     port: 80
     protocol: TCP
     targetPort: pihole
-  - name: tcp-dns
+  - name: dns-tcp
     port: 53
     protocol: TCP
-    targetPort: dns-tcp
-  - name: udp-dns
+    targetPort: 53
+  - name: dns-udp
     port: 53
     protocol: UDP
-    targetPort: dns-udp
+    targetPort: 53
 env:
 - name: TZ
   value: "America/Toronto"
@@ -60,6 +61,14 @@ env:
   value: '8082,443s'
 - name: FTLCONF_debug_api
   value: 'true'
+- name: PH_VERBOSE
+  value: '1'
+- name: PIHOLE_UID
+  value: '1000'
+- name: PIHOLE_GID
+  value: '1000'
+- name: DNSMASQ_USER
+  value: 'root'
 ingress:
   enabled: true
 networkpolicy:
@@ -68,16 +77,21 @@ networkpolicy:
   egress:
     internet: true
 containerSecurityContext:
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true
   capabilities:
-    drop:
-    - ALL
-  readOnlyRootFilesystem: true
+    add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_RAW
+      - NET_ADMIN
+      - SYS_NICE
+      - CHOWN
+  readOnlyRootFilesystem: false
   privileged: false
-podSecurityContext:
-  fsGroup: 1000
-  runAsNonRoot: true
-  runAsUser: 1000
+# podSecurityContext:
+#   fsGroup: 1000
+#   runAsNonRoot: true
+#   runAsUser: 1000
 imageUpdater:
   enabled: true
 sidecarContainers:
@@ -100,10 +114,10 @@ sidecarContainers:
       requests:
         cpu: 50m
         memory: 128Mi
-      ports:
-        - containerPort: 5053
-          name: cloudflared-udp
-          protocol: UDP
-        - containerPort: 49312
-          name: cloudflared-met
-          protocol: TCP
+    ports:
+      - containerPort: 5053
+        name: cloudflared-udp
+        protocol: UDP
+      - containerPort: 49312
+        name: cloudflared-met
+        protocol: TCP

@@ -4,6 +4,9 @@
 deployment:
   enabled: true
 
+daemonSet:
+  enabled: false
+
 name: ""
 namespace: ""
 replicaCount: 1
