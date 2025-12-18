@@ -47,15 +47,15 @@ service:
   - name: dns-tcp
     port: 53
     protocol: TCP
-    targetPort: 53
+    targetPort: dns-tcp
   - name: dns-udp
     port: 53
     protocol: UDP
-    targetPort: 53
+    targetPort: dns-udp
   - name: metrics
     port: 9617
     protocol: TCP
-    targetPort: 9617
+    targetPort: metrics
 env:
 - name: TZ
   value: "America/Toronto"
@@ -143,6 +143,27 @@ sidecarContainers:
       - containerPort: 49312
         name: cloudflared-met
         protocol: TCP
+    startupProbe:
+      tcpSocket:
+        port: 5053
+      failureThreshold: 15
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 15
+    livenessProbe:
+      tcpSocket:
+        port: 5053
+      failureThreshold: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    readinessProbe:
+      tcpSocket:
+        port: 5053
+      failureThreshold: 2
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 5
     args:
       - proxy-dns
       - --port
@@ -168,9 +189,30 @@ sidecarContainers:
       requests:
         cpu: 25m
         memory: 64Mi
+    startupProbe:
+      tcpSocket:
+        port: 9617
+      failureThreshold: 15
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 15
+    livenessProbe:
+      tcpSocket:
+        port: 9617
+      failureThreshold: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    readinessProbe:
+      tcpSocket:
+        port: 9617
+      failureThreshold: 2
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 5
     ports:
       - containerPort: 9617
-        name: prometheus
+        name: metrics
         protocol: TCP
 volumeMounts:
 - name: pihole-configmap
