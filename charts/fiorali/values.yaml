@@ -6,6 +6,10 @@ deployment:
 
 daemonSet:
   enabled: false
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
 
 name: ""
 namespace: ""

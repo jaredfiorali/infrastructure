@@ -14,5 +14,7 @@ spec:
     matchNames:
     - {{ .Values.namespace }}
   endpoints:
-  - port: {{ .Values.serviceMonitor.port }}
+    - port: {{ .Values.serviceMonitor.port }}
+      path: {{ .Values.serviceMonitor.path | default "/metrics" }}
+      interval: {{ .Values.serviceMonitor.interval | default "30s" }}
 {{- end }}

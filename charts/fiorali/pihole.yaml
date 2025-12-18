@@ -48,27 +48,42 @@ service:
     port: 53
     protocol: UDP
     targetPort: 53
+  - name: metrics
+    port: 9617
+    protocol: TCP
+    targetPort: 9617
 env:
 - name: TZ
   value: "America/Toronto"
-- name: FTLCONF_dns_revServers
-  value: 'true,192.168.0.0/16,192.168.0.1,lan'
-- name: FTLCONF_dns_upstreams
-  value: '1.1.1.1;8.8.8.8'
+# - name: FTLCONF_dns_revServers
+#   value: 'true,192.168.24.0/27,192.168.24.1,lan;true,192.168.20.0/27,192.168.20.1,lan;true,192.168.15.0/26,192.168.15.1,lan;true,192.168.10.0/26,192.168.10.1,lan;true,192.168.5.0/28,192.168.5.1,lan;'
 - name: FTLCONF_webserver_api_password
   value: ''
 - name: FTLCONF_webserver_port
   value: '8082,443s'
-- name: FTLCONF_debug_api
-  value: 'true'
-- name: PH_VERBOSE
-  value: '1'
 - name: PIHOLE_UID
   value: '1000'
 - name: PIHOLE_GID
   value: '1000'
 - name: DNSMASQ_USER
   value: 'root'
+- name: DNSMASQ_LISTENING
+  value: "all"
+- name: FTLCONF_stats_excludeTypes
+  value: "PTR,SRV,SOA"
+- name: FTLCONF_stats_excludeDomains
+  value: |
+    localhost.*;
+    lb._dns-sd._udp.*;
+    lb._dns-sd._tcp.*;
+    _dns-sd._udp.*;
+    _dns-sd._tcp.*;
+    _services._dns-sd._udp.*;
+    in-addr.arpa.*;
+- name: FTLCONF_LOCAL_IPV4
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
 ingress:
   enabled: true
 networkpolicy:
@@ -80,12 +95,11 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities:
     add:
-      - NET_ADMIN
+      - CHOWN
       - NET_BIND_SERVICE
       - NET_RAW
       - NET_ADMIN
       - SYS_NICE
-      - CHOWN
   readOnlyRootFilesystem: false
   privileged: false
 # podSecurityContext:
@@ -94,6 +108,10 @@ containerSecurityContext:
 #   runAsUser: 1000
 imageUpdater:
   enabled: true
+serviceMonitor:
+  enabled: true
+  appSelector: pihole
+  port: "metrics"
 sidecarContainers:
   enabled: true
   containers:
@@ -121,3 +139,94 @@ sidecarContainers:
       - containerPort: 49312
         name: cloudflared-met
         protocol: TCP
+    args:
+      - proxy-dns
+      - --port
+      - "5053"
+      - --upstream
+      - "https://p5mp7qmshw.cloudflare-gateway.com/dns-query"
+  - name: pihole-exporter
+    image: ekofr/pihole-exporter:latest@sha256:36dab68a7e4b2750802e2326d9340201dc498ac429cbd89cdfb45cbab3fef081
+    imagePullPolicy: Always
+    env:
+      - name: PIHOLE_HOSTNAME
+        value: 127.0.0.1
+      - name: PIHOLE_PORT
+        value: "8082"
+      - name: PIHOLE_PASSWORD
+        value: ""
+      - name: PIHOLE_PROTOCOL
+        value: "http"
+    resources:
+      limits:
+        cpu: 50m
+        memory: 128Mi
+      requests:
+        cpu: 25m
+        memory: 64Mi
+    ports:
+      - containerPort: 9617
+        name: prometheus
+        protocol: TCP
+volumeMounts:
+- name: pihole-configmap
+  mountPath: /etc/pihole/setupVars.conf
+  subPath: setupVars.conf
+- name: pihole-configmap
+  mountPath: /etc/pihole/pihole-FTL.conf
+  subPath: pihole-FTL.conf
+- name: pihole-configmap
+  mountPath: /etc/pihole/adlists.list
+  subPath: adlists.list
+- name: pihole-configmap
+  mountPath: /etc/pihole/custom.list
+  subPath: custom.list
+volumes:
+- name: pihole-configmap
+  configMap:
+    name: pihole-configmap
+configMap:
+  enabled: true
+  value: |-
+    setupVars.conf: |
+      PIHOLE_INTERFACE=eth0
+      IPV4_ADDRESS=0.0.0.0
+      IPV6_ADDRESS=
+      DNSMASQ_LISTENING=all
+      QUERY_LOGGING=true
+      INSTALL_WEB_SERVER=true
+      INSTALL_WEB_INTERFACE=true
+      LIGHTTPD_ENABLED=true
+      WEBPASSWORD=
+      BLOCKING_ENABLED=true
+      DNS_FQDN_REQUIRED=true
+      DNS_BOGUS_PRIV=true
+      DNSSEC=true
+
+      # Upstreams (Cloudflare + Unbound if you add later)
+      PIHOLE_DNS_1=127.0.0.1#5053
+      PIHOLE_DNS_2=127.0.0.1#5053
+
+      TEMPERATUREUNIT=c
+      WEBUIBOXEDLAYOUT=boxed
+      WEBTHEME=default-dark
+    pihole-FTL.conf: |
+      # Performance
+      MAXDBDAYS=7
+      PRIVACYLEVEL=0
+      RATE_LIMIT=0/0
+
+      # Kubernetes-safe logging
+      LOGFILE=/dev/stdout
+      LOG_FTL=true
+
+      # Don't bind to specific IPs
+      RESOLVE_IPV6=no
+    adlists.list: |
+      https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/light-onlydomains.txt
+      https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+      https://small.oisd.nl/domainswild2
+    custom.list: |
+      192.168.20.20 *.fiora.li
+      192.168.20.21 pihole.fiora.li
+      192.168.20.22 plex.fiora.li
