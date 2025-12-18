@@ -4,8 +4,12 @@ deployment:
   enabled: false
 daemonSet:
   enabled: true
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
 image:
-  repository: pihole/pihole
+  repository: docker.io/pihole/pihole
   tag: latest@sha256:91dc91ddd413bf461c283204558f8f21839851e9824799075a7ceff7c77eea40
 containerPorts:
 - containerPort: 8082
@@ -116,7 +120,7 @@ sidecarContainers:
   enabled: true
   containers:
   - name: cloudflared
-    image: crazymax/cloudflared:latest@sha256:9b4e856d18f6f6367330c56d91452f5fe3b6bd235f1210dcd9f6bd7373cad9be
+    image: docker.io/crazymax/cloudflared:latest@sha256:9b4e856d18f6f6367330c56d91452f5fe3b6bd235f1210dcd9f6bd7373cad9be
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -146,7 +150,7 @@ sidecarContainers:
       - --upstream
       - "https://p5mp7qmshw.cloudflare-gateway.com/dns-query"
   - name: pihole-exporter
-    image: ekofr/pihole-exporter:latest@sha256:36dab68a7e4b2750802e2326d9340201dc498ac429cbd89cdfb45cbab3fef081
+    image: docker.io/ekofr/pihole-exporter:latest@sha256:36dab68a7e4b2750802e2326d9340201dc498ac429cbd89cdfb45cbab3fef081
     imagePullPolicy: Always
     env:
       - name: PIHOLE_HOSTNAME
