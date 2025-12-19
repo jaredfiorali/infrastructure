@@ -269,9 +269,7 @@ configMap:
       # Don't bind to specific IPs
       RESOLVE_IPV6=no
     adlists.list: |
-      https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/light-onlydomains.txt
-      https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
-      https://small.oisd.nl/domainswild2
+      https://raw.githubusercontent.com/r0xd4n3t/pihole-adblock-lists/main/pihole_adlists.txt
     custom.list: |
       192.168.20.20 *.fiora.li
       192.168.20.21 pihole.fiora.li
