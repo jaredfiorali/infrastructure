@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:2d8d07715382a58f83fdcd1751e08c736711d76eecf71135106312fd370af933
+  tag: latest@sha256:9e5157459da3272d5dcbca2db84f3823dd9daa0f166b963c5d51899098b17035
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -86,7 +86,7 @@ initContainers:
       privileged: true
       capabilities:
         add:
-          - NET_ADMIN
+        - NET_ADMIN
     startupProbe:
       successThreshold: 1
       failureThreshold: 18
@@ -94,9 +94,9 @@ initContainers:
       timeoutSeconds: 5
       exec:
         command:
-          - sh
-          - -c
-          - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+        - sh
+        - -c
+        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
     livenessProbe:
       successThreshold: 1
       failureThreshold: 3
@@ -104,9 +104,9 @@ initContainers:
       timeoutSeconds: 5
       exec:
         command:
-          - sh
-          - -c
-          - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+        - sh
+        - -c
+        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
     readinessProbe:
       successThreshold: 2
       failureThreshold: 2
@@ -114,37 +114,37 @@ initContainers:
       timeoutSeconds: 5
       exec:
         command:
-          - sh
-          - -c
-          - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+        - sh
+        - -c
+        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
     env:
-      - name: VPN_SERVICE_PROVIDER
-        value: "private internet access"
-      - name: OPENVPN_FLAGS
-        value: "--fast-io --sndbuf 1024000 --rcvbuf 1024000 --compress"
-      - name: OPENVPN_CIPHERS
-        value: "aes-128-cbc"
-      - name: OPENVPN_USER
-        valueFrom:
-          secretKeyRef:
-            name: pia-credentials
-            key: username
-      - name: OPENVPN_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: pia-credentials
-            key: password
-      - name: SERVER_REGIONS
-        value: "CA Toronto"
-      - name: PORT_FORWARD_ONLY
-        value: "true"
-      - name: VPN_PORT_FORWARDING
-        value: "on"
-      - name: VPN_PORT_FORWARDING_STATUS_FILE
-        value: "/gluetun/forwarded_port.txt"
+    - name: VPN_SERVICE_PROVIDER
+      value: "private internet access"
+    - name: OPENVPN_FLAGS
+      value: "--fast-io --sndbuf 1024000 --rcvbuf 1024000 --compress"
+    - name: OPENVPN_CIPHERS
+      value: "aes-128-cbc"
+    - name: OPENVPN_USER
+      valueFrom:
+        secretKeyRef:
+          name: pia-credentials
+          key: username
+    - name: OPENVPN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: pia-credentials
+          key: password
+    - name: SERVER_REGIONS
+      value: "CA Toronto"
+    - name: PORT_FORWARD_ONLY
+      value: "true"
+    - name: VPN_PORT_FORWARDING
+      value: "on"
+    - name: VPN_PORT_FORWARDING_STATUS_FILE
+      value: "/gluetun/forwarded_port.txt"
     ports:
-      - containerPort: 8000
-        name: gluetun
+    - containerPort: 8000
+      name: gluetun
     volumeMounts:
     - name: port-forward
       mountPath: /gluetun
