@@ -3,7 +3,7 @@ apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
 metadata:
   name: {{ .Values.bgpAdvertisement.name }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.bgpAdvertisement.namespace | default .Values.namespace }}
 spec:
   ipAddressPools:
   {{- with .Values.bgpAdvertisement.ipAddressPools }}
