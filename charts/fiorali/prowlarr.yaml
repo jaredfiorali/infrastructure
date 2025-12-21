@@ -82,3 +82,6 @@ volume:
   size: "1073741824"
 imageUpdater:
   enabled: true
+dnsConfig:
+  nameservers:
+  - 192.168.20.21
