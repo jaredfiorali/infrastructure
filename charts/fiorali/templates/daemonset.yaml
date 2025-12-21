@@ -26,6 +26,7 @@ spec:
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
       serviceAccountName: {{ .Values.name }}-serviceaccount
       {{- with .Values.podSecurityContext }}
       securityContext:

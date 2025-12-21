@@ -8,6 +8,7 @@ daemonSet:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 50%
+terminationGracePeriodSeconds: 5
 image:
   repository: docker.io/pihole/pihole
   tag: latest@sha256:91dc91ddd413bf461c283204558f8f21839851e9824799075a7ceff7c77eea40
@@ -26,11 +27,11 @@ containerPorts:
   protocol: UDP
 resources:
   limits:
-    cpu: 100m
-    memory: 256Mi
+    cpu: 250m
+    memory: 128Gi
   requests:
     cpu: 50m
-    memory: 128Mi
+    memory: 64Mi
 probes:
   tcpSocket:
     port: 53
@@ -59,23 +60,19 @@ service:
 env:
 - name: TZ
   value: "America/Toronto"
-# - name: FTLCONF_dns_revServers
-#   value: 'true,192.168.24.0/27,192.168.24.1,lan;true,192.168.20.0/27,192.168.20.1,lan;true,192.168.15.0/26,192.168.15.1,lan;true,192.168.10.0/26,192.168.10.1,lan;true,192.168.5.0/28,192.168.5.1,lan;'
 - name: FTLCONF_webserver_api_password
   value: ''
 - name: FTLCONF_webserver_port
   value: '8082,443s'
-- name: PIHOLE_UID
-  value: '1000'
-- name: PIHOLE_GID
-  value: '1000'
-- name: DNSMASQ_USER
-  value: 'root'
+# - name: DNSMASQ_USER
+#   value: 'root'
 - name: DNSMASQ_LISTENING
   value: "all"
-- name: FTLCONF_stats_excludeTypes
-  value: "PTR,SRV,SOA"
-- name: FTLCONF_stats_excludeDomains
+- name: FTLCONF_files_database
+  value: "/tmp/pihole-FTL.db"
+- name: FTLCONF_files_gravity
+  value: "/tmp/gravity.db"
+- name: FTLCONF_webserver_api_excludeDomains
   value: |
     localhost.*;
     lb._dns-sd._udp.*;
@@ -84,10 +81,6 @@ env:
     _dns-sd._tcp.*;
     _services._dns-sd._udp.*;
     in-addr.arpa.*;
-- name: FTLCONF_LOCAL_IPV4
-  valueFrom:
-    fieldRef:
-      fieldPath: status.podIP
 ingress:
   enabled: true
 networkpolicy:
@@ -116,6 +109,32 @@ serviceMonitor:
   enabled: true
   appSelector: pihole
   port: "metrics"
+initContainers:
+  enabled: true
+  containers:
+  - name: load-configmaps
+    image: docker.io/busybox:stable
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+    command:
+      - sh
+      - -c
+      - chmod -R 777 /tmp
+    volumeMounts:
+      - name: tmp
+        mountPath: /tmp
 sidecarContainers:
   enabled: true
   containers:
@@ -173,6 +192,14 @@ sidecarContainers:
   - name: pihole-exporter
     image: docker.io/ekofr/pihole-exporter:latest@sha256:36dab68a7e4b2750802e2326d9340201dc498ac429cbd89cdfb45cbab3fef081
     imagePullPolicy: Always
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 1000
     env:
       - name: PIHOLE_HOSTNAME
         value: 127.0.0.1
@@ -214,6 +241,49 @@ sidecarContainers:
       - containerPort: 9617
         name: metrics
         protocol: TCP
+  - name: config-sync
+    image: docker.io/pihole/pihole:latest@sha256:91dc91ddd413bf461c283204558f8f21839851e9824799075a7ceff7c77eea40
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        echo "Starting config sync service..."
+        echo "Waiting 120 seconds for pihole to start..."
+        for i in $(seq 1 12); do
+          echo "$(( (13-i)*10 )) seconds remaining..."
+          sleep 10 &
+          wait $!
+        done
+
+        while true; do
+          echo "Starting daily config sync..."
+          echo "Importing regex whitelists..."
+          while IFS= read -r line; do
+            if [ ! -z "$line" ]; then
+              pihole allow --allow-regex "$line"
+            fi
+          done < /tmp/whitelist_regex.list
+          echo "Sync complete."
+          echo "Sleeping for 24 hours until next sync..."
+          sleep 86400
+        done
+    env:
+      - name: FTLCONF_files_database
+        value: "/tmp/pihole-FTL.db"
+      - name: FTLCONF_files_gravity
+        value: "/tmp/gravity.db"
+    volumeMounts:
+    - mountPath: /tmp
+      name: tmp
+    - mountPath: /tmp/whitelist_regex.list
+      name: pihole-configmap
+      subPath: whitelist_regex.list
+    resources:
+      limits:
+        cpu: 50m
+        memory: 64Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
 volumeMounts:
 - name: pihole-configmap
   mountPath: /etc/pihole/setupVars.conf
@@ -227,10 +297,19 @@ volumeMounts:
 - name: pihole-configmap
   mountPath: /etc/pihole/custom.list
   subPath: custom.list
+- name: pihole-configmap
+  mountPath: /etc/pihole/whitelist.list
+  subPath: whitelist.list
+- name: tmp
+  mountPath: /tmp
 volumes:
 - name: pihole-configmap
   configMap:
     name: pihole-configmap
+- name: tmp
+  emptyDir:
+    sizeLimit: 512Mi
+    medium: Memory
 configMap:
   enabled: true
   value: |-
@@ -274,3 +353,12 @@ configMap:
       192.168.20.20 *.fiora.li
       192.168.20.21 pihole.fiora.li
       192.168.20.22 plex.fiora.li
+    whitelist_regex.list: |
+      (^|\.)spe\.schoolmessenger\.com
+      (^|\.)braze\.com$
+      (^|\.)thepiratebay\.org$
+      (^|\.)apibay\.org$
+dnsPolicy: "None"
+dnsConfig:
+  nameservers:
+    - 1.1.1.1
