@@ -85,10 +85,9 @@ clusterRole:
 clusterRoleBinding:
   enabled: false
 
-dnsPolicy: "None"
+dnsPolicy: ""
 dnsConfig:
-  nameservers:
-    - 192.168.20.21
+  nameservers: []
 
 service:
   enabled: true
