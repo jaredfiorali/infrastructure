@@ -28,10 +28,10 @@ containerPorts:
 resources:
   limits:
     cpu: 250m
-    memory: 128Gi
+    memory: 512Mi
   requests:
     cpu: 50m
-    memory: 64Mi
+    memory: 256Mi
 probes:
   tcpSocket:
     port: 53
@@ -308,7 +308,7 @@ volumes:
     name: pihole-configmap
 - name: tmp
   emptyDir:
-    sizeLimit: 512Mi
+    sizeLimit: 256Mi
     medium: Memory
 configMap:
   enabled: true
@@ -358,7 +358,4 @@ configMap:
       (^|\.)braze\.com$
       (^|\.)thepiratebay\.org$
       (^|\.)apibay\.org$
-dnsPolicy: "None"
-dnsConfig:
-  nameservers:
-    - 1.1.1.1
+      ^(wbsapi|static|sct01-ws|prod\.rudderstack)\.withings\.net$
