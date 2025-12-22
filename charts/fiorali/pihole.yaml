@@ -266,6 +266,36 @@ sidecarContainers:
           echo "Sleeping for 24 hours until next sync..."
           sleep 86400
         done
+    livenessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - ls $FTLCONF_files_gravity || exit 1
+      failureThreshold: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - ls $FTLCONF_files_gravity || exit 1
+      failureThreshold: 2
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 5
+    startupProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - ls $FTLCONF_files_gravity || exit 1
+      failureThreshold: 15
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 15
     env:
       - name: FTLCONF_files_database
         value: "/tmp/pihole-FTL.db"
@@ -328,7 +358,6 @@ configMap:
       DNS_BOGUS_PRIV=true
       DNSSEC=true
 
-      # Upstreams (Cloudflare + Unbound if you add later)
       PIHOLE_DNS_1=127.0.0.1#5053
       PIHOLE_DNS_2=127.0.0.1#5053
 
