@@ -64,14 +64,20 @@ env:
   value: ''
 - name: FTLCONF_webserver_port
   value: '8082,443s'
-# - name: DNSMASQ_USER
-#   value: 'root'
 - name: DNSMASQ_LISTENING
   value: "all"
 - name: FTLCONF_files_database
   value: "/tmp/pihole-FTL.db"
 - name: FTLCONF_files_gravity
   value: "/tmp/gravity.db"
+- name: FTLCONF_dns_CNAMEdeepInspect
+  value: "true"
+- name: FTLCONF_dns_ignoreLocalhost
+  value: "true"
+- name: FTLCONF_dns_dnssec
+  value: "true"
+- name: FTLCONF_dns_listeningMode
+  value: "ALL"
 - name: FTLCONF_webserver_api_excludeDomains
   value: |
     localhost.*;
