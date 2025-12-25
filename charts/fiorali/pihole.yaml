@@ -315,10 +315,10 @@ sidecarContainers:
       subPath: whitelist_regex.list
     resources:
       limits:
-        cpu: 100m
+        cpu: 250m
         memory: 64Mi
       requests:
-        cpu: 50m
+        cpu: 100m
         memory: 64Mi
 volumeMounts:
 - name: pihole-configmap
