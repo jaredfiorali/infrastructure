@@ -217,10 +217,10 @@ sidecarContainers:
         value: "http"
     resources:
       limits:
-        cpu: 50m
+        cpu: 100m
         memory: 128Mi
       requests:
-        cpu: 25m
+        cpu: 50m
         memory: 64Mi
     startupProbe:
       tcpSocket:
@@ -315,7 +315,7 @@ sidecarContainers:
       subPath: whitelist_regex.list
     resources:
       limits:
-        cpu: 50m
+        cpu: 100m
         memory: 64Mi
       requests:
         cpu: 50m
