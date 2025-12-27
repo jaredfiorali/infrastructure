@@ -24,8 +24,6 @@ cronjob:
 volumeMounts:
 - name: config
   mountPath: /config
-- name: assets
-  mountPath: /assets
 - name: kometa-configmap
   mountPath: /config/movies.yml
   subPath: movies.yml
@@ -36,8 +34,6 @@ volumeMounts:
   readOnly: true
 volumes:
 - name: config
-  emptyDir: {}
-- name: assets
   emptyDir: {}
 - name: tmp
   emptyDir: {}
@@ -136,15 +132,17 @@ configMap:
     config.yml: |
       libraries:
         Movies:
+          language: en
           collection_files:
-            - file: config/movies.yaml
+            - file: /config/movies.yml
         TV Shows:
+          language: en
           collection_files:
-            - file: config/tv.yaml
+            - file: /config/tv.yml
       settings:
         cache: true
         cache_expiration: 60
-        asset_directory: /assets
+        asset_directory: /config/assets
         asset_folders: true
         asset_depth: 0
         create_asset_folders: false
@@ -152,11 +150,11 @@ configMap:
         download_url_assets: false
         show_missing_season_assets: false
         sync_mode: append
-        minimum_items: 1
-        default_collection_order:
+        minimum_items: 5
+        default_collection_order: release
         delete_below_minimum: true
         delete_not_scheduled: false
-        run_again_delay: 2
+        run_again_delay: 10
         missing_only_released: false
         only_filter_missing: false
         show_unmanaged: true
@@ -165,16 +163,19 @@ configMap:
         show_missing: true
         show_missing_assets: true
         save_report: true
+        show_report: true
         tvdb_language: eng
-        ignore_ids:
-        ignore_imdb_ids:
         playlist_sync_to_users: all
         verify_ssl: false
+        run_order:
+          - operations
+          - metadata
+          - collections
+          - overlays
       plex:
         url: http://plex.downloader:32400
         token: ${PLEX_TOKEN}
         timeout: 60
-        db_cache:
         clean_bundles: false
         empty_trash: false
         optimize: false
@@ -190,17 +191,15 @@ configMap:
         add_missing: false
         root_folder_path: /media-movies-2
         monitor: false
-        availability: cinemas
+        availability: released
         quality_profile: HD-1080p
         tag: kometa
         add_existing: false
         search: false
-        radarr_path:
-        plex_path:
       sonarr:
         url: http://sonarr.downloader:8989
         token: ${SONARR_TOKEN}
-        add_missing: false
+        add_missing: true
         add_existing: false
         root_folder_path: /media-tv-2
         monitor: pilot
@@ -211,8 +210,6 @@ configMap:
         tag: kometa
         search: true
         cutoff_search: false
-        sonarr_path:
-        plex_path:
     movies.yml: |
       collections:
         Tautulli Most Popular Movies:
@@ -224,7 +221,7 @@ configMap:
             list_minimum: 1
     tv.yml: |
       collections:
-        Most Popular:
+        Tautulli Most Popular TV Shows:
           smart_label: originally_available.desc
           sync_mode: sync
           imdb_search:
