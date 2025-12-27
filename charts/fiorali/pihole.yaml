@@ -391,6 +391,4 @@ configMap:
     whitelist_regex.list: |
       (^|\.)spe\.schoolmessenger\.com
       (^|\.)braze\.com$
-      (^|\.)thepiratebay\.org$
-      (^|\.)apibay\.org$
-      ^(wbsapi|static|sct01-ws|prod\.rudderstack)\.withings\.net$
+      (^|\.)launchdarkly\.com$
