@@ -74,10 +74,18 @@ env:
   value: "true"
 - name: FTLCONF_dns_ignoreLocalhost
   value: "true"
+- name: FTLCONF_database_DBimport
+  value: "false"
+- name: FTLCONF_misc_check_load
+  value: "false"
 - name: FTLCONF_dns_dnssec
   value: "true"
 - name: FTLCONF_dns_listeningMode
   value: "ALL"
+- name: FTLCONF_webserver_domain
+  value: "pihole.fiora.li"
+- name: FTLCONF_database_maxDBdays
+  value: "0"
 - name: FTLCONF_webserver_api_excludeDomains
   value: |
     localhost.*;
@@ -392,3 +400,4 @@ configMap:
       (^|\.)spe\.schoolmessenger\.com
       (^|\.)braze\.com$
       (^|\.)launchdarkly\.com$
+      (^|\.)appsflyersdk\.com$
