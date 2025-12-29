@@ -401,3 +401,6 @@ configMap:
       (^|\.)braze\.com$
       (^|\.)launchdarkly\.com$
       (^|\.)appsflyersdk\.com$
+      (^|\.)mixpanel\.com$
+      (^|\.)ingest\.sentry\.io$
+      (^|\.)jitsu\.com$
