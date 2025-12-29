@@ -402,5 +402,5 @@ configMap:
       (^|\.)launchdarkly\.com$
       (^|\.)appsflyersdk\.com$
       (^|\.)mixpanel\.com$
-      (^|\.)ingest\.sentry\.io$
+      (^|\.)sentry\.io$
       (^|\.)jitsu\.com$
