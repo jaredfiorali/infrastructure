@@ -399,9 +399,3 @@ configMap:
     whitelist_regex.list: |
       (^|\.)spe\.schoolmessenger\.com
       (^|\.)braze\.com$
-      (^|\.)launchdarkly\.com$
-      (^|\.)appsflyersdk\.com$
-      (^|\.)mixpanel\.com$
-      (^|\.)sentry\.io$
-      (^|\.)jitsu\.com$
-      (^|\.)expo\.dev$
