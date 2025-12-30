@@ -22,16 +22,26 @@ containerPorts:
 - containerPort: 39613
   name: metrics
   protocol: TCP
+serviceMonitor:
+  enabled: true
+  appSelector: cloudflared
+  port: "metrics"
+env:
+- name: UPSTREAM_DNS
+  valueFrom:
+    secretKeyRef:
+      name: cloudflared-dns
+      key: UPSTREAM_DNS
 resources:
   limits:
-    cpu: 100m
+    cpu: 250m
     memory: 128Mi
   requests:
-    cpu: 50m
+    cpu: 25m
     memory: 64Mi
 command:
   enabled: true
-  args: ["proxy-dns", "--address=0.0.0.0", "--port", "53", "--upstream", "$(UPSTREAM_DNS)", "--metrics=0.0.0.0:39613"]
+  args: ["proxy-dns", "--address=0.0.0.0", "--port=53", "--upstream=$(UPSTREAM_DNS)", "--metrics=0.0.0.0:39613"]
 probes:
   tcpSocket:
     port: 53
