@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/baosystems/postgis
-  tag: 17@sha256:378439647f8b8c79f7cfb9be335d21717d516386b9500e87701238eb8df0d9e1
+  tag: 17@sha256:01a1c9e835077814bf7aa6cf1cbbf6966d4e1b1125d5c9b1616a9c2596cbcc4d
 containerPorts:
 - containerPort: 5432
   name: db
