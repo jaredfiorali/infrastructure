@@ -42,8 +42,11 @@ spec:
       - name: {{ .Values.name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-        {{- if .Values.command.enabled }}
+        {{- if .Values.command.exec }}
         command: {{- toYaml .Values.command.exec | nindent 10 }}
+        {{- end }}
+        {{- if .Values.command.args }}
+        args: {{- toYaml .Values.command.args | nindent 10 }}
         {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}

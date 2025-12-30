@@ -1,0 +1,62 @@
+name: cloudflared
+namespace: cloudflared
+deployment:
+  enabled: false
+daemonSet:
+  enabled: true
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+terminationGracePeriodSeconds: 5
+image:
+  repository: docker.io/cloudflare/cloudflared
+  tag: latest@sha256:89ee50efb1e9cb2ae30281a8a404fed95eb8f02f0a972617526f8c5b417acae2
+containerPorts:
+- containerPort: 53
+  name: dns-tcp
+  protocol: TCP
+- containerPort: 53
+  name: dns-udp
+  protocol: UDP
+- containerPort: 39613
+  name: metrics
+  protocol: TCP
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+command:
+  enabled: true
+  args: ["proxy-dns", "--address=0.0.0.0", "--port", "53", "--upstream", "$(UPSTREAM_DNS)", "--metrics=0.0.0.0:39613"]
+probes:
+  tcpSocket:
+    port: 53
+service:
+  enabled: true
+  loadBalancerIP: 192.168.20.21
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  ports:
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: dns-tcp
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: dns-udp
+  - name: metrics
+    port: 39613
+    protocol: TCP
+    targetPort: metrics
+networkpolicy:
+  ingress:
+    allowAll: true
+  egress:
+    internet: true
+imageUpdater:
+  enabled: true
