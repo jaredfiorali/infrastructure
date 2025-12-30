@@ -42,6 +42,17 @@ resources:
 command:
   enabled: true
   args: ["proxy-dns", "--address=0.0.0.0", "--port=53", "--upstream=$(UPSTREAM_DNS)", "--metrics=0.0.0.0:39613"]
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 2000
+  runAsNonRoot: true
+  runAsUser: 1000
 probes:
   tcpSocket:
     port: 53
