@@ -6,9 +6,9 @@ image:
   repository: ghcr.io/baosystems/postgis
   tag: 17@sha256:b6cfdd1cd78bf7d7e23eda74994736081e532dee55cb37f617cfd3874016d640
 containerPorts:
-- containerPort: 5432
-  name: db
-  protocol: TCP
+  - containerPort: 5432
+    name: db
+    protocol: TCP
 resources:
   limits:
     cpu: 1
@@ -19,45 +19,45 @@ resources:
 probes:
   exec:
     command:
-    - sh
-    - -c
-    - pg_isready -U postgres -d dawarich_development
+      - sh
+      - -c
+      - pg_isready -U postgres -d dawarich_development
 service:
   enabled: true
   ports:
-  - name: db
-    port: 5432
-    protocol: TCP
-    targetPort: db
+    - name: db
+      port: 5432
+      protocol: TCP
+      targetPort: db
 volumeMounts:
-- name: dawarich-persistent-storage
-  mountPath: /var/lib/postgresql/data
-  subPath: db_data
-- name: dawarich-persistent-storage
-  mountPath: /var/shared
-  subPath: shared
-- name: tmp
-  mountPath: /tmp
-- name: postgresql
-  mountPath: /var/run/postgresql
+  - name: dawarich-persistent-storage
+    mountPath: /var/lib/postgresql/data
+    subPath: db_data
+  - name: dawarich-persistent-storage
+    mountPath: /var/shared
+    subPath: shared
+  - name: tmp
+    mountPath: /tmp
+  - name: postgresql
+    mountPath: /var/run/postgresql
 volumes:
-- name: dawarich-persistent-storage
-  persistentVolumeClaim:
-    claimName: dawarich
-- name: tmp
-  emptyDir: {}
-- name: postgresql
-  emptyDir: {}
+  - name: dawarich-persistent-storage
+    persistentVolumeClaim:
+      claimName: dawarich
+  - name: tmp
+    emptyDir: {}
+  - name: postgresql
+    emptyDir: {}
 env:
-- name: POSTGRES_USER
-  value: postgres
-- name: POSTGRES_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: dawarich-credentials
-      key: DATABASE_PASSWORD
-- name: POSTGRES_HOST_AUTH_METHOD
-  value: trust
+  - name: POSTGRES_USER
+    value: postgres
+  - name: POSTGRES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-credentials
+        key: DATABASE_PASSWORD
+  - name: POSTGRES_HOST_AUTH_METHOD
+    value: trust
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -69,7 +69,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

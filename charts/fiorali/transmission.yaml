@@ -6,8 +6,8 @@ image:
   repository: docker.io/linuxserver/transmission
   tag: latest@sha256:456204f6cd5e5a23a46bdae14c7f39238c3b8ec5bea750bba9d908e13c4e507b
 containerPorts:
-- containerPort: 9091
-  name: transmission
+  - containerPort: 9091
+    name: transmission
 resources:
   limits:
     cpu: 1500m
@@ -18,51 +18,51 @@ resources:
 probes:
   exec:
     command:
-    - sh
-    - -c
-    - if [[ $(pgrep transmission | wc -l) -ne 1 ]]; then exit 1; fi
+      - sh
+      - -c
+      - if [[ $(pgrep transmission | wc -l) -ne 1 ]]; then exit 1; fi
 service:
   enabled: true
   ports:
-  - port: 9091
-    name: transmission
-    targetPort: transmission
+    - port: 9091
+      name: transmission
+      targetPort: transmission
 env:
-- name: PUID
-  value: "1000"
-- name: PGID
-  value: "1000"
-- name: TZ
-  value: "America/Toronto"
-- name: S6_READ_ONLY_ROOT
-  value: "1"
-- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-  value: "1"
-- name: S6_VERBOSITY
-  value: "2"
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "America/Toronto"
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
+  - name: S6_VERBOSITY
+    value: "2"
 ingress:
   enabled: true
 volumeMounts:
-- name: media-bittorrent
-  mountPath: /media-bittorrent
-- name: config
-  mountPath: /config
-- name: run
-  mountPath: /run
+  - name: media-bittorrent
+    mountPath: /media-bittorrent
+  - name: config
+    mountPath: /config
+  - name: run
+    mountPath: /run
 volumes:
-- name: transmission-configmap
-  configMap:
-    name: transmission-configmap
-    defaultMode: 511
-- name: media-bittorrent
-  persistentVolumeClaim:
-    claimName: media-bittorrent
-- name: port-forward
-  emptyDir: {}
-- name: config
-  emptyDir: {}
-- name: run
-  emptyDir: {}
+  - name: transmission-configmap
+    configMap:
+      name: transmission-configmap
+      defaultMode: 511
+  - name: media-bittorrent
+    persistentVolumeClaim:
+      claimName: media-bittorrent
+  - name: port-forward
+    emptyDir: {}
+  - name: config
+    emptyDir: {}
+  - name: run
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -71,151 +71,151 @@ networkpolicy:
 initContainers:
   enabled: true
   containers:
-  - name: gluetun
-    image: docker.io/qmcgaw/gluetun:latest@sha256:6a59b7901068b7c50ef52200152db3afd4b9cebc13e272b2169de4cdcad91006
-    resources:
-      limits:
-        cpu: 1500m
-        memory: 1Gi
-      requests:
-        cpu: 1000m
-        memory: 500Mi
-    imagePullPolicy: IfNotPresent
-    restartPolicy: Always
-    securityContext:
-      privileged: true
-      capabilities:
-        add:
-        - NET_ADMIN
-    startupProbe:
-      successThreshold: 1
-      failureThreshold: 18
-      periodSeconds: 10
-      timeoutSeconds: 5
-      exec:
-        command:
+    - name: gluetun
+      image: docker.io/qmcgaw/gluetun:latest@sha256:6a59b7901068b7c50ef52200152db3afd4b9cebc13e272b2169de4cdcad91006
+      resources:
+        limits:
+          cpu: 1500m
+          memory: 1Gi
+        requests:
+          cpu: 1000m
+          memory: 500Mi
+      imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      securityContext:
+        privileged: true
+        capabilities:
+          add:
+            - NET_ADMIN
+      startupProbe:
+        successThreshold: 1
+        failureThreshold: 18
+        periodSeconds: 10
+        timeoutSeconds: 5
+        exec:
+          command:
+            - sh
+            - -c
+            - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+      livenessProbe:
+        successThreshold: 1
+        failureThreshold: 3
+        periodSeconds: 30
+        timeoutSeconds: 5
+        exec:
+          command:
+            - sh
+            - -c
+            - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+      readinessProbe:
+        successThreshold: 2
+        failureThreshold: 2
+        periodSeconds: 10
+        timeoutSeconds: 5
+        exec:
+          command:
+            - sh
+            - -c
+            - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
+      env:
+        - name: VPN_SERVICE_PROVIDER
+          value: "private internet access"
+        - name: OPENVPN_FLAGS
+          value: "--fast-io --sndbuf 1024000 --rcvbuf 1024000 --compress"
+        - name: OPENVPN_CIPHERS
+          value: "aes-128-cbc"
+        - name: OPENVPN_USER
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: username
+        - name: OPENVPN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pia-credentials
+              key: password
+        - name: SERVER_REGIONS
+          value: "CA Toronto"
+        - name: PORT_FORWARD_ONLY
+          value: "true"
+        - name: VPN_PORT_FORWARDING
+          value: "on"
+        - name: VPN_PORT_FORWARDING_STATUS_FILE
+          value: "/gluetun/forwarded_port.txt"
+      ports:
+        - containerPort: 8000
+          name: gluetun
+      volumeMounts:
+        - name: port-forward
+          mountPath: /gluetun
+    - name: ping
+      image: docker.io/busybox:stable
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+            - NET_ADMIN
+        privileged: false
+        readOnlyRootFilesystem: true
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      command:
         - sh
         - -c
-        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
-    livenessProbe:
-      successThreshold: 1
-      failureThreshold: 3
-      periodSeconds: 30
-      timeoutSeconds: 5
-      exec:
-        command:
+        - |
+          while ! ping -c 1 google.com; do
+            echo "Ping failed, retrying in 5"
+            sleep 5
+          done
+          echo "ping successful, exiting"
+    - name: update-peer-port
+      image: docker.io/busybox:stable
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsUser: 911
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      command:
         - sh
         - -c
-        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
-    readinessProbe:
-      successThreshold: 2
-      failureThreshold: 2
-      periodSeconds: 10
-      timeoutSeconds: 5
-      exec:
-        command:
-        - sh
-        - -c
-        - wget -q -T 10 -t 2 127.0.0.1:9999 && echo 0 || echo 1
-    env:
-    - name: VPN_SERVICE_PROVIDER
-      value: "private internet access"
-    - name: OPENVPN_FLAGS
-      value: "--fast-io --sndbuf 1024000 --rcvbuf 1024000 --compress"
-    - name: OPENVPN_CIPHERS
-      value: "aes-128-cbc"
-    - name: OPENVPN_USER
-      valueFrom:
-        secretKeyRef:
-          name: pia-credentials
-          key: username
-    - name: OPENVPN_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: pia-credentials
-          key: password
-    - name: SERVER_REGIONS
-      value: "CA Toronto"
-    - name: PORT_FORWARD_ONLY
-      value: "true"
-    - name: VPN_PORT_FORWARDING
-      value: "on"
-    - name: VPN_PORT_FORWARDING_STATUS_FILE
-      value: "/gluetun/forwarded_port.txt"
-    ports:
-    - containerPort: 8000
-      name: gluetun
-    volumeMounts:
-    - name: port-forward
-      mountPath: /gluetun
-  - name: ping
-    image: docker.io/busybox:stable
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        add:
-        - NET_ADMIN
-      privileged: false
-      readOnlyRootFilesystem: true
-    resources:
-      limits:
-        cpu: 100m
-        memory: 100Mi
-      requests:
-        cpu: 100m
-        memory: 100Mi
-    command:
-    - sh
-    - -c
-    - |
-      while ! ping -c 1 google.com; do
-        echo "Ping failed, retrying in 5"
-        sleep 5
-      done
-      echo "ping successful, exiting"
-  - name: update-peer-port
-    image: docker.io/busybox:stable
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsUser: 911
-    resources:
-      limits:
-        cpu: 100m
-        memory: 100Mi
-      requests:
-        cpu: 100m
-        memory: 100Mi
-    command:
-    - sh
-    - -c
-    - |
-      while [ ! -f "/gluetun/forwarded_port.txt" ]; do
-        echo "Waiting for port forward..."
-        sleep 5
-      done
-      cp /tmp/settings.json /config/settings.json
-      export FORWARDED_PORT="$(cat /gluetun/forwarded_port.txt)"
-      sed -i "s/\"peer-port\":.*/\"peer-port\": $FORWARDED_PORT,/g" /config/settings.json
-      echo "transmission port updated to $FORWARDED_PORT"
-      cat /config/settings.json
-    volumeMounts:
-    - name: transmission-configmap
-      mountPath: /tmp/settings.json
-      subPath: settings.json
-      readOnly: true
-    - name: port-forward
-      mountPath: /gluetun
-    - name: config
-      mountPath: /config
+        - |
+          while [ ! -f "/gluetun/forwarded_port.txt" ]; do
+            echo "Waiting for port forward..."
+            sleep 5
+          done
+          cp /tmp/settings.json /config/settings.json
+          export FORWARDED_PORT="$(cat /gluetun/forwarded_port.txt)"
+          sed -i "s/\"peer-port\":.*/\"peer-port\": $FORWARDED_PORT,/g" /config/settings.json
+          echo "transmission port updated to $FORWARDED_PORT"
+          cat /config/settings.json
+      volumeMounts:
+        - name: transmission-configmap
+          mountPath: /tmp/settings.json
+          subPath: settings.json
+          readOnly: true
+        - name: port-forward
+          mountPath: /gluetun
+        - name: config
+          mountPath: /config
 dnsPolicy: "None"
 dnsConfig:
   nameservers:
-  - 127.0.0.1
+    - 127.0.0.1
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   readOnlyRootFilesystem: true
@@ -224,7 +224,7 @@ containerSecurityContext:
 #   capabilities:
 #     drop:
 #     - ALL
-podSecurityContext: {} #gluetun needs root access to make changes to network settings
+podSecurityContext: {}  # gluetun needs root access to make changes to network settings
 imageUpdater:
   enabled: true
 configMap:

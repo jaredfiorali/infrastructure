@@ -6,9 +6,9 @@ image:
   repository: docker.io/linuxserver/radarr
   tag: latest@sha256:6c0948b42c149e36bb3dbc0b64d36c77b2d3c9dccf1b424c4f72af1e57ba0c21
 containerPorts:
-- containerPort: 7878
-  name: radarr
-  protocol: TCP
+  - containerPort: 7878
+    name: radarr
+    protocol: TCP
 resources:
   limits:
     cpu: 1
@@ -19,67 +19,67 @@ resources:
 probes:
   exec:
     command:
-    - sh
-    - -c
-    - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
+      - sh
+      - -c
+      - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
-  - name: radarr
-    port: 7878
-    protocol: TCP
-    targetPort: radarr
+    - name: radarr
+      port: 7878
+      protocol: TCP
+      targetPort: radarr
 env:
-- name: API_KEY
-  valueFrom:
-    secretKeyRef:
-      name: radarr-api-key
-      key: api-key
-- name: PUID
-  value: "1000"
-- name: PGID
-  value: "1000"
-- name: TZ
-  value: "America/Toronto"
-- name: S6_READ_ONLY_ROOT
-  value: "1"
-- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-  value: "1"
-- name: S6_VERBOSITY
-  value: "2"
+  - name: API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: radarr-api-key
+        key: api-key
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "America/Toronto"
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
+  - name: S6_VERBOSITY
+    value: "2"
 ingress:
   enabled: true
 volumeMounts:
-- name: radarr-persistent-storage
-  mountPath: /config
-- name: media-bittorrent
-  mountPath: /media-bittorrent
-- name: media-movies-0
-  mountPath: /media-movies-0
-- name: media-movies-1
-  mountPath: /media-movies-1
-- name: media-movies-2
-  mountPath: /media-movies-2
-- name: run
-  mountPath: /run
+  - name: radarr-persistent-storage
+    mountPath: /config
+  - name: media-bittorrent
+    mountPath: /media-bittorrent
+  - name: media-movies-0
+    mountPath: /media-movies-0
+  - name: media-movies-1
+    mountPath: /media-movies-1
+  - name: media-movies-2
+    mountPath: /media-movies-2
+  - name: run
+    mountPath: /run
 volumes:
-- name: radarr-persistent-storage
-  persistentVolumeClaim:
-    claimName: radarr
-- name: media-bittorrent
-  persistentVolumeClaim:
-    claimName: media-bittorrent
-- name: media-movies-0
-  persistentVolumeClaim:
-    claimName: media-movies-0
-- name: media-movies-1
-  persistentVolumeClaim:
-    claimName: media-movies-1
-- name: media-movies-2
-  persistentVolumeClaim:
-    claimName: media-movies-2
-- name: run
-  emptyDir: {}
+  - name: radarr-persistent-storage
+    persistentVolumeClaim:
+      claimName: radarr
+  - name: media-bittorrent
+    persistentVolumeClaim:
+      claimName: media-bittorrent
+  - name: media-movies-0
+    persistentVolumeClaim:
+      claimName: media-movies-0
+  - name: media-movies-1
+    persistentVolumeClaim:
+      claimName: media-movies-1
+  - name: media-movies-2
+    persistentVolumeClaim:
+      claimName: media-movies-2
+  - name: run
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true

@@ -22,28 +22,28 @@ cronjob:
   enabled: true
   schedule: "*/10 * * * *"
 volumeMounts:
-- name: popeye-configmap
-  mountPath: /spinach.yaml
-  subPath: spinach.yaml
-  readOnly: true
-- name: tmp
-  mountPath: /tmp
+  - name: popeye-configmap
+    mountPath: /spinach.yaml
+    subPath: spinach.yaml
+    readOnly: true
+  - name: tmp
+    mountPath: /tmp
 volumes:
-- name: popeye-configmap
-  configMap:
-    name: popeye-configmap
-    defaultMode: 511
-- name: tmp
-  emptyDir: {}
+  - name: popeye-configmap
+    configMap:
+      name: popeye-configmap
+      defaultMode: 511
+  - name: tmp
+    emptyDir: {}
 networkpolicy:
   egress:
     namespaces:
-    - monitoring
+      - monitoring
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
@@ -54,77 +54,77 @@ clusterRoleBinding:
 clusterRole:
   enabled: true
   rules:
-  - apiGroups: [""]
-    resources:
-    - configmaps
-    - endpoints
-    - namespaces
-    - nodes
-    - persistentvolumes
-    - persistentvolumeclaims
-    - pods
-    - secrets
-    - serviceaccounts
-    - services
-    - events
-    verbs: ["get", "list"]
-  - apiGroups: ["apps"]
-    resources:
-    - daemonsets
-    - deployments
-    - statefulsets
-    - replicasets
-    verbs: ["get", "list"]
-  - apiGroups: ["networking.k8s.io"]
-    resources:
-    - ingresses
-    - networkpolicies
-    verbs: ["get", "list"]
-  - apiGroups: ["batch"]
-    resources:
-    - cronjobs
-    - jobs
-    verbs: ["get", "list"]
-  - apiGroups: ["gateway.networking.k8s.io"]
-    resources:
-    - gatewayclasses
-    - gateways
-    - httproutes
-    verbs: ["get", "list"]
-  - apiGroups: ["autoscaling"]
-    resources:
-    - horizontalpodautoscalers
-    verbs: ["get", "list"]
-  - apiGroups: ["policy"]
-    resources:
-    - poddisruptionbudgets
-    - podsecuritypolicies
-    verbs: ["get", "list"]
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-    - clusterroles
-    - clusterrolebindings
-    - roles
-    - rolebindings
-    verbs: ["get", "list"]
-  - apiGroups: ["metrics.k8s.io"]
-    resources:
-    - pods
-    - nodes
-    verbs: ["get", "list"]
+    - apiGroups: [""]
+      resources:
+        - configmaps
+        - endpoints
+        - namespaces
+        - nodes
+        - persistentvolumes
+        - persistentvolumeclaims
+        - pods
+        - secrets
+        - serviceaccounts
+        - services
+        - events
+      verbs: ["get", "list"]
+    - apiGroups: ["apps"]
+      resources:
+        - daemonsets
+        - deployments
+        - statefulsets
+        - replicasets
+      verbs: ["get", "list"]
+    - apiGroups: ["networking.k8s.io"]
+      resources:
+        - ingresses
+        - networkpolicies
+      verbs: ["get", "list"]
+    - apiGroups: ["batch"]
+      resources:
+        - cronjobs
+        - jobs
+      verbs: ["get", "list"]
+    - apiGroups: ["gateway.networking.k8s.io"]
+      resources:
+        - gatewayclasses
+        - gateways
+        - httproutes
+      verbs: ["get", "list"]
+    - apiGroups: ["autoscaling"]
+      resources:
+        - horizontalpodautoscalers
+      verbs: ["get", "list"]
+    - apiGroups: ["policy"]
+      resources:
+        - poddisruptionbudgets
+        - podsecuritypolicies
+      verbs: ["get", "list"]
+    - apiGroups: ["rbac.authorization.k8s.io"]
+      resources:
+        - clusterroles
+        - clusterrolebindings
+        - roles
+        - rolebindings
+      verbs: ["get", "list"]
+    - apiGroups: ["metrics.k8s.io"]
+      resources:
+        - pods
+        - nodes
+      verbs: ["get", "list"]
 prometheusRules:
   enabled: true
   rules:
-  - alert: PopeyeLowScore
-    annotations:
-      description: If the popeye linter has a low score, it indicates that the cluster is not healthy.
-      summary: Popeye linter score is low.
-    expr: popeye_report_score < 100
-    for: 5m
-    keep_firing_for: 10m
-    labels:
-      issue: Popeye score is less than 100.
-      severity: critical
+    - alert: PopeyeLowScore
+      annotations:
+        description: If the popeye linter has a low score, it indicates that the cluster is not healthy.
+        summary: Popeye linter score is low.
+      expr: popeye_report_score < 100
+      for: 5m
+      keep_firing_for: 10m
+      labels:
+        issue: Popeye score is less than 100.
+        severity: critical
 imageUpdater:
   enabled: true
   rootImageTag: "v0.22.0"

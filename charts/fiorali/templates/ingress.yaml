@@ -6,14 +6,14 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   rules:
-  - host: {{ .Values.ingress.name | default .Values.name }}.fiora.li
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: {{ .Values.ingress.serviceName | default .Values.name }}
-            port:
-              name: {{ .Values.ingress.portName | default .Values.name }}
+    - host: {{ .Values.ingress.name | default .Values.name }}.fiora.li
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: {{ .Values.ingress.serviceName | default .Values.name }}
+                port:
+                  name: {{ .Values.ingress.portName | default .Values.name }}
 {{- end }}

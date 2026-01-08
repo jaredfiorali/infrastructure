@@ -6,9 +6,9 @@ image:
   repository: docker.io/sissbruecker/linkding
   tag: latest@sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060
 containerPorts:
-- containerPort: 9090
-  name: linkding
-  protocol: TCP
+  - containerPort: 9090
+    name: linkding
+    protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -23,34 +23,34 @@ probes:
 service:
   enabled: true
   ports:
-  - name: linkding
-    port: 9090
-    protocol: TCP
-    targetPort: linkding
+    - name: linkding
+      port: 9090
+      protocol: TCP
+      targetPort: linkding
 env:
-- name: LD_SUPERUSER_NAME
-  valueFrom:
-    secretKeyRef:
-      name: linkding-credentials
-      key: username
-- name: LD_SUPERUSER_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: linkding-credentials
-      key: password
+  - name: LD_SUPERUSER_NAME
+    valueFrom:
+      secretKeyRef:
+        name: linkding-credentials
+        key: username
+  - name: LD_SUPERUSER_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: linkding-credentials
+        key: password
 ingress:
   enabled: true
 volumeMounts:
-- name: linkding-persistent-storage
-  mountPath: /etc/linkding/data
-- name: tmp
-  mountPath: /tmp
+  - name: linkding-persistent-storage
+    mountPath: /etc/linkding/data
+  - name: tmp
+    mountPath: /tmp
 volumes:
-- name: linkding-persistent-storage
-  persistentVolumeClaim:
-    claimName: linkding
-- name: tmp
-  emptyDir: {}
+  - name: linkding-persistent-storage
+    persistentVolumeClaim:
+      claimName: linkding
+  - name: tmp
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -60,7 +60,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

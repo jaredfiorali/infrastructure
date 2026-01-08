@@ -10,3 +10,5 @@ for chart in charts/fiorali/*; do
     helm lint --quiet charts/fiorali -f charts/fiorali/values.yaml -f $chart;
   fi
 done
+
+yamllint  -c other/scripts/.yamllint.yaml charts/fiorali

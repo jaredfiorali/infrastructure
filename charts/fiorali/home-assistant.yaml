@@ -6,15 +6,15 @@ image:
   repository: docker.io/homeassistant/home-assistant
   tag: latest@sha256:97d63b3d0028b6b52ad8e5ac7b014c3404e69bf1656b5489eec48b59184e0bc7
 containerPorts:
-- containerPort: 8123
-  name: home-assistant
-  protocol: TCP
-- containerPort: 5353
-  name: homekit-udp
-  protocol: UDP
-- containerPort: 21063
-  name: homekit-tcp
-  protocol: TCP
+  - containerPort: 8123
+    name: home-assistant
+    protocol: TCP
+  - containerPort: 5353
+    name: homekit-udp
+    protocol: UDP
+  - containerPort: 21063
+    name: homekit-tcp
+    protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -29,36 +29,36 @@ probes:
 service:
   enabled: true
   ports:
-  - name: home-assistant
-    port: 8123
-    protocol: TCP
-    targetPort: home-assistant
-  - port: 5353
-    name: homekit-udp
-    protocol: UDP
-    targetPort: homekit-udp
-  - port: 21063
-    name: homekit-tcp
-    protocol: TCP
-    targetPort: homekit-tcp
+    - name: home-assistant
+      port: 8123
+      protocol: TCP
+      targetPort: home-assistant
+    - port: 5353
+      name: homekit-udp
+      protocol: UDP
+      targetPort: homekit-udp
+    - port: 21063
+      name: homekit-tcp
+      protocol: TCP
+      targetPort: homekit-tcp
 ingress:
   enabled: true
 hostNetwork: true
 volumeMounts:
-- name: home-assistant-persistent-storage
-  mountPath: /config
-- name: home-assistant-configmap
-  mountPath: /config/configuration.yaml
-  subPath: configuration.yaml
-  readOnly: true
+  - name: home-assistant-persistent-storage
+    mountPath: /config
+  - name: home-assistant-configmap
+    mountPath: /config/configuration.yaml
+    subPath: configuration.yaml
+    readOnly: true
 volumes:
-- name: home-assistant-persistent-storage
-  persistentVolumeClaim:
-    claimName: home-assistant
-- name: home-assistant-configmap
-  configMap:
-    name: home-assistant-configmap
-    defaultMode: 511
+  - name: home-assistant-persistent-storage
+    persistentVolumeClaim:
+      claimName: home-assistant
+  - name: home-assistant-configmap
+    configMap:
+      name: home-assistant-configmap
+      defaultMode: 511
 dnsPolicy: ClusterFirstWithHostNet
 networkpolicy:
   ingress:

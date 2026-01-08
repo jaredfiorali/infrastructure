@@ -6,9 +6,9 @@ image:
   repository: docker.io/koush/scrypted
   tag: lite@sha256:d92de598b5807fd7564964dd78ef7938c494dc1de4a1dafd65243e0dbdc15dbd
 containerPorts:
-- containerPort: 11080
-  name: scrypted
-  protocol: TCP
+  - containerPort: 11080
+    name: scrypted
+    protocol: TCP
 resources:
   limits:
     cpu: '3'
@@ -22,27 +22,27 @@ probes:
 service:
   enabled: true
   ports:
-  - name: scrypted
-    port: 11080
-    protocol: TCP
-    targetPort: scrypted
+    - name: scrypted
+      port: 11080
+      protocol: TCP
+      targetPort: scrypted
 ingress:
   enabled: true
 env:
-- name: SCRYPTED_DISABLE_AUTHENTICATION
-  value: "true"
+  - name: SCRYPTED_DISABLE_AUTHENTICATION
+    value: "true"
 volumeMounts:
-- name: scrypted-persistent-storage
-  mountPath: /server/volume
-- name: logs
-  mountPath: /home/ubuntu/.npm/_logs
+  - name: scrypted-persistent-storage
+    mountPath: /server/volume
+  - name: logs
+    mountPath: /home/ubuntu/.npm/_logs
 hostNetwork: true
 volumes:
-- name: scrypted-persistent-storage
-  persistentVolumeClaim:
-    claimName: scrypted
-- name: logs
-  emptyDir: {}
+  - name: scrypted-persistent-storage
+    persistentVolumeClaim:
+      claimName: scrypted
+  - name: logs
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -52,7 +52,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

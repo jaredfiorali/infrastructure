@@ -6,9 +6,9 @@ image:
   repository: docker.io/linuxserver/sonarr
   tag: latest@sha256:8b9f2138ec50fc9e521960868f79d2ad0d529bc610aef19031ea8ff80b54c5e0
 containerPorts:
-- containerPort: 8989
-  name: sonarr
-  protocol: TCP
+  - containerPort: 8989
+    name: sonarr
+    protocol: TCP
 resources:
   limits:
     cpu: '2'
@@ -19,88 +19,88 @@ resources:
 probes:
   exec:
     command:
-    - sh
-    - -c
-    - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
+      - sh
+      - -c
+      - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
 service:
   enabled: true
   ports:
-  - name: sonarr
-    port: 8989
-    protocol: TCP
-    targetPort: sonarr
+    - name: sonarr
+      port: 8989
+      protocol: TCP
+      targetPort: sonarr
 env:
-- name: API_KEY
-  valueFrom:
-    secretKeyRef:
-      name: sonarr-api-key
-      key: api-key
-- name: TZ
-  value: "America/Toronto"
-- name: S6_READ_ONLY_ROOT
-  value: "1"
-- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-  value: "1"
-- name: S6_VERBOSITY
-  value: "2"
+  - name: API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: sonarr-api-key
+        key: api-key
+  - name: TZ
+    value: "America/Toronto"
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
+  - name: S6_VERBOSITY
+    value: "2"
 ingress:
   enabled: true
 volumeMounts:
-- name: sonarr-persistent-storage
-  mountPath: /config
-- name: media-bittorrent
-  mountPath: /media-bittorrent
-- name: media-tv-0
-  mountPath: /media-tv-0
-- name: media-tv-1
-  mountPath: /media-tv-1
-- name: media-tv-2
-  mountPath: /media-tv-2
-- name: media-tv-4
-  mountPath: /media-tv-4
-- name: media-tv-5
-  mountPath: /media-tv-5
-- name: media-tv-6
-  mountPath: /media-tv-6
-- name: media-tv-7
-  mountPath: /media-tv-7
-- name: media-tv-8
-  mountPath: /media-tv-8
-- name: run
-  mountPath: /run
+  - name: sonarr-persistent-storage
+    mountPath: /config
+  - name: media-bittorrent
+    mountPath: /media-bittorrent
+  - name: media-tv-0
+    mountPath: /media-tv-0
+  - name: media-tv-1
+    mountPath: /media-tv-1
+  - name: media-tv-2
+    mountPath: /media-tv-2
+  - name: media-tv-4
+    mountPath: /media-tv-4
+  - name: media-tv-5
+    mountPath: /media-tv-5
+  - name: media-tv-6
+    mountPath: /media-tv-6
+  - name: media-tv-7
+    mountPath: /media-tv-7
+  - name: media-tv-8
+    mountPath: /media-tv-8
+  - name: run
+    mountPath: /run
 volumes:
-- name: sonarr-persistent-storage
-  persistentVolumeClaim:
-    claimName: sonarr
-- name: media-bittorrent
-  persistentVolumeClaim:
-    claimName: media-bittorrent
-- name: media-tv-0
-  persistentVolumeClaim:
-    claimName: media-tv-0
-- name: media-tv-1
-  persistentVolumeClaim:
-    claimName: media-tv-1
-- name: media-tv-2
-  persistentVolumeClaim:
-    claimName: media-tv-2
-- name: media-tv-4
-  persistentVolumeClaim:
-    claimName: media-tv-4
-- name: media-tv-5
-  persistentVolumeClaim:
-    claimName: media-tv-5
-- name: media-tv-6
-  persistentVolumeClaim:
-    claimName: media-tv-6
-- name: media-tv-7
-  persistentVolumeClaim:
-    claimName: media-tv-7
-- name: media-tv-8
-  persistentVolumeClaim:
-    claimName: media-tv-8
-- name: run
-  emptyDir: {}
+  - name: sonarr-persistent-storage
+    persistentVolumeClaim:
+      claimName: sonarr
+  - name: media-bittorrent
+    persistentVolumeClaim:
+      claimName: media-bittorrent
+  - name: media-tv-0
+    persistentVolumeClaim:
+      claimName: media-tv-0
+  - name: media-tv-1
+    persistentVolumeClaim:
+      claimName: media-tv-1
+  - name: media-tv-2
+    persistentVolumeClaim:
+      claimName: media-tv-2
+  - name: media-tv-4
+    persistentVolumeClaim:
+      claimName: media-tv-4
+  - name: media-tv-5
+    persistentVolumeClaim:
+      claimName: media-tv-5
+  - name: media-tv-6
+    persistentVolumeClaim:
+      claimName: media-tv-6
+  - name: media-tv-7
+    persistentVolumeClaim:
+      claimName: media-tv-7
+  - name: media-tv-8
+    persistentVolumeClaim:
+      claimName: media-tv-8
+  - name: run
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true

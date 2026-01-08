@@ -6,9 +6,9 @@ image:
   repository: docker.io/influxdb
   tag: latest@sha256:9e967a2283f54ecd401377f1ed677c882adc23dd4090fb5f0c7ebe98a8138a8a
 containerPorts:
-- containerPort: 8086
-  name: influxdb
-  protocol: TCP
+  - containerPort: 8086
+    name: influxdb
+    protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -22,19 +22,19 @@ probes:
 service:
   enabled: true
   ports:
-  - name: influxdb
-    port: 8086
-    protocol: TCP
-    targetPort: influxdb
+    - name: influxdb
+      port: 8086
+      protocol: TCP
+      targetPort: influxdb
 ingress:
   enabled: true
 volumeMounts:
-- name: influxdb-storage
-  mountPath: /var/lib/influxdb2
+  - name: influxdb-storage
+    mountPath: /var/lib/influxdb2
 volumes:
-- name: influxdb-storage
-  persistentVolumeClaim:
-    claimName: influxdb
+  - name: influxdb-storage
+    persistentVolumeClaim:
+      claimName: influxdb
 networkpolicy:
   ingress:
     internal: true
@@ -43,7 +43,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

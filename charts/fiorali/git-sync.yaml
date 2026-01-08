@@ -23,27 +23,27 @@ cronjob:
   enabled: true
   schedule: "5 23 * * *"
 env:
-- name: QUERIES
-  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
-- name: GITHUB_PAT
-  valueFrom:
-    secretKeyRef:
-      name: github-pat
-      key: github-pat
+  - name: QUERIES
+    value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
+  - name: GITHUB_PAT
+    valueFrom:
+      secretKeyRef:
+        name: github-pat
+        key: github-pat
 volumeMounts:
-- name: git
-  mountPath: /git
-- name: git-sync-configmap
-  mountPath: /git-sync.sh
-  subPath: git-sync.sh
-  readOnly: true
+  - name: git
+    mountPath: /git
+  - name: git-sync-configmap
+    mountPath: /git-sync.sh
+    subPath: git-sync.sh
+    readOnly: true
 volumes:
-- name: git-sync-configmap
-  configMap:
-    name: git-sync-configmap
-    defaultMode: 511
-- name: git
-  emptyDir: {}
+  - name: git-sync-configmap
+    configMap:
+      name: git-sync-configmap
+      defaultMode: 511
+  - name: git
+    emptyDir: {}
 networkpolicy:
   ingress:
     internet: true
@@ -54,7 +54,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

@@ -7,12 +7,12 @@ image:
   repository: ghcr.io/kashalls/kromgo
   tag: latest@sha256:464dfa398fc0d032cffbd8396a1993f2690917b847f6628159c6d9fe3cba9055
 containerPorts:
-- containerPort: 8080
-  name: kromgo
-  protocol: TCP
-- containerPort: 8888
-  name: healthz
-  protocol: TCP
+  - containerPort: 8080
+    name: kromgo
+    protocol: TCP
+  - containerPort: 8888
+    name: healthz
+    protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -27,20 +27,20 @@ probes:
 service:
   enabled: true
   ports:
-  - name: kromgo
-    port: 8080
-    protocol: TCP
-    targetPort: kromgo
+    - name: kromgo
+      port: 8080
+      protocol: TCP
+      targetPort: kromgo
 env:
-- name: PROMETHEUS_URL
-  value: "http://prometheus-kube-prometheus-prometheus:9090"
+  - name: PROMETHEUS_URL
+    value: "http://prometheus-kube-prometheus-prometheus:9090"
 ingress:
   enabled: true
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
@@ -51,15 +51,15 @@ networkpolicy:
   ingress:
     internal: true
 volumeMounts:
-- name: kromgo-configmap
-  mountPath: /kromgo/config.yaml
-  subPath: config.yaml
-  readOnly: true
+  - name: kromgo-configmap
+    mountPath: /kromgo/config.yaml
+    subPath: config.yaml
+    readOnly: true
 volumes:
-- name: kromgo-configmap
-  configMap:
-    name: kromgo-configmap
-    defaultMode: 511
+  - name: kromgo-configmap
+    configMap:
+      name: kromgo-configmap
+      defaultMode: 511
 imageUpdater:
   enabled: true
 configMap:

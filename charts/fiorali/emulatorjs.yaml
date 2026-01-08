@@ -6,12 +6,12 @@ image:
   repository: docker.io/linuxserver/emulatorjs
   tag: latest@sha256:bc892148cee315125f48640f5a2b7ca6bd599967574424d71060c064e8a36a48
 containerPorts:
-- containerPort: 80
-  name: emulatorjs
-  protocol: TCP
-- containerPort: 3000
-  name: management
-  protocol: TCP
+  - containerPort: 80
+    name: emulatorjs
+    protocol: TCP
+  - containerPort: 3000
+    name: management
+    protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -26,38 +26,38 @@ probes:
 service:
   enabled: true
   ports:
-  - name: emulatorjs
-    port: 80
-    protocol: TCP
-    targetPort: emulatorjs
-  - name: management
-    port: 3000
-    protocol: TCP
-    targetPort: management
+    - name: emulatorjs
+      port: 80
+      protocol: TCP
+      targetPort: emulatorjs
+    - name: management
+      port: 3000
+      protocol: TCP
+      targetPort: management
 env:
-- name: DISABLE_IPFS
-  value: "true"
-- name: S6_READ_ONLY_ROOT
-  value: "1"
-- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-  value: "1"
+  - name: DISABLE_IPFS
+    value: "true"
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
 ingress:
   enabled: true
 volumeMounts:
-- name: emulatorjs-configmap
-  mountPath: /config/profile/default/retroarch.cfg
-  subPath: retroarch.cfg
-  readOnly: true
-- name: roms
-  mountPath: /data
+  - name: emulatorjs-configmap
+    mountPath: /config/profile/default/retroarch.cfg
+    subPath: retroarch.cfg
+    readOnly: true
+  - name: roms
+    mountPath: /data
 volumes:
-- name: emulatorjs-configmap
-  configMap:
-    name: emulatorjs-configmap
-    defaultMode: 511
-- name: roms
-  persistentVolumeClaim:
-    claimName: roms
+  - name: emulatorjs-configmap
+    configMap:
+      name: emulatorjs-configmap
+      defaultMode: 511
+  - name: roms
+    persistentVolumeClaim:
+      claimName: roms
 nodeSelector: {}
 tolerations: []
 affinity: {}

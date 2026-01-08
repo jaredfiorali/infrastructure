@@ -67,16 +67,16 @@ affinity: {}
 initContainers:
   enabled: false
   containers:
-  - name: ""
-    image:
-      repository: ""
-      tag: ""
-    securityContext: {}
-    imagePullPolicy: IfNotPresent
-    command: []
-    args: []
-    resources: {}
-    volumeMounts: []
+    - name: ""
+      image:
+        repository: ""
+        tag: ""
+      securityContext: {}
+      imagePullPolicy: IfNotPresent
+      command: []
+      args: []
+      resources: {}
+      volumeMounts: []
 
 clusterRole:
   enabled: false
@@ -120,13 +120,13 @@ networkpolicy:
   enabled: true
   podSelector: true
   ingress:
-    allowAll: false # Temporary until I flesh out the ingress network policy
+    allowAll: false  # Temporary until I flesh out the ingress network policy
     namespaces: []
     internal: false
     network: false
     internet: false
   egress:
-    allowAll: false # Temporary until I flesh out the ingress network policy
+    allowAll: false  # Temporary until I flesh out the ingress network policy
     namespaces: []
     internal: false
     network: false
@@ -165,7 +165,7 @@ volume:
   accessMode: rwo
   dataEngine: v1
   diskSelector:
-  - SSD
+    - SSD
   encrypted: true
   numberOfReplicas: 2
   snapshotMaxCount: 15

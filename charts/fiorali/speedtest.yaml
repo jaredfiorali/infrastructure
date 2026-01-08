@@ -7,9 +7,9 @@ image:
   repository: docker.io/openspeedtest/latest
   tag: latest@sha256:1745e913f596fe98882b286a67751efdae74774e9caa742a4934bb056e8748d2
 containerPorts:
-- containerPort: 3000
-  name: speedtest
-  protocol: TCP
+  - containerPort: 3000
+    name: speedtest
+    protocol: TCP
 resources:
   limits:
     cpu: 250m
@@ -24,10 +24,10 @@ probes:
 service:
   enabled: true
   ports:
-  - name: speedtest
-    port: 3000
-    protocol: TCP
-    targetPort: speedtest
+    - name: speedtest
+      port: 3000
+      protocol: TCP
+      targetPort: speedtest
 networkpolicy:
   ingress:
     internal: true
@@ -37,48 +37,48 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "cp /OpenSpeedTest-Server.conf /etc/nginx/conf.d/ && ./entrypoint.sh"]
 volumeMounts:
-- name: speedtest-configmap
-  mountPath: /OpenSpeedTest-Server.conf
-  subPath: OpenSpeedTest-Server.conf
-  readOnly: true
-- name: nginx-conf
-  mountPath: /etc/nginx/conf.d/
-- name: client-temp
-  mountPath: /var/cache/nginx/client_temp
-- name: proxy-temp
-  mountPath: /var/cache/nginx/proxy_temp
-- name: fastcgi-temp
-  mountPath: /var/cache/nginx/fastcgi_temp
-- name: uwsgi-temp
-  mountPath: /var/cache/nginx/uwsgi_temp
-- name: scgi-temp
-  mountPath: /var/cache/nginx/scgi_temp
-- name: tmp
-  mountPath: /tmp
+  - name: speedtest-configmap
+    mountPath: /OpenSpeedTest-Server.conf
+    subPath: OpenSpeedTest-Server.conf
+    readOnly: true
+  - name: nginx-conf
+    mountPath: /etc/nginx/conf.d/
+  - name: client-temp
+    mountPath: /var/cache/nginx/client_temp
+  - name: proxy-temp
+    mountPath: /var/cache/nginx/proxy_temp
+  - name: fastcgi-temp
+    mountPath: /var/cache/nginx/fastcgi_temp
+  - name: uwsgi-temp
+    mountPath: /var/cache/nginx/uwsgi_temp
+  - name: scgi-temp
+    mountPath: /var/cache/nginx/scgi_temp
+  - name: tmp
+    mountPath: /tmp
 volumes:
-- name: nginx-conf
-  emptyDir: {}
-- name: speedtest-configmap
-  configMap:
-    name: speedtest-configmap
-    defaultMode: 511
-- name: client-temp
-  emptyDir: {}
-- name: proxy-temp
-  emptyDir: {}
-- name: fastcgi-temp
-  emptyDir: {}
-- name: uwsgi-temp
-  emptyDir: {}
-- name: scgi-temp
-  emptyDir: {}
-- name: tmp
-  emptyDir: {}
+  - name: nginx-conf
+    emptyDir: {}
+  - name: speedtest-configmap
+    configMap:
+      name: speedtest-configmap
+      defaultMode: 511
+  - name: client-temp
+    emptyDir: {}
+  - name: proxy-temp
+    emptyDir: {}
+  - name: fastcgi-temp
+    emptyDir: {}
+  - name: uwsgi-temp
+    emptyDir: {}
+  - name: scgi-temp
+    emptyDir: {}
+  - name: tmp
+    emptyDir: {}
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:

@@ -6,9 +6,9 @@ image:
   repository: docker.io/plexinc/pms-docker
   tag: latest@sha256:9c03c26b9479ba9a09935f3367459bfdc8d21545f42ed2a13258983c5be1b252
 containerPorts:
-- containerPort: 32400
-  name: plex
-  protocol: TCP
+  - containerPort: 32400
+    name: plex
+    protocol: TCP
 resources:
   limits:
     cpu: '3'
@@ -24,126 +24,126 @@ service:
   enabled: true
   loadBalancerIP: 192.168.20.22
   ports:
-  - name: plex
-    port: 32400
-    protocol: TCP
-    targetPort: plex
+    - name: plex
+      port: 32400
+      protocol: TCP
+      targetPort: plex
   externalTrafficPolicy: Cluster
   type: LoadBalancer
 env:
-- name: ADVERTISE_IP
-  value: http://192.168.20.10:32400/
-- name: PUID
-  value: "1000"
-- name: PGID
-  value: "1000"
-- name: TZ
-  value: "America/Toronto"
-- name: S6_READ_ONLY_ROOT
-  value: "1"
-- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-  value: "1"
-- name: S6_VERBOSITY
-  value: "2"
+  - name: ADVERTISE_IP
+    value: http://192.168.20.10:32400/
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: "America/Toronto"
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
+  - name: S6_VERBOSITY
+    value: "2"
 ingress:
   enabled: true
 volumeMounts:
-- name: plex-persistent-storage
-  mountPath: /config
-  subPath: config
-- name: media-movies-0
-  mountPath: /media-movies-0
-  readOnly: true
-- name: media-movies-1
-  mountPath: /media-movies-1
-  readOnly: true
-- name: media-movies-2
-  mountPath: /media-movies-2
-  readOnly: true
-- name: media-tv-0
-  mountPath: /media-tv-0
-  readOnly: true
-- name: media-tv-1
-  mountPath: /media-tv-1
-  readOnly: true
-- name: media-tv-2
-  mountPath: /media-tv-2
-  readOnly: true
-- name: media-tv-4
-  mountPath: /media-tv-4
-  readOnly: true
-- name: media-tv-5
-  mountPath: /media-tv-5
-  readOnly: true
-- name: media-tv-6
-  mountPath: /media-tv-6
-  readOnly: true
-- name: media-tv-7
-  mountPath: /media-tv-7
-  readOnly: true
-- name: media-tv-8
-  mountPath: /media-tv-8
-  readOnly: true
-- name: media-workout-0
-  mountPath: /media-workout-0
-  readOnly: true
-- name: phototranscoder-cache
-  mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
-- name: transcode
-  mountPath: /transcode
-- name: tmp
-  mountPath: /tmp
-- name: run
-  mountPath: /run
+  - name: plex-persistent-storage
+    mountPath: /config
+    subPath: config
+  - name: media-movies-0
+    mountPath: /media-movies-0
+    readOnly: true
+  - name: media-movies-1
+    mountPath: /media-movies-1
+    readOnly: true
+  - name: media-movies-2
+    mountPath: /media-movies-2
+    readOnly: true
+  - name: media-tv-0
+    mountPath: /media-tv-0
+    readOnly: true
+  - name: media-tv-1
+    mountPath: /media-tv-1
+    readOnly: true
+  - name: media-tv-2
+    mountPath: /media-tv-2
+    readOnly: true
+  - name: media-tv-4
+    mountPath: /media-tv-4
+    readOnly: true
+  - name: media-tv-5
+    mountPath: /media-tv-5
+    readOnly: true
+  - name: media-tv-6
+    mountPath: /media-tv-6
+    readOnly: true
+  - name: media-tv-7
+    mountPath: /media-tv-7
+    readOnly: true
+  - name: media-tv-8
+    mountPath: /media-tv-8
+    readOnly: true
+  - name: media-workout-0
+    mountPath: /media-workout-0
+    readOnly: true
+  - name: phototranscoder-cache
+    mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
+  - name: transcode
+    mountPath: /transcode
+  - name: tmp
+    mountPath: /tmp
+  - name: run
+    mountPath: /run
 volumes:
-- name: plex-persistent-storage
-  persistentVolumeClaim:
-    claimName: plex
-- name: media-movies-0
-  persistentVolumeClaim:
-    claimName: media-movies-0
-- name: media-movies-1
-  persistentVolumeClaim:
-    claimName: media-movies-1
-- name: media-movies-2
-  persistentVolumeClaim:
-    claimName: media-movies-2
-- name: media-tv-0
-  persistentVolumeClaim:
-    claimName: media-tv-0
-- name: media-tv-1
-  persistentVolumeClaim:
-    claimName: media-tv-1
-- name: media-tv-2
-  persistentVolumeClaim:
-    claimName: media-tv-2
-- name: media-tv-4
-  persistentVolumeClaim:
-    claimName: media-tv-4
-- name: media-tv-5
-  persistentVolumeClaim:
-    claimName: media-tv-5
-- name: media-tv-6
-  persistentVolumeClaim:
-    claimName: media-tv-6
-- name: media-tv-7
-  persistentVolumeClaim:
-    claimName: media-tv-7
-- name: media-tv-8
-  persistentVolumeClaim:
-    claimName: media-tv-8
-- name: media-workout-0
-  persistentVolumeClaim:
-    claimName: media-workout-0
-- name: phototranscoder-cache
-  emptyDir:
-    sizeLimit: 2Gi
-- name: transcode
-  emptyDir: {}
-- name: tmp
-  emptyDir: {}
-- name: run
-  emptyDir: {}
+  - name: plex-persistent-storage
+    persistentVolumeClaim:
+      claimName: plex
+  - name: media-movies-0
+    persistentVolumeClaim:
+      claimName: media-movies-0
+  - name: media-movies-1
+    persistentVolumeClaim:
+      claimName: media-movies-1
+  - name: media-movies-2
+    persistentVolumeClaim:
+      claimName: media-movies-2
+  - name: media-tv-0
+    persistentVolumeClaim:
+      claimName: media-tv-0
+  - name: media-tv-1
+    persistentVolumeClaim:
+      claimName: media-tv-1
+  - name: media-tv-2
+    persistentVolumeClaim:
+      claimName: media-tv-2
+  - name: media-tv-4
+    persistentVolumeClaim:
+      claimName: media-tv-4
+  - name: media-tv-5
+    persistentVolumeClaim:
+      claimName: media-tv-5
+  - name: media-tv-6
+    persistentVolumeClaim:
+      claimName: media-tv-6
+  - name: media-tv-7
+    persistentVolumeClaim:
+      claimName: media-tv-7
+  - name: media-tv-8
+    persistentVolumeClaim:
+      claimName: media-tv-8
+  - name: media-workout-0
+    persistentVolumeClaim:
+      claimName: media-workout-0
+  - name: phototranscoder-cache
+    emptyDir:
+      sizeLimit: 2Gi
+  - name: transcode
+    emptyDir: {}
+  - name: tmp
+    emptyDir: {}
+  - name: run
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
