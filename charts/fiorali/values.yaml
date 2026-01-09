@@ -58,7 +58,9 @@ env: []
 
 hostNetwork: false
 
-resources: {}
+resources:
+  limits: {}
+  requests: {}
 
 volumes: []
 

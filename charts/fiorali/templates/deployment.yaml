@@ -43,10 +43,13 @@ spec:
           command: {{- toYaml .Values.command.exec | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 10 }}
+            limits:
+              {{- toYaml .Values.resources.limits | nindent 14 }}
+            requests:
+              {{- toYaml .Values.resources.requests | nindent 14 }}
           {{- with .Values.containerPorts }}
           ports:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           startupProbe:
             {{- with .Values.probes.httpGet }}
@@ -57,10 +60,9 @@ spec:
             tcpSocket:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.probes.exec }}
+            {{- if .Values.probes.exec.command }}
             exec:
-              command:
-                {{- toYaml .command | nindent 16 }}
+              command: {{ .Values.probes.exec.command }}
             {{- end }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
@@ -75,10 +77,9 @@ spec:
             tcpSocket:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.probes.exec }}
+            {{- if .Values.probes.exec.command }}
             exec:
-              command:
-                {{- toYaml .command | nindent 16 }}
+              command: {{ .Values.probes.exec.command }}
             {{- end }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
@@ -93,10 +94,9 @@ spec:
             tcpSocket:
               {{- toYaml . | nindent 14 }}
             {{- end }}
-            {{- with .Values.probes.exec }}
+            {{- if .Values.probes.exec.command }}
             exec:
-              command:
-                {{- toYaml .command | nindent 16 }}
+              command: {{ .Values.probes.exec.command }}
             {{- end }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
@@ -104,11 +104,11 @@ spec:
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
           {{- with .Values.env }}
           env:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext:
