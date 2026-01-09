@@ -1,4 +1,4 @@
-{{- if .Values.cronjob.enabled -}}
+{{ if .Values.cronjob.enabled -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -30,7 +30,7 @@ spec:
               imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
               {{- with .Values.env }}
               env:
-                {{- toYaml . | nindent 14 }}
+                {{- toYaml . | nindent 16 }}
               {{- end }}
               {{- if .Values.command.exec }}
               command:
@@ -48,15 +48,20 @@ spec:
                 {{- toYaml .Values.resources | nindent 16 }}
               {{- with .Values.volumeMounts }}
               volumeMounts:
-                {{- toYaml . | nindent 14 }}
-              {{- end }}
-              {{- with .Values.containerSecurityContext }}
-              securityContext:
                 {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- if .Values.containerSecurityContext }}
+              securityContext:
+                allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
+                capabilities:
+                  drop:
+                    {{- toYaml .Values.containerSecurityContext.capabilities.drop | nindent 20 }}
+                readOnlyRootFilesystem: {{ .Values.containerSecurityContext.readOnlyRootFilesystem }}
+                privileged: {{ .Values.containerSecurityContext.privileged }}
               {{- end }}
           {{- with .Values.volumes }}
           volumes:
-            {{- toYaml . | nindent 10 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.podSecurityContext }}
           securityContext:

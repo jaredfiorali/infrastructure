@@ -1,4 +1,5 @@
-{{- if .Values.bgpAdvertisement.enabled -}}
+---
+{{ if .Values.bgpAdvertisement.enabled -}}
 apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
 metadata:

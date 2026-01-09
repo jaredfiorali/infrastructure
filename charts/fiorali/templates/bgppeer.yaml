@@ -1,4 +1,4 @@
-{{- if .Values.bgpPeer.enabled -}}
+{{ if .Values.bgpPeer.enabled -}}
 apiVersion: metallb.io/v1beta1
 kind: BGPPeer
 metadata:

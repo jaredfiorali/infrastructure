@@ -182,7 +182,6 @@ configMap:
       # the username and passwords for basic auth are the same as those
       # for the individual accounts
       perUserBasicAuth: false
-
       # User session timeout *in seconds* (defaults to 24 hours).
       ## Set to a positive number to expire session after a certain time of inactivity
       ## Set to 0 to expire session when the browser is closed
@@ -210,7 +209,6 @@ configMap:
       # Avoids using 'localhost' for autorun in auto mode.
       # use if you don't have 'localhost' in your hosts file
       avoidLocalhost: false
-
       ## BACKUP CONFIGURATION
       backups:
         # Common settings for all backup types
@@ -225,7 +223,6 @@ configMap:
           # Interval in milliseconds to throttle chat backups per user
           throttleInterval: 10000
           checkIntegrity: true
-
       # THUMBNAILING CONFIGURATION
       thumbnails:
         # Enable thumbnail generation
@@ -239,7 +236,6 @@ configMap:
         quality: 95
         # Maximum thumbnail dimensions per type [width, height]
         dimensions: { 'bg': [160, 90], 'avatar': [96, 144] }
-
       # PERFORMANCE-RELATED CONFIGURATION
       performance:
         # Enables lazy loading of character cards. Improves performances with large card libraries.
@@ -248,7 +244,6 @@ configMap:
         # The maximum amount of memory that parsed character cards can use. Set to 0 to disable memory caching.
         memoryCacheCapacity: 0
         useDiskCache: true
-
       # Allow secret keys exposure via API
       allowKeysExposure: false
       # Skip new default content checks
@@ -270,7 +265,6 @@ configMap:
       ##   headers:
       ##     User-Agent: "Googlebot/2.1 (+http://www.google.com/bot.html)"
       requestOverrides: []
-
       # EXTENSIONS CONFIGURATION
       extensions:
         # Enable UI extensions
@@ -286,7 +280,6 @@ configMap:
           embedding: Cohee/jina-embeddings-v2-base-en
           speechToText: Xenova/whisper-small
           textToSpeech: Xenova/speecht5_tts
-
       # Additional model tokenizers can be downloaded on demand.
       # Disabling will fallback to another locally available tokenizer.
       enableDownloadableTokenizers: true

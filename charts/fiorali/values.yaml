@@ -30,7 +30,8 @@ containerPorts: []
 probes:
   httpGet: {}
   tcpSocket: {}
-  exec: {}
+  exec:
+    command: []
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}
@@ -39,7 +40,12 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-containerSecurityContext: {}
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: []
+  readOnlyRootFilesystem: true
+  privileged: false
 
 podSecurityContext: {}
 

@@ -71,20 +71,16 @@ configMap:
     configuration.yaml: |
       # Loads default set of integrations. Do not remove.
       default_config:
-
       # Load frontend themes from the themes folder
       frontend:
         themes: !include_dir_merge_named themes
-
       automation: !include automations.yaml
       script: !include scripts.yaml
       scene: !include scenes.yaml
-
       http:
         use_x_forwarded_for: true
         trusted_proxies:
           - 0.0.0.0/0
-
       alarm_control_panel:
         - platform: manual
           name: Security System
@@ -112,7 +108,6 @@ configMap:
             - armed_home
             - armed_away
             - armed_night
-
       rest_command:
         push_position_to_dawarich:
           url: http://dawarich-app.dawarich:3000/api/v1/overland/batches?api_key={{ api_key }}

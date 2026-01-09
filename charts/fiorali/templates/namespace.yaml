@@ -1,4 +1,4 @@
-{{- if .Values.namespaceChart.enabled -}}
+{{ if .Values.namespaceChart.enabled -}}
 apiVersion: v1
 kind: Namespace
 metadata:

@@ -1,9 +1,9 @@
-{{- if .Values.volume.enabled -}}
+{{ if .Values.volume.enabled -}}
 apiVersion: longhorn.io/v1beta2
 kind: Volume
 metadata:
   finalizers:
-  - longhorn.io
+    - longhorn.io
   labels:
     backup-target: default
     longhornvolume: {{ .Values.volume.name | default .Values.name }}
@@ -23,7 +23,7 @@ spec:
   accessMode: {{ .Values.volume.accessMode }}
   dataEngine: {{ .Values.volume.dataEngine }}
   diskSelector:
-    {{- toYaml .Values.volume.diskSelector | nindent 2 }}
+    {{- toYaml .Values.volume.diskSelector | nindent 4 }}
   encrypted: {{ .Values.volume.encrypted }}
   frontend: blockdev
   numberOfReplicas: {{ .Values.volume.numberOfReplicas }}

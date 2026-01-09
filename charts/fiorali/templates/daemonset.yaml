@@ -1,4 +1,4 @@
-{{- if .Values.daemonSet.enabled -}}
+{{ if .Values.daemonSet.enabled -}}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -39,89 +39,94 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-      - name: {{ .Values.name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-        imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
-        {{- if .Values.command.exec }}
-        command: {{- toYaml .Values.command.exec | nindent 10 }}
-        {{- end }}
-        {{- if .Values.command.args }}
-        args: {{- toYaml .Values.command.args | nindent 10 }}
-        {{- end }}
-        resources:
-          {{- toYaml .Values.resources | nindent 10 }}
-        {{- with .Values.containerPorts }}
-        ports:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
-        startupProbe:
-          {{- with .Values.probes.httpGet }}
-          httpGet:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          {{- if .Values.command.exec }}
+          command: {{- toYaml .Values.command.exec | nindent 10 }}
+          {{- end }}
+          {{- if .Values.command.args }}
+          args: {{- toYaml .Values.command.args | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 10 }}
+          {{- with .Values.containerPorts }}
+          ports:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.probes.tcpSocket }}
-          tcpSocket:
+          startupProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.exec }}
+            exec:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds | default 15 }}
+          livenessProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.exec }}
+            exec:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
+          readinessProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.probes.exec }}
+            exec:
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold | default 2 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
+          {{- with .Values.env }}
+          env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.probes.exec }}
-          exec:
-            {{- toYaml . | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 10 }}
           {{- end }}
-          failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
-          periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
-          successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
-          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds | default 15 }}
-        livenessProbe:
-          {{- with .Values.probes.httpGet }}
-          httpGet:
-            {{- toYaml . | nindent 12 }}
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+            allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
+            capabilities:
+              drop:
+                {{- toYaml .Values.containerSecurityContext.capabilities.drop | nindent 16 }}
+            readOnlyRootFilesystem: {{ .Values.containerSecurityContext.readOnlyRootFilesystem }}
+            privileged: {{ .Values.containerSecurityContext.privileged }}
           {{- end }}
-          {{- with .Values.probes.tcpSocket }}
-          tcpSocket:
-            {{- toYaml . | nindent 12 }}
+          {{- if .Values.sidecarContainers.enabled }}
+            {{- with .Values.sidecarContainers }}
+              {{- toYaml .containers | nindent 6 }}
+            {{- end }}
           {{- end }}
-          {{- with .Values.probes.exec }}
-          exec:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
-          successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
-          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
-        readinessProbe:
-          {{- with .Values.probes.httpGet }}
-          httpGet:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.probes.tcpSocket }}
-          tcpSocket:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.probes.exec }}
-          exec:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
-          periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
-          successThreshold: {{ .Values.readinessProbe.successThreshold | default 2 }}
-          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
-        {{- with .Values.env }}
-        env:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
-        {{- with .Values.volumeMounts }}
-        volumeMounts:
-          {{- toYaml . | nindent 8 }}
-        {{- end }}
-        {{- with .Values.containerSecurityContext }}
-        securityContext:
-          {{- toYaml . | nindent 10 }}
-        {{- end }}
-        {{- if .Values.sidecarContainers.enabled }}
-          {{- with .Values.sidecarContainers }}
-            {{- toYaml .containers | nindent 6 }}
-          {{- end }}
-        {{- end }}
       {{- if .Values.hostNetwork }}
       hostNetwork: {{ .Values.hostNetwork | default false }}
       {{- end }}

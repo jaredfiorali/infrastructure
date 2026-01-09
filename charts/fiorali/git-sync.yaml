@@ -67,29 +67,22 @@ configMap:
     git-sync.sh: |
       #!/bin/sh
       set -x
-
       echo "Cloning git repository"
       git clone --depth 5 "https://jaredfiorali:$GITHUB_PAT@github.com/jaredfiorali/infrastructure.git" --single-branch --branch=gh-pages
-
       # Move into the new directory
       cd /git/infrastructure
-
       # Set the IFS to comma
       IFS=','
-
       # TODO: jfiorali - This needs to exit 1 if there are any issues pulling the metrics
       echo "Downloading metrics"
       for query in $QUERIES; do
           wget -O "$query.json" "http://kromgo.monitoring:8080/$query"
       done
-
       # echo "Set email and username for git push"
       git config user.email "jaredfiorali@gmail.com"
       git config user.name "Jared Fiorali"
-
       echo "Commit metrics to git"
       git add . && git commit -m "Metrics update"
-
       echo "Push new metrics"
       git push
 imageUpdater:

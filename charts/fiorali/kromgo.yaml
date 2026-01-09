@@ -84,7 +84,6 @@ configMap:
         - name: argocd_version
           query: argocd_info{}
           label: version
-
         - name: cluster_uptime_days
           query: ceil(avg(node_time_seconds - node_boot_time_seconds)/60/60/24)
           prefix: ""

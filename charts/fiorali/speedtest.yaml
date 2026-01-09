@@ -95,7 +95,6 @@ configMap:
       # Your contribution helps us continue to improve and maintain the tool for everyone to use.
       # Official Website : https://OpenSpeedTest.com | Email: support@openspeedtest.com
       # Developed by : Vishnu | https://Vishnu.Pro | Email : me@vishnu.pro
-
       server {
         server_name _ localhost YOURDOMAIN;
         listen 3000 reuseport;
@@ -131,7 +130,6 @@ configMap:
         open_file_cache_valid 30s;
         open_file_cache_min_uses 2;
         open_file_cache_errors off;
-
         location ~ /\.well-known/acme-challenge/ {
           allow all;
           default_type "text/plain";
@@ -139,7 +137,6 @@ configMap:
           try_files $uri =404;
           break;
         }
-
         location / {
           add_header 'Access-Control-Allow-Origin' "*" always;
           add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With' always;
@@ -150,7 +147,6 @@ configMap:
           if_modified_since off;
           expires off;
           etag off;
-
           if ($request_method = OPTIONS ) {
             add_header 'Access-Control-Allow-Credentials' "true";
             add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With' always;
@@ -159,21 +155,16 @@ configMap:
             return 200;
           }
         }
-
         #HTTP2 & HTTP3 will not wait for the post body and return 200. We need to stop that behaviour.
         #Otherwise, you will see abnormal upload speed. To fix this issue, Enable the following lines. (Only Applicable If you Enabled HTTP2 or HTTP3 in This Server.)
-
         #HTTP2 & HTTP3 -> UPLOAD FIX -- START
-
         #location = /upload {
         #    proxy_pass http://127.0.0.1:3000/dev-null;
         #}
         #location = /dev-null {
         #    return 200;
         #}
-
         #HTTP2 & HTTP3 -> UPLOAD FIX -- END
-
         # Caching for Static Files,
         location ~* ^.+\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
             access_log off;

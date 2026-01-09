@@ -1,4 +1,4 @@
-{{- if .Values.prometheusRules.enabled -}}
+{{ if .Values.prometheusRules.enabled -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -12,6 +12,6 @@ spec:
     - name: {{ .Values.name }}.rules
       {{- with .Values.prometheusRules.rules }}
       rules:
-        {{- toYaml . | nindent 6 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}

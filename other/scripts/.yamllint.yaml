@@ -1,7 +1,13 @@
 # This is an example .yamllint file
 extends: default  # Extend the default configuration
 
+ignore: |
+  **/templates/**
+  **/charts/**
+  **/*.tpl
+
 rules:
   # Customize specific rules
   line-length: disable
   document-start: disable
+  braces: disable
