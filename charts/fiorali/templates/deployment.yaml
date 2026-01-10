@@ -62,7 +62,8 @@ spec:
             {{- end }}
             {{- if .Values.probes.exec.command }}
             exec:
-              command: {{ .Values.probes.exec.command }}
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
             {{- end }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
@@ -79,7 +80,8 @@ spec:
             {{- end }}
             {{- if .Values.probes.exec.command }}
             exec:
-              command: {{ .Values.probes.exec.command }}
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
             {{- end }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
@@ -96,7 +98,8 @@ spec:
             {{- end }}
             {{- if .Values.probes.exec.command }}
             exec:
-              command: {{ .Values.probes.exec.command }}
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
             {{- end }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
