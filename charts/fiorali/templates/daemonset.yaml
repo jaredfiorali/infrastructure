@@ -121,10 +121,14 @@ spec:
           {{- end }}
           {{- if .Values.containerSecurityContext }}
           securityContext:
+            {{- if .Values.containerSecurityContext.allowPrivilegeEscalation }}
             allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
+            {{- end }}
+            {{- if .Values.containerSecurityContext.capabilities.drop }}
             capabilities:
               drop:
                 {{- toYaml .Values.containerSecurityContext.capabilities.drop | nindent 16 }}
+            {{- end }}
             readOnlyRootFilesystem: {{ .Values.containerSecurityContext.readOnlyRootFilesystem }}
             privileged: {{ .Values.containerSecurityContext.privileged }}
           {{- end }}
