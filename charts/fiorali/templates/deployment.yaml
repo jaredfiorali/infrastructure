@@ -115,20 +115,12 @@ spec:
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
-            {{- if .Values.containerSecurityContext.allowPrivilegeEscalation }}
             allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}
-            {{- end }}
-            {{- if .Values.containerSecurityContext.capabilities.drop }}
             capabilities:
               drop:
                 {{- toYaml .Values.containerSecurityContext.capabilities.drop | nindent 16 }}
-            {{- end }}
-            {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
             readOnlyRootFilesystem: {{ .Values.containerSecurityContext.readOnlyRootFilesystem }}
-            {{- end }}
-            {{- if .Values.containerSecurityContext.privileged }}
             privileged: {{ .Values.containerSecurityContext.privileged }}
-            {{- end }}
           {{- end }}
           {{- if .Values.sidecarContainers.enabled }}
             {{- with .Values.sidecarContainers }}
