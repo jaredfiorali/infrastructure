@@ -169,10 +169,5 @@ containerSecurityContext:
       - SETPCAP
   seccompProfile:
     type: RuntimeDefault
-# podSecurityContext:
-  # fsGroup: 1000
-  # runAsNonRoot: true
-  # runAsUser: 1000
-  # runAsGroup: 1000
 imageUpdater:
   enabled: true
