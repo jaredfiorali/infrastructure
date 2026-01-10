@@ -76,6 +76,8 @@ volumeMounts:
     mountPath: /config/configuration.yaml
     subPath: configuration.yaml
     readOnly: true
+  - name: run
+    mountPath: /run
 volumes:
   - name: home-assistant-persistent-storage
     persistentVolumeClaim:
@@ -84,6 +86,8 @@ volumes:
     configMap:
       name: home-assistant-configmap
       defaultMode: 511
+  - name: run
+    emptyDir: {}
 dnsPolicy: ClusterFirstWithHostNet
 networkpolicy:
   ingress:

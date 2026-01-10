@@ -21,23 +21,7 @@ probes:
     path: /api/v1/health
     port: dawarich
 containerSecurityContext:
-  enabled: true
-  readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: true
-  capabilities:
-    drop:
-      - ALL
-    add:
-      - CHOWN
-      - SETUID
-      - SETGID
-  seccompProfile:
-    type: RuntimeDefault
-podSecurityContext:
-  fsGroup: 1000
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
+  enabled: false
 service:
   enabled: true
   ports:

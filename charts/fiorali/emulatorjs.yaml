@@ -50,6 +50,8 @@ volumeMounts:
     readOnly: true
   - name: roms
     mountPath: /data
+  - name: run
+    mountPath: /run
 volumes:
   - name: emulatorjs-configmap
     configMap:
@@ -58,6 +60,8 @@ volumes:
   - name: roms
     persistentVolumeClaim:
       claimName: roms
+  - name: run
+    emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}

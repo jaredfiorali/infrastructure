@@ -31,6 +31,8 @@ service:
   externalTrafficPolicy: Cluster
   type: LoadBalancer
 env:
+  - name: PLEX_SKIP_FIRST_RUN
+    value: "true"
   - name: ADVERTISE_IP
     value: http://192.168.20.10:32400/
   - name: PUID
@@ -95,6 +97,8 @@ volumeMounts:
     mountPath: /tmp
   - name: run
     mountPath: /run
+  - name: var-run
+    mountPath: /var/run
 volumes:
   - name: plex-persistent-storage
     persistentVolumeClaim:
@@ -144,12 +148,13 @@ volumes:
     emptyDir: {}
   - name: run
     emptyDir: {}
+  - name: var-run
+    emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
   egress:
     internet: true
-# Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: true
@@ -161,12 +166,13 @@ containerSecurityContext:
       - CHOWN
       - SETUID
       - SETGID
+      - SETPCAP
   seccompProfile:
     type: RuntimeDefault
-podSecurityContext:
-  fsGroup: 1000
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
+# podSecurityContext:
+  # fsGroup: 1000
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # runAsGroup: 1000
 imageUpdater:
   enabled: true
