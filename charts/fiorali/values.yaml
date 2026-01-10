@@ -43,7 +43,8 @@ fullnameOverride: ""
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
-    drop: []
+    drop:
+      - ALL
   readOnlyRootFilesystem: true
   privileged: false
 

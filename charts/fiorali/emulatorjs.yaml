@@ -76,6 +76,7 @@ networkpolicy:
 #   fsGroup: 2000
 #   runAsNonRoot: true
 #   runAsUser: 1000
+containerSecurityContext: {}
 configMap:
   enabled: true
   value: |

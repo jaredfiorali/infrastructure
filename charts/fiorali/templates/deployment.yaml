@@ -123,8 +123,12 @@ spec:
               drop:
                 {{- toYaml .Values.containerSecurityContext.capabilities.drop | nindent 16 }}
             {{- end }}
+            {{- if .Values.containerSecurityContext.readOnlyRootFilesystem }}
             readOnlyRootFilesystem: {{ .Values.containerSecurityContext.readOnlyRootFilesystem }}
+            {{- end }}
+            {{- if .Values.containerSecurityContext.privileged }}
             privileged: {{ .Values.containerSecurityContext.privileged }}
+            {{- end }}
           {{- end }}
           {{- if .Values.sidecarContainers.enabled }}
             {{- with .Values.sidecarContainers }}
