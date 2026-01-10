@@ -218,6 +218,7 @@ dnsConfig:
     - 127.0.0.1
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
+  enabled: false
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   privileged: false
