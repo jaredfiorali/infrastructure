@@ -20,7 +20,8 @@ probes:
   httpGet:
     path: /api/v1/health
     port: dawarich
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: false
 podSecurityContext: {}
 service:
   enabled: true

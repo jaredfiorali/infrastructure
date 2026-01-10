@@ -33,6 +33,8 @@ service:
       port: 9394
       protocol: TCP
       targetPort: prometheus
+containerSecurityContext:
+  enabled: false
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]

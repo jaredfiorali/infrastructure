@@ -16,3 +16,5 @@ serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
+containerSecurityContext:
+  enabled: false

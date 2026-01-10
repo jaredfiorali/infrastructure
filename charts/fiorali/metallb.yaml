@@ -24,3 +24,5 @@ bgpAdvertisement:
   enabled: true
   name: "default"
   ipAddressPools: ["pi-vips"]
+containerSecurityContext:
+  enabled: false

@@ -41,6 +41,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 containerSecurityContext:
+  enabled: true
   allowPrivilegeEscalation: false
   capabilities:
     drop:

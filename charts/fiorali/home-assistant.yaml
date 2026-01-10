@@ -41,7 +41,8 @@ service:
       name: homekit-tcp
       protocol: TCP
       targetPort: homekit-tcp
-containerSecurityContext: {}
+containerSecurityContext:
+  enabled: false
 ingress:
   enabled: true
 hostNetwork: true

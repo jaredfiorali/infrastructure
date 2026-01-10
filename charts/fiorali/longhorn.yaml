@@ -14,7 +14,8 @@ serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
-
+containerSecurityContext:
+  enabled: false
 namespaceChart:
   enabled: true
 prometheusRules:

@@ -113,7 +113,7 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- if .Values.containerSecurityContext }}
+          {{- if .Values.containerSecurityContext.enabled }}
           securityContext:
             {{- if .Values.containerSecurityContext.allowPrivilegeEscalation }}
             allowPrivilegeEscalation: {{ .Values.containerSecurityContext.allowPrivilegeEscalation }}

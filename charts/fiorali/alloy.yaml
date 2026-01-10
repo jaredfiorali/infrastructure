@@ -18,6 +18,8 @@ podDisruptionBudget:
 ingress:
   enabled: true
   portName: http-metrics
+containerSecurityContext:
+  enabled: false
 configMap:
   enabled: true
   value: |-
