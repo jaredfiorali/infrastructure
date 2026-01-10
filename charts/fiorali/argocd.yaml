@@ -23,41 +23,32 @@ configMap:
     # --- Context ---
     context: |
       argocdUrl: http://argo.fiora.li/
-
     # --- Slack service definition ---
     service.slack: |
       token: $slack-token
       defaultRecipients: [jared-notifications]
-
     # --- Triggers ---
     trigger.on-sync-succeeded: |
       - when: app.status.operationState.phase in ['Succeeded'] and app.status.sync.status == 'Synced'
         send: [app-sync-succeeded]
-
     trigger.on-sync-failed: |
       - when: app.status.operationState.phase in ['Failed']
         send: [app-sync-failed]
-
     trigger.on-deployed: |
       - when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
         send: [app-deployed]
-
     trigger.on-deleted: |
       - when: app.metadata.deletionTimestamp != nil
         send: [app-deleted]
-
     trigger.on-health-degraded: |
       - when: app.status.health.status == 'Degraded'
         send: [app-health-degraded]
-
     trigger.on-sync-status-unknown: |
       - when: app.status.sync.status == 'Unknown'
         send: [app-sync-status-unknown]
-
     trigger.on-sync-status-out-of-sync: |
       - when: app.status.sync.status == 'OutOfSync'
         send: [app-sync-status-out-of-sync]
-
     # --- Templates ---
     template.app-sync-succeeded: |
       message: |
@@ -75,7 +66,6 @@ configMap:
               {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
             ]
           }]
-
     template.app-sync-failed: |
       message: |
         :x: *{{.app.metadata.name}}* sync failed
@@ -92,7 +82,6 @@ configMap:
               {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
             ]
           }]
-
     template.app-deployed: |
       message: |
         :rocket: *{{.app.metadata.name}}* successfully deployed
@@ -109,7 +98,6 @@ configMap:
               {"title": "Repository", "value": "{{.app.spec.source.repoURL}}", "short": false}
             ]
           }]
-
     template.app-deleted: |
       message: |
         :wastebasket: *{{.app.metadata.name}}* was deleted
@@ -122,7 +110,6 @@ configMap:
               {"title": "Project", "value": "{{.app.spec.project}}", "short": true}
             ]
           }]
-
     template.app-health-degraded: |
       message: |
         :warning: *{{.app.metadata.name}}* health degraded
@@ -138,7 +125,6 @@ configMap:
               {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true}
             ]
           }]
-
     template.app-sync-status-unknown: |
       message: |
         :grey_question: *{{.app.metadata.name}}* sync status unknown
@@ -152,7 +138,6 @@ configMap:
               {"title": "Revision", "value": "{{.app.status.sync.revision}}", "short": true}
             ]
           }]
-
     template.app-sync-status-out-of-sync: |
       message: |
         :arrows_counterclockwise: *{{.app.metadata.name}}* is out of sync
