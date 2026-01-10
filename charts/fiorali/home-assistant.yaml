@@ -42,7 +42,30 @@ service:
       protocol: TCP
       targetPort: homekit-tcp
 containerSecurityContext:
-  enabled: false
+  enabled: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - CHOWN
+      - SETUID
+      - SETGID
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+env:
+  - name: S6_READ_ONLY_ROOT
+    value: "1"
+  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+    value: "1"
+  - name: S6_VERBOSITY
+    value: "2"
 ingress:
   enabled: true
 hostNetwork: true

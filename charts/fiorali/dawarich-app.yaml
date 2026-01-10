@@ -21,8 +21,23 @@ probes:
     path: /api/v1/health
     port: dawarich
 containerSecurityContext:
-  enabled: false
-podSecurityContext: {}
+  enabled: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - CHOWN
+      - SETUID
+      - SETGID
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
 service:
   enabled: true
   ports:
@@ -45,6 +60,8 @@ volumeMounts:
     mountPath: /tmp
   - name: app-tmp
     mountPath: /var/app/tmp
+  - name: run
+    mountPath: /run
 volumes:
   - name: dawarich-persistent-storage
     persistentVolumeClaim:
@@ -56,6 +73,8 @@ volumes:
   - name: tmp
     emptyDir: {}
   - name: app-tmp
+    emptyDir: {}
+  - name: run
     emptyDir: {}
 env:
   - name: RAILS_ENV

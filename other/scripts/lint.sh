@@ -9,7 +9,7 @@ for chart in charts/fiorali/*; do
   else
     echo "Linting ${chart_name}"
     helm lint --quiet charts/fiorali -f charts/fiorali/values.yaml -f $chart;
-    yamllint  -c other/scripts/.yamllint.yaml $chart_name;
+    yamllint  -c other/scripts/.yamllint.yaml $chart;
     other/scripts/test-chart.sh $chart_name && yamllint  -c other/scripts/.yamllint.yaml "other/scripts/tmp/${chart_name}_debug.yaml";
   fi
 done

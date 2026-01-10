@@ -218,14 +218,19 @@ dnsConfig:
   - 127.0.0.1
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
-  enabled: false
+  enabled: true
   readOnlyRootFilesystem: true
-  allowPrivilegeEscalation: false
-  privileged: false
-#   capabilities:
-#     drop:
-#     - ALL
-podSecurityContext: {} # gluetun needs root access to make changes to network settings
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - CHOWN
+      - SETUID
+      - SETGID
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityContext: {}  # gluetun needs root access to make changes to network settings
 imageUpdater:
   enabled: true
 configMap:

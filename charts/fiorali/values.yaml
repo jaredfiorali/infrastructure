@@ -46,6 +46,7 @@ containerSecurityContext:
   capabilities:
     drop:
       - ALL
+    add: []
   readOnlyRootFilesystem: true
   privileged: false
 

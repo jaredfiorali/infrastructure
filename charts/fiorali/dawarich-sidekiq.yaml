@@ -34,7 +34,23 @@ service:
       protocol: TCP
       targetPort: prometheus
 containerSecurityContext:
-  enabled: false
+  enabled: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - CHOWN
+      - SETUID
+      - SETGID
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
 command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
@@ -48,10 +64,14 @@ volumeMounts:
   - name: dawarich-persistent-storage
     mountPath: /var/app/storage
     subPath: storage
+  - name: run
+    mountPath: /run
 volumes:
   - name: dawarich-persistent-storage
     persistentVolumeClaim:
       claimName: dawarich
+  - name: run
+    emptyDir: {}
 env:
   - name: RAILS_ENV
     value: development

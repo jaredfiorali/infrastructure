@@ -108,13 +108,18 @@ networkpolicy:
     internet: true
 # Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
-  enabled: false
+  enabled: true
   readOnlyRootFilesystem: true
-  privileged: false
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - CHOWN
+      - SETUID
+      - SETGID
+  seccompProfile:
+    type: RuntimeDefault
 podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
