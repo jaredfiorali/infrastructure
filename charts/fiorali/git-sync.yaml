@@ -2,7 +2,7 @@ name: git-sync
 namespace: monitoring
 image:
   repository: docker.io/alpine/git
-  tag: latest@sha256:63d6641dc22922b38b8c19780d2308879ef29a8fb9766ddb90f7e4c9ddeefad3
+  tag: latest@sha256:b4ba5e95ee803a9f98fe9f4306e0105f679d2386dedaf207ffe62dd20fdd3f1c
 deployment:
   enabled: false
 resources:
@@ -23,27 +23,27 @@ cronjob:
   enabled: true
   schedule: "5 23 * * *"
 env:
-  - name: QUERIES
-    value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
-  - name: GITHUB_PAT
-    valueFrom:
-      secretKeyRef:
-        name: github-pat
-        key: github-pat
+- name: QUERIES
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
+- name: GITHUB_PAT
+  valueFrom:
+    secretKeyRef:
+      name: github-pat
+      key: github-pat
 volumeMounts:
-  - name: git
-    mountPath: /git
-  - name: git-sync-configmap
-    mountPath: /git-sync.sh
-    subPath: git-sync.sh
-    readOnly: true
+- name: git
+  mountPath: /git
+- name: git-sync-configmap
+  mountPath: /git-sync.sh
+  subPath: git-sync.sh
+  readOnly: true
 volumes:
-  - name: git-sync-configmap
-    configMap:
-      name: git-sync-configmap
-      defaultMode: 511
-  - name: git
-    emptyDir: {}
+- name: git-sync-configmap
+  configMap:
+    name: git-sync-configmap
+    defaultMode: 511
+- name: git
+  emptyDir: {}
 networkpolicy:
   ingress:
     internet: true
@@ -54,7 +54,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
