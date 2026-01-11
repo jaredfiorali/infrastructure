@@ -4,14 +4,14 @@ deployment:
   enabled: true
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:5383151e5a478c62e7c6883a040c686d4083a37c59e9906e0033990532267668
+  tag: latest@sha256:efab2e677baf912f5cc68363ec26e648015fa2c703b4a0cf8e03418415e1ed0d
 containerPorts:
-  - containerPort: 3000
-    name: sidekiq
-    protocol: TCP
-  - containerPort: 9394
-    name: prometheus
-    protocol: TCP
+- containerPort: 3000
+  name: sidekiq
+  protocol: TCP
+- containerPort: 9394
+  name: prometheus
+  protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -25,25 +25,25 @@ probes:
 service:
   enabled: true
   ports:
-    - name: sidekiq
-      port: 3000
-      protocol: TCP
-      targetPort: sidekiq
-    - name: prometheus
-      port: 9394
-      protocol: TCP
-      targetPort: prometheus
+  - name: sidekiq
+    port: 3000
+    protocol: TCP
+    targetPort: sidekiq
+  - name: prometheus
+    port: 9394
+    protocol: TCP
+    targetPort: prometheus
 containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
 podSecurityContext:
@@ -55,59 +55,59 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "sidekiq-entrypoint.sh sidekiq"]
 volumeMounts:
-  - name: dawarich-persistent-storage
-    mountPath: /var/app/public
-    subPath: public
-  - name: dawarich-persistent-storage
-    mountPath: /var/app/tmp/imports/watched
-    subPath: watched
-  - name: dawarich-persistent-storage
-    mountPath: /var/app/storage
-    subPath: storage
-  - name: run
-    mountPath: /run
+- name: dawarich-persistent-storage
+  mountPath: /var/app/public
+  subPath: public
+- name: dawarich-persistent-storage
+  mountPath: /var/app/tmp/imports/watched
+  subPath: watched
+- name: dawarich-persistent-storage
+  mountPath: /var/app/storage
+  subPath: storage
+- name: run
+  mountPath: /run
 volumes:
-  - name: dawarich-persistent-storage
-    persistentVolumeClaim:
-      claimName: dawarich
-  - name: run
-    emptyDir: {}
+- name: dawarich-persistent-storage
+  persistentVolumeClaim:
+    claimName: dawarich
+- name: run
+  emptyDir: {}
 env:
-  - name: RAILS_ENV
-    value: development
-  - name: REDIS_URL
-    value: 'redis://dawarich-redis:6379'
-  - name: DATABASE_HOST
-    value: dawarich-db
-  - name: DATABASE_USERNAME
-    value: postgres
-  - name: DATABASE_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: dawarich-credentials
-        key: DATABASE_PASSWORD
-  - name: DATABASE_NAME
-    value: dawarich_development
-  - name: MIN_MINUTES_SPENT_IN_CITY
-    value: '60'
-  - name: APPLICATION_HOSTS
-    value: dawarich.fiora.li
-  - name: TIME_ZONE
-    value: America/Toronto
-  - name: APPLICATION_PROTOCOL
-    value: http
-  - name: DISTANCE_UNIT
-    value: km
-  - name: PROMETHEUS_EXPORTER_ENABLED
-    value: 'false'
-  - name: PROMETHEUS_EXPORTER_HOST
-    value: '0.0.0.0'
-  - name: PROMETHEUS_EXPORTER_PORT
-    value: '9394'
-  - name: ENABLE_TELEMETRY
-    value: 'false'
-  - name: SELF_HOSTED
-    value: 'true'
+- name: RAILS_ENV
+  value: development
+- name: REDIS_URL
+  value: 'redis://dawarich-redis:6379'
+- name: DATABASE_HOST
+  value: dawarich-db
+- name: DATABASE_USERNAME
+  value: postgres
+- name: DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: dawarich-credentials
+      key: DATABASE_PASSWORD
+- name: DATABASE_NAME
+  value: dawarich_development
+- name: MIN_MINUTES_SPENT_IN_CITY
+  value: '60'
+- name: APPLICATION_HOSTS
+  value: dawarich.fiora.li
+- name: TIME_ZONE
+  value: America/Toronto
+- name: APPLICATION_PROTOCOL
+  value: http
+- name: DISTANCE_UNIT
+  value: km
+- name: PROMETHEUS_EXPORTER_ENABLED
+  value: 'false'
+- name: PROMETHEUS_EXPORTER_HOST
+  value: '0.0.0.0'
+- name: PROMETHEUS_EXPORTER_PORT
+  value: '9394'
+- name: ENABLE_TELEMETRY
+  value: 'false'
+- name: SELF_HOSTED
+  value: 'true'
 nodeSelector: {}
 tolerations: []
 affinity: {}
