@@ -65,7 +65,6 @@ networkpolicy:
     internal: true
   egress:
     internet: true
-# Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: true

@@ -106,7 +106,6 @@ networkpolicy:
     internal: true
   egress:
     internet: true
-# Outstanding bug with s6: https://github.com/just-containers/s6-overlay/issues/600
 containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: true
@@ -123,7 +122,8 @@ containerSecurityContext:
 podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
-  runAsUser: 911
+  runAsUser: 1000
+  runAsGroup: 1000
 volume:
   enabled: true
   size: "1073741824"
