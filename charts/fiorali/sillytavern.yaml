@@ -55,10 +55,6 @@ volumeMounts:
   - name: sillytavern-persistent-storage
     mountPath: /home/node/app/extensions
     subPath: data/extensions
-  - name: sillytavern-user-css
-    mountPath: /home/node/app/public/css/user.css
-    subPath: user.css
-    readOnly: true
   - name: error
     mountPath: /home/node/app/public/error
   - name: backups
@@ -69,10 +65,6 @@ volumes:
   - name: sillytavern-persistent-storage
     persistentVolumeClaim:
       claimName: sillytavern
-  - name: sillytavern-user-css
-    configMap:
-      name: sillytavern-user-css
-      defaultMode: 511
   - name: error
     emptyDir: {}
   - name: backups
