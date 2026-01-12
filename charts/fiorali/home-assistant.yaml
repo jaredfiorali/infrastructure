@@ -4,17 +4,17 @@ deployment:
   enabled: true
 image:
   repository: docker.io/homeassistant/home-assistant
-  tag: latest@sha256:97d63b3d0028b6b52ad8e5ac7b014c3404e69bf1656b5489eec48b59184e0bc7
+  tag: latest@sha256:bf1602fc889bc4e6e4c1ccf9e6657f0be968bda13e1a4d1299e3dbe0ccf9a23b
 containerPorts:
-  - containerPort: 8123
-    name: home-assistant
-    protocol: TCP
-  - containerPort: 5353
-    name: homekit-udp
-    protocol: UDP
-  - containerPort: 21063
-    name: homekit-tcp
-    protocol: TCP
+- containerPort: 8123
+  name: home-assistant
+  protocol: TCP
+- containerPort: 5353
+  name: homekit-udp
+  protocol: UDP
+- containerPort: 21063
+  name: homekit-tcp
+  protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -29,29 +29,29 @@ probes:
 service:
   enabled: true
   ports:
-    - name: home-assistant
-      port: 8123
-      protocol: TCP
-      targetPort: home-assistant
-    - port: 5353
-      name: homekit-udp
-      protocol: UDP
-      targetPort: homekit-udp
-    - port: 21063
-      name: homekit-tcp
-      protocol: TCP
-      targetPort: homekit-tcp
+  - name: home-assistant
+    port: 8123
+    protocol: TCP
+    targetPort: home-assistant
+  - port: 5353
+    name: homekit-udp
+    protocol: UDP
+    targetPort: homekit-udp
+  - port: 21063
+    name: homekit-tcp
+    protocol: TCP
+    targetPort: homekit-tcp
 containerSecurityContext:
   enabled: true
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
 podSecurityContext:
@@ -60,34 +60,34 @@ podSecurityContext:
   runAsUser: 1000
   runAsGroup: 1000
 env:
-  - name: S6_READ_ONLY_ROOT
-    value: "1"
-  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-    value: "1"
-  - name: S6_VERBOSITY
-    value: "2"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
 ingress:
   enabled: true
 hostNetwork: true
 volumeMounts:
-  - name: home-assistant-persistent-storage
-    mountPath: /config
-  - name: home-assistant-configmap
-    mountPath: /config/configuration.yaml
-    subPath: configuration.yaml
-    readOnly: true
-  - name: run
-    mountPath: /run
+- name: home-assistant-persistent-storage
+  mountPath: /config
+- name: home-assistant-configmap
+  mountPath: /config/configuration.yaml
+  subPath: configuration.yaml
+  readOnly: true
+- name: run
+  mountPath: /run
 volumes:
-  - name: home-assistant-persistent-storage
-    persistentVolumeClaim:
-      claimName: home-assistant
-  - name: home-assistant-configmap
-    configMap:
-      name: home-assistant-configmap
-      defaultMode: 511
-  - name: run
-    emptyDir: {}
+- name: home-assistant-persistent-storage
+  persistentVolumeClaim:
+    claimName: home-assistant
+- name: home-assistant-configmap
+  configMap:
+    name: home-assistant-configmap
+    defaultMode: 511
+- name: run
+  emptyDir: {}
 dnsPolicy: ClusterFirstWithHostNet
 networkpolicy:
   ingress:
