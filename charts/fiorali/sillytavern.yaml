@@ -4,11 +4,11 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/sillytavern/sillytavern
-  tag: latest@sha256:cd90a8c47fe709f0ef9533dc66e447c3a1109f1cee572bff8472699deb05914a
+  tag: latest@sha256:cb3ba4d156b959299a7fed08451413ba140d60a046e0e12a1282b5d43f4eeb39
 containerPorts:
-  - containerPort: 8000
-    name: sillytavern
-    protocol: TCP
+- containerPort: 8000
+  name: sillytavern
+  protocol: TCP
 resources:
   limits:
     cpu: 2
@@ -23,54 +23,54 @@ probes:
 service:
   enabled: true
   ports:
-    - name: sillytavern
-      port: 8000
-      protocol: TCP
-      targetPort: sillytavern
+  - name: sillytavern
+    port: 8000
+    protocol: TCP
+    targetPort: sillytavern
 env:
-  - name: NODE_ENV
-    value: production
-  - name: FORCE_COLOR
-    value: '1'
-  - name: SILLYTAVERN_LISTEN
-    value: 'true'
-  - name: SILLYTAVERN_WHITELISTMODE
-    value: 'false'
-  - name: SILLYTAVERN_BACKUPS_CHAT_ENABLED
-    value: 'false'
-  - name: SILLYTAVERN_SECURITYOVERRIDE
-    value: 'true'
+- name: NODE_ENV
+  value: production
+- name: FORCE_COLOR
+  value: '1'
+- name: SILLYTAVERN_LISTEN
+  value: 'true'
+- name: SILLYTAVERN_WHITELISTMODE
+  value: 'false'
+- name: SILLYTAVERN_BACKUPS_CHAT_ENABLED
+  value: 'false'
+- name: SILLYTAVERN_SECURITYOVERRIDE
+  value: 'true'
 ingress:
   enabled: true
 volumeMounts:
-  - name: sillytavern-persistent-storage
-    mountPath: /home/node/app/config
-    subPath: data/config
-  - name: sillytavern-persistent-storage
-    mountPath: /home/node/app/data
-    subPath: data/data
-  - name: sillytavern-persistent-storage
-    mountPath: /home/node/app/plugins
-    subPath: data/plugins
-  - name: sillytavern-persistent-storage
-    mountPath: /home/node/app/extensions
-    subPath: data/extensions
-  - name: error
-    mountPath: /home/node/app/public/error
-  - name: backups
-    mountPath: /home/node/app/backups
-  - name: third-party
-    mountPath: /home/node/app/public/scripts/extensions/third-party
+- name: sillytavern-persistent-storage
+  mountPath: /home/node/app/config
+  subPath: data/config
+- name: sillytavern-persistent-storage
+  mountPath: /home/node/app/data
+  subPath: data/data
+- name: sillytavern-persistent-storage
+  mountPath: /home/node/app/plugins
+  subPath: data/plugins
+- name: sillytavern-persistent-storage
+  mountPath: /home/node/app/extensions
+  subPath: data/extensions
+- name: error
+  mountPath: /home/node/app/public/error
+- name: backups
+  mountPath: /home/node/app/backups
+- name: third-party
+  mountPath: /home/node/app/public/scripts/extensions/third-party
 volumes:
-  - name: sillytavern-persistent-storage
-    persistentVolumeClaim:
-      claimName: sillytavern
-  - name: error
-    emptyDir: {}
-  - name: backups
-    emptyDir: {}
-  - name: third-party
-    emptyDir: {}
+- name: sillytavern-persistent-storage
+  persistentVolumeClaim:
+    claimName: sillytavern
+- name: error
+  emptyDir: {}
+- name: backups
+  emptyDir: {}
+- name: third-party
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -80,7 +80,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
