@@ -4,11 +4,11 @@ deployment:
   enabled: true
 image:
   repository: docker.io/redis
-  tag: latest@sha256:47200b04138293fae39737e50878a238b13ec0781083126b1b0c63cf5d992e8d
+  tag: latest@sha256:350e485f00477588a01de022e00a83735f9a81a30129ace85f73808a57b4a655
 containerPorts:
-  - containerPort: 6379
-    name: redis
-    protocol: TCP
+- containerPort: 6379
+  name: redis
+  protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -19,24 +19,24 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - redis-cli --raw incr ping
+    - sh
+    - -c
+    - redis-cli --raw incr ping
 service:
   enabled: true
   ports:
-    - name: redis
-      port: 6379
-      protocol: TCP
-      targetPort: redis
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: redis
 volumeMounts:
-  - name: dawarich-persistent-storage
-    mountPath: /data
-    subPath: shared
+- name: dawarich-persistent-storage
+  mountPath: /data
+  subPath: shared
 volumes:
-  - name: dawarich-persistent-storage
-    persistentVolumeClaim:
-      claimName: dawarich
+- name: dawarich-persistent-storage
+  persistentVolumeClaim:
+    claimName: dawarich
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -48,7 +48,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
