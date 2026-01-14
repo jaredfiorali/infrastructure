@@ -2,6 +2,7 @@ name: linkding
 namespace: linkding
 deployment:
   enabled: true
+  strategyType: RollingUpdate
 image:
   repository: docker.io/sissbruecker/linkding
   tag: latest@sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060
@@ -38,6 +39,21 @@ env:
       secretKeyRef:
         name: linkding-credentials
         key: password
+  - name: LD_DB_ENGINE
+    value: postgres
+  - name: LD_DB_HOST
+    value: aws-1-us-east-2.pooler.supabase.com
+  - name: LD_DB_DATABASE
+    value: postgres
+  - name: LD_DB_USER
+    value: postgres.thavarrhqqounmvobjwu
+  - name: LD_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: linkding-credentials
+        key: database-password
+  - name: LD_DB_PORT
+    value: "5432"
 ingress:
   enabled: true
 volumeMounts:
@@ -47,8 +63,7 @@ volumeMounts:
     mountPath: /tmp
 volumes:
   - name: linkding-persistent-storage
-    persistentVolumeClaim:
-      claimName: linkding
+    emptyDir: {}
   - name: tmp
     emptyDir: {}
 networkpolicy:
