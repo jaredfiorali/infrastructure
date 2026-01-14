@@ -39,9 +39,15 @@ env:
   - name: GF_DATABASE_NAME
     value: postgres
   - name: GF_DATABASE_USER
-    value: postgres.nneyhbzsgnkkzstatxen
+    valueFrom:
+      secretKeyRef:
+        name: grafana-credentials
+        key: username
   - name: GF_DATABASE_PASSWORD
-    value: kinryf-2cedhy-zicBuc
+    valueFrom:
+      secretKeyRef:
+        name: grafana-credentials
+        key: password
   - name: GF_DATABASE_SSL_MODE
     value: require
 ingress:
