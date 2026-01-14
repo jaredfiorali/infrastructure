@@ -3,7 +3,7 @@ namespace: monitoring
 deployment:
   enabled: true
 replicaCount: 2
-strategyType: RollingUpdate
+strategyType: Recreate
 image:
   repository: docker.io/grafana/grafana-oss
   tag: latest@sha256:adaf2d6b44c7e2b711b931b98be153778d313806582a24eab21178804fac2976
