@@ -2,6 +2,7 @@ name: prowlarr
 namespace: downloader
 deployment:
   enabled: true
+  strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
   tag: latest@sha256:67a8aaedcfd6989f3030b937a6a07007310b1dfc7ee8df16d2cbfa48d1c1158c
@@ -47,17 +48,46 @@ env:
     value: "1"
   - name: S6_VERBOSITY
     value: "2"
+  - name: PROWLARR__AUTH__APIKEY
+    value: "ce8be8b1875b41139c150971de815b3d"
+  - name: PROWLARR__SERVER__ENABLESSL
+    value: "false"
+  - name: PROWLARR__APP__LAUNCHBROWSER
+    value: "false"
+  - name: PROWLARR__AUTH__METHOD
+    value: "Forms"
+  - name: PROWLARR__AUTH__REQUIRED
+    value: "DisabledForLocalAddresses"
+  - name: PROWLARR__UPDATE__MECHANISM
+    value: "docker"
+  - name: PROWLARR__POSTGRES__HOST
+    value: "aws-1-us-east-2.pooler.supabase.com"
+  - name: PROWLARR__POSTGRES__PORT
+    value: "5432"
+  - name: PROWLARR__POSTGRES__USER
+    valueFrom:
+      secretKeyRef:
+        name: prowlarr-credentials
+        key: username
+  - name: PROWLARR__POSTGRES__PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: prowlarr-credentials
+        key: password
+  - name: PROWLARR__POSTGRES__MAINDB
+    value: "postgres"
+  - name: PROWLARR__POSTGRES__LOGDB
+    value: "postgres"
 ingress:
   enabled: true
 volumeMounts:
-  - name: prowlarr-persistent-storage
+  - name: prowlarr-data
     mountPath: /config
   - name: run
     mountPath: /run
 volumes:
-  - name: prowlarr-persistent-storage
-    persistentVolumeClaim:
-      claimName: prowlarr
+  - name: prowlarr-data
+    emptyDir: {}
   - name: run
     emptyDir: {}
 networkpolicy:
