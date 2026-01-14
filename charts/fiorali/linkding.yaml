@@ -46,7 +46,10 @@ env:
   - name: LD_DB_DATABASE
     value: postgres
   - name: LD_DB_USER
-    value: postgres.thavarrhqqounmvobjwu
+    valueFrom:
+      secretKeyRef:
+        name: linkding-credentials
+        key: database-username
   - name: LD_DB_PASSWORD
     valueFrom:
       secretKeyRef:
@@ -57,12 +60,12 @@ env:
 ingress:
   enabled: true
 volumeMounts:
-  - name: linkding-persistent-storage
+  - name: linkding-data
     mountPath: /etc/linkding/data
   - name: tmp
     mountPath: /tmp
 volumes:
-  - name: linkding-persistent-storage
+  - name: linkding-data
     emptyDir: {}
   - name: tmp
     emptyDir: {}
@@ -83,8 +86,5 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
-volume:
-  enabled: true
-  size: "536870912"
 imageUpdater:
   enabled: true
