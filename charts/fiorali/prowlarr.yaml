@@ -2,7 +2,8 @@ name: prowlarr
 namespace: downloader
 deployment:
   enabled: true
-  strategyType: RollingUpdate
+replicaCount: 2
+strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
   tag: latest@sha256:67a8aaedcfd6989f3030b937a6a07007310b1dfc7ee8df16d2cbfa48d1c1158c
@@ -12,11 +13,11 @@ containerPorts:
     protocol: TCP
 resources:
   limits:
-    cpu: '1'
-    memory: 1Gi
-  requests:
     cpu: 500m
     memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 250Mi
 probes:
   exec:
     command:
