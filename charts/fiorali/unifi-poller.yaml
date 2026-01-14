@@ -12,11 +12,11 @@ containerPorts:
     protocol: TCP
 resources:
   limits:
-    cpu: 2000m
-    memory: 250Mi
-  requests:
-    cpu: 500m
+    cpu: 250m
     memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
 probes:
   tcpSocket:
     port: poller
@@ -59,8 +59,9 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
-  fsGroup: 2000
+  fsGroup: 1000
   runAsNonRoot: true
   runAsUser: 1000
+  runAsGroup: 1000
 imageUpdater:
   enabled: true

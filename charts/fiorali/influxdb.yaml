@@ -47,9 +47,10 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
-  fsGroup: 2000
+  fsGroup: 1000
   runAsNonRoot: true
   runAsUser: 1000
+  runAsGroup: 1000
 volume:
   enabled: true
   size: "524288000"
