@@ -31,8 +31,6 @@ service:
   externalTrafficPolicy: Cluster
   type: LoadBalancer
 env:
-  - name: PLEX_SKIP_FIRST_RUN
-    value: "true"
   - name: ADVERTISE_IP
     value: http://192.168.20.10:32400/
   - name: PUID
@@ -97,8 +95,6 @@ volumeMounts:
     mountPath: /tmp
   - name: run
     mountPath: /run
-  - name: var-run
-    mountPath: /var/run
 volumes:
   - name: plex-persistent-storage
     persistentVolumeClaim:
@@ -147,8 +143,6 @@ volumes:
   - name: tmp
     emptyDir: {}
   - name: run
-    emptyDir: {}
-  - name: var-run
     emptyDir: {}
 networkpolicy:
   ingress:
