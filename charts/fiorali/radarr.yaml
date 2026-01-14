@@ -2,6 +2,8 @@ name: radarr
 namespace: downloader
 deployment:
   enabled: true
+replicaCount: 2
+strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/radarr
   tag: latest@sha256:6c0948b42c149e36bb3dbc0b64d36c77b2d3c9dccf1b424c4f72af1e57ba0c21
@@ -21,7 +23,7 @@ probes:
     command:
       - sh
       - -c
-      - curl -f "http://localhost:7878/api/v3/health?apikey=$API_KEY" || exit 1
+      - curl -f "http://localhost:7878/api/v3/health?apikey=$RADARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
@@ -30,11 +32,6 @@ service:
       protocol: TCP
       targetPort: radarr
 env:
-  - name: API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: radarr-api-key
-        key: api-key
   - name: PUID
     value: "1000"
   - name: PGID
@@ -47,10 +44,43 @@ env:
     value: "1"
   - name: S6_VERBOSITY
     value: "2"
+  - name: RADARR__SERVER__ENABLESSL
+    value: "false"
+  - name: RADARR__APP__LAUNCHBROWSER
+    value: "false"
+  - name: RADARR__AUTH__METHOD
+    value: "Forms"
+  - name: RADARR__AUTH__REQUIRED
+    value: "DisabledForLocalAddresses"
+  - name: RADARR__UPDATE__MECHANISM
+    value: "docker"
+  - name: RADARR__POSTGRES__HOST
+    value: "aws-1-us-east-1.pooler.supabase.com"
+  - name: RADARR__POSTGRES__PORT
+    value: "5432"
+  - name: RADARR__POSTGRES__MAINDB
+    value: "postgres"
+  - name: RADARR__POSTGRES__LOGDB
+    value: "postgres"
+  - name: RADARR__POSTGRES__USER
+    valueFrom:
+      secretKeyRef:
+        name: radarr-credentials
+        key: username
+  - name: RADARR__POSTGRES__PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: radarr-credentials
+        key: password
+  - name: RADARR__AUTH__APIKEY
+    valueFrom:
+      secretKeyRef:
+        name: radarr-credentials
+        key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:
-  - name: radarr-persistent-storage
+  - name: radarr-data
     mountPath: /config
   - name: media-bittorrent
     mountPath: /media-bittorrent
@@ -63,9 +93,8 @@ volumeMounts:
   - name: run
     mountPath: /run
 volumes:
-  - name: radarr-persistent-storage
-    persistentVolumeClaim:
-      claimName: radarr
+  - name: radarr-data
+    emptyDir: {}
   - name: media-bittorrent
     persistentVolumeClaim:
       claimName: media-bittorrent
@@ -102,6 +131,7 @@ podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
   runAsUser: 1000
+  runAsGroup: 1000
 volume:
   enabled: true
   size: "1073741824"

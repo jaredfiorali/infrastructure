@@ -23,7 +23,7 @@ probes:
     command:
       - sh
       - -c
-      - curl -f "http://localhost:9696/api/v1/health?apikey=$API_KEY" || exit 1
+      - curl -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
@@ -32,11 +32,6 @@ service:
       protocol: TCP
       targetPort: prowlarr
 env:
-  - name: API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: prowlarr-api-key
-        key: api-key
   - name: PUID
     value: "1000"
   - name: PGID
@@ -49,8 +44,6 @@ env:
     value: "1"
   - name: S6_VERBOSITY
     value: "2"
-  - name: PROWLARR__AUTH__APIKEY
-    value: "ce8be8b1875b41139c150971de815b3d"
   - name: PROWLARR__SERVER__ENABLESSL
     value: "false"
   - name: PROWLARR__APP__LAUNCHBROWSER
@@ -65,6 +58,10 @@ env:
     value: "aws-1-us-east-2.pooler.supabase.com"
   - name: PROWLARR__POSTGRES__PORT
     value: "5432"
+  - name: PROWLARR__POSTGRES__MAINDB
+    value: "postgres"
+  - name: PROWLARR__POSTGRES__LOGDB
+    value: "postgres"
   - name: PROWLARR__POSTGRES__USER
     valueFrom:
       secretKeyRef:
@@ -75,10 +72,11 @@ env:
       secretKeyRef:
         name: prowlarr-credentials
         key: password
-  - name: PROWLARR__POSTGRES__MAINDB
-    value: "postgres"
-  - name: PROWLARR__POSTGRES__LOGDB
-    value: "postgres"
+  - name: PROWLARR__AUTH__APIKEY
+    valueFrom:
+      secretKeyRef:
+        name: prowlarr-credentials
+        key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:

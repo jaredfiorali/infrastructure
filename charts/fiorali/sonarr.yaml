@@ -2,6 +2,8 @@ name: sonarr
 namespace: downloader
 deployment:
   enabled: true
+replicaCount: 2
+strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/sonarr
   tag: latest@sha256:8b9f2138ec50fc9e521960868f79d2ad0d529bc610aef19031ea8ff80b54c5e0
@@ -11,17 +13,17 @@ containerPorts:
     protocol: TCP
 resources:
   limits:
-    cpu: '2'
-    memory: 1500Mi
-  requests:
-    cpu: '1'
+    cpu: 1
     memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
 probes:
   exec:
     command:
       - sh
       - -c
-      - curl -f "http://localhost:8989/api/v3/health?apikey=$API_KEY" || exit 1
+      - curl -f "http://localhost:8989/api/v3/health?apikey=$SONARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
@@ -30,11 +32,10 @@ service:
       protocol: TCP
       targetPort: sonarr
 env:
-  - name: API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: sonarr-api-key
-        key: api-key
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
   - name: TZ
     value: "America/Toronto"
   - name: S6_READ_ONLY_ROOT
@@ -43,10 +44,43 @@ env:
     value: "1"
   - name: S6_VERBOSITY
     value: "2"
+  - name: SONARR__SERVER__ENABLESSL
+    value: "false"
+  - name: SONARR__APP__LAUNCHBROWSER
+    value: "false"
+  - name: SONARR__AUTH__METHOD
+    value: "Forms"
+  - name: SONARR__AUTH__REQUIRED
+    value: "DisabledForLocalAddresses"
+  - name: SONARR__UPDATE__MECHANISM
+    value: "docker"
+  - name: SONARR__POSTGRES__HOST
+    value: "aws-1-us-east-2.pooler.supabase.com"
+  - name: SONARR__POSTGRES__PORT
+    value: "5432"
+  - name: SONARR__POSTGRES__MAINDB
+    value: "postgres"
+  - name: SONARR__POSTGRES__LOGDB
+    value: "postgres"
+  - name: SONARR__POSTGRES__USER
+    valueFrom:
+      secretKeyRef:
+        name: sonarr-credentials
+        key: username
+  - name: SONARR__POSTGRES__PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: sonarr-credentials
+        key: password
+  - name: SONARR__AUTH__APIKEY
+    valueFrom:
+      secretKeyRef:
+        name: sonarr-credentials
+        key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:
-  - name: sonarr-persistent-storage
+  - name: sonarr-data
     mountPath: /config
   - name: media-bittorrent
     mountPath: /media-bittorrent
@@ -69,9 +103,8 @@ volumeMounts:
   - name: run
     mountPath: /run
 volumes:
-  - name: sonarr-persistent-storage
-    persistentVolumeClaim:
-      claimName: sonarr
+  - name: sonarr-data
+    emptyDir: {}
   - name: media-bittorrent
     persistentVolumeClaim:
       claimName: media-bittorrent
