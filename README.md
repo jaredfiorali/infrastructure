@@ -99,7 +99,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 | Application                      | Importance | Purpose                       |
 |----------------------------------|------------|-------------------------------|
-| [supabase](https://supabase.com) | 🔴         | Externally hosted postgres DB |
+| [supabase](https://supabase.com) | 🟠         | Externally hosted postgres DB |
 
 ### Application Dependency Diagram
 
@@ -108,8 +108,6 @@ graph LR
 Z[git-sync]:::blue --> |depends| N[kromgo]
 O[loki]:::blue ---> |depends| K[alloy]
 N[kromgo]:::blue --> |depends| I[prometheus]
-L[grafana]:::blue -----> |depends| Y[supabase]
-V[linkding]:::orange -----> |depends| Y[supabase]
 B[prowlarr]:::red -----> |depends| Y[supabase]
 C[radarr]:::red ---> |depends| B[prowlarr]
 C[radarr]:::red ---> |depends| F[transmission]
@@ -119,6 +117,8 @@ D[sonarr]:::red ---> |depends| F[transmission]
 D[sonarr]:::red -----> |depends| Y[supabase]
 F[transmission]:::red ---> |depends| G[gluetun]
 G[gluetun]:::red
+L[grafana]:::blue -----> |depends| Y[supabase]
+V[linkding]:::orange -----> |depends| Y[supabase]
 E[tautulli]:::red ---> |depends| A[plex]
 A[plex]:::red -----> |depends| H[replicated\nvolumes]
 E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
