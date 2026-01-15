@@ -97,14 +97,16 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 ### External
 
-| Application                      | Importance | Purpose                       |
-|----------------------------------|------------|-------------------------------|
-| [supabase](https://supabase.com) | 🟠         | Externally hosted postgres DB |
+| Application                          | Importance | Purpose                              |
+|--------------------------------------|------------|--------------------------------------|
+| [supabase](https://supabase.com)     | 🟠         | Externally hosted postgres DB.       |
+| [cloudflare](https://cloudflare.com) | 🟠         | DNS provider for cloudflared service |
 
 ### Application Dependency Diagram
 
 ```mermaid
 graph LR
+W[cloudflared]:::blue -----> |depends| X[cloudflare]
 Z[git-sync]:::blue --> |depends| N[kromgo]
 O[loki]:::blue ---> |depends| K[alloy]
 N[kromgo]:::blue --> |depends| I[prometheus]
@@ -136,6 +138,7 @@ I[prometheus]:::blue
 K[alloy]:::blue
 H:::pink@{ shape: processes, label: "replicated\nvolumes" } <--- |< provisions| J[longhorn]:::pink
 Y:::purple@{ shape: processes, label: "supabase\n(external)" }
+X:::purple@{ shape: processes, label: "cloudflare\n(external)" }
 
 classDef red stroke:#f00
 classDef blue stroke:#00f
@@ -220,7 +223,7 @@ graph TD
 
 ### DNS
 
-There is a network wide configuration which forces all traffic on port 53 to route to a specific CloudFlare endpoint. This endpoint was configured in using [CloudFlare's Zero Trust feature](https://one.dash.cloudflare.com), and essentially acts as an ad blocker across the network.
+There is a network wide configuration which forces all traffic on port 53 to route to a specific CloudFlare endpoint. This endpoint was configured in using [CloudFlare's Zero Trust feature](https://one.dash.cloudflare.com), and essentially acts as an ad blocker across the network. By default all traffic is filtered using [CloudFlare's CIPA Filter](https://developers.cloudflare.com/learning-paths/cybersafe/concepts/cipa-overview/). A subset of traffic is [routed via the cloudflared service](#other) in the cluster, which circumvents the CIPA filter.
 
 [There is a GitHub Action in this repo](https://github.com/jaredfiorali/Cloudflare-Gateway-Pihole) which runs every so often and updates the block list on CloudFlare's end. In rare cases the block list will incidentally block legitimate applications, which will need to be added to the Allow List.
 
@@ -266,6 +269,7 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 
 Here's a list of all the services that can be reached via a web portal (within the network):
 
+- [alloy](http://alloy.fiora.li)
 - [argocd](http://argo.fiora.li)
 - [dawarich](http://dawarich.fiora.li)
 - [emulatorjs](http://emulatorjs.fiora.li)
