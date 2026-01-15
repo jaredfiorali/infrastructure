@@ -124,6 +124,7 @@ V[linkding]:::orange -----> |depends| Y[supabase]
 E[tautulli]:::red ---> |depends| A[plex]
 A[plex]:::red -----> |depends| H[replicated\nvolumes]
 E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
+T[dawarich-app]:::orange ---> |depends| S[home-assistant]
 T[dawarich-app]:::orange ---> |depends| U[dawarich-db]
 T[dawarich-app]:::orange ---> |depends| P[dawarich-redis]
 T[dawarich-app]:::orange ---> |depends| Q[dawarich-sidekiq]
@@ -131,9 +132,9 @@ T[dawarich-app]:::orange ---> |depends| H[replicated\nvolumes]
 U[dawarich-db]:::orange ---> |depends| H[replicated\nvolumes]
 P[dawarich-redis]:::orange ---> |depends| H[replicated\nvolumes]
 Q[dawarich-sidekiq]:::orange ---> |depends| H[replicated\nvolumes]
+S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
 M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
 R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
-S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
 I[prometheus]:::blue
 K[alloy]:::blue
 H:::pink@{ shape: processes, label: "replicated\nvolumes" } <--- |< provisions| J[longhorn]:::pink
