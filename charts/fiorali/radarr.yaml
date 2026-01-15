@@ -2,7 +2,6 @@ name: radarr
 namespace: downloader
 deployment:
   enabled: true
-replicaCount: 2
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/radarr
