@@ -106,40 +106,78 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 ```mermaid
 graph LR
-W[cloudflared]:::blue -----> |depends| X[cloudflare]
-Z[git-sync]:::blue --> |depends| N[kromgo]
-O[loki]:::blue ---> |depends| K[alloy]
-N[kromgo]:::blue --> |depends| I[prometheus]
-B[prowlarr]:::red -----> |depends| Y[supabase]
-C[radarr]:::red ---> |depends| B[prowlarr]
-C[radarr]:::red ---> |depends| F[transmission]
-C[radarr]:::red -----> |depends| Y[supabase]
-D[sonarr]:::red ---> |depends| B[prowlarr]
-D[sonarr]:::red ---> |depends| F[transmission]
-D[sonarr]:::red -----> |depends| Y[supabase]
-F[transmission]:::red ---> |depends| G[gluetun]
-G[gluetun]:::red
-L[grafana]:::blue -----> |depends| Y[supabase]
-V[linkding]:::orange -----> |depends| Y[supabase]
-E[tautulli]:::red ---> |depends| A[plex]
-A[plex]:::red -----> |depends| H[replicated\nvolumes]
-E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
-T[dawarich-app]:::orange ---> |depends| S[home-assistant]
-T[dawarich-app]:::orange ---> |depends| U[dawarich-db]
-T[dawarich-app]:::orange ---> |depends| P[dawarich-redis]
-T[dawarich-app]:::orange ---> |depends| Q[dawarich-sidekiq]
-T[dawarich-app]:::orange ---> |depends| H[replicated\nvolumes]
-U[dawarich-db]:::orange ---> |depends| H[replicated\nvolumes]
-P[dawarich-redis]:::orange ---> |depends| H[replicated\nvolumes]
-Q[dawarich-sidekiq]:::orange ---> |depends| H[replicated\nvolumes]
-S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
-M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
-R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
-I[prometheus]:::blue
-K[alloy]:::blue
-H:::pink@{ shape: processes, label: "replicated\nvolumes" } <--- |< provisions| J[longhorn]:::pink
-Y:::purple@{ shape: processes, label: "supabase\n(external)" }
-X:::purple@{ shape: processes, label: "cloudflare\n(external)" }
+    subgraph "External Services"
+        X[cloudflare]:::purple
+        Y[supabase]:::purple
+    end
+
+    subgraph "Monitoring & Core Services"
+        L[grafana]:::blue
+        Z[git-sync]:::blue
+        N[kromgo]:::blue
+        I[prometheus]:::blue
+        O[loki]:::blue
+        K[alloy]:::blue
+        W[cloudflared]:::blue
+    end
+
+    subgraph "Media Management"
+        C[radarr]:::red
+        D[sonarr]:::red
+        B[prowlarr]:::red
+        F[transmission]:::red
+        G[gluetun]:::red
+        A[plex]:::red
+        E[tautulli]:::red
+    end
+
+    subgraph "Home & Personal"
+        T[dawarich<br>#91;app/sidekiq/db/redis#93;]:::orange
+        S[home-assistant]:::green
+        R[scrypted]:::green
+        V[linkding]:::orange
+        M[influxdb]:::orange
+    end
+
+    subgraph "Infrastructure"
+        J[longhorn]:::pink
+        H[replicated volumes]:::pink
+    end
+
+    %% External dependencies
+    W -.-> X
+    L -.-> Y
+    B -.-> Y
+    C -.-> Y
+    D -.-> Y
+    V -.-> Y
+
+    %% Monitoring flow
+    Z --> N
+    N --> I
+    O --> K
+
+    %% Media management flow
+    C --> B
+    C --> F
+    D --> B
+    D --> F
+    F --> G
+    E --> A
+
+    %% Dawarich dependencies
+    T --> S
+
+    %% Storage dependencies
+    A --> H
+    E --> H
+    T --> H
+    S --> H
+    M --> H
+    R --> H
+
+    %% Infrastructure provisioning
+    J --> |provisions| H
 
 classDef red stroke:#f00
 classDef blue stroke:#00f
