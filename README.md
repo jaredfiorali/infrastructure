@@ -33,7 +33,9 @@ Storage is handled by [Longhorn](https://longhorn.io). Storage is split between 
 
 Given the speed difference between the two disk types (SSD vs USB), slower long term volumes are provisioned on the USB drives while the volumes that require speed are stored on the SSD's. The majority of volumes are configured with 2 replicas in the event a single node goes down.
 
-A small subset (~10G) of "critical" data is [sent to an Amazon S3 bucket](https://ca-central-1.console.aws.amazon.com/console/home), in order to ensure that data will be secure in the event of an unrecoverable error in the cluster. Data being backed up includes (but is not limited to): dawarich, home-assistant, influxdb.
+A small subset (~5G) of "critical" data is [sent to an Amazon S3 bucket](https://ca-central-1.console.aws.amazon.com/console/home), in order to ensure that data will be secure in the event of an unrecoverable error in the cluster. Data being backed up includes (but is not limited to): dawarich, home-assistant, influxdb.
+
+There are a few applications that only need a postgres database to run (sonarr, prowlarr, radarr, etc). These dependant applications can be viewed in the [dependency diagram](#application-dependency-diagram) below. These have been configured to use [supabase](https://supabase.com) to host their required postgres databases. This lightens the storage/maintenance requirements for Longhorn.
 
 ## Applications
 
@@ -53,11 +55,12 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 ### Kubernetes Core
 
-| Application                                                         | Importance | Purpose                                                    |
-|---------------------------------------------------------------------|------------|------------------------------------------------------------|
-| [longhorn](https://longhorn.io)                                     | 🟢         | Provisions persistent storage for Applications             |
-| [argocd](https://argo-cd.readthedocs.io)                            | 🟠         | Deploys changes to this repo to the cluster                |
-| [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs this repo if there are updates |
+| Application                                                         | Importance | Purpose                                                        |
+|---------------------------------------------------------------------|------------|----------------------------------------------------------------|
+| [longhorn](https://longhorn.io)                                     | 🟢         | Provisions persistent storage for Applications                 |
+| [argocd](https://argo-cd.readthedocs.io)                            | 🟠         | Deploys changes to this repo to the cluster                    |
+| [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs repo if there are updates |
+| [metallb](https://metallb.io)                                       | 🔴         | Creates Virtual IP addresses for Load Balancing traffic.       |
 
 ### Monitoring
 
@@ -75,7 +78,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 ### Home Security
 
-| Application                                     | Importance | Purpose |
+| Application                                     | Importance | Purpose                                                             |
 |-------------------------------------------------|------------|---------------------------------------------------------------------|
 | [scrypted](https://www.scrypted.app)            | 🟠         | Reads Unifi camera feed and exposes it to HomeKit                   |
 | [home-assistant](https://www.home-assistant.io) | 🟠         | Allows for complex automation to be written for various IoT devices |
@@ -84,56 +87,62 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 | Application                                                    | Importance | Purpose                                                          |
 |----------------------------------------------------------------|------------|------------------------------------------------------------------|
+| [cloudflared](https://github.com/cloudflare/cloudflared)       | 🟢         | Network DNS provider for 'Secure Devices' VLAN                   |
 | [dawarich-app/dawarich-db](https://github.com/Freika/dawarich) | 🔴         | Stores ingested location data (from HA) and displays it on a map |
 | [emulatorjs](https://emulatorjs.org)                           | 🔴         | Console emulator written in JS                                   |
 | [influxdb](https://www.influxdata.com/products/influxdb)       | 🟢         | Stores data for the "reflection" app                             |
 | [linkding](https://github.com/sissbruecker/linkding)           | 🔴         | Bookmark manager                                                 |
 | [sillytavern](https://github.com/SillyTavern/SillyTavern)      | 🔴         | LLM chat frontend                                                |
 | [speedtest](https://openspeedtest.com)                         | 🔴         | Local speedtest server to check internal network speeds          |
-| [timemachine](https://github.com/mbentley/docker-timemachine)  | 🔴         | Stores MacOS backups                                             |
+
+### External
+
+| Application                      | Importance | Purpose                       |
+|----------------------------------|------------|-------------------------------|
+| [supabase](https://supabase.com) | 🔴         | Externally hosted postgres DB |
 
 ### Application Dependency Diagram
 
 ```mermaid
 graph LR
-L[grafana]:::blue -----> |depends| H[replicated\nvolumes]
 Z[git-sync]:::blue --> |depends| N[kromgo]
+O[loki]:::blue ---> |depends| K[alloy]
 N[kromgo]:::blue --> |depends| I[prometheus]
-A[plex]:::red -----> |depends| H[replicated\nvolumes]
-B[prowlarr]:::red -----> |depends| H[replicated\nvolumes]
-C[radarr]:::red -----> |depends| H[replicated\nvolumes]
+L[grafana]:::blue -----> |depends| Y[supabase]
+V[linkding]:::orange -----> |depends| Y[supabase]
+B[prowlarr]:::red -----> |depends| Y[supabase]
 C[radarr]:::red ---> |depends| B[prowlarr]
 C[radarr]:::red ---> |depends| F[transmission]
-D[sonarr]:::red -----> |depends| H[replicated\nvolumes]
+C[radarr]:::red -----> |depends| Y[supabase]
 D[sonarr]:::red ---> |depends| B[prowlarr]
 D[sonarr]:::red ---> |depends| F[transmission]
-E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
-E[tautulli]:::red ---> |depends| A[plex]
-F[transmission]:::red -----> |depends| H[replicated\nvolumes]
+D[sonarr]:::red -----> |depends| Y[supabase]
 F[transmission]:::red ---> |depends| G[gluetun]
-O[loki]:::blue ---> |depends| K[alloy]
+G[gluetun]:::red
+E[tautulli]:::red ---> |depends| A[plex]
+A[plex]:::red -----> |depends| H[replicated\nvolumes]
+E[tautulli]:::red -----> |depends| H[replicated\nvolumes]
 T[dawarich-app]:::orange ---> |depends| U[dawarich-db]
 T[dawarich-app]:::orange ---> |depends| P[dawarich-redis]
 T[dawarich-app]:::orange ---> |depends| Q[dawarich-sidekiq]
 T[dawarich-app]:::orange ---> |depends| H[replicated\nvolumes]
-M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
 U[dawarich-db]:::orange ---> |depends| H[replicated\nvolumes]
 P[dawarich-redis]:::orange ---> |depends| H[replicated\nvolumes]
 Q[dawarich-sidekiq]:::orange ---> |depends| H[replicated\nvolumes]
-V[linkding]:::orange -----> |depends| H[replicated\nvolumes]
-Y[timemachine]:::orange -----> |depends| H[replicated\nvolumes]
+M[influxdb]:::orange -----> |depends| H[replicated\nvolumes]
 R[scrypted]:::green -----> |depends| H[replicated\nvolumes]
 S[home-assistant]:::green -----> |depends| H[replicated\nvolumes]
 I[prometheus]:::blue
-G[gluetun]:::red
 K[alloy]:::blue
 H:::pink@{ shape: processes, label: "replicated\nvolumes" } <--- |< provisions| J[longhorn]:::pink
+Y:::purple@{ shape: processes, label: "supabase\n(external)" }
 
 classDef red stroke:#f00
 classDef blue stroke:#00f
 classDef green stroke:#0f0
 classDef orange stroke:#f96
 classDef pink stroke:#f9f
+classDef purple stroke:#a5f
 ```
 
 ## Directories
@@ -146,8 +155,8 @@ This Git repository contains the following directories for the [Kubernetes](./ch
    ├── 📄 Chart.yaml  # sets the version of the compiled helm charts
    ├── 📁 templates   # helm charts use to populate values
    ├── 📁 other       # various non-helm utilities
-       ├── 📁 scripts     # various helper scripts
        ├── 📁 configs     # anything that might be used for external configs
+       ├── 📁 scripts     # various helper scripts
 ```
 
 ## Deployment workflow
