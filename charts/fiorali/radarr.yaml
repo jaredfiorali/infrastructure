@@ -131,8 +131,5 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
-volume:
-  enabled: true
-  size: "1073741824"
 imageUpdater:
   enabled: true
