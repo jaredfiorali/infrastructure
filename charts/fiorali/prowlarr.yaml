@@ -5,11 +5,11 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
-  tag: latest@sha256:67a8aaedcfd6989f3030b937a6a07007310b1dfc7ee8df16d2cbfa48d1c1158c
+  tag: latest@sha256:d3e9307b320b6772749a2cf8fc2712e9e824c4930b034680ad4d08a9e2f25884
 containerPorts:
-  - containerPort: 9696
-    name: prowlarr
-    protocol: TCP
+- containerPort: 9696
+  name: prowlarr
+  protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -20,74 +20,74 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - curl -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
+    - sh
+    - -c
+    - curl -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
-    - name: prowlarr
-      port: 9696
-      protocol: TCP
-      targetPort: prowlarr
+  - name: prowlarr
+    port: 9696
+    protocol: TCP
+    targetPort: prowlarr
 env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "America/Toronto"
-  - name: S6_READ_ONLY_ROOT
-    value: "1"
-  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-    value: "1"
-  - name: S6_VERBOSITY
-    value: "2"
-  - name: PROWLARR__SERVER__ENABLESSL
-    value: "false"
-  - name: PROWLARR__APP__LAUNCHBROWSER
-    value: "false"
-  - name: PROWLARR__AUTH__METHOD
-    value: "Forms"
-  - name: PROWLARR__AUTH__REQUIRED
-    value: "DisabledForLocalAddresses"
-  - name: PROWLARR__UPDATE__MECHANISM
-    value: "docker"
-  - name: PROWLARR__POSTGRES__HOST
-    value: "aws-1-us-east-2.pooler.supabase.com"
-  - name: PROWLARR__POSTGRES__PORT
-    value: "5432"
-  - name: PROWLARR__POSTGRES__MAINDB
-    value: "postgres"
-  - name: PROWLARR__POSTGRES__LOGDB
-    value: "postgres"
-  - name: PROWLARR__POSTGRES__USER
-    valueFrom:
-      secretKeyRef:
-        name: prowlarr-credentials
-        key: username
-  - name: PROWLARR__POSTGRES__PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: prowlarr-credentials
-        key: password
-  - name: PROWLARR__AUTH__APIKEY
-    valueFrom:
-      secretKeyRef:
-        name: prowlarr-credentials
-        key: auth-apikey
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
+- name: PROWLARR__SERVER__ENABLESSL
+  value: "false"
+- name: PROWLARR__APP__LAUNCHBROWSER
+  value: "false"
+- name: PROWLARR__AUTH__METHOD
+  value: "Forms"
+- name: PROWLARR__AUTH__REQUIRED
+  value: "DisabledForLocalAddresses"
+- name: PROWLARR__UPDATE__MECHANISM
+  value: "docker"
+- name: PROWLARR__POSTGRES__HOST
+  value: "aws-1-us-east-2.pooler.supabase.com"
+- name: PROWLARR__POSTGRES__PORT
+  value: "5432"
+- name: PROWLARR__POSTGRES__MAINDB
+  value: "postgres"
+- name: PROWLARR__POSTGRES__LOGDB
+  value: "postgres"
+- name: PROWLARR__POSTGRES__USER
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-credentials
+      key: username
+- name: PROWLARR__POSTGRES__PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-credentials
+      key: password
+- name: PROWLARR__AUTH__APIKEY
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-credentials
+      key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:
-  - name: prowlarr-data
-    mountPath: /config
-  - name: run
-    mountPath: /run
+- name: prowlarr-data
+  mountPath: /config
+- name: run
+  mountPath: /run
 volumes:
-  - name: prowlarr-data
-    emptyDir: {}
-  - name: run
-    emptyDir: {}
+- name: prowlarr-data
+  emptyDir: {}
+- name: run
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -99,11 +99,11 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
 podSecurityContext:
