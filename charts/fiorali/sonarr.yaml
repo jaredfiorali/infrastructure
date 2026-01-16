@@ -5,11 +5,11 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/sonarr
-  tag: latest@sha256:8b9f2138ec50fc9e521960868f79d2ad0d529bc610aef19031ea8ff80b54c5e0
+  tag: latest@sha256:02b4d538d351d6e35882a021c08e8600fe95d28860fb1dd724b597166e7221ca
 containerPorts:
-  - containerPort: 8989
-    name: sonarr
-    protocol: TCP
+- containerPort: 8989
+  name: sonarr
+  protocol: TCP
 resources:
   limits:
     cpu: 1
@@ -20,119 +20,119 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - curl -f "http://localhost:8989/api/v3/health?apikey=$SONARR__AUTH__APIKEY" || exit 1
+    - sh
+    - -c
+    - curl -f "http://localhost:8989/api/v3/health?apikey=$SONARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
-    - name: sonarr
-      port: 8989
-      protocol: TCP
-      targetPort: sonarr
+  - name: sonarr
+    port: 8989
+    protocol: TCP
+    targetPort: sonarr
 env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "America/Toronto"
-  - name: S6_READ_ONLY_ROOT
-    value: "1"
-  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-    value: "1"
-  - name: S6_VERBOSITY
-    value: "2"
-  - name: SONARR__SERVER__ENABLESSL
-    value: "false"
-  - name: SONARR__APP__LAUNCHBROWSER
-    value: "false"
-  - name: SONARR__AUTH__METHOD
-    value: "Forms"
-  - name: SONARR__AUTH__REQUIRED
-    value: "DisabledForLocalAddresses"
-  - name: SONARR__UPDATE__MECHANISM
-    value: "docker"
-  - name: SONARR__POSTGRES__HOST
-    value: "aws-1-us-east-2.pooler.supabase.com"
-  - name: SONARR__POSTGRES__PORT
-    value: "5432"
-  - name: SONARR__POSTGRES__MAINDB
-    value: "postgres"
-  - name: SONARR__POSTGRES__LOGDB
-    value: "postgres"
-  - name: SONARR__POSTGRES__USER
-    valueFrom:
-      secretKeyRef:
-        name: sonarr-credentials
-        key: username
-  - name: SONARR__POSTGRES__PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: sonarr-credentials
-        key: password
-  - name: SONARR__AUTH__APIKEY
-    valueFrom:
-      secretKeyRef:
-        name: sonarr-credentials
-        key: auth-apikey
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
+- name: SONARR__SERVER__ENABLESSL
+  value: "false"
+- name: SONARR__APP__LAUNCHBROWSER
+  value: "false"
+- name: SONARR__AUTH__METHOD
+  value: "Forms"
+- name: SONARR__AUTH__REQUIRED
+  value: "DisabledForLocalAddresses"
+- name: SONARR__UPDATE__MECHANISM
+  value: "docker"
+- name: SONARR__POSTGRES__HOST
+  value: "aws-1-us-east-2.pooler.supabase.com"
+- name: SONARR__POSTGRES__PORT
+  value: "5432"
+- name: SONARR__POSTGRES__MAINDB
+  value: "postgres"
+- name: SONARR__POSTGRES__LOGDB
+  value: "postgres"
+- name: SONARR__POSTGRES__USER
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-credentials
+      key: username
+- name: SONARR__POSTGRES__PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-credentials
+      key: password
+- name: SONARR__AUTH__APIKEY
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-credentials
+      key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:
-  - name: sonarr-data
-    mountPath: /config
-  - name: media-bittorrent
-    mountPath: /media-bittorrent
-  - name: media-tv-0
-    mountPath: /media-tv-0
-  - name: media-tv-1
-    mountPath: /media-tv-1
-  - name: media-tv-2
-    mountPath: /media-tv-2
-  - name: media-tv-4
-    mountPath: /media-tv-4
-  - name: media-tv-5
-    mountPath: /media-tv-5
-  - name: media-tv-6
-    mountPath: /media-tv-6
-  - name: media-tv-7
-    mountPath: /media-tv-7
-  - name: media-tv-8
-    mountPath: /media-tv-8
-  - name: run
-    mountPath: /run
+- name: sonarr-data
+  mountPath: /config
+- name: media-bittorrent
+  mountPath: /media-bittorrent
+- name: media-tv-0
+  mountPath: /media-tv-0
+- name: media-tv-1
+  mountPath: /media-tv-1
+- name: media-tv-2
+  mountPath: /media-tv-2
+- name: media-tv-4
+  mountPath: /media-tv-4
+- name: media-tv-5
+  mountPath: /media-tv-5
+- name: media-tv-6
+  mountPath: /media-tv-6
+- name: media-tv-7
+  mountPath: /media-tv-7
+- name: media-tv-8
+  mountPath: /media-tv-8
+- name: run
+  mountPath: /run
 volumes:
-  - name: sonarr-data
-    emptyDir: {}
-  - name: media-bittorrent
-    persistentVolumeClaim:
-      claimName: media-bittorrent
-  - name: media-tv-0
-    persistentVolumeClaim:
-      claimName: media-tv-0
-  - name: media-tv-1
-    persistentVolumeClaim:
-      claimName: media-tv-1
-  - name: media-tv-2
-    persistentVolumeClaim:
-      claimName: media-tv-2
-  - name: media-tv-4
-    persistentVolumeClaim:
-      claimName: media-tv-4
-  - name: media-tv-5
-    persistentVolumeClaim:
-      claimName: media-tv-5
-  - name: media-tv-6
-    persistentVolumeClaim:
-      claimName: media-tv-6
-  - name: media-tv-7
-    persistentVolumeClaim:
-      claimName: media-tv-7
-  - name: media-tv-8
-    persistentVolumeClaim:
-      claimName: media-tv-8
-  - name: run
-    emptyDir: {}
+- name: sonarr-data
+  emptyDir: {}
+- name: media-bittorrent
+  persistentVolumeClaim:
+    claimName: media-bittorrent
+- name: media-tv-0
+  persistentVolumeClaim:
+    claimName: media-tv-0
+- name: media-tv-1
+  persistentVolumeClaim:
+    claimName: media-tv-1
+- name: media-tv-2
+  persistentVolumeClaim:
+    claimName: media-tv-2
+- name: media-tv-4
+  persistentVolumeClaim:
+    claimName: media-tv-4
+- name: media-tv-5
+  persistentVolumeClaim:
+    claimName: media-tv-5
+- name: media-tv-6
+  persistentVolumeClaim:
+    claimName: media-tv-6
+- name: media-tv-7
+  persistentVolumeClaim:
+    claimName: media-tv-7
+- name: media-tv-8
+  persistentVolumeClaim:
+    claimName: media-tv-8
+- name: run
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -144,11 +144,11 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
 podSecurityContext:
