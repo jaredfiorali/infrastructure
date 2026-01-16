@@ -225,13 +225,50 @@ In order to apply the updated image to the cluster, an update to the [Chart.yaml
 
 ```mermaid
 graph TD
-    A(User) -->|Commits| B(Github Repo)
-    B(Github Repo) -->|Triggers| F>Github Actions]
-    F>Github Actions] -->|Compiles Helm Charts| C>Github Pages]
-    B(Github Repo) -->|Watched By| G(ArgoCD Image Updater)
-    G>ArgoCD Image Updater] -->|Updates| C(Github Pages)
-    D>ArgoCD] -->|Reads| C(Github Pages)
-    D>ArgoCD] -->|Deploys| E(Kubernetes Cluster)
+    subgraph "Development"
+        A[User/Developer]:::user
+    end
+
+    subgraph "Source Control"
+        B[GitHub Repo<br>infrastructure]:::repo
+    end
+
+    subgraph "CI/CD Pipeline"
+        F[GitHub Actions<br>Build & Package]:::ci
+        C[GitHub Pages<br>Helm Charts]:::registry
+    end
+
+    subgraph "GitOps Automation"
+        G[ArgoCD<br>Image Updater]:::automation
+        D[ArgoCD<br>Controller]:::automation
+    end
+
+    subgraph "Infrastructure"
+        E[Kubernetes Cluster<br>10x Raspberry Pi]:::cluster
+    end
+
+    %% Development flow
+    A -->|git push| B
+
+    %% CI/CD Pipeline
+    B -->|triggers| F
+    F -->|publishes| C
+
+    %% GitOps automation
+    B -.->|watches| G
+    G -->|updates images| B
+    D -->|reads charts| C
+    D -->|deploys| E
+
+    %% Manual trigger path
+    B -.->|chart version bump| F
+
+classDef user stroke:#1565c0
+classDef repo stroke:#6a1b9a
+classDef ci stroke:#2e7d32
+classDef registry stroke:#ef6c00
+classDef automation stroke:#c2185b
+classDef cluster stroke:#d32f2f
 ```
 
 ## Network
@@ -242,22 +279,72 @@ High level network diagram can be found below. Note that each connection denotes
 
 ```mermaid
 graph TD
-    A(Modem) --> B(Gateway UDM SE - Backup)
-    A(Modem) --> C(Gateway UDM SE - Primary)
-    B(Gateway UDM SE - Backup) --> D(USW Pro Max 24 PoE)
-    C(Gateway UDM SE - Primary) --> D(USW Pro Max 24 PoE)
-    D(USW Pro Max 24 PoE) --> E(U7 Pro XG - Family Room)
-    D(USW Pro Max 24 PoE) --> F(U7 Pro XG - Dining Room)
-    D(USW Pro Max 24 PoE) --> G(USW-Ultra - Theatre)
-    G(USW-Ultra - Theatre) --> H(U6 Mesh - Theatre)
-    G(USW-Ultra - Theatre - 1) --> O(USW-Ultra - Theatre - 2)
-    D(USW Pro Max 24 PoE) --> I(G4 Dome - East Camera)
-    D(USW Pro Max 24 PoE) --> J(UP FloodLight - East Light)
-    D(USW Pro Max 24 PoE) ---> K(USW Flex 2.5G - Garage)
-    K(USW Flex 2.5G - Garage) --> L(U7 Pro XG - Office)
-    K(USW Flex 2.5G - Garage) --> M(G5 PTZ - Driveway Camera)
-    K(USW Flex 2.5G - Garage) --> N(UP FloodLight - West Light)
-    K(USW Flex 2.5G - Garage) --> P(UP Siren - Garage Alarm)
+    subgraph "ISP & Gateways"
+        A[Modem]:::isp
+        B[UDM SE<br>Backup]:::gateway
+        C[UDM SE<br>Primary/NVR]:::gateway
+    end
+
+    subgraph "Core Network"
+        D[USW Pro Max 24 PoE<br>Main Switch]:::switch
+    end
+
+    subgraph "Family & Dining Areas"
+        E[U7 Pro XG<br>Family Room]:::wifi
+        F[U7 Pro XG<br>Dining Room]:::wifi
+    end
+
+    subgraph "Theatre Setup"
+        G[USW Ultra<br>Theatre-1]:::switch
+        H[U6 Mesh<br>Theatre]:::wifi
+        O[USW Ultra<br>Theatre-2]:::switch
+    end
+
+    subgraph "Security System"
+        I[G4 Dome<br>East Camera]:::camera
+        J[UP FloodLight<br>East]:::security
+        M[G5 PTZ<br>Driveway]:::camera
+        N[UP FloodLight<br>West]:::security
+        P[UP Siren<br>Garage]:::security
+    end
+
+    subgraph "Office & Garage"
+        K[USW Flex 2.5G<br>Garage Switch]:::switch
+        L[U7 Pro XG<br>Office]:::wifi
+    end
+
+    %% ISP connections
+    A --> B
+    A --> C
+
+    %% Gateway to main switch
+    B --> D
+    C --> D
+
+    %% Main switch to areas
+    D --> E
+    D --> F
+    D --> G
+    D --> I
+    D --> J
+    D --> K
+
+    %% Theatre connections
+    G --> H
+    G --> O
+
+    %% Garage switch connections
+    K --> L
+    K --> M
+    K --> N
+    K --> P
+
+classDef isp stroke:#01579b
+classDef gateway stroke:#4a148c
+classDef switch stroke:#1b5e20
+classDef wifi stroke:#e65100
+classDef camera stroke:#c62828
+classDef security stroke:#ad1457
 ```
 
 ### DNS
