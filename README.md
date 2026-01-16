@@ -357,35 +357,65 @@ High level diagram outlining how each VLAN's DNS is routed can be found below:
 
 ```mermaid
 graph TD
-    subgraph "Internal VLANs"
-        A[Guest]:::cipa
-        B[IoT]:::cipa
-        C[Secure Devices]:::adblock
-        D[Servers]:::unfiltered
-        E[Core Network]:::unfiltered
+    subgraph "CIPA Filtered VLANs"
+        B[Guest<br>192.168.5.x]:::vlan_cipa
+        D[IoT - Isolated<br>192.168.9.x]:::vlan_cipa
+        E[IoT<br>192.168.10.x]:::vlan_cipa
     end
 
-    subgraph "CloudFlare DNS Filtering"
-        F[CIPA Filter<br>Family Safety]:::external
-        H[Custom Ad Block<br>Pi-hole Lists]:::external
-        G[Standard DNS<br>1.1.1.1]:::external
+    subgraph "Ad Block Filtered VLANs"
+        A[VPN<br>192.168.3.x]:::vlan_adblock
+        F[Secure Devices<br>192.168.15.x]:::vlan_adblock
     end
 
-    %% VLAN routing
-    A --> F
-    B --> F
-    C --> H
-    D --> G
-    E --> G
+    subgraph "Unfiltered VLANs"
+        G[Servers<br>192.168.20.x]:::vlan_unfiltered
+        H[Core Network<br>192.168.24.x]:::vlan_unfiltered
+    end
 
-    %% Filter chain
-    F --> H
-    H --> G
+    subgraph "Isolated/No Internet"
+        C[IoT - No Internet<br>192.168.8.x]:::vlan_isolated
+    end
 
-classDef cipa stroke:#01579b
-classDef adblock stroke:#4a148c
-classDef unfiltered stroke:#1b5e20
-classDef external stroke:#e65100
+    subgraph "Kubernetes Cluster"
+        M[cloudflared pods]:::k8s_cluster
+    end
+
+    subgraph "CloudFlare DNS Processing Chain"
+        I[CIPA Filter<br>Family Safety]:::external_service
+        J[Custom Ad Block<br>Pi-hole Lists]:::external_service
+        K[Standard DNS<br>1.1.1.1]:::external_service
+        L((Internet)):::external_service
+    end
+
+
+    %% VLAN routing to appropriate filtering level
+    B --> I
+    D --> I
+    E --> I
+
+    A --> M
+    F --> M
+
+    M --> J
+
+    G --> K
+    H --> K
+
+    %% Filter processing chain
+    I --> J
+    J --> K
+    K --> L
+
+    %% No internet access
+    C -.->|No DNS/Internet| C
+
+classDef vlan_cipa stroke:#d32f2f
+classDef vlan_adblock stroke:#ef6c00
+classDef vlan_unfiltered stroke:#2e7d32
+classDef vlan_isolated stroke:#6a1b9a
+classDef k8s_cluster stroke:#1565c0
+classDef external_service stroke:#c2185b
 ```
 
 ### VPN
