@@ -353,6 +353,41 @@ There is a network wide configuration which forces all traffic on port 53 to rou
 
 [There is a GitHub Action in this repo](https://github.com/jaredfiorali/Cloudflare-Gateway-Pihole) which runs every so often and updates the block list on CloudFlare's end. In rare cases the block list will incidentally block legitimate applications, which will need to be added to the Allow List.
 
+High level diagram outlining how each VLAN's DNS is routed can be found below:
+
+```mermaid
+graph TD
+    subgraph "Internal VLANs"
+        A[Guest]:::cipa
+        B[IoT]:::cipa
+        C[Secure Devices]:::adblock
+        D[Servers]:::unfiltered
+        E[Core Network]:::unfiltered
+    end
+
+    subgraph "CloudFlare DNS Filtering"
+        F[CIPA Filter<br>Family Safety]:::external
+        H[Custom Ad Block<br>Pi-hole Lists]:::external
+        G[Standard DNS<br>1.1.1.1]:::external
+    end
+
+    %% VLAN routing
+    A --> F
+    B --> F
+    C --> H
+    D --> G
+    E --> G
+
+    %% Filter chain
+    F --> H
+    H --> G
+
+classDef cipa stroke:#01579b
+classDef adblock stroke:#4a148c
+classDef unfiltered stroke:#1b5e20
+classDef external stroke:#e65100
+```
+
 ### VPN
 
 Trusted devices are configured with a [wireguard client provided by Unifi](https://help.ui.com/hc/en-us/articles/115005445768-UniFi-Gateway-WireGuard-VPN-Server), which automatically connects to the VPN when the device has left the local network.
@@ -379,9 +414,9 @@ Due to the DNS being forced to route to CloudFlare's Zero Trust (in order to get
 |-----------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
 | [Mac Studio](https://www.apple.com/mac-studio/)                                                                                         | Personal PC, hosts LLM       |
 | [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Office        |
-| [Unifi U6-Mesh](https://ca.store.ui.com/ca/en/category/all-wifi/products/u6-mesh)                                                       | Access Point - Theatre       |
 | [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Family Room   |
 | [Unifi U7 Pro XG](https://ca.store.ui.com/ca/en/category/all-wifi/products/u7-pro-xg)                                                   | Access Point - Dining Room   |
+| [Unifi U6-Mesh](https://ca.store.ui.com/ca/en/category/all-wifi/products/u6-mesh)                                                       | Access Point - Theatre       |
 | [Unifi USW-Ultra](https://ca.store.ui.com/ca/en/category/switching-utility/collections/pro-ultra)                                       | Network Switch - Theatre (1) |
 | [Unifi USW-Ultra](https://ca.store.ui.com/ca/en/category/switching-utility/collections/pro-ultra)                                       | Network Switch - Theatre (2) |
 | [Unifi USW Flex 2.5G](https://ca.store.ui.com/ca/en/category/all-switching/products/usw-flex-2-5g-8-poe)                                | Network Switch - Garage      |
