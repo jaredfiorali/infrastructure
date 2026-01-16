@@ -5,11 +5,11 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/radarr
-  tag: latest@sha256:6c0948b42c149e36bb3dbc0b64d36c77b2d3c9dccf1b424c4f72af1e57ba0c21
+  tag: latest@sha256:270f25698624b57b86ca119cc95399d7ff15be8297095b4e1223fd5b549b732c
 containerPorts:
-  - containerPort: 7878
-    name: radarr
-    protocol: TCP
+- containerPort: 7878
+  name: radarr
+  protocol: TCP
 resources:
   limits:
     cpu: 1
@@ -20,94 +20,94 @@ resources:
 probes:
   exec:
     command:
-      - sh
-      - -c
-      - curl -f "http://localhost:7878/api/v3/health?apikey=$RADARR__AUTH__APIKEY" || exit 1
+    - sh
+    - -c
+    - curl -f "http://localhost:7878/api/v3/health?apikey=$RADARR__AUTH__APIKEY" || exit 1
 service:
   enabled: true
   ports:
-    - name: radarr
-      port: 7878
-      protocol: TCP
-      targetPort: radarr
+  - name: radarr
+    port: 7878
+    protocol: TCP
+    targetPort: radarr
 env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "America/Toronto"
-  - name: S6_READ_ONLY_ROOT
-    value: "1"
-  - name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
-    value: "1"
-  - name: S6_VERBOSITY
-    value: "2"
-  - name: RADARR__SERVER__ENABLESSL
-    value: "false"
-  - name: RADARR__APP__LAUNCHBROWSER
-    value: "false"
-  - name: RADARR__AUTH__METHOD
-    value: "Forms"
-  - name: RADARR__AUTH__REQUIRED
-    value: "DisabledForLocalAddresses"
-  - name: RADARR__UPDATE__MECHANISM
-    value: "docker"
-  - name: RADARR__POSTGRES__HOST
-    value: "aws-1-us-east-1.pooler.supabase.com"
-  - name: RADARR__POSTGRES__PORT
-    value: "5432"
-  - name: RADARR__POSTGRES__MAINDB
-    value: "postgres"
-  - name: RADARR__POSTGRES__LOGDB
-    value: "postgres"
-  - name: RADARR__POSTGRES__USER
-    valueFrom:
-      secretKeyRef:
-        name: radarr-credentials
-        key: username
-  - name: RADARR__POSTGRES__PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: radarr-credentials
-        key: password
-  - name: RADARR__AUTH__APIKEY
-    valueFrom:
-      secretKeyRef:
-        name: radarr-credentials
-        key: auth-apikey
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
+- name: RADARR__SERVER__ENABLESSL
+  value: "false"
+- name: RADARR__APP__LAUNCHBROWSER
+  value: "false"
+- name: RADARR__AUTH__METHOD
+  value: "Forms"
+- name: RADARR__AUTH__REQUIRED
+  value: "DisabledForLocalAddresses"
+- name: RADARR__UPDATE__MECHANISM
+  value: "docker"
+- name: RADARR__POSTGRES__HOST
+  value: "aws-1-us-east-1.pooler.supabase.com"
+- name: RADARR__POSTGRES__PORT
+  value: "5432"
+- name: RADARR__POSTGRES__MAINDB
+  value: "postgres"
+- name: RADARR__POSTGRES__LOGDB
+  value: "postgres"
+- name: RADARR__POSTGRES__USER
+  valueFrom:
+    secretKeyRef:
+      name: radarr-credentials
+      key: username
+- name: RADARR__POSTGRES__PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: radarr-credentials
+      key: password
+- name: RADARR__AUTH__APIKEY
+  valueFrom:
+    secretKeyRef:
+      name: radarr-credentials
+      key: auth-apikey
 ingress:
   enabled: true
 volumeMounts:
-  - name: radarr-data
-    mountPath: /config
-  - name: media-bittorrent
-    mountPath: /media-bittorrent
-  - name: media-movies-0
-    mountPath: /media-movies-0
-  - name: media-movies-1
-    mountPath: /media-movies-1
-  - name: media-movies-2
-    mountPath: /media-movies-2
-  - name: run
-    mountPath: /run
+- name: radarr-data
+  mountPath: /config
+- name: media-bittorrent
+  mountPath: /media-bittorrent
+- name: media-movies-0
+  mountPath: /media-movies-0
+- name: media-movies-1
+  mountPath: /media-movies-1
+- name: media-movies-2
+  mountPath: /media-movies-2
+- name: run
+  mountPath: /run
 volumes:
-  - name: radarr-data
-    emptyDir: {}
-  - name: media-bittorrent
-    persistentVolumeClaim:
-      claimName: media-bittorrent
-  - name: media-movies-0
-    persistentVolumeClaim:
-      claimName: media-movies-0
-  - name: media-movies-1
-    persistentVolumeClaim:
-      claimName: media-movies-1
-  - name: media-movies-2
-    persistentVolumeClaim:
-      claimName: media-movies-2
-  - name: run
-    emptyDir: {}
+- name: radarr-data
+  emptyDir: {}
+- name: media-bittorrent
+  persistentVolumeClaim:
+    claimName: media-bittorrent
+- name: media-movies-0
+  persistentVolumeClaim:
+    claimName: media-movies-0
+- name: media-movies-1
+  persistentVolumeClaim:
+    claimName: media-movies-1
+- name: media-movies-2
+  persistentVolumeClaim:
+    claimName: media-movies-2
+- name: run
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
@@ -119,11 +119,11 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
 podSecurityContext:
