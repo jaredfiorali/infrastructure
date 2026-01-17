@@ -347,6 +347,63 @@ classDef camera stroke:#c62828
 classDef security stroke:#ad1457
 ```
 
+### VLANs
+
+#### Purpose
+
+The devices on the network are divided by VLANs, each with their own purpose. Below is a quick breakdown of each VLAN and it's designated purpose:
+
+| VLAN Name         | VLAN ID | IP Range     | Purpose                                                          |
+|-------------------|---------|--------------|------------------------------------------------------------------|
+| VPN               | 3       | 192.168.3.x  | For devices which connect via VPN                                |
+| Guest             | 5       | 192.168.5.x  | Untrusted devices from visitors.                                 |
+| IoT (No Internet) | 8       | 192.168.8.x  | IoT devices that do not need the internet to function            |
+| IoT (Isolated)    | 9       | 192.168.9.x  | IoT devices that only need the internet to function              |
+| IoT               | 10      | 192.168.10.x | IoT devices that need the internet and local network to function |
+| Secure Devices    | 15      | 192.168.15.x | Personal devices that are trusted with security updates          |
+| Servers           | 20      | 192.168.20.x | Computers running in the Kubernetes cluster                      |
+| Network Gear      | 24      | 192.168.24.x | VLAN management  network                                         |
+
+#### Diagram
+
+```mermaid
+graph TD
+    %% Untrusted VLANs
+    subgraph "Untrusted"
+        B[Guest<br>192.168.5.x]:::vlan_cipa
+        D[IoT - Isolated<br>192.168.9.x]:::vlan_cipa
+        C[IoT - No Internet<br>192.168.8.x]:::vlan_isolated
+        E[IoT<br>192.168.10.x]:::vlan_cipa
+    end
+
+    %% Trusted VLANs
+    subgraph "Trusted"
+        A[VPN<br>192.168.3.x]:::vlan_adblock
+        F[Secure Devices<br>192.168.15.x]:::vlan_adblock
+        G[Servers<br>192.168.20.x]:::vlan_unfiltered
+        H[Core Network<br>192.168.24.x]:::vlan_unfiltered
+    end
+
+    %% Allowed communication paths
+    A <--> F
+    F <--> G
+    G <--> H
+    F <--> H
+    A <--> E
+    F <--> E
+    D --> E
+    E --> D
+    C -.->|Isolated| C
+
+    %% Optional: clarify what arrows mean
+    %% Note: "<-->" means bidirectional communication allowed
+
+classDef vlan_cipa stroke:#d32f2f
+classDef vlan_adblock stroke:#ef6c00
+classDef vlan_unfiltered stroke:#2e7d32
+classDef vlan_isolated stroke:#6a1b9a
+```
+
 ### DNS
 
 There is a network wide configuration which forces all traffic on port 53 to route to a specific CloudFlare endpoint. This endpoint was configured in using [CloudFlare's Zero Trust feature](https://one.dash.cloudflare.com), and essentially acts as an ad blocker across the network. By default all traffic is filtered using [CloudFlare's CIPA Filter](https://developers.cloudflare.com/learning-paths/cybersafe/concepts/cipa-overview/). A subset of traffic is [routed via the cloudflared service](#other) in the cluster, which circumvents the CIPA filter.
