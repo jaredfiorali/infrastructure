@@ -370,18 +370,18 @@ The devices on the network are divided by VLANs, each with their own purpose. Be
 graph TD
     %% Untrusted VLANs
     subgraph "Untrusted"
-        B[Guest<br>192.168.5.x]:::vlan_cipa
-        D[IoT - Isolated<br>192.168.9.x]:::vlan_cipa
-        C[IoT - No Internet<br>192.168.8.x]:::vlan_isolated
-        E[IoT<br>192.168.10.x]:::vlan_cipa
+        D[IoT - Isolated<br>192.168.9.x]:::iot
+        C[IoT - No Internet<br>192.168.8.x]:::iot
+        E[IoT<br>192.168.10.x]:::iot
+        B[Guest<br>192.168.5.x]:::guest
     end
 
     %% Trusted VLANs
     subgraph "Trusted"
-        A[VPN<br>192.168.3.x]:::vlan_adblock
-        F[Secure Devices<br>192.168.15.x]:::vlan_adblock
-        G[Servers<br>192.168.20.x]:::vlan_unfiltered
-        H[Core Network<br>192.168.24.x]:::vlan_unfiltered
+        A[VPN<br>192.168.3.x]:::secure_devices
+        F[Secure Devices<br>192.168.15.x]:::secure_devices
+        G[Servers<br>192.168.20.x]:::trusted
+        H[Core Network<br>192.168.24.x]:::trusted
     end
 
     %% Allowed communication paths
@@ -391,17 +391,15 @@ graph TD
     F <--> H
     A <--> E
     F <--> E
-    D --> E
-    E --> D
-    C -.->|Isolated| C
+    C --> E
+    E --> C
+    B -.->|Isolated| B
+    D -.->|Isolated| D
 
-    %% Optional: clarify what arrows mean
-    %% Note: "<-->" means bidirectional communication allowed
-
-classDef vlan_cipa stroke:#d32f2f
-classDef vlan_adblock stroke:#ef6c00
-classDef vlan_unfiltered stroke:#2e7d32
-classDef vlan_isolated stroke:#6a1b9a
+classDef iot stroke:#d32f2f
+classDef guest stroke:#ef6c00
+classDef secure_devices stroke:#2e7d32
+classDef trusted stroke:#6a1b9a
 ```
 
 ### DNS
