@@ -14,7 +14,9 @@ Kubernetes cluster managed with ArgoCD and GitHub Actions, using Longhorn for pe
 ![Power](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_power_usage.json&style=flat-square&label=Power)
 ![Popeye](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_popeye_score.json&style=flat-square&label=Popeye)
 
-This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable), [Kubernetes](https://kubernetes.io), and [GitHub Actions](https://github.com/features/actions).
+This is my attempt to formalize and document my homelab, partly for myself, and partly so there's some documentation if I get hit by a bus 🚌
+
+It's basically a mono repo for my home infrastructure and Kubernetes cluster. My aim is to follow Infrastructure as Code (IaC) principals and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable), [Kubernetes](https://kubernetes.io), and [GitHub Actions](https://github.com/features/actions).
 
 ## Kubernetes
 
@@ -27,7 +29,7 @@ The Kubernetes cluster is running across 10 Raspberry Pi's, where 5 of the nodes
 
 In a typical setup, workloads are only provisioned on worker nodes. However given the compute requirements for the entire cluster, workloads are provisioned across all nodes. In essence the only discernable difference between master and worker nodes is that `kubectl` commands can be run against the master nodes.
 
-## Storage
+### Storage
 
 Storage is handled by [Longhorn](https://longhorn.io). Storage is split between node types (you can reference the [Kubernetes hardware for details](#kubernetes)).
 
@@ -37,11 +39,11 @@ A small subset (~5G) of "critical" data is [sent to an Amazon S3 bucket](https:/
 
 There are a few applications that only need a postgres database to run (sonarr, prowlarr, radarr, etc). These dependant applications can be viewed in the [dependency diagram](#application-dependency-diagram) below. These have been configured to use [supabase](https://supabase.com) to host their required postgres databases. This lightens the storage/maintenance requirements for Longhorn.
 
-## Applications
+### Applications
 
 Each application is defined in the [charts/fiorali](./charts/fiorali) directory. Below you will find a quick explainer on each application.
 
-### Media Management
+#### Media Management
 
 | Application                                 | Importance | Purpose                                              |
 |---------------------------------------------|------------|------------------------------------------------------|
@@ -53,7 +55,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [transmission](https://transmissionbt.com)  | 🔴         | Torrent downloader                                   |
 | [gluetun](https://github.com/qdm12/gluetun) | 🔴         | VPN sidecar for transmission                         |
 
-### Kubernetes Core
+#### Kubernetes Core
 
 | Application                                                         | Importance | Purpose                                                        |
 |---------------------------------------------------------------------|------------|----------------------------------------------------------------|
@@ -62,7 +64,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs repo if there are updates |
 | [metallb](https://metallb.io)                                       | 🔴         | Creates Virtual IP addresses for Load Balancing traffic.       |
 
-### Monitoring
+#### Monitoring
 
 | Application                                        | Importance | Purpose                                                            |
 |----------------------------------------------------|------------|--------------------------------------------------------------------|
@@ -76,14 +78,14 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [popeye](https://popeyecli.io)                     | 🔴         | "linter" for the cluster                                           |
 | [unifi-poller](https://unpoller.com)               | 🔴         | Scans the Unifi network equipment and stores metrics in prometheus |
 
-### Home Security
+#### Home Security
 
 | Application                                     | Importance | Purpose                                                             |
 |-------------------------------------------------|------------|---------------------------------------------------------------------|
 | [scrypted](https://www.scrypted.app)            | 🟠         | Reads Unifi camera feed and exposes it to HomeKit                   |
 | [home-assistant](https://www.home-assistant.io) | 🟠         | Allows for complex automation to be written for various IoT devices |
 
-### Other
+#### Other
 
 | Application                                                    | Importance | Purpose                                                          |
 |----------------------------------------------------------------|------------|------------------------------------------------------------------|
@@ -95,14 +97,14 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [sillytavern](https://github.com/SillyTavern/SillyTavern)      | 🔴         | LLM chat frontend                                                |
 | [speedtest](https://openspeedtest.com)                         | 🔴         | Local speedtest server to check internal network speeds          |
 
-### External
+#### External
 
 | Application                          | Importance | Purpose                              |
 |--------------------------------------|------------|--------------------------------------|
 | [supabase](https://supabase.com)     | 🟠         | Externally hosted postgres DB.       |
 | [cloudflare](https://cloudflare.com) | 🟠         | DNS provider for cloudflared service |
 
-### Application Dependency Diagram
+#### Application Dependency Diagram
 
 ```mermaid
 graph LR
@@ -187,41 +189,29 @@ classDef pink stroke:#f9f
 classDef purple stroke:#a5f
 ```
 
-## Directories
+### Deployment workflow
 
-This Git repository contains the following directories for the [Kubernetes](./charts/fiorali) deployments.
-
-```sh
-📁 charts
-├── 📁 fiorali        # application value definitions
-   ├── 📄 Chart.yaml  # sets the version of the compiled helm charts
-   ├── 📁 templates   # helm charts use to populate values
-   ├── 📁 other       # various non-helm utilities
-       ├── 📁 configs     # anything that might be used for external configs
-       ├── 📁 scripts     # various helper scripts
-```
-
-## Deployment workflow
-
-### Codebase (Helm)
+#### Codebase (Helm)
 
 Each application is defined by a unique helm chart. The helm chart defines what kind of resources each application will need (deployment, service, networkPolicy, etc).
 
-### Compiling Charts (Github Action)
+#### Compiling Charts (Github Action)
 
 When code is pushed to the `master` branch, it triggers a [Github action](https://github.com/jaredfiorali/infrastructure/actions) which [compiles and packages](https://github.com/jaredfiorali/infrastructure/releases) the helm charts into actual kubernetes yaml files that can be used in deployments, and then publishes them via [github pages](https://github.com/jaredfiorali/infrastructure/deployments/github-pages).
 
-### CD Pipeline (ArgoCD)
+#### CD Pipeline (ArgoCD)
 
 [ArgoCD](https://argo-cd.readthedocs.io) is the deployment automation tool that I use to keep each defined application in sync with the code defined in this repo. ArgoCD will watch for any code changes, and if any changes are discovered, it will auto-sync the updated application code with the cluster.
 
 Most applications are configured to automatically sync with the latest version, with Longhorn as a notable exception. Given how critical that application is (as it manages the storage for most other applications), I have decided it makes sense to have it manually updated.
 
-### Updates (argocd-image-updater)
+#### Updates (argocd-image-updater)
 
 The last piece of this system is the [argocd-image-updater](https://argocd-image-updater.readthedocs.io). Within each application is a definition to scan a specific docker image, and if an update is found, then the argocd-image-updater will update the code repo with the updated image.
 
 In order to apply the updated image to the cluster, an update to the [Chart.yaml](./charts/fiorali/Chart.yaml) file will need to be done, as ArgoCD will only deploy when there's a chart version update, not a repo commit. This is helpful, as it means updates are as frequent as I want them to be.
+
+#### Deployment Diagram
 
 ```mermaid
 graph TD
@@ -271,11 +261,25 @@ classDef automation stroke:#c2185b
 classDef cluster stroke:#d32f2f
 ```
 
+## Repo Directories
+
+This Git repository contains the following directories for the [Kubernetes](./charts/fiorali) deployments.
+
+```sh
+📁 charts
+├── 📁 fiorali        # application value definitions
+   ├── 📄 Chart.yaml  # sets the version of the compiled helm charts
+   ├── 📁 templates   # helm charts use to populate values
+   ├── 📁 other       # various non-helm utilities
+       ├── 📁 configs     # anything that might be used for external configs
+       ├── 📁 scripts     # various helper scripts
+```
+
 ## Network
 
 The network infrastructure consists largely of [Unifi hardware](#hardware), which is managed through the [Unifi App portal](https://unifi.ui.com).
 
-High level network diagram can be found below. Note that each connection denotes an ethernet connection.
+### Network Diagram
 
 ```mermaid
 graph TD
@@ -364,7 +368,7 @@ The devices on the network are divided by VLANs, each with their own purpose. Be
 | Servers           | 20      | 192.168.20.x | Computers running in the Kubernetes cluster                      |
 | Network Gear      | 24      | 192.168.24.x | VLAN management  network                                         |
 
-#### Diagram
+#### VLAN Diagram
 
 ```mermaid
 graph TD
@@ -408,7 +412,7 @@ There is a network wide configuration which forces all traffic on port 53 to rou
 
 [There is a GitHub Action in this repo](https://github.com/jaredfiorali/Cloudflare-Gateway-Pihole) which runs every so often and updates the block list on CloudFlare's end. In rare cases the block list will incidentally block legitimate applications, which will need to be added to the Allow List.
 
-High level diagram outlining how each VLAN's DNS is routed can be found below:
+#### DNS Diagram
 
 ```mermaid
 graph TD
