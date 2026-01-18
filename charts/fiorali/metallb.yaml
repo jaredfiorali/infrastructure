@@ -13,7 +13,7 @@ podDisruptionBudget:
 ipAddressPool:
   enabled: true
   name: "pi-vips"
-  addresses: ["192.168.20.20-192.168.20.25"]
+  addresses: ["192.168.20.20-192.168.20.40"]
 bgpPeer:
   enabled: true
   name: "unifi"
