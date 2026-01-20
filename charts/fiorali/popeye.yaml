@@ -225,13 +225,11 @@ configMap:
                 - labels:
                     app: [radarr, sonarr, transmission] # Exclude codes for any pods with specified labels
                   codes: [110] # => Memory Current/Request threshold
-                - labels:
-                    app: [grafana, linkding, sonarr, radarr, prowlarr] # Exclude codes for any pods with specified labels
+                - containers: [postgres-exporter] # Exclude codes for any pods with specified labels
                   codes: [101] # => 'latest' image tag in use
             deployments:
               instances:
-                - labels:
-                    app: [grafana, linkding, sonarr, radarr, prowlarr] # Exclude codes for any pods with specified labels
+                - containers: [postgres-exporter] # Exclude codes for any pods with specified labels
                   codes: [101] # => 'latest' image tag in use
         resources:
           # Configure node resources.
