@@ -165,11 +165,11 @@ spec:
                   key: metrics-prefix
           resources:
             limits:
-              cpu: 100m
-              memory: 256Mi
-            requests:
-              cpu: 50m
+              cpu: 150m
               memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
           ports:
             - containerPort: 9187
               name: metrics
