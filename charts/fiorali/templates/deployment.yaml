@@ -182,7 +182,7 @@ spec:
           startupProbe:
             httpGet:
               path: /metrics
-              port: 9187
+              port: metrics
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 3
@@ -190,14 +190,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /metrics
-              port: 9187
+              port: metrics
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /metrics
-              port: 9187
+              port: metrics
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 2
