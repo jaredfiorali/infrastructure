@@ -2,7 +2,7 @@ name: grafana
 namespace: monitoring
 deployment:
   enabled: true
-replicaCount: 2
+replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/grafana/grafana-oss
@@ -31,23 +31,30 @@ service:
       port: 3000
       protocol: TCP
       targetPort: grafana
+    - name: metrics
+      port: 9187
+      protocol: TCP
+      targetPort: metrics
 env:
   - name: GF_DATABASE_TYPE
     value: postgres
-  - name: GF_DATABASE_HOST
-    value: aws-1-ca-central-1.pooler.supabase.com:5432
   - name: GF_DATABASE_NAME
     value: postgres
   - name: GF_DATABASE_USER
     valueFrom:
       secretKeyRef:
-        name: grafana-credentials
+        name: grafana-postgres-credentials
         key: username
   - name: GF_DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: grafana-credentials
+        name: grafana-postgres-credentials
         key: password
+  - name: GF_DATABASE_HOST
+    valueFrom:
+      secretKeyRef:
+        name: grafana-postgres-credentials
+        key: host
   - name: GF_DATABASE_SSL_MODE
     value: require
 ingress:
@@ -84,3 +91,10 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+sidecarContainers:
+  enabled: true
+  postgresExporter: true
+serviceMonitor:
+  enabled: true
+  appSelector: grafana
+  port: "metrics"

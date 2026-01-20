@@ -30,6 +30,10 @@ service:
     port: 8989
     protocol: TCP
     targetPort: sonarr
+  - name: metrics
+    port: 9187
+    protocol: TCP
+    targetPort: metrics
 env:
 - name: PUID
   value: "1000"
@@ -53,8 +57,6 @@ env:
   value: "DisabledForLocalAddresses"
 - name: SONARR__UPDATE__MECHANISM
   value: "docker"
-- name: SONARR__POSTGRES__HOST
-  value: "aws-1-us-east-2.pooler.supabase.com"
 - name: SONARR__POSTGRES__PORT
   value: "5432"
 - name: SONARR__POSTGRES__MAINDB
@@ -64,13 +66,18 @@ env:
 - name: SONARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:
-      name: sonarr-credentials
+      name: sonarr-postgres-credentials
       key: username
 - name: SONARR__POSTGRES__PASSWORD
   valueFrom:
     secretKeyRef:
-      name: sonarr-credentials
+      name: sonarr-postgres-credentials
       key: password
+- name: SONARR__POSTGRES__HOST
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-postgres-credentials
+      key: host
 - name: SONARR__AUTH__APIKEY
   valueFrom:
     secretKeyRef:
@@ -158,3 +165,10 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+sidecarContainers:
+  enabled: true
+  postgresExporter: true
+serviceMonitor:
+  enabled: true
+  appSelector: sonarr
+  port: "metrics"

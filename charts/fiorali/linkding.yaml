@@ -28,6 +28,10 @@ service:
       port: 9090
       protocol: TCP
       targetPort: linkding
+    - name: metrics
+      port: 9187
+      protocol: TCP
+      targetPort: metrics
 env:
   - name: LD_SUPERUSER_NAME
     valueFrom:
@@ -39,22 +43,25 @@ env:
       secretKeyRef:
         name: linkding-credentials
         key: password
-  - name: LD_DB_ENGINE
-    value: postgres
-  - name: LD_DB_HOST
-    value: aws-1-us-east-2.pooler.supabase.com
-  - name: LD_DB_DATABASE
-    value: postgres
   - name: LD_DB_USER
     valueFrom:
       secretKeyRef:
-        name: linkding-credentials
-        key: database-username
+        name: linkding-postgres-credentials
+        key: username
   - name: LD_DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: linkding-credentials
-        key: database-password
+        name: linkding-postgres-credentials
+        key: password
+  - name: LD_DB_HOST
+    valueFrom:
+      secretKeyRef:
+        name: linkding-postgres-credentials
+        key: host
+  - name: LD_DB_ENGINE
+    value: postgres
+  - name: LD_DB_DATABASE
+    value: postgres
   - name: LD_DB_PORT
     value: "5432"
 ingress:
@@ -88,3 +95,10 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+sidecarContainers:
+  enabled: true
+  postgresExporter: true
+serviceMonitor:
+  enabled: true
+  appSelector: linkding
+  port: "metrics"

@@ -129,8 +129,54 @@ spec:
             privileged: {{ .Values.containerSecurityContext.privileged }}
           {{- end }}
           {{- if .Values.sidecarContainers.enabled }}
+            {{- if .Values.sidecarContainers.postgresExporter }}
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:latest
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          env:
+            - name: DATA_SOURCE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres-credentials
+                  key: username
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres-credentials
+                  key: password
+            - name: DATA_SOURCE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres-credentials
+                  key: host
+            - name: PG_EXPORTER_METRIC_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-postgres-credentials
+                  key: metrics-prefix
+          resources:
+            limits:
+              cpu: 50m
+              memory: 256Mi
+            requests:
+              cpu: 25m
+              memory: 128Mi
+          ports:
+            - containerPort: 9187
+              name: metrics
+            {{- else }}
             {{- with .Values.sidecarContainers }}
-              {{- toYaml .containers | nindent 6 }}
+              {{- toYaml .containers | nindent 8 }}
+            {{- end }}
             {{- end }}
           {{- end }}
       {{- if .Values.hostNetwork }}
