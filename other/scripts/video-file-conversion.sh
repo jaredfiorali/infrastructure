@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 # Check if folder argument is provided
 if [ $# -ne 1 ]; then
@@ -16,28 +16,45 @@ if [ ! -d "$INPUT_FOLDER" ]; then
 fi
 
 # Count total files to process
-total_files=$(find "$INPUT_FOLDER" -maxdepth 1 -type f \( -iname "*.mkv" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mp4" -o -iname "*.m4v" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" \) | wc -l)
+total_files=$(find "$INPUT_FOLDER" -maxdepth 1 -type f ! -name "._*" \( -iname "*.mkv" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mp4" -o -iname "*.m4v" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" \) | wc -l)
 
 if [ "$total_files" -eq 0 ]; then
-    echo "No video files found in '$INPUT_FOLDER'"
+    echo "⚠️  No video files found in '$INPUT_FOLDER'"
     exit 0
 fi
 
-echo "Found $total_files video file(s) to process in '$INPUT_FOLDER'"
+echo "🎬 Found $total_files video file(s) to process in '$INPUT_FOLDER'"
 processed=0
 failed=0
 
-# Process each video file in the folder
-find "$INPUT_FOLDER" -maxdepth 1 -type f \( -iname "*.mkv" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mp4" -o -iname "*.m4v" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" \) | while read -r input_file; do
-    # Get filename without extension and create output filename
-    filename=$(basename "$input_file")
-    name_without_ext="${filename%.*}"
-    output_file="$(dirname "$input_file")/${name_without_ext}_converted.mp4"
+# Build array of all video files (compatible with bash 3.2+)
+video_files=()
+while IFS= read -r -d '' file; do
+    video_files+=("$file")
+done < <(find "$INPUT_FOLDER" -maxdepth 1 -type f ! -name "._*" \( -iname "*.mkv" -o -iname "*.avi" -o -iname "*.mov" -o -iname "*.mp4" -o -iname "*.m4v" -o -iname "*.wmv" -o -iname "*.flv" -o -iname "*.webm" \) -print0)
 
-    echo "Processing: $filename"
+# Process each video file in the folder
+for input_file in "${video_files[@]}"; do
+    # Get filename without extension and create output filename
+    filename=$(basename -- "$input_file")
+    name_without_ext="${filename%.*}"
+    output_file="$(dirname -- "$input_file")/${name_without_ext}_converted.mp4"
+
+    echo "⚙️  Processing: $filename"
+
+    # Check if file is already in target format
+    video_codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$input_file" 2>/dev/null)
+    audio_codec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$input_file" 2>/dev/null)
+    format_name=$(ffprobe -v error -show_entries format=format_name -of default=noprint_wrappers=1:nokey=1 "$input_file" 2>/dev/null)
+
+    if [ "$video_codec" = "hevc" ] && [ "$audio_codec" = "aac" ] && echo "$format_name" | grep -q "mp4"; then
+        echo "⏭️  Skipping (already in target format): $filename"
+        echo ""
+        continue
+    fi
 
     # Run ffmpeg conversion
-    if ffmpeg -i "$input_file" -c:v hevc_videotoolbox -pix_fmt p010le -c:a aac -b:a 384k -ac 6 -sn -map 0:v -map 0:a:0 -map 0:s:0 -movflags +faststart "$output_file" -y; then
+    if ffmpeg -i "$input_file" -c:v hevc_videotoolbox -pix_fmt p010le -c:a aac -b:a 384k -ac 6 -sn -map 0:v -map 0:a:0 -movflags +faststart "$output_file" -y; then
         # Check if output file was created and has reasonable size
         if [ -f "$output_file" ] && [ -s "$output_file" ]; then
             output_size=$(stat -f%z "$output_file" 2>/dev/null || echo "0")
@@ -65,6 +82,10 @@ find "$INPUT_FOLDER" -maxdepth 1 -type f \( -iname "*.mkv" -o -iname "*.avi" -o 
     echo ""
 done
 
-echo "Conversion complete!"
-echo "Successfully processed: $processed files"
-echo "Failed: $failed files"
+# Clean up MacOS system files
+echo "🧹 Cleaning up system files..."
+find "$INPUT_FOLDER" -maxdepth 1 -type f -name "._*" -delete
+
+echo "🎉 Conversion complete!"
+echo "✅ Successfully processed: $processed files"
+echo "❌ Failed: $failed files"
