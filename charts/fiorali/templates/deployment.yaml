@@ -173,6 +173,28 @@ spec:
           ports:
             - containerPort: 9187
               name: metrics
+          startupProbe:
+            httpGet:
+              path: /metrics
+              port: 9187
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 9187
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 9187
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 2
             {{- else }}
             {{- with .Values.sidecarContainers }}
               {{- toYaml .containers | nindent 8 }}
