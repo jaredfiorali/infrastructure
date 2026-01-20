@@ -157,7 +157,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.name }}-postgres-credentials
-                  key: host
+                  key: uri
             - name: PG_EXPORTER_METRIC_PREFIX
               valueFrom:
                 secretKeyRef:
