@@ -170,6 +170,12 @@ spec:
             requests:
               cpu: 150m
               memory: 64Mi
+          args:
+            - "--disable-default-metrics"
+            - "--collector.database"
+            - "--collector.stat_database"
+            - "--collector.stat_user_tables"
+            - "--collector.stat_statements"
           ports:
             - containerPort: 9187
               name: metrics
