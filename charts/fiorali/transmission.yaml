@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:7ffccac759f5c2f075ab09757b2da1db2c05a35989b5b0c27ae535928c09283f
+  tag: latest@sha256:bea1c86bd65e255589403d3df823e0b8e7525c7b6777801bbccdd4bb0c9fe379
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -222,14 +222,14 @@ containerSecurityContext:
   allowPrivilegeEscalation: true
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - CHOWN
-      - SETUID
-      - SETGID
+    - CHOWN
+    - SETUID
+    - SETGID
   seccompProfile:
     type: RuntimeDefault
-podSecurityContext: {}  # gluetun needs root access to make changes to network settings
+podSecurityContext: {} # gluetun needs root access to make changes to network settings
 imageUpdater:
   enabled: true
 configMap:
