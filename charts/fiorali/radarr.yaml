@@ -18,11 +18,8 @@ resources:
     cpu: 500m
     memory: 500Mi
 probes:
-  exec:
-    command:
-    - sh
-    - -c
-    - curl -f "http://localhost:7878/api/v3/health?apikey=$RADARR__AUTH__APIKEY" || exit 1
+  tcpSocket:
+    port: radarr
 service:
   enabled: true
   ports:

@@ -18,11 +18,8 @@ resources:
     cpu: 500m
     memory: 500Mi
 probes:
-  exec:
-    command:
-    - sh
-    - -c
-    - curl -f "http://localhost:8989/api/v3/health?apikey=$SONARR__AUTH__APIKEY" || exit 1
+  tcpSocket:
+    port: sonarr
 service:
   enabled: true
   ports:

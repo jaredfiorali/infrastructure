@@ -18,11 +18,8 @@ resources:
     cpu: 100m
     memory: 250Mi
 probes:
-  exec:
-    command:
-    - sh
-    - -c
-    - curl -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
+  tcpSocket:
+    port: prowlarr
 service:
   enabled: true
   ports:
