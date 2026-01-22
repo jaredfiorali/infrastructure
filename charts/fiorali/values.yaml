@@ -32,6 +32,9 @@ probes:
   tcpSocket: {}
   exec:
     command: []
+  startupProbe: {}
+  livenessProbe: {}
+  readinessProbe: {}
 startupProbe: {}
 livenessProbe: {}
 readinessProbe: {}
