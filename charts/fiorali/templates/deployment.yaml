@@ -51,6 +51,60 @@ spec:
           ports:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          startupProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- if .Values.probes.exec.command }}
+            exec:
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
+            {{- end }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold | default 15 }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.startupProbe.successThreshold | default 1 }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds | default 15 }}
+          livenessProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- if .Values.probes.exec.command }}
+            exec:
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
+            {{- end }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold | default 3 }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 30 }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold | default 1 }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds | default 5 }}
+          readinessProbe:
+            {{- with .Values.probes.httpGet }}
+            httpGet:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- with .Values.probes.tcpSocket }}
+            tcpSocket:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
+            {{- if .Values.probes.exec.command }}
+            exec:
+              command:
+                {{- .Values.probes.exec.command | toYaml | nindent 16 }}
+            {{- end }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 2 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 10 }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold | default 2 }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds | default 5 }}
           {{- with .Values.env }}
           env:
             {{- toYaml . | nindent 12 }}
@@ -77,6 +131,7 @@ spec:
           {{- if .Values.sidecarContainers.enabled }}
             {{- with .Values.sidecarContainers }}
               {{- toYaml .containers | nindent 8 }}
+            {{- end }}
             {{- end }}
           {{- end }}
       {{- if .Values.hostNetwork }}
