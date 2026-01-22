@@ -46,6 +46,8 @@ env:
     value: postgres
   - name: GF_DATABASE_NAME
     value: postgres
+  - name: GF_DATABASE_PORT
+    value: "6543"
   - name: GF_DATABASE_USER
     valueFrom:
       secretKeyRef:
@@ -57,10 +59,7 @@ env:
         name: grafana-postgres-credentials
         key: password
   - name: GF_DATABASE_HOST
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: host
+    value: aws-1-ca-central-1.pooler.supabase.com
   - name: GF_DATABASE_SSL_MODE
     value: require
 ingress:

@@ -55,7 +55,7 @@ env:
 - name: PROWLARR__UPDATE__MECHANISM
   value: "docker"
 - name: PROWLARR__POSTGRES__PORT
-  value: "5432"
+  value: "6543"
 - name: PROWLARR__POSTGRES__MAINDB
   value: "postgres"
 - name: PROWLARR__POSTGRES__LOGDB

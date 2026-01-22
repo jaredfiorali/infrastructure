@@ -55,7 +55,7 @@ env:
 - name: RADARR__UPDATE__MECHANISM
   value: "docker"
 - name: RADARR__POSTGRES__PORT
-  value: "5432"
+  value: "6543"
 - name: RADARR__POSTGRES__MAINDB
   value: "postgres"
 - name: RADARR__POSTGRES__LOGDB

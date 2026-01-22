@@ -63,7 +63,7 @@ env:
   - name: LD_DB_DATABASE
     value: postgres
   - name: LD_DB_PORT
-    value: "5432"
+    value: "6543"
 ingress:
   enabled: true
 volumeMounts:

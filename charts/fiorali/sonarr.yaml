@@ -55,7 +55,7 @@ env:
 - name: SONARR__UPDATE__MECHANISM
   value: "docker"
 - name: SONARR__POSTGRES__PORT
-  value: "5432"
+  value: "6543"
 - name: SONARR__POSTGRES__MAINDB
   value: "postgres"
 - name: SONARR__POSTGRES__LOGDB
