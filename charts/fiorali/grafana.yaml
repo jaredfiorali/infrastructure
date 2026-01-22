@@ -36,6 +36,12 @@ service:
       protocol: TCP
       targetPort: metrics
 env:
+  - name: GF_ALERTING_ENABLED
+    value: "false"
+  - name: GF_UNIFIED_ALERTING_ENABLED
+    value: "false"
+  - name: GF_AUTH_DISABLE_LOGIN_FORM
+    value: "false"
   - name: GF_DATABASE_TYPE
     value: postgres
   - name: GF_DATABASE_NAME
