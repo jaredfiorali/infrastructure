@@ -120,5 +120,5 @@ sidecarContainers:
 serviceMonitor:
   enabled: false
   appSelector: grafana
-  interval: 6h
+  interval: 30m
   port: "metrics"
