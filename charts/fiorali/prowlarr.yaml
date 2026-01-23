@@ -150,5 +150,4 @@ sidecarContainers:
 serviceMonitor:
   enabled: true
   appSelector: prowlarr
-  interval: "6h"
   port: "metrics"

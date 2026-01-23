@@ -195,5 +195,4 @@ sidecarContainers:
 serviceMonitor:
   enabled: true
   appSelector: sonarr
-  interval: "6h"
   port: "metrics"
