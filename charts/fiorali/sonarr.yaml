@@ -73,11 +73,20 @@ env:
 - name: SONARR__UPDATE__MECHANISM
   value: "docker"
 - name: SONARR__POSTGRES__PORT
-  value: "5432"
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-postgres-credentials
+      key: port
 - name: SONARR__POSTGRES__MAINDB
-  value: "postgres"
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-postgres-credentials
+      key: name
 - name: SONARR__POSTGRES__LOGDB
-  value: "postgres"
+  valueFrom:
+    secretKeyRef:
+      name: sonarr-postgres-credentials
+      key: name
 - name: SONARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:

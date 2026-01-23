@@ -59,11 +59,20 @@ env:
         name: linkding-postgres-credentials
         key: host
   - name: LD_DB_ENGINE
-    value: postgres
+    valueFrom:
+      secretKeyRef:
+        name: linkding-postgres-credentials
+        key: type
   - name: LD_DB_DATABASE
-    value: postgres
+    valueFrom:
+      secretKeyRef:
+        name: linkding-postgres-credentials
+        key: name
   - name: LD_DB_PORT
-    value: "6543"
+    valueFrom:
+      secretKeyRef:
+        name: linkding-postgres-credentials
+        key: port
 ingress:
   enabled: true
 volumeMounts:

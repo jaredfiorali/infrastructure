@@ -73,11 +73,20 @@ env:
 - name: PROWLARR__UPDATE__MECHANISM
   value: "docker"
 - name: PROWLARR__POSTGRES__PORT
-  value: "5432"
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-postgres-credentials
+      key: port
 - name: PROWLARR__POSTGRES__MAINDB
-  value: "postgres"
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-postgres-credentials
+      key: name
 - name: PROWLARR__POSTGRES__LOGDB
-  value: "postgres"
+  valueFrom:
+    secretKeyRef:
+      name: prowlarr-postgres-credentials
+      key: name
 - name: PROWLARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:

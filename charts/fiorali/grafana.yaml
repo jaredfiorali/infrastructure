@@ -51,11 +51,20 @@ env:
   - name: GF_DASHBOARDS_MIN_REFRESH_INTERVAL
     value: "10m"
   - name: GF_DATABASE_TYPE
-    value: postgres
+    valueFrom:
+      secretKeyRef:
+        name: grafana-postgres-credentials
+        key: type
   - name: GF_DATABASE_NAME
-    value: postgres
+    valueFrom:
+      secretKeyRef:
+        name: grafana-postgres-credentials
+        key: name
   - name: GF_DATABASE_PORT
-    value: "6543"
+    valueFrom:
+      secretKeyRef:
+        name: grafana-postgres-credentials
+        key: port
   - name: GF_DATABASE_USER
     valueFrom:
       secretKeyRef:
@@ -67,7 +76,10 @@ env:
         name: grafana-postgres-credentials
         key: password
   - name: GF_DATABASE_HOST
-    value: aws-1-ca-central-1.pooler.supabase.com
+    valueFrom:
+      secretKeyRef:
+        name: grafana-postgres-credentials
+        key: host
   - name: GF_DATABASE_SSL_MODE
     value: require
 ingress:
