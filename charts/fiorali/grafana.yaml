@@ -42,6 +42,14 @@ env:
     value: "false"
   - name: GF_AUTH_DISABLE_LOGIN_FORM
     value: "false"
+  - name: GF_PLUGINS_CHECK_FOR_UPDATES
+    value: "false"
+  - name: GF_PLUGIN_ADMIN_ENABLED
+    value: "false"
+  - name: GF_LIVE_ENABLED
+    value: "false"
+  - name: GF_DASHBOARDS_MIN_REFRESH_INTERVAL
+    value: "10m"
   - name: GF_DATABASE_TYPE
     value: postgres
   - name: GF_DATABASE_NAME
@@ -96,7 +104,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-serviceMonitor:
-  enabled: true
-  appSelector: grafana
-  port: "metrics"
