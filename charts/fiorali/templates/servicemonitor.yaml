@@ -17,4 +17,5 @@ spec:
     - port: {{ .Values.serviceMonitor.port }}
       path: {{ .Values.serviceMonitor.path | default "/metrics" }}
       interval: {{ .Values.serviceMonitor.interval | default "30s" }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout | default "30s" }}
 {{- end }}

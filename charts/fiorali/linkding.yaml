@@ -104,7 +104,10 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+sidecarContainers:
+  enabled: true
+  postgresExporter: true
 serviceMonitor:
   enabled: true
   appSelector: linkding
-  port: "metrics"
+  interval: "6h"
