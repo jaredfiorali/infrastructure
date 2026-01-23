@@ -48,8 +48,6 @@ env:
     value: "false"
   - name: GF_LIVE_ENABLED
     value: "false"
-  - name: GF_DASHBOARDS_MIN_REFRESH_INTERVAL
-    value: "10m"
   - name: GF_DATABASE_TYPE
     valueFrom:
       secretKeyRef:

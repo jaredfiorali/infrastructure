@@ -110,4 +110,5 @@ sidecarContainers:
 serviceMonitor:
   enabled: true
   appSelector: linkding
-  interval: "6h"
+  interval: "30s"
+  port: "metrics"
