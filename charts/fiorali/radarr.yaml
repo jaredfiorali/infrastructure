@@ -170,4 +170,5 @@ sidecarContainers:
 serviceMonitor:
   enabled: true
   appSelector: radarr
+  interval: 6h
   port: "metrics"

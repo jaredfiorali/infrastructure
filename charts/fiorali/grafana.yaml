@@ -114,3 +114,11 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+sidecarContainers:
+  enabled: false
+  postgresExporter: false
+serviceMonitor:
+  enabled: false
+  appSelector: grafana
+  interval: 6h
+  port: "metrics"
