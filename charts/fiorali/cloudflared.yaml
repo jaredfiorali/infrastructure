@@ -49,8 +49,6 @@ containerSecurityContext:
     - ALL
   readOnlyRootFilesystem: true
   privileged: false
-hostNetwork: true
-dnsPolicy: Default
 podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
