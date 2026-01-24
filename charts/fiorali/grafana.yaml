@@ -44,6 +44,16 @@ env:
     value: "false"
   - name: GF_LIVE_ENABLED
     value: "false"
+  - name: GF_PUBLIC_DASHBOARDS_ENABLED
+    value: "false"
+  - name: GF_ANALYTICS_REPORTING_ENABLED
+    value: "false"
+  - name: GF_ANALYTICS_CHECK_FOR_UPDATES
+    value: "false"
+  - name: GF_NEWS_NEWS_FEED_ENABLED
+    value: "false"
+  - name: GF_SNAPSHOTS_ENABLED
+    value: "false"
   - name: GF_DATABASE_TYPE
     valueFrom:
       secretKeyRef:
