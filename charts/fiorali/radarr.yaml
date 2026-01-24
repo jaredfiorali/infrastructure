@@ -45,10 +45,6 @@ service:
     port: 7878
     protocol: TCP
     targetPort: radarr
-  - name: metrics
-    port: 9187
-    protocol: TCP
-    targetPort: metrics
 env:
 - name: PUID
   value: "1000"
@@ -164,11 +160,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-sidecarContainers:
-  enabled: true
-  postgresExporter: true
-serviceMonitor:
-  enabled: true
-  appSelector: radarr
-  interval: 30m
-  port: "metrics"

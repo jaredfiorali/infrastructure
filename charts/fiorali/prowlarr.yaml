@@ -45,10 +45,6 @@ service:
     port: 9696
     protocol: TCP
     targetPort: prowlarr
-  - name: metrics
-    port: 9187
-    protocol: TCP
-    targetPort: metrics
 env:
 - name: PUID
   value: "1000"
@@ -144,11 +140,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-sidecarContainers:
-  enabled: true
-  postgresExporter: true
-serviceMonitor:
-  enabled: true
-  appSelector: prowlarr
-  interval: 30m
-  port: "metrics"

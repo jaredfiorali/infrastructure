@@ -45,10 +45,6 @@ service:
     port: 8989
     protocol: TCP
     targetPort: sonarr
-  - name: metrics
-    port: 9187
-    protocol: TCP
-    targetPort: metrics
 env:
 - name: PUID
   value: "1000"
@@ -189,11 +185,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-sidecarContainers:
-  enabled: true
-  postgresExporter: true
-serviceMonitor:
-  enabled: true
-  appSelector: sonarr
-  interval: 30m
-  port: "metrics"

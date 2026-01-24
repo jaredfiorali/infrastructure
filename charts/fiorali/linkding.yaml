@@ -28,10 +28,6 @@ service:
       port: 9090
       protocol: TCP
       targetPort: linkding
-    - name: metrics
-      port: 9187
-      protocol: TCP
-      targetPort: metrics
 env:
   - name: LD_SUPERUSER_NAME
     valueFrom:
@@ -104,11 +100,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-sidecarContainers:
-  enabled: true
-  postgresExporter: true
-serviceMonitor:
-  enabled: true
-  appSelector: linkding
-  interval: 30m
-  port: "metrics"

@@ -31,10 +31,6 @@ service:
       port: 3000
       protocol: TCP
       targetPort: grafana
-    - name: metrics
-      port: 9187
-      protocol: TCP
-      targetPort: metrics
 env:
   - name: GF_ALERTING_ENABLED
     value: "false"
@@ -114,11 +110,3 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
-sidecarContainers:
-  enabled: false
-  postgresExporter: false
-serviceMonitor:
-  enabled: false
-  appSelector: grafana
-  interval: 30m
-  port: "metrics"
