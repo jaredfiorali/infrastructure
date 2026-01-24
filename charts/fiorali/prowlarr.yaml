@@ -22,7 +22,7 @@ probes:
     command:
     - sh
     - -c
-    - curl -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
+    - curl -m 5 -f "http://localhost:9696/api/v1/health?apikey=$PROWLARR__AUTH__APIKEY" || exit 1
   startupProbe:
     failureThreshold: 15
     periodSeconds: 10
