@@ -5,11 +5,11 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/unpoller/unpoller
-  tag: latest@sha256:a08b532be181256318211b6170691e316d29ac04575bc54d59620189953f03aa
+  tag: latest@sha256:fe9186e8206b8b230a3eedd1b927541c77191cf0593a40abf22ce5e1d3c70ad2
 containerPorts:
-  - containerPort: 9130
-    name: poller
-    protocol: TCP
+- containerPort: 9130
+  name: poller
+  protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -23,29 +23,29 @@ probes:
 service:
   enabled: true
   ports:
-    - name: poller
-      port: 9130
-      protocol: TCP
-      targetPort: poller
+  - name: poller
+    port: 9130
+    protocol: TCP
+    targetPort: poller
 env:
-  - name: UP_UNIFI_DEFAULT_URL
-    value: "https://192.168.24.1"
-  - name: UP_UNIFI_DEFAULT_USER
-    value: "read-only"
-  - name: UP_UNIFI_DEFAULT_PASS
-    value: "t9X3DLokVGFl"
-  - name: UP_UNIFI_DEFAULT_SAVE_DPI
-    value: "true"
-  - name: UP_INFLUXDB_DISABLE
-    value: "true"
-  - name: UP_PROMETHEUS_DEAD_PORTS
-    value: "true"
-  - name: unifi-poller_PORT
-    value: "9130"
-  - name: unifi-poller_TOKEN_STORE
-    value: "/opt/unifi-poller/unifi-poller.store"
-  - name: UP_LOKI_DISABLE
-    value: "true"
+- name: UP_UNIFI_DEFAULT_URL
+  value: "https://192.168.24.1"
+- name: UP_UNIFI_DEFAULT_USER
+  value: "read-only"
+- name: UP_UNIFI_DEFAULT_PASS
+  value: "t9X3DLokVGFl"
+- name: UP_UNIFI_DEFAULT_SAVE_DPI
+  value: "true"
+- name: UP_INFLUXDB_DISABLE
+  value: "true"
+- name: UP_PROMETHEUS_DEAD_PORTS
+  value: "true"
+- name: unifi-poller_PORT
+  value: "9130"
+- name: unifi-poller_TOKEN_STORE
+  value: "/opt/unifi-poller/unifi-poller.store"
+- name: UP_LOKI_DISABLE
+  value: "true"
 networkpolicy:
   ingress:
     network: true
@@ -55,7 +55,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
