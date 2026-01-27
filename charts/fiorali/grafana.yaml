@@ -6,11 +6,11 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/grafana/grafana-oss
-  tag: latest@sha256:adaf2d6b44c7e2b711b931b98be153778d313806582a24eab21178804fac2976
+  tag: latest@sha256:7be8fa6d533d94b77e8c547cf56f648ab241fab4eb2b2b5a294c44d9cb545364
 containerPorts:
-  - containerPort: 3000
-    name: grafana
-    protocol: TCP
+- containerPort: 3000
+  name: grafana
+  protocol: TCP
 resources:
   limits:
     cpu: '1'
@@ -27,90 +27,90 @@ podLabels:
 service:
   enabled: true
   ports:
-    - name: grafana
-      port: 3000
-      protocol: TCP
-      targetPort: grafana
+  - name: grafana
+    port: 3000
+    protocol: TCP
+    targetPort: grafana
 env:
-  - name: GF_ALERTING_ENABLED
-    value: "false"
-  - name: GF_UNIFIED_ALERTING_ENABLED
-    value: "false"
-  - name: GF_AUTH_DISABLE_LOGIN_FORM
-    value: "false"
-  - name: GF_PLUGINS_CHECK_FOR_UPDATES
-    value: "false"
-  - name: GF_PLUGIN_ADMIN_ENABLED
-    value: "false"
-  - name: GF_LIVE_ENABLED
-    value: "false"
-  - name: GF_PUBLIC_DASHBOARDS_ENABLED
-    value: "false"
-  - name: GF_ANALYTICS_REPORTING_ENABLED
-    value: "false"
-  - name: GF_ANALYTICS_CHECK_FOR_UPDATES
-    value: "false"
-  - name: GF_NEWS_NEWS_FEED_ENABLED
-    value: "false"
-  - name: GF_SNAPSHOTS_ENABLED
-    value: "false"
-  - name: GF_DATABASE_TYPE
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: type
-  - name: GF_DATABASE_NAME
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: name
-  - name: GF_DATABASE_PORT
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: port
-  - name: GF_DATABASE_USER
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: username
-  - name: GF_DATABASE_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: password
-  - name: GF_DATABASE_HOST
-    valueFrom:
-      secretKeyRef:
-        name: grafana-postgres-credentials
-        key: host
-  - name: GF_DATABASE_SSL_MODE
-    value: require
+- name: GF_ALERTING_ENABLED
+  value: "false"
+- name: GF_UNIFIED_ALERTING_ENABLED
+  value: "false"
+- name: GF_AUTH_DISABLE_LOGIN_FORM
+  value: "false"
+- name: GF_PLUGINS_CHECK_FOR_UPDATES
+  value: "false"
+- name: GF_PLUGIN_ADMIN_ENABLED
+  value: "false"
+- name: GF_LIVE_ENABLED
+  value: "false"
+- name: GF_PUBLIC_DASHBOARDS_ENABLED
+  value: "false"
+- name: GF_ANALYTICS_REPORTING_ENABLED
+  value: "false"
+- name: GF_ANALYTICS_CHECK_FOR_UPDATES
+  value: "false"
+- name: GF_NEWS_NEWS_FEED_ENABLED
+  value: "false"
+- name: GF_SNAPSHOTS_ENABLED
+  value: "false"
+- name: GF_DATABASE_TYPE
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: type
+- name: GF_DATABASE_NAME
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: name
+- name: GF_DATABASE_PORT
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: port
+- name: GF_DATABASE_USER
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: username
+- name: GF_DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: password
+- name: GF_DATABASE_HOST
+  valueFrom:
+    secretKeyRef:
+      name: grafana-postgres-credentials
+      key: host
+- name: GF_DATABASE_SSL_MODE
+  value: require
 ingress:
   enabled: true
 volumeMounts:
-  - name: grafana-storage
-    mountPath: /var/lib/grafana
-  - name: tmp
-    mountPath: /tmp
+- name: grafana-storage
+  mountPath: /var/lib/grafana
+- name: tmp
+  mountPath: /tmp
 volumes:
-  - name: grafana-storage
-    emptyDir: {}
-  - name: tmp
-    emptyDir: {}
+- name: grafana-storage
+  emptyDir: {}
+- name: tmp
+  emptyDir: {}
 networkpolicy:
   ingress:
     internal: true
   egress:
     internet: true
     namespaces:
-      - monitoring
-      - loki
+    - monitoring
+    - loki
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
