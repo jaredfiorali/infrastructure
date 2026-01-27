@@ -71,17 +71,17 @@ env:
 - name: RADARR__POSTGRES__PORT
   valueFrom:
     secretKeyRef:
-      name: prowlarr-postgres-credentials
+      name: radarr-postgres-credentials
       key: port
 - name: RADARR__POSTGRES__MAINDB
   valueFrom:
     secretKeyRef:
-      name: prowlarr-postgres-credentials
+      name: radarr-postgres-credentials
       key: name
 - name: RADARR__POSTGRES__LOGDB
   valueFrom:
     secretKeyRef:
-      name: prowlarr-postgres-credentials
+      name: radarr-postgres-credentials
       key: name
 - name: RADARR__POSTGRES__USER
   valueFrom:
