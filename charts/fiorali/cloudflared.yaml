@@ -11,7 +11,7 @@ daemonSet:
 terminationGracePeriodSeconds: 5
 image:
   repository: docker.io/cloudflare/cloudflared
-  tag: latest@sha256:5bb6a0870686742d00e171f36c892ba91e5994631bc363d808b9ba822262dad6
+  tag: latest@sha256:e9bcb2ef08d25632ff74344e73a025f4f4bf12718335b196fa0e670cacace8c5
 containerPorts:
 - containerPort: 53
   name: dns-tcp
