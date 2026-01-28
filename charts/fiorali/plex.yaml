@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/plexinc/pms-docker
-  tag: latest@sha256:2b37d04b119b10813b309d27546d1da79a2adde011a3236b36af30ddc09f5b7d
+  tag: latest@sha256:d38767ec3b948e860bcf1abfe16512bd638e6ac01230f5b65b64e2ef09052267
 containerPorts:
 - containerPort: 32400
   name: plex
