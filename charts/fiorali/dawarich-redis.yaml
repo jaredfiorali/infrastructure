@@ -30,13 +30,11 @@ service:
     protocol: TCP
     targetPort: redis
 volumeMounts:
-- name: dawarich-persistent-storage
+- name: shared
   mountPath: /data
-  subPath: shared
 volumes:
-- name: dawarich-persistent-storage
-  persistentVolumeClaim:
-    claimName: dawarich
+- name: shared
+  emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}

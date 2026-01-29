@@ -2,9 +2,10 @@ name: dawarich-app
 namespace: dawarich
 deployment:
   enabled: true
+replicaCount: 1
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:c302b2bec65d8523a4b450b859d89ff348170551317254f9fdbbe22005f38d27
+  tag: latest@sha256:ce2a337a1c2d521cf7d5265abe5abb1f9a645322e7184b6a20fd8ff59943a9e1
 containerPorts:
   - containerPort: 3000
     name: dawarich
@@ -12,14 +13,29 @@ containerPorts:
 resources:
   limits:
     cpu: 1
-    memory: 3G
+    memory: 2G
   requests:
     cpu: 250m
-    memory: 2G
+    memory: 1G
 probes:
   httpGet:
     path: /api/v1/health
     port: dawarich
+  startupProbe:
+    failureThreshold: 15
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  livenessProbe:
+    failureThreshold: 1
+    periodSeconds: 120
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    failureThreshold: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 5
 containerSecurityContext:
   enabled: false
 service:
@@ -37,26 +53,24 @@ volumeMounts:
     mountPath: /var/app/public
   - name: watched
     mountPath: /var/app/tmp/imports/watched
-  - name: dawarich-persistent-storage
+  - name: storage
     mountPath: /var/app/storage
-    subPath: storage
-  - name: tmp
-    mountPath: /tmp
   - name: app-tmp
     mountPath: /var/app/tmp
+  - name: tmp
+    mountPath: /tmp
   - name: run
     mountPath: /run
 volumes:
-  - name: dawarich-persistent-storage
-    persistentVolumeClaim:
-      claimName: dawarich
   - name: public
     emptyDir: {}
   - name: watched
     emptyDir: {}
-  - name: tmp
+  - name: storage
     emptyDir: {}
   - name: app-tmp
+    emptyDir: {}
+  - name: tmp
     emptyDir: {}
   - name: run
     emptyDir: {}
@@ -67,28 +81,50 @@ env:
     value: 'redis://dawarich-redis:6379'
   - name: RAILS_LOG_LEVEL
     value: info
-  - name: DATABASE_HOST
-    value: dawarich-db
   - name: DATABASE_USERNAME
-    value: postgres
-  - name: DATABASE_NAME
-    value: dawarich_development
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: username
   - name: DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: dawarich-credentials
-        key: DATABASE_PASSWORD
+        name: dawarich-postgres-credentials
+        key: password
+  - name: DATABASE_HOST
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: host
+  - name: DATABASE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: name
+  - name: DATABASE_PORT
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: port
+
+  - name: QUEUE_DATABASE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: password
   - name: QUEUE_DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: dawarich-credentials
-        key: QUEUE_DATABASE_PASSWORD
-  - name: QUEUE_DATABASE_NAME
-    value: dawarich_development_queue
-  - name: QUEUE_DATABASE_USERNAME
-    value: postgres
+        name: dawarich-postgres-credentials
+        key: password
   - name: QUEUE_DATABASE_HOST
-    value: dawarich-db
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: host
+  - name: QUEUE_DATABASE_NAME
+    value: postgres
+
   - name: MIN_MINUTES_SPENT_IN_CITY
     value: '60'
   - name: APPLICATION_HOSTS
@@ -104,11 +140,11 @@ env:
   - name: RAILS_LOG_TO_STDOUT
     value: 'true'
   - name: PROMETHEUS_EXPORTER_ENABLED
-    value: 'true'
-  - name: PROMETHEUS_EXPORTER_HOST
-    value: 'localhost'
-  - name: PROMETHEUS_EXPORTER_PORT
-    value: '9394'
+    value: 'false'
+  # - name: PROMETHEUS_EXPORTER_HOST
+  #   value: 'localhost'
+  # - name: PROMETHEUS_EXPORTER_PORT
+  #   value: '9394'
   - name: ENABLE_TELEMETRY
     value: 'false'
   - name: SELF_HOSTED
@@ -126,6 +162,8 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+  egress:
+    internet: true
 volume:
   enabled: true
   accessMode: rwx

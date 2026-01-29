@@ -2,6 +2,7 @@ name: dawarich-db
 namespace: dawarich
 deployment:
   enabled: true
+replicaCount: 0
 image:
   repository: ghcr.io/baosystems/postgis
   tag: 17@sha256:4fcaa1d113a26c3a055ae2cd2dd08f2d72f8094f9b68b61f34e83685ff12661b
