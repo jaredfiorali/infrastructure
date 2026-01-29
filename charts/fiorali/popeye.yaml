@@ -182,12 +182,10 @@ configMap:
                 - labels:
                     app: [git-sync, kometa]
                   codes: [400] # => Secret not assigned
-                - fqns: [^rx:additional-scrape-configs]
-                  codes: [400] # => Secret not assigned
             services:
               instances:
                 - labels:
-                    name: [cloudflared, plex]
+                    app: [cloudflared, plex]
                   codes: [1103, 1107] # Load balancer services
             serviceaccounts:
               instances:
@@ -210,7 +208,7 @@ configMap:
                     app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [git-sync, kometa, linkding, cloudflared, grafana, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
+                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, grafana, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
                   codes: [1207] # => Can't match 192.168.0.0/16 (egress)
             # Configure the pods linter for v1/pods.
             pods:
