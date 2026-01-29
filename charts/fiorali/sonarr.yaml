@@ -2,6 +2,7 @@ name: sonarr
 namespace: downloader
 deployment:
   enabled: true
+replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/sonarr

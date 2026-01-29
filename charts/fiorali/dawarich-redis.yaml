@@ -2,6 +2,7 @@ name: dawarich-redis
 namespace: dawarich
 deployment:
   enabled: true
+replicaCount: 1
 image:
   repository: docker.io/redis
   tag: latest@sha256:73dad4271642c5966db88db7a7585fae7cf10b685d1e48006f31e0294c29fdd7
