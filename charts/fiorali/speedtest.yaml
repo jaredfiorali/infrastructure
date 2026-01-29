@@ -2,6 +2,7 @@ name: speedtest
 namespace: speedtest
 deployment:
   enabled: true
+replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/openspeedtest/latest

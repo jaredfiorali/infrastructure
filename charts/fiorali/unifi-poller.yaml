@@ -2,6 +2,7 @@ name: unifi-poller
 namespace: monitoring
 deployment:
   enabled: true
+replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/unpoller/unpoller
