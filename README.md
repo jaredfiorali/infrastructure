@@ -18,6 +18,8 @@ This is my attempt to formalize and document my homelab, partly for myself, and 
 
 It's basically a mono repo for my home infrastructure and Kubernetes cluster. My aim is to follow Infrastructure as Code (IaC) principals and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable), [Kubernetes](https://kubernetes.io), and [GitHub Actions](https://github.com/features/actions).
 
+<a href="https://www.buymeacoffee.com/jaredfiorali" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Kubernetes
 
 The Kubernetes cluster is running across 10 Raspberry Pi's, where 5 of the nodes are Raspberry Pi 4's (worker nodes), and the other 5 are Raspberry Pi 5's (master nodes). Node names are denoted with a numeric suffix, depending on their physical placement in the server room.
