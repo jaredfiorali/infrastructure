@@ -90,7 +90,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | Application                                                    | Importance | Purpose                                                          |
 |----------------------------------------------------------------|------------|------------------------------------------------------------------|
 | [cloudflared](https://github.com/cloudflare/cloudflared)       | 🟢         | Network DNS provider for 'Secure Devices' VLAN                   |
-| [dawarich-app/dawarich-db](https://github.com/Freika/dawarich) | 🔴         | Stores ingested location data (from HA) and displays it on a map |
+| [dawarich-app](https://github.com/Freika/dawarich) | 🔴         | Stores ingested location data (from HA) and displays it on a map |
 | [emulatorjs](https://emulatorjs.org)                           | 🔴         | Console emulator written in JS                                   |
 | [influxdb](https://www.influxdata.com/products/influxdb)       | 🟢         | Stores data for the "reflection" app                             |
 | [linkding](https://github.com/sissbruecker/linkding)           | 🔴         | Bookmark manager                                                 |
@@ -134,7 +134,7 @@ graph LR
     end
 
     subgraph "Home & Personal"
-        T[dawarich<br>#91;app/sidekiq/db/redis#93;]:::orange
+        T[dawarich<br>#91;app/sidekiq/redis#93;]:::orange
         S[home-assistant]:::green
         R[scrypted]:::green
         V[linkding]:::orange
@@ -153,6 +153,7 @@ graph LR
     C -.-> Y
     D -.-> Y
     V -.-> Y
+    T -.-> Y
 
     %% Monitoring flow
     Z --> N
@@ -173,7 +174,6 @@ graph LR
     %% Storage dependencies
     A --> H
     E --> H
-    T --> H
     S --> H
     M --> H
     R --> H
