@@ -86,6 +86,10 @@ env:
   value: development
 - name: REDIS_URL
   value: 'redis://dawarich-redis:6379'
+- name: RAILS_MAX_THREADS
+  value: '2'
+- name: BACKGROUND_PROCESSING_CONCURRENCY
+  value: '2'
 - name: DATABASE_USERNAME
   valueFrom:
     secretKeyRef:
@@ -111,22 +115,12 @@ env:
     secretKeyRef:
       name: dawarich-postgres-credentials
       key: port
-- name: MIN_MINUTES_SPENT_IN_CITY
-  value: '60'
 - name: APPLICATION_HOSTS
   value: dawarich.fiora.li
 - name: TIME_ZONE
   value: America/Toronto
 - name: APPLICATION_PROTOCOL
   value: http
-- name: DISTANCE_UNIT
-  value: km
-- name: PROMETHEUS_EXPORTER_ENABLED
-  value: 'false'
-- name: PROMETHEUS_EXPORTER_HOST
-  value: '0.0.0.0'
-- name: PROMETHEUS_EXPORTER_PORT
-  value: '9394'
 - name: ENABLE_TELEMETRY
   value: 'false'
 - name: SELF_HOSTED
@@ -138,5 +132,7 @@ networkpolicy:
   podSelector: true
   ingress:
     allowAll: true
+  egress:
+    internet: true
 imageUpdater:
   enabled: true
