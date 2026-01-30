@@ -208,7 +208,7 @@ configMap:
                     app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, grafana, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
+                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
                   codes: [1207] # => Can't match 192.168.0.0/16 (egress)
             # Configure the pods linter for v1/pods.
             pods:
