@@ -42,32 +42,25 @@ ingress:
 volumeMounts:
   - name: tautulli-persistent-storage
     mountPath: /config
-  - name: temporary-config-logs
+  - name: tmp
     mountPath: /config/logs
     subPath: logs
-  - name: temporary-config-backups
+  - name: tmp
     mountPath: /config/backups
     subPath: backups
-  - name: temporary-config-cache
+  - name: tmp
     mountPath: /config/cache
     subPath: cache
-  - name: temporary-config-exports
+  - name: tmp
     mountPath: /config/exports
     subPath: exports
   - name: tmp
     mountPath: /tmp
+    subPath: tmp
 volumes:
   - name: tautulli-persistent-storage
     persistentVolumeClaim:
       claimName: tautulli
-  - name: temporary-config-logs
-    emptyDir: {}
-  - name: temporary-config-backups
-    emptyDir: {}
-  - name: temporary-config-cache
-    emptyDir: {}
-  - name: temporary-config-exports
-    emptyDir: {}
   - name: tmp
     emptyDir: {}
 nodeSelector: {}
