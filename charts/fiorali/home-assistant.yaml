@@ -94,6 +94,12 @@ networkpolicy:
     internal: true
   egress:
     allowAll: true
+serviceMonitor:
+  enabled: true
+  appSelector: home-assistant
+  port: "home-assistant"
+  path: /api/prometheus
+  interval: 60s
 configMap:
   enabled: true
   value: |
@@ -106,6 +112,9 @@ configMap:
       automation: !include automations.yaml
       script: !include scripts.yaml
       scene: !include scenes.yaml
+      zeroconf:
+      prometheus:
+        requires_auth: false
       http:
         use_x_forwarded_for: true
         trusted_proxies:
