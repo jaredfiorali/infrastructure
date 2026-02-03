@@ -5,7 +5,7 @@ deployment:
 replicaCount: 1
 image:
   repository: docker.io/redis
-  tag: latest@sha256:8eaac6251dbeda146f5f55df83a8147beab30329c7042636cfcb1c5e80070fcf
+  tag: latest@sha256:e59abdb114af4c9106fc16d4c2e9d9ad408db8c7db333ae05055949a5f3df41e
 containerPorts:
 - containerPort: 6379
   name: redis
