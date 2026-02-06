@@ -61,7 +61,7 @@ initContainers:
   enabled: true
   containers:
     - name: kometa-init
-      image: docker.io/alpine/curl:latest@sha256:bd3d6bf85a478818cb858cce42c87fcecbac141249f10814be96309e4abeb807
+      image: docker.io/alpine/curl:latest
       securityContext:
         allowPrivilegeEscalation: false
         capabilities:

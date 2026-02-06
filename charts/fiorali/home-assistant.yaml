@@ -26,6 +26,54 @@ probes:
   httpGet:
     path: /
     port: home-assistant
+initContainers:
+  enabled: true
+  containers:
+    - name: home-assistant-init
+      image: docker.io/alpine/curl:latest
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+        runAsUser: 911
+      resources:
+        limits:
+          cpu: 25m
+          memory: 25Mi
+        requests:
+          cpu: 10m
+          memory: 10Mi
+      env:
+        - name: INFLUXDB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: home-assistant-credentials
+              key: INFLUXDB_TOKEN
+      command:
+        - sh
+        - -c
+        - |
+          cd /tmp
+          curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
+          chmod +x envsubst
+          # Process all config files with environment variable substitution
+          ./envsubst < /tmp/configuration.yaml > /config/configuration.yaml
+          echo "Config files processed successfully"
+          echo "Processed files:"
+          ls -la /config/configuration.yaml
+      volumeMounts:
+        - name: home-assistant-configmap
+          mountPath: /tmp/configuration.yaml
+          subPath: configuration.yaml
+          readOnly: true
+        - name: home-assistant-persistent-storage
+          mountPath: /config
+        - name: tmp
+          mountPath: /tmp
+          subPath: tmp
 service:
   enabled: true
   ports:
@@ -72,12 +120,9 @@ hostNetwork: true
 volumeMounts:
 - name: home-assistant-persistent-storage
   mountPath: /config
-- name: home-assistant-configmap
-  mountPath: /config/configuration.yaml
-  subPath: configuration.yaml
-  readOnly: true
-- name: run
+- name: tmp
   mountPath: /run
+  subPath: run
 volumes:
 - name: home-assistant-persistent-storage
   persistentVolumeClaim:
@@ -86,7 +131,7 @@ volumes:
   configMap:
     name: home-assistant-configmap
     defaultMode: 511
-- name: run
+- name: tmp
   emptyDir: {}
 dnsPolicy: ClusterFirstWithHostNet
 networkpolicy:
@@ -119,6 +164,15 @@ configMap:
         use_x_forwarded_for: true
         trusted_proxies:
           - 0.0.0.0/0
+      influxdb:
+        api_version: 2
+        ssl: false
+        host: influxdb.fiora.li
+        port: 80
+        token: ${INFLUXDB_TOKEN}
+        organization: fiorali
+        bucket: home_assistant
+        measurement_attr: entity_id
       alarm_control_panel:
         - platform: manual
           name: Security System

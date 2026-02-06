@@ -225,6 +225,12 @@ configMap:
                 - labels:
                     app: [radarr, sonarr, prowlarr, transmission] # Exclude codes for any pods with specified labels
                   codes: [110] # => Memory Current/Request threshold
+                - containers: [kometa-init, home-assistant-init]
+                  codes: [101] # => Image tagged 'latest' in use
+            deployments:
+              instances:
+                - containers: [kometa-init, home-assistant-init]
+                  codes: [101] # => Image tagged 'latest' in use
         resources:
           # Configure node resources.
           node:
