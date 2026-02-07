@@ -177,6 +177,8 @@ configMap:
                 - labels:
                     app: [popeye, git-sync, kometa]
                   codes: [1501] # => Cronjob not ready
+                - containers: [home-assistant-init]
+                  codes: [101] # => Image tagged 'latest' in use
             secrets:
               instances:
                 - labels:
@@ -229,7 +231,7 @@ configMap:
                   codes: [101] # => Image tagged 'latest' in use
             deployments:
               instances:
-                - containers: [kometa-init, home-assistant-init]
+                - containers: [home-assistant-init]
                   codes: [101] # => Image tagged 'latest' in use
         resources:
           # Configure node resources.
