@@ -2,7 +2,7 @@ name: kometa
 namespace: downloader
 image:
   repository: docker.io/kometateam/kometa
-  tag: latest@sha256:7c646da49169eacc3a1e5462af86de2b4176b7a68673cf7996709f431c5fdc7d
+  tag: latest@sha256:46fc4bdd6f64dbd92655c6495d9f9d1a745845bd60fa13a7283755db48de8bc0
 deployment:
   enabled: false
 resources:
@@ -22,30 +22,30 @@ cronjob:
   enabled: true
   schedule: "35 2 * * *"
 volumeMounts:
-  - name: config
-    mountPath: /config
-  - name: kometa-configmap
-    mountPath: /config/movies.yml
-    subPath: movies.yml
-    readOnly: true
-  - name: kometa-configmap
-    mountPath: /config/tv.yml
-    subPath: tv.yml
-    readOnly: true
+- name: config
+  mountPath: /config
+- name: kometa-configmap
+  mountPath: /config/movies.yml
+  subPath: movies.yml
+  readOnly: true
+- name: kometa-configmap
+  mountPath: /config/tv.yml
+  subPath: tv.yml
+  readOnly: true
 volumes:
-  - name: config
-    emptyDir: {}
-  - name: tmp
-    emptyDir: {}
-  - name: kometa-configmap
-    configMap:
-      name: kometa-configmap
-      defaultMode: 511
+- name: config
+  emptyDir: {}
+- name: tmp
+  emptyDir: {}
+- name: kometa-configmap
+  configMap:
+    name: kometa-configmap
+    defaultMode: 511
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
@@ -60,69 +60,69 @@ networkpolicy:
 initContainers:
   enabled: true
   containers:
-    - name: kometa-init
-      image: docker.io/alpine/curl:latest
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        privileged: false
-        readOnlyRootFilesystem: true
-        runAsUser: 911
-      resources:
-        limits:
-          cpu: 25m
-          memory: 25Mi
-        requests:
-          cpu: 10m
-          memory: 10Mi
-      env:
-        - name: PLEX_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: kometa-api-credentials
-              key: PLEX_TOKEN
-        - name: TMDB_APIKEY
-          valueFrom:
-            secretKeyRef:
-              name: kometa-api-credentials
-              key: TMDB_APIKEY
-        - name: TAUTULLI_APIKEY
-          valueFrom:
-            secretKeyRef:
-              name: kometa-api-credentials
-              key: TAUTULLI_APIKEY
-        - name: RADARR_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: kometa-api-credentials
-              key: RADARR_TOKEN
-        - name: SONARR_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: kometa-api-credentials
-              key: SONARR_TOKEN
-      command:
-        - sh
-        - -c
-        - |
-          cd /tmp
-          curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
-          chmod +x envsubst
-          # Process all config files with environment variable substitution
-          ./envsubst < /tmp/config.yml > /config/config.yml
-          echo "Config files processed successfully"
-          echo "Processed files:"
-          ls -la /config/
-      volumeMounts:
-        - name: kometa-configmap
-          mountPath: /tmp/config.yml
-          subPath: config.yml
-        - name: config
-          mountPath: /config
-        - name: tmp
-          mountPath: /tmp
+  - name: kometa-init
+    image: docker.io/alpine/curl:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 911
+    resources:
+      limits:
+        cpu: 25m
+        memory: 25Mi
+      requests:
+        cpu: 10m
+        memory: 10Mi
+    env:
+    - name: PLEX_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: PLEX_TOKEN
+    - name: TMDB_APIKEY
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: TMDB_APIKEY
+    - name: TAUTULLI_APIKEY
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: TAUTULLI_APIKEY
+    - name: RADARR_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: RADARR_TOKEN
+    - name: SONARR_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: SONARR_TOKEN
+    command:
+    - sh
+    - -c
+    - |
+      cd /tmp
+      curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
+      chmod +x envsubst
+      # Process all config files with environment variable substitution
+      ./envsubst < /tmp/config.yml > /config/config.yml
+      echo "Config files processed successfully"
+      echo "Processed files:"
+      ls -la /config/
+    volumeMounts:
+    - name: kometa-configmap
+      mountPath: /tmp/config.yml
+      subPath: config.yml
+    - name: config
+      mountPath: /config
+    - name: tmp
+      mountPath: /tmp
 imageUpdater:
   enabled: true
 configMap:
