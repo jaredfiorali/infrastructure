@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  my-settings.override: |
+    rewrite name exact _grpc_config.localhost localhost
+
+    # Forward all other queries to the internal DNS server
+    forward . 192.168.20.21 {
+      prefer_udp
+      max_fails 3
+      expire 10s
+    }
