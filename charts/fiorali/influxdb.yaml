@@ -56,3 +56,4 @@ volume:
   size: "524288000"
 imageUpdater:
   enabled: true
+  rootImageTag: "alpine"

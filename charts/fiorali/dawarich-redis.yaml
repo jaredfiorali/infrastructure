@@ -56,3 +56,4 @@ podSecurityContext:
   runAsUser: 999
 imageUpdater:
   enabled: true
+  rootImageTag: "alpine"
