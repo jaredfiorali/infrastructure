@@ -4,11 +4,11 @@ deployment:
   enabled: true
 image:
   repository: docker.io/tautulli/tautulli
-  tag: latest@sha256:5fc33cf56fce13db1a73f91f7b1214950f9b96f72b69ae704e492e88b049c717
+  tag: latest@sha256:746b2accd580c8551bff3570eab9c6606bbefe9b33567feace2a3c3c9863a1d1
 containerPorts:
-  - containerPort: 8181
-    name: tautulli
-    protocol: TCP
+- containerPort: 8181
+  name: tautulli
+  protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -23,46 +23,46 @@ probes:
 service:
   enabled: true
   ports:
-    - name: tautulli
-      port: 8181
-      protocol: TCP
-      targetPort: tautulli
+  - name: tautulli
+    port: 8181
+    protocol: TCP
+    targetPort: tautulli
 command:
   enabled: true
   exec: ["/usr/bin/env", "bash", "-c", "python Tautulli.py --datadir /config"]
 env:
-  - name: PUID
-    value: "1000"
-  - name: PGID
-    value: "1000"
-  - name: TZ
-    value: "America/Toronto"
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
 ingress:
   enabled: true
 volumeMounts:
-  - name: tautulli-persistent-storage
-    mountPath: /config
-  - name: tmp
-    mountPath: /config/logs
-    subPath: logs
-  - name: tmp
-    mountPath: /config/backups
-    subPath: backups
-  - name: tmp
-    mountPath: /config/cache
-    subPath: cache
-  - name: tmp
-    mountPath: /config/exports
-    subPath: exports
-  - name: tmp
-    mountPath: /tmp
-    subPath: tmp
+- name: tautulli-persistent-storage
+  mountPath: /config
+- name: tmp
+  mountPath: /config/logs
+  subPath: logs
+- name: tmp
+  mountPath: /config/backups
+  subPath: backups
+- name: tmp
+  mountPath: /config/cache
+  subPath: cache
+- name: tmp
+  mountPath: /config/exports
+  subPath: exports
+- name: tmp
+  mountPath: /tmp
+  subPath: tmp
 volumes:
-  - name: tautulli-persistent-storage
-    persistentVolumeClaim:
-      claimName: tautulli
-  - name: tmp
-    emptyDir: {}
+- name: tautulli-persistent-storage
+  persistentVolumeClaim:
+    claimName: tautulli
+- name: tmp
+  emptyDir: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -72,12 +72,12 @@ networkpolicy:
   egress:
     internet: true
     namespaces:
-      - downloader
+    - downloader
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
