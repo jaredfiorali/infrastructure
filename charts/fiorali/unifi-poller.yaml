@@ -34,7 +34,10 @@ env:
 - name: UP_UNIFI_DEFAULT_USER
   value: "read-only"
 - name: UP_UNIFI_DEFAULT_PASS
-  value: "t9X3DLokVGFl"
+  valueFrom:
+    secretKeyRef:
+      name: unifi-credentials
+      key: UP_UNIFI_DEFAULT_PASS
 - name: UP_UNIFI_DEFAULT_SAVE_DPI
   value: "true"
 - name: UP_INFLUXDB_DISABLE
@@ -66,3 +69,9 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: unifi-credentials
+    data:
+      - secretKey: UP_UNIFI_DEFAULT_PASS
+        remoteRef:
+          key: /homelab/unifi-poller/UP_UNIFI_DEFAULT_PASS

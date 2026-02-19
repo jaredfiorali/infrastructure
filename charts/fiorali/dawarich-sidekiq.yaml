@@ -94,27 +94,27 @@ env:
   valueFrom:
     secretKeyRef:
       name: dawarich-postgres-credentials
-      key: username
+      key: DB_USERNAME
 - name: DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: dawarich-postgres-credentials
-      key: password
+      key: DB_PASSWORD
 - name: DATABASE_HOST
   valueFrom:
     secretKeyRef:
       name: dawarich-postgres-credentials
-      key: host
+      key: DB_HOST
 - name: DATABASE_NAME
   valueFrom:
     secretKeyRef:
       name: dawarich-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: DATABASE_PORT
   valueFrom:
     secretKeyRef:
       name: dawarich-postgres-credentials
-      key: port
+      key: DB_PORT
 - name: APPLICATION_HOSTS
   value: dawarich.fiora.li
 - name: TIME_ZONE

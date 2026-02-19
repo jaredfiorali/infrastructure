@@ -134,13 +134,13 @@ networkpolicy:
   enabled: true
   podSelector: true
   ingress:
-    allowAll: false  # Temporary until I flesh out the ingress network policy
+    allowAll: false
     namespaces: []
     internal: false
     network: false
     internet: false
   egress:
-    allowAll: false  # Temporary until I flesh out the ingress network policy
+    allowAll: false
     namespaces: []
     internal: false
     network: false
@@ -158,7 +158,7 @@ serviceAccount:
 
 podDisruptionBudget:
   enabled: true
-  minAvailable: 1
+  minAvailable: 0
   maxUnavailable: 1
 
 cronjob:
@@ -219,3 +219,5 @@ bgpAdvertisement:
 sidecarContainers:
   enabled: false
   containers: []
+
+externalSecrets: []

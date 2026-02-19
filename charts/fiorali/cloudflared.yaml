@@ -82,3 +82,9 @@ networkpolicy:
     internet: true
 imageUpdater:
   enabled: false
+externalSecrets:
+  - name: cloudflared-dns
+    data:
+      - secretKey: UPSTREAM_DNS
+        remoteRef:
+          key: /homelab/cloudflared/UPSTREAM_DNS

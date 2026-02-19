@@ -34,42 +34,42 @@ env:
     valueFrom:
       secretKeyRef:
         name: linkding-credentials
-        key: username
+        key: SUPERUSER_USERNAME
   - name: LD_SUPERUSER_PASSWORD
     valueFrom:
       secretKeyRef:
         name: linkding-credentials
-        key: password
+        key: SUPERUSER_PASSWORD
   - name: LD_DB_USER
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: username
+        key: DB_USERNAME
   - name: LD_DB_PASSWORD
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: password
+        key: DB_PASSWORD
   - name: LD_DB_HOST
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: host
+        key: DB_HOST
   - name: LD_DB_ENGINE
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: type
+        key: DB_TYPE
   - name: LD_DB_DATABASE
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: name
+        key: DB_NAME
   - name: LD_DB_PORT
     valueFrom:
       secretKeyRef:
         name: linkding-postgres-credentials
-        key: port
+        key: DB_PORT
 ingress:
   enabled: true
 volumeMounts:
@@ -101,3 +101,32 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: linkding-credentials
+    data:
+      - secretKey: SUPERUSER_USERNAME
+        remoteRef:
+          key: /homelab/linkding/SUPERUSER_USERNAME
+      - secretKey: SUPERUSER_PASSWORD
+        remoteRef:
+          key: /homelab/linkding/SUPERUSER_PASSWORD
+  - name: linkding-postgres-credentials
+    data:
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/linkding/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/linkding/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/linkding/DB_HOST
+      - secretKey: DB_TYPE
+        remoteRef:
+          key: /homelab/linkding/DB_TYPE
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/linkding/DB_NAME
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/linkding/DB_PORT

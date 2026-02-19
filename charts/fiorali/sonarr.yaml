@@ -72,37 +72,37 @@ env:
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: port
+      key: DB_PORT
 - name: SONARR__POSTGRES__MAINDB
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: SONARR__POSTGRES__LOGDB
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: SONARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: username
+      key: DB_USERNAME
 - name: SONARR__POSTGRES__PASSWORD
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: password
+      key: DB_PASSWORD
 - name: SONARR__POSTGRES__HOST
   valueFrom:
     secretKeyRef:
       name: sonarr-postgres-credentials
-      key: host
+      key: DB_HOST
 - name: SONARR__AUTH__APIKEY
   valueFrom:
     secretKeyRef:
       name: sonarr-credentials
-      key: auth-apikey
+      key: AUTH_APIKEY
 ingress:
   enabled: true
 volumeMounts:
@@ -185,3 +185,26 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: sonarr-postgres-credentials
+    data:
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/sonarr/DB_PORT
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/sonarr/DB_NAME
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/sonarr/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/sonarr/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/sonarr/DB_HOST
+  - name: sonarr-credentials
+    data:
+      - secretKey: AUTH_APIKEY
+        remoteRef:
+          key: /homelab/sonarr/AUTH_APIKEY

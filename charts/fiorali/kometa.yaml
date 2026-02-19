@@ -125,6 +125,24 @@ initContainers:
       mountPath: /tmp
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: kometa-api-credentials
+    data:
+      - secretKey: PLEX_TOKEN
+        remoteRef:
+          key: /homelab/kometa/PLEX_TOKEN
+      - secretKey: TMDB_APIKEY
+        remoteRef:
+          key: /homelab/kometa/TMDB_APIKEY
+      - secretKey: TAUTULLI_APIKEY
+        remoteRef:
+          key: /homelab/kometa/TAUTULLI_APIKEY
+      - secretKey: RADARR_TOKEN
+        remoteRef:
+          key: /homelab/kometa/RADARR_TOKEN
+      - secretKey: SONARR_TOKEN
+        remoteRef:
+          key: /homelab/kometa/SONARR_TOKEN
 configMap:
   enabled: true
   value: |-

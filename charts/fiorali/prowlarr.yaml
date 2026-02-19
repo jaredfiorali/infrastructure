@@ -73,37 +73,37 @@ env:
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: port
+      key: DB_PORT
 - name: PROWLARR__POSTGRES__MAINDB
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: PROWLARR__POSTGRES__LOGDB
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: PROWLARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: username
+      key: DB_USERNAME
 - name: PROWLARR__POSTGRES__PASSWORD
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: password
+      key: DB_PASSWORD
 - name: PROWLARR__POSTGRES__HOST
   valueFrom:
     secretKeyRef:
       name: prowlarr-postgres-credentials
-      key: host
+      key: DB_HOST
 - name: PROWLARR__AUTH__APIKEY
   valueFrom:
     secretKeyRef:
       name: prowlarr-credentials
-      key: auth-apikey
+      key: AUTH_APIKEY
 ingress:
   enabled: true
 volumeMounts:
@@ -141,3 +141,26 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: prowlarr-postgres-credentials
+    data:
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/prowlarr/DB_PORT
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/prowlarr/DB_NAME
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/prowlarr/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/prowlarr/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/prowlarr/DB_HOST
+  - name: prowlarr-credentials
+    data:
+      - secretKey: AUTH_APIKEY
+        remoteRef:
+          key: /homelab/prowlarr/AUTH_APIKEY

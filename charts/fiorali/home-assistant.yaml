@@ -250,3 +250,9 @@ volume:
   size: "5368709120"
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: home-assistant-credentials
+    data:
+      - secretKey: INFLUXDB_TOKEN
+        remoteRef:
+          key: /homelab/home-assistant/INFLUXDB_TOKEN

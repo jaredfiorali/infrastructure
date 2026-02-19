@@ -199,7 +199,7 @@ Each application is defined by a unique helm chart. The helm chart defines what 
 
 #### Compiling Charts (Github Action)
 
-When code is pushed to the `master` branch, it triggers a [Github action](https://github.com/jaredfiorali/infrastructure/actions) which [compiles and packages](https://github.com/jaredfiorali/infrastructure/releases) the helm charts into actual kubernetes yaml files that can be used in deployments, and then publishes them via [github pages](https://github.com/jaredfiorali/infrastructure/deployments/github-pages).
+When code is pushed to the `main` branch, it triggers a [Github action](https://github.com/jaredfiorali/infrastructure/actions) which [compiles and packages](https://github.com/jaredfiorali/infrastructure/releases) the helm charts into actual kubernetes yaml files that can be used in deployments, and then publishes them via [github pages](https://github.com/jaredfiorali/infrastructure/deployments/github-pages).
 
 #### CD Pipeline (ArgoCD)
 

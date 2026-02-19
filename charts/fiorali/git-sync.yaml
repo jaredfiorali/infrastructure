@@ -29,7 +29,7 @@ env:
   valueFrom:
     secretKeyRef:
       name: github-pat
-      key: github-pat
+      key: GITHUB_PAT
 volumeMounts:
 - name: git
   mountPath: /git
@@ -88,3 +88,9 @@ configMap:
       git push
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: github-pat
+    data:
+      - secretKey: GITHUB_PAT
+        remoteRef:
+          key: /homelab/git-sync/GITHUB_PAT

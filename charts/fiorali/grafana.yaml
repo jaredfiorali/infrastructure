@@ -75,32 +75,32 @@ env:
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: type
+      key: DB_TYPE
 - name: GF_DATABASE_NAME
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: GF_DATABASE_PORT
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: port
+      key: DB_PORT
 - name: GF_DATABASE_USER
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: username
+      key: DB_USERNAME
 - name: GF_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: password
+      key: DB_PASSWORD
 - name: GF_DATABASE_HOST
   valueFrom:
     secretKeyRef:
       name: grafana-postgres-credentials
-      key: host
+      key: DB_HOST
 - name: GF_DATABASE_SSL_MODE
   value: require
 ingress:
@@ -137,3 +137,24 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: grafana-postgres-credentials
+    data:
+      - secretKey: DB_TYPE
+        remoteRef:
+          key: /homelab/grafana/DB_TYPE
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/grafana/DB_NAME
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/grafana/DB_PORT
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/grafana/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/grafana/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/grafana/DB_HOST

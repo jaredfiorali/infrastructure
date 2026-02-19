@@ -128,12 +128,12 @@ initContainers:
       valueFrom:
         secretKeyRef:
           name: pia-credentials
-          key: username
+          key: PIA_USERNAME
     - name: OPENVPN_PASSWORD
       valueFrom:
         secretKeyRef:
           name: pia-credentials
-          key: password
+          key: PIA_PASSWORD
     - name: SERVER_REGIONS
       value: "CA Toronto"
     - name: PORT_FORWARD_ONLY
@@ -318,3 +318,12 @@ configMap:
         "watch-dir": "/media-bittorrent/watch",
         "watch-dir-enabled": false
       }
+externalSecrets:
+  - name: pia-credentials
+    data:
+      - secretKey: PIA_USERNAME
+        remoteRef:
+          key: /homelab/transmission/PIA_USERNAME
+      - secretKey: PIA_PASSWORD
+        remoteRef:
+          key: /homelab/transmission/PIA_PASSWORD

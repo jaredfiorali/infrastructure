@@ -72,37 +72,37 @@ env:
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: port
+      key: DB_PORT
 - name: RADARR__POSTGRES__MAINDB
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: RADARR__POSTGRES__LOGDB
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: name
+      key: DB_NAME
 - name: RADARR__POSTGRES__USER
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: username
+      key: DB_USERNAME
 - name: RADARR__POSTGRES__PASSWORD
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: password
+      key: DB_PASSWORD
 - name: RADARR__POSTGRES__HOST
   valueFrom:
     secretKeyRef:
       name: radarr-postgres-credentials
-      key: host
+      key: DB_HOST
 - name: RADARR__AUTH__APIKEY
   valueFrom:
     secretKeyRef:
       name: radarr-credentials
-      key: auth-apikey
+      key: AUTH_APIKEY
 ingress:
   enabled: true
 volumeMounts:
@@ -160,3 +160,26 @@ podSecurityContext:
   runAsGroup: 1000
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: radarr-postgres-credentials
+    data:
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/radarr/DB_PORT
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/radarr/DB_NAME
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/radarr/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/radarr/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/radarr/DB_HOST
+  - name: radarr-credentials
+    data:
+      - secretKey: AUTH_APIKEY
+        remoteRef:
+          key: /homelab/radarr/AUTH_APIKEY

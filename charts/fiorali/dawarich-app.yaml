@@ -85,43 +85,43 @@ env:
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: username
+        key: DB_USERNAME
   - name: DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: password
+        key: DB_PASSWORD
   - name: DATABASE_HOST
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: host
+        key: DB_HOST
   - name: DATABASE_NAME
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: name
+        key: DB_NAME
   - name: DATABASE_PORT
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: port
+        key: DB_PORT
 
   - name: QUEUE_DATABASE_USERNAME
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: password
+        key: DB_PASSWORD
   - name: QUEUE_DATABASE_PASSWORD
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: password
+        key: DB_PASSWORD
   - name: QUEUE_DATABASE_HOST
     valueFrom:
       secretKeyRef:
         name: dawarich-postgres-credentials
-        key: host
+        key: DB_HOST
   - name: QUEUE_DATABASE_NAME
     value: postgres
 
@@ -166,3 +166,21 @@ networkpolicy:
     internet: true
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: dawarich-postgres-credentials
+    data:
+      - secretKey: DB_USERNAME
+        remoteRef:
+          key: /homelab/dawarich/DB_USERNAME
+      - secretKey: DB_PASSWORD
+        remoteRef:
+          key: /homelab/dawarich/DB_PASSWORD
+      - secretKey: DB_HOST
+        remoteRef:
+          key: /homelab/dawarich/DB_HOST
+      - secretKey: DB_NAME
+        remoteRef:
+          key: /homelab/dawarich/DB_NAME
+      - secretKey: DB_PORT
+        remoteRef:
+          key: /homelab/dawarich/DB_PORT
