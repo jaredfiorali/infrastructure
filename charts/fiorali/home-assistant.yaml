@@ -52,6 +52,11 @@ initContainers:
         secretKeyRef:
           name: home-assistant-credentials
           key: INFLUXDB_TOKEN
+    - name: WEBHOOK_GARAGE_SIREN
+      valueFrom:
+        secretKeyRef:
+          name: home-assistant-credentials
+          key: WEBHOOK_GARAGE_SIREN
     command:
     - sh
     - -c
@@ -240,7 +245,7 @@ configMap:
               ]
             }
         trigger_garage_siren:
-          url: https://192.168.24.1/proxy/protect/integration/v1/alarm-manager/webhook/f3c88d19-abfb-4ef1-8fc7-ed900d3666fa
+          url: https://192.168.24.1/proxy/protect/integration/v1/alarm-manager/webhook/${WEBHOOK_GARAGE_SIREN}
           method: POST
           verify_ssl: false
           headers:
@@ -256,3 +261,6 @@ externalSecrets:
       - secretKey: INFLUXDB_TOKEN
         remoteRef:
           key: /homelab/home-assistant/INFLUXDB_TOKEN
+      - secretKey: WEBHOOK_GARAGE_SIREN
+        remoteRef:
+          key: /homelab/home-assistant/WEBHOOK_GARAGE_SIREN

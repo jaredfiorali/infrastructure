@@ -136,7 +136,10 @@ env:
   - name: DISTANCE_UNIT
     value: km
   - name: SECRET_KEY_BASE
-    value: '1234567890'
+    valueFrom:
+      secretKeyRef:
+        name: dawarich-postgres-credentials
+        key: SECRET_KEY_BASE
   - name: RAILS_LOG_TO_STDOUT
     value: 'true'
   - name: PROMETHEUS_EXPORTER_ENABLED
@@ -167,6 +170,11 @@ networkpolicy:
 imageUpdater:
   enabled: true
 externalSecrets:
+  - name: dawarich-redis
+    data:
+      - secretKey: SECRET_KEY_BASE
+        remoteRef:
+          key: /homelab/dawarich/SECRET_KEY_BASE
   - name: dawarich-postgres-credentials
     data:
       - secretKey: DB_USERNAME
