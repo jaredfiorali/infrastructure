@@ -138,7 +138,7 @@ env:
   - name: SECRET_KEY_BASE
     valueFrom:
       secretKeyRef:
-        name: dawarich-postgres-credentials
+        name: dawarich-redis
         key: SECRET_KEY_BASE
   - name: RAILS_LOG_TO_STDOUT
     value: 'true'
