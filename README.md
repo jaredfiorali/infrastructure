@@ -41,6 +41,10 @@ A small subset (~5G) of "critical" data is [sent to an Amazon S3 bucket](https:/
 
 There are a few applications that only need a postgres database to run (sonarr, prowlarr, radarr, etc). These dependant applications can be viewed in the [dependency diagram](#application-dependency-diagram) below. These have been configured to use [supabase](https://supabase.com) to host their required postgres databases. This lightens the storage/maintenance requirements for Longhorn.
 
+### Secrets Management
+
+Secrets for various Kubernetes applications are stored in the [AWS Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html). This allows for secrets to be kept externally in a secure location, allowing for easy recovery in the event that the cluster needs to be rebuilt from a catastrophic error.
+
 ### Applications
 
 Each application is defined in the [charts/fiorali](./charts/fiorali) directory. Below you will find a quick explainer on each application.
@@ -65,6 +69,7 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 | [argocd](https://argo-cd.readthedocs.io)                            | 🟠         | Deploys changes to this repo to the cluster                    |
 | [argocd-image-updater](https://argocd-image-updater.readthedocs.io) | 🟠         | Scans remote docker images and syncs repo if there are updates |
 | [metallb](https://metallb.io)                                       | 🔴         | Creates Virtual IP addresses for Load Balancing traffic.       |
+| [external-secrets](https://external-secrets.io)                     | 🔴         | Pulls secrets from external providers into the cluster         |
 
 #### Monitoring
 
@@ -101,10 +106,11 @@ Each application is defined in the [charts/fiorali](./charts/fiorali) directory.
 
 #### External
 
-| Application                          | Importance | Purpose                              |
-|--------------------------------------|------------|--------------------------------------|
-| [supabase](https://supabase.com)     | 🟠         | Externally hosted postgres DB.       |
-| [cloudflare](https://cloudflare.com) | 🟠         | DNS provider for cloudflared service |
+| Application                                                                                                              | Importance | Purpose                                |
+|--------------------------------------------------------------------------------------------------------------------------|------------|----------------------------------------|
+| [supabase](https://supabase.com)                                                                                         | 🟠         | Externally hosted postgres DB.         |
+| [cloudflare](https://cloudflare.com)                                                                                     | 🟠         | DNS provider for cloudflared service   |
+| [AWS Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) | 🟠         | Secrets manager for Kubernetes secrets |
 
 #### Application Dependency Diagram
 
