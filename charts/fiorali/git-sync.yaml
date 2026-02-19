@@ -89,8 +89,8 @@ configMap:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: github-pat
-    data:
-      - secretKey: GITHUB_PAT
-        remoteRef:
-          key: /homelab/git-sync/GITHUB_PAT
+- name: github-pat
+  data:
+  - secretKey: GITHUB_PAT
+    remoteRef:
+      key: /homelab/git-sync/GITHUB_PAT
