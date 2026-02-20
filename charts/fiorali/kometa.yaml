@@ -216,14 +216,14 @@ configMap:
       radarr:
         url: http://radarr.downloader:7878
         token: ${RADARR_TOKEN}
-        add_missing: false
+        add_missing: true
+        add_existing: false
         root_folder_path: /media-movies-3
-        monitor: false
+        monitor: true
         availability: released
         quality_profile: HD-1080p
         tag: kometa
-        add_existing: false
-        search: false
+        search: true
       sonarr:
         url: http://sonarr.downloader:8989
         token: ${SONARR_TOKEN}
@@ -244,13 +244,15 @@ configMap:
           mdblist_list:
             url: https://mdblist.com/lists/jaredfiorali/top-movies-recent
             limit: 5
-            sort_by: score
           sync_mode: sync
+          collection_order: custom
+          minimum_items: 1
     tv.yml: |
       collections:
         Top Rated Shows:
           mdblist_list:
             url: https://mdblist.com/lists/jaredfiorali/top-shows-recent
             limit: 5
-            sort_by: score
           sync_mode: sync
+          collection_order: custom
+          minimum_items: 1
