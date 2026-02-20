@@ -103,6 +103,11 @@ initContainers:
         secretKeyRef:
           name: kometa-api-credentials
           key: SONARR_TOKEN
+    - name: MDBLIST_APIKEY
+      valueFrom:
+        secretKeyRef:
+          name: kometa-api-credentials
+          key: MDBLIST_APIKEY
     command:
     - sh
     - -c
@@ -143,6 +148,9 @@ externalSecrets:
       - secretKey: SONARR_TOKEN
         remoteRef:
           key: /homelab/kometa/SONARR_TOKEN
+      - secretKey: MDBLIST_APIKEY
+        remoteRef:
+          key: /homelab/kometa/MDBLIST_APIKEY
 configMap:
   enabled: true
   value: |-
@@ -199,6 +207,9 @@ configMap:
       tmdb:
         apikey: ${TMDB_APIKEY}
         language: en
+      mdblist:
+        apikey: ${MDBLIST_APIKEY}
+        cache_expiration: 60
       tautulli:
         url: http://tautulli.tautulli:8181
         apikey: ${TAUTULLI_APIKEY}
@@ -206,7 +217,7 @@ configMap:
         url: http://radarr.downloader:7878
         token: ${RADARR_TOKEN}
         add_missing: false
-        root_folder_path: /media-movies-2
+        root_folder_path: /media-movies-3
         monitor: false
         availability: released
         quality_profile: HD-1080p
@@ -223,35 +234,23 @@ configMap:
         quality_profile: HD-1080p
         language_profile: English
         series_type: standard
-        season_folder: true
+        season_folder: false
         tag: kometa
         search: true
         cutoff_search: false
     movies.yml: |
       collections:
-        Tautulli Most Popular Movies:
+        Top Rated Movies:
+          mdblist_list:
+            url: https://mdblist.com/lists/jaredfiorali/top-movies-recent
+            limit: 5
+            sort_by: score
           sync_mode: sync
-          collection_order: custom
-          tautulli_watched:
-            list_days: 180
-            list_size: 10
-            list_minimum: 1
     tv.yml: |
       collections:
-        Tautulli Most Popular TV Shows:
-          smart_label: originally_available.desc
+        Top Rated Shows:
+          mdblist_list:
+            url: https://mdblist.com/lists/jaredfiorali/top-shows-recent
+            limit: 5
+            sort_by: score
           sync_mode: sync
-          imdb_search:
-            type: tv_series, tv_mini_series
-            limit: 10
-          summary: The 10 most popular shows across the internet
-          sonarr_add_missing: true
-          sonarr_search: true
-          sonarr_monitor: pilot
-        Tautulli Most Popular:
-          sync_mode: sync
-          collection_order: custom
-          summary: The 10 most popular shows from Plex users
-          tautulli_popular:
-            list_days: 180
-            list_size: 10

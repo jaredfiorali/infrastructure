@@ -116,6 +116,8 @@ volumeMounts:
   mountPath: /media-movies-1
 - name: media-movies-2
   mountPath: /media-movies-2
+- name: media-movies-3
+  mountPath: /media-movies-3
 - name: run
   mountPath: /run
 volumes:
@@ -133,6 +135,9 @@ volumes:
 - name: media-movies-2
   persistentVolumeClaim:
     claimName: media-movies-2
+- name: media-movies-3
+  persistentVolumeClaim:
+    claimName: media-movies-3
 - name: run
   emptyDir: {}
 networkpolicy:

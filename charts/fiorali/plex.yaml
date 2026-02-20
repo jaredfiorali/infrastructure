@@ -60,6 +60,9 @@ volumeMounts:
 - name: media-movies-2
   mountPath: /media-movies-2
   readOnly: true
+- name: media-movies-3
+  mountPath: /media-movies-3
+  readOnly: true
 - name: media-tv-0
   mountPath: /media-tv-0
   readOnly: true
@@ -108,6 +111,9 @@ volumes:
 - name: media-movies-2
   persistentVolumeClaim:
     claimName: media-movies-2
+- name: media-movies-3
+  persistentVolumeClaim:
+    claimName: media-movies-3
 - name: media-tv-0
   persistentVolumeClaim:
     claimName: media-tv-0
