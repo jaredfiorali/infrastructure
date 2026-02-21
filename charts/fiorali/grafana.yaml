@@ -158,3 +158,15 @@ externalSecrets:
       - secretKey: DB_HOST
         remoteRef:
           key: /homelab/grafana/DB_HOST
+prometheusRules:
+  enabled: true
+  rules:
+    - alert: SupabaseIngressBandwidthWarning
+      annotations:
+        description: The supabase ingress usage for {{$labels.Project}} has exceeded 2K bits for more than 5 minutes
+        summary: The rate of bandwidth usage for supabase is over 2K
+      expr: (rate(supavisor_client_network_recv[5m])) > 2000
+      for: 5m
+      labels:
+        issue: Supabase ingress usage for {{$labels.Project}} is too high
+        severity: critical
