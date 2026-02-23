@@ -28,15 +28,16 @@ configMap:
         level  = "info"
         format = "logfmt"
       }
+
       // Loki write endpoint
       loki.write "fiorali" {
         endpoint {
-          url = "http://loki-gateway.loki/loki/api/v1/push"
+          url       = "http://loki-gateway.loki/loki/api/v1/push"
           tenant_id = "fiorali"
         }
       }
-      // Kubernetes discovery
-      // Pod discovery (DaemonSet, node-local)
+
+      // Kubernetes discovery (Filtering to only this Node)
       discovery.kubernetes "pods" {
         role = "pod"
         selectors {
@@ -44,109 +45,79 @@ configMap:
           field = "spec.nodeName=" + coalesce(env("HOSTNAME"), constants.hostname)
         }
       }
-      // Cluster-wide discovery
-      discovery.kubernetes "services" {
-        role = "service"
-        // No node filter; discovers all services cluster-wide
-      }
-      discovery.kubernetes "ingresses" {
-        role = "ingress"
-        // No node filter; discovers all ingresses cluster-wide
-      }
-      // Relabel rules for pod logs
+
       discovery.relabel "pod_logs" {
         targets = discovery.kubernetes.pods.targets
-        // Standard labels
+
+        // 1. Map standard labels
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
-          action = "replace"
-          target_label = "namespace"
+          target_label  = "namespace"
         }
         rule {
           source_labels = ["__meta_kubernetes_pod_name"]
-          action = "replace"
-          target_label = "pod"
+          target_label  = "pod"
         }
         rule {
           source_labels = ["__meta_kubernetes_pod_container_name"]
-          action = "replace"
-          target_label = "container"
+          target_label  = "container"
         }
+
+        // 2. Build the directory string: namespace_podname_uid
         rule {
-          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
-          action = "replace"
-          target_label = "app"
+          source_labels = [
+            "__meta_kubernetes_namespace",
+            "__meta_kubernetes_pod_name",
+            "__meta_kubernetes_pod_uid",
+          ]
+          separator    = "_"
+          target_label = "tmp_folder"
         }
-        // Job label: namespace/container
+
+        // 3. Final Path Construction
         rule {
-          source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
-          action = "replace"
-          target_label = "job"
-          separator = "/"
-          replacement = "$1/$2"
-        }
-        // Path to container logs
-        rule {
-          source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
-          action = "replace"
-          target_label = "__path__"
-          separator = "/"
-          replacement = "/var/log/pods/*$1/$2/*.log"
-        }
-        // Container runtime
-        rule {
-          source_labels = ["__meta_kubernetes_pod_container_id"]
-          action = "replace"
-          target_label = "container_runtime"
-          regex = "^(\\S+):\\/\\/.+$"
-          replacement = "$1"
+          source_labels = ["tmp_folder", "__meta_kubernetes_pod_container_name"]
+          separator     = "/"
+          replacement   = "/var/log/pods/$1$2/0.log"
+          target_label  = "__path__"
         }
       }
-      // Pod logs source
-      loki.source.kubernetes "pod_logs" {
+
+      loki.source.file "pod_logs" {
         targets    = discovery.relabel.pod_logs.output
         forward_to = [loki.process.pod_logs.receiver]
+        // Critical for RPi/Busy clusters to avoid 400 errors
+        tail_from_end = true
       }
-      // Pod logs processing
+
       loki.process "pod_logs" {
-        stage.static_labels {
-          values = {
-            cluster     = "default",
-            environment = "prod",
+        forward_to = [loki.write.fiorali.receiver]
+
+        // 1. Parse the CRI format
+        // This extracts the real timestamp and removes the "stdout F" junk
+        stage.cri {}
+
+        // 2. (Optional) Parse JSON if the app logs in JSON
+        // If emulatorjs logs look like {"level":"info", "msg":"..."},
+        // this will turn those into searchable labels.
+        stage.json {
+          expressions = {
+            level  = "level",
+            msg    = "message",
           }
         }
-        forward_to = [loki.write.fiorali.receiver]
-      }
-      // Kubernetes events
-      loki.source.kubernetes_events "cluster_events" {
-        job_name   = "integrations/kubernetes/eventhandler"
-        log_format = "logfmt"
-        forward_to = [loki.process.cluster_events.receiver]
-      }
-      loki.process "cluster_events" {
-        forward_to = [loki.write.fiorali.receiver]
-        stage.static_labels {
-          values = {
-            cluster     = "default",
-            environment = "prod",
-          }
-        }
+
+        // 3. Set a fallback level if JSON parsing fails
         stage.labels {
           values = {
-            event_type = "job",
+            level = "level",
           }
         }
-      }
-      // Node-local file logs (syslog)
-      local.file_match "node_logs" {
-        path_targets = [{
-            __path__  = "/var/log/syslog",
-            job       = "node/syslog",
-            node_name = sys.env("HOSTNAME"),
-            cluster   = "default",
-        }]
-      }
-      loki.source.file "node_logs" {
-        targets    = local.file_match.node_logs.targets
-        forward_to = [loki.write.fiorali.receiver]
+
+        stage.static_labels {
+          values = {
+            cluster     = "default",
+            environment = "prod",
+          }
+        }
       }
