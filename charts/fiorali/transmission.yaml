@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/linuxserver/transmission
-  tag: latest@sha256:4d84e7d6459b0bb760623d968a19bc20028b32014cc6f7eec72580be7281b249
+  tag: latest@sha256:3f75efdb5203efb4daecec06f1ecd728b488fc537651df0ba7dca94a3e39b6e4
 containerPorts:
 - containerPort: 9091
   name: transmission
@@ -319,11 +319,11 @@ configMap:
         "watch-dir-enabled": false
       }
 externalSecrets:
-  - name: pia-credentials
-    data:
-      - secretKey: PIA_USERNAME
-        remoteRef:
-          key: /homelab/transmission/PIA_USERNAME
-      - secretKey: PIA_PASSWORD
-        remoteRef:
-          key: /homelab/transmission/PIA_PASSWORD
+- name: pia-credentials
+  data:
+  - secretKey: PIA_USERNAME
+    remoteRef:
+      key: /homelab/transmission/PIA_USERNAME
+  - secretKey: PIA_PASSWORD
+    remoteRef:
+      key: /homelab/transmission/PIA_PASSWORD
