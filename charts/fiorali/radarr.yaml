@@ -5,7 +5,7 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/radarr
-  tag: latest@sha256:6d3e68474ea146f995af98d3fb2cb1a14e2e4457ddaf035aa5426889e2f9249c
+  tag: latest@sha256:a360633a3682d41e96f71a07ff36ecbdf2394a9628465b84b0a8437087715b41
 containerPorts:
 - containerPort: 7878
   name: radarr
@@ -166,25 +166,25 @@ podSecurityContext:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: radarr-postgres-credentials
-    data:
-      - secretKey: DB_PORT
-        remoteRef:
-          key: /homelab/radarr/DB_PORT
-      - secretKey: DB_NAME
-        remoteRef:
-          key: /homelab/radarr/DB_NAME
-      - secretKey: DB_USERNAME
-        remoteRef:
-          key: /homelab/radarr/DB_USERNAME
-      - secretKey: DB_PASSWORD
-        remoteRef:
-          key: /homelab/radarr/DB_PASSWORD
-      - secretKey: DB_HOST
-        remoteRef:
-          key: /homelab/radarr/DB_HOST
-  - name: radarr-credentials
-    data:
-      - secretKey: AUTH_APIKEY
-        remoteRef:
-          key: /homelab/radarr/AUTH_APIKEY
+- name: radarr-postgres-credentials
+  data:
+  - secretKey: DB_PORT
+    remoteRef:
+      key: /homelab/radarr/DB_PORT
+  - secretKey: DB_NAME
+    remoteRef:
+      key: /homelab/radarr/DB_NAME
+  - secretKey: DB_USERNAME
+    remoteRef:
+      key: /homelab/radarr/DB_USERNAME
+  - secretKey: DB_PASSWORD
+    remoteRef:
+      key: /homelab/radarr/DB_PASSWORD
+  - secretKey: DB_HOST
+    remoteRef:
+      key: /homelab/radarr/DB_HOST
+- name: radarr-credentials
+  data:
+  - secretKey: AUTH_APIKEY
+    remoteRef:
+      key: /homelab/radarr/AUTH_APIKEY
