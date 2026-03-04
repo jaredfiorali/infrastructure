@@ -6,7 +6,7 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
-  tag: latest@sha256:e74a1e093dcc223d671d4b7061e2b4946f1989a4d3059654ff4e623b731c9134
+  tag: latest@sha256:a8fe7b9c502f979146b6d0f22438b825c38e068241bb8a708c473062dffdbb03
 containerPorts:
 - containerPort: 9696
   name: prowlarr
@@ -142,25 +142,25 @@ podSecurityContext:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: prowlarr-postgres-credentials
-    data:
-      - secretKey: DB_PORT
-        remoteRef:
-          key: /homelab/prowlarr/DB_PORT
-      - secretKey: DB_NAME
-        remoteRef:
-          key: /homelab/prowlarr/DB_NAME
-      - secretKey: DB_USERNAME
-        remoteRef:
-          key: /homelab/prowlarr/DB_USERNAME
-      - secretKey: DB_PASSWORD
-        remoteRef:
-          key: /homelab/prowlarr/DB_PASSWORD
-      - secretKey: DB_HOST
-        remoteRef:
-          key: /homelab/prowlarr/DB_HOST
-  - name: prowlarr-credentials
-    data:
-      - secretKey: AUTH_APIKEY
-        remoteRef:
-          key: /homelab/prowlarr/AUTH_APIKEY
+- name: prowlarr-postgres-credentials
+  data:
+  - secretKey: DB_PORT
+    remoteRef:
+      key: /homelab/prowlarr/DB_PORT
+  - secretKey: DB_NAME
+    remoteRef:
+      key: /homelab/prowlarr/DB_NAME
+  - secretKey: DB_USERNAME
+    remoteRef:
+      key: /homelab/prowlarr/DB_USERNAME
+  - secretKey: DB_PASSWORD
+    remoteRef:
+      key: /homelab/prowlarr/DB_PASSWORD
+  - secretKey: DB_HOST
+    remoteRef:
+      key: /homelab/prowlarr/DB_HOST
+- name: prowlarr-credentials
+  data:
+  - secretKey: AUTH_APIKEY
+    remoteRef:
+      key: /homelab/prowlarr/AUTH_APIKEY
