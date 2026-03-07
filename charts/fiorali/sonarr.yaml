@@ -5,7 +5,7 @@ deployment:
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/sonarr
-  tag: latest@sha256:37be832b78548e3f55f69c45b50e3b14d18df1b6def2a4994258217e67efb1a1
+  tag: latest@sha256:21c1c3d52248589bb064f5adafec18cad45812d7a01d317472955eef051e619b
 containerPorts:
 - containerPort: 8989
   name: sonarr
@@ -186,25 +186,25 @@ podSecurityContext:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: sonarr-postgres-credentials
-    data:
-      - secretKey: DB_PORT
-        remoteRef:
-          key: /homelab/sonarr/DB_PORT
-      - secretKey: DB_NAME
-        remoteRef:
-          key: /homelab/sonarr/DB_NAME
-      - secretKey: DB_USERNAME
-        remoteRef:
-          key: /homelab/sonarr/DB_USERNAME
-      - secretKey: DB_PASSWORD
-        remoteRef:
-          key: /homelab/sonarr/DB_PASSWORD
-      - secretKey: DB_HOST
-        remoteRef:
-          key: /homelab/sonarr/DB_HOST
-  - name: sonarr-credentials
-    data:
-      - secretKey: AUTH_APIKEY
-        remoteRef:
-          key: /homelab/sonarr/AUTH_APIKEY
+- name: sonarr-postgres-credentials
+  data:
+  - secretKey: DB_PORT
+    remoteRef:
+      key: /homelab/sonarr/DB_PORT
+  - secretKey: DB_NAME
+    remoteRef:
+      key: /homelab/sonarr/DB_NAME
+  - secretKey: DB_USERNAME
+    remoteRef:
+      key: /homelab/sonarr/DB_USERNAME
+  - secretKey: DB_PASSWORD
+    remoteRef:
+      key: /homelab/sonarr/DB_PASSWORD
+  - secretKey: DB_HOST
+    remoteRef:
+      key: /homelab/sonarr/DB_HOST
+- name: sonarr-credentials
+  data:
+  - secretKey: AUTH_APIKEY
+    remoteRef:
+      key: /homelab/sonarr/AUTH_APIKEY
