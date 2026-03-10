@@ -73,6 +73,8 @@ env:
   value: 15m
 - name: GF_QUERY_CACHE_ENABLED
   value: "true"
+- name: GF_QUERY_CACHE_TYPE
+  value: "memory"
 - name: GF_QUERY_CACHE_TTL
   value: "5m"
 - name: GF_DATABASE_TYPE
