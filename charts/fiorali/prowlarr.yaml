@@ -30,7 +30,7 @@ probes:
     successThreshold: 1
     timeoutSeconds: 15
   livenessProbe:
-    failureThreshold: 1
+    failureThreshold: 3
     periodSeconds: 120
     successThreshold: 1
     timeoutSeconds: 5
