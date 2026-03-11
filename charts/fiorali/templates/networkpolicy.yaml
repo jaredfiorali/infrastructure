@@ -76,13 +76,20 @@ spec:
         - ipBlock:
             cidr: 192.168.0.0/16  # RFC1918 private network
     {{- end }}
-    {{- if .Values.networkpolicy.egress.internet }}
+    {{- if or .Values.networkpolicy.egress.internet .Values.networkpolicy.egress.supabase }}
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0  # Allow internet
             except:
               - 10.0.0.0/8  # RFC1918 private network
               - 192.168.0.0/16  # RFC1918 private network
+      {{- if .Values.networkpolicy.egress.supabase }}
+      ports:
+        - protocol: TCP
+          port: 6543 # Transaction Pooler
+        - protocol: TCP
+          port: 5432 # Session Pooler
+      {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}
