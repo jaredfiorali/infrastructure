@@ -5,7 +5,7 @@ deployment:
 replicaCount: 1
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:82e82e459511612d9570e414005dc58635e39dfea7cdd2c7f7b5bafb2d2ccc53
+  tag: latest@sha256:1c9ba9e0bde48688af8253b2a042adbb2fe245b23b61c977b01b227452ab0547
 containerPorts:
   - containerPort: 3000
     name: dawarich
@@ -47,7 +47,7 @@ service:
       targetPort: dawarich
 command:
   enabled: true
-  exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/dev server -p 3000 -b ::"]
+  exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/rails server -p 3000 -b ::"]
 volumeMounts:
   - name: public
     mountPath: /var/app/public
