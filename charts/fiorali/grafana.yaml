@@ -47,6 +47,8 @@ service:
     protocol: TCP
     targetPort: grafana
 env:
+- name: GF_FEATURE_TOGGLES_ENABLE
+  value: "provisioning,kubernetesDashboards"
 - name: GF_ALERTING_ENABLED
   value: "false"
 - name: GF_UNIFIED_ALERTING_ENABLED
@@ -125,7 +127,7 @@ networkpolicy:
   ingress:
     internal: true
   egress:
-    supabase: true
+    internet: true
     namespaces:
     - monitoring
     - loki
