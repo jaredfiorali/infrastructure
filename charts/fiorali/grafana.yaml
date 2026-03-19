@@ -51,6 +51,12 @@ env:
   value: "provisioning,kubernetesDashboards"
 - name: GF_ALERTING_ENABLED
   value: "false"
+- name: GF_ALERTING_EXECUTE_ALERTS_ENABLED
+  value: "false"
+- name: GF_ALERTING_MIN_INTERVAL_SECONDS
+  value: "86400"
+- name: GF_CLOUD_MIGRATION_ENABLED
+  value: "false"
 - name: GF_UNIFIED_ALERTING_ENABLED
   value: "false"
 - name: GF_AUTH_DISABLE_LOGIN_FORM
@@ -63,8 +69,24 @@ env:
   value: "false"
 - name: GF_PUBLIC_DASHBOARDS_ENABLED
   value: "false"
+- name: GF_ANALYTICS_ENABLED
+  value: "false"
 - name: GF_ANALYTICS_REPORTING_ENABLED
   value: "false"
+- name: GF_RECORDED_QUERIES_ENABLED
+  value: "false"
+- name: GF_RECORDING_RULES_ENABLED
+  value: "false"
+- name: GF_REPORTING_ENABLED
+  value: "false"
+- name: GF_SUPPORT_BUNDLES_ENABLED
+  value: "false"
+- name: GF_METRICS_ENABLED
+  value: "false"
+- name: GF_AUTHORIZATION_CACHE_TTL
+  value: "86400s"
+- name: GF_DASHBOARD_CLEANUP_INTERVAL
+  value: "86400s"
 - name: GF_ANALYTICS_CHECK_FOR_UPDATES
   value: "false"
 - name: GF_NEWS_NEWS_FEED_ENABLED
@@ -79,6 +101,16 @@ env:
   value: "memory"
 - name: GF_QUERY_CACHE_TTL
   value: "5m"
+- name: GF_UNIFIED_STORAGE_INDEX_MIN_UPDATE_INTERVAL
+  value: "30s"
+- name: GF_UNIFIED_STORAGE_ENABLE_SEARCH
+  value: "false"
+- name: GF_UNIFIED_STORAGE_INDEX_WORKERS
+  value: "2"
+- name: GF_UNIFIED_STORAGE_OVERRIDES_RELOAD_PERIOD
+  value: "120s"
+- name: GF_DATABASE_HIGH_AVAILABILITY
+  value: "false"
 - name: GF_DATABASE_TYPE
   valueFrom:
     secretKeyRef:
