@@ -149,7 +149,20 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
-    "links": [],
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/jaredfiorali/infrastructure/blob/main/dashboardskubernetes_dashboard.json"
+      }
+    ],
     "panels": [
       {
         "collapsed": false,
@@ -2535,7 +2548,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (project) (\n  increase(supavisor_client_network_recv[24h])\n  +\n  increase(supavisor_client_network_send[24h])\n) * 30",
+            "expr": "sum by (project) (\n  increase(supavisor_client_network_send[24h])\n) * 30",
             "instant": false,
             "interval": "$resolution",
             "legendFormat": "{{ job }}",
