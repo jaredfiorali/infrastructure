@@ -24,7 +24,20 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "links": [],
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Source (GitHub)",
+        "tooltip": "View source file in repository",
+        "type": "link",
+        "url": "https://github.com/jaredfiorali/infrastructure/blob/main/dashboardssupabase_metrics.json"
+      }
+    ],
     "panels": [
       {
         "collapsed": false,
@@ -2498,7 +2511,7 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "rate(node_network_receive_bytes_total{supabase_identifier=~\"${supabase_identifier:pipe}\"}[$interval])*8",
+            "expr": "sum by (supabase_identifier) (rate(node_network_receive_bytes_total{supabase_identifier=~\"${supabase_identifier:pipe}\"}[$interval])*8)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "recv {{device}}",
@@ -2512,7 +2525,7 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "rate(node_network_transmit_bytes_total{supabase_identifier=~\"${supabase_identifier:pipe}\"}[$interval])*8",
+            "expr": "sum by (supabase_identifier) (rate(node_network_transmit_bytes_total{supabase_identifier=~\"${supabase_identifier:pipe}\"}[$interval])*8)",
             "format": "time_series",
             "intervalFactor": 1,
             "legendFormat": "trans {{device}} ",
@@ -15837,8 +15850,8 @@
       "list": [
         {
           "current": {
-            "text": "dwbbzqvttbgxjrmczooj",
-            "value": "dwbbzqvttbgxjrmczooj"
+            "text": "nneyhbzsgnkkzstatxen",
+            "value": "nneyhbzsgnkkzstatxen"
           },
           "datasource": {
             "type": "prometheus",
@@ -15874,8 +15887,8 @@
         {
           "allowCustomValue": false,
           "current": {
-            "text": "rklxiqaccblwqihvdejr",
-            "value": "rklxiqaccblwqihvdejr"
+            "text": "nneyhbzsgnkkzstatxen",
+            "value": "nneyhbzsgnkkzstatxen"
           },
           "datasource": {
             "type": "prometheus",
@@ -15934,7 +15947,7 @@
       ]
     },
     "time": {
-      "from": "now-24h",
+      "from": "now-15m",
       "to": "now"
     },
     "timepicker": {
