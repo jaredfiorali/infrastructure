@@ -82,7 +82,7 @@
               750
             ]
           },
-          "hide": false,
+          "hide": true,
           "iconColor": "yellow",
           "name": "Fan On",
           "target": {
