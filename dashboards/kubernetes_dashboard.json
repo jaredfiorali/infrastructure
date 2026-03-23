@@ -238,7 +238,7 @@
             "percentSize": 1
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -316,7 +316,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -351,7 +351,7 @@
               {
                 "targetBlank": true,
                 "title": "Score Details",
-                "url": "http://grafana.fiora.li/explore?schemaVersion=1\u0026panes=%7B%22feo%22:%7B%22datasource%22:%22ef97fhyk0nfuoc%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bcontainer%3D%5C%22popeye%5C%22%7D%20%7C%20json%20%7C%20json%20issuesCluster%3D%5C%22popeye.sections%5B0%5D.issues%5C%22%20%7C%20json%20issuesClusterRoles%3D%5C%22popeye.sections%5B1%5D.issues%5C%22%20%7C%20json%20issuesClusterRoleBindings%3D%5C%22popeye.sections%5B2%5D.issues%5C%22%20%7C%20json%20issuesConfigMaps%3D%5C%22popeye.sections%5B3%5D.issues%5C%22%20%7C%20json%20issuesCronjobs%3D%5C%22popeye.sections%5B4%5D.issues%5C%22%20%7C%20json%20issuesDaemonSets%3D%5C%22popeye.sections%5B5%5D.issues%5C%22%20%7C%20json%20issuesDeployments%3D%5C%22popeye.sections%5B6%5D.issues%5C%22%20%7C%20json%20issuesGateways%3D%5C%22popeye.sections%5B7%5D.issues%5C%22%20%7C%20json%20issuesGatewayClasses%3D%5C%22popeye.sections%5B8%5D.issues%5C%22%20%7C%20json%20issuesHorizontalPodAutoscalers%3D%5C%22popeye.sections%5B9%5D.issues%5C%22%20%7C%20json%20issuesHttpRoutes%3D%5C%22popeye.sections%5B10%5D.issues%5C%22%20%7C%20json%20issuesIngresses%3D%5C%22popeye.sections%5B11%5D.issues%5C%22%20%7C%20json%20issuesJobs%3D%5C%22popeye.sections%5B12%5D.issues%5C%22%20%7C%20json%20issuesNamespaces%3D%5C%22popeye.sections%5B13%5D.issues%5C%22%20%7C%20json%20issuesNetworkPolicies%3D%5C%22popeye.sections%5B14%5D.issues%5C%22%20%7C%20json%20issuesNodes%3D%5C%22popeye.sections%5B15%5D.issues%5C%22%20%7C%20json%20issuesPersistentVolumes%3D%5C%22popeye.sections%5B16%5D.issues%5C%22%20%7C%20json%20issuesPersistentVolumeClaims%3D%5C%22popeye.sections%5B17%5D.issues%5C%22%20%7C%20json%20issuesPods%3D%5C%22popeye.sections%5B18%5D.issues%5C%22%20%7C%20json%20issuesPoddisruptionBudgets%3D%5C%22popeye.sections%5B19%5D.issues%5C%22%20%7C%20json%20issuesReplicaSets%3D%5C%22popeye.sections%5B20%5D.issues%5C%22%20%7C%20json%20issuesRoles%3D%5C%22popeye.sections%5B21%5D.issues%5C%22%20%7C%20json%20issuesRoleBindings%3D%5C%22popeye.sections%5B22%5D.issues%5C%22%20%7C%20json%20issuesSecrets%3D%5C%22popeye.sections%5B23%5D.issues%5C%22%20%7C%20json%20issuesServices%3D%5C%22popeye.sections%5B24%5D.issues%5C%22%20%7C%20json%20issuesServiceAccounts%3D%5C%22popeye.sections%5B25%5D.issues%5C%22%20%7C%20json%20issuesStatefulSets%3D%5C%22popeye.sections%5B26%5D.issues%5C%22%20%7C%20popeye_score%20%3C%20100%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22ef97fhyk0nfuoc%22%7D,%22editorMode%22:%22code%22,%22direction%22:%22backward%22%7D%5D,%22range%22:%7B%22from%22:%22now-24h%22,%22to%22:%22now%22%7D,%22panelsState%22:%7B%22logs%22:%7B%22visualisationType%22:%22logs%22,%22columns%22:%7B%220%22:%22Time%22,%221%22:%22Line%22%7D,%22labelFieldName%22:%22labels%22,%22refId%22:%22A%22%7D%7D%7D%7D\u0026orgId=1"
+                "url": "http://grafana-oss.fiora.li/explore?schemaVersion=1\u0026panes=%7B%22feo%22:%7B%22datasource%22:%22ef97fhyk0nfuoc%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bcontainer%3D%5C%22popeye%5C%22%7D%20%7C%20json%20%7C%20json%20issuesCluster%3D%5C%22popeye.sections%5B0%5D.issues%5C%22%20%7C%20json%20issuesClusterRoles%3D%5C%22popeye.sections%5B1%5D.issues%5C%22%20%7C%20json%20issuesClusterRoleBindings%3D%5C%22popeye.sections%5B2%5D.issues%5C%22%20%7C%20json%20issuesConfigMaps%3D%5C%22popeye.sections%5B3%5D.issues%5C%22%20%7C%20json%20issuesCronjobs%3D%5C%22popeye.sections%5B4%5D.issues%5C%22%20%7C%20json%20issuesDaemonSets%3D%5C%22popeye.sections%5B5%5D.issues%5C%22%20%7C%20json%20issuesDeployments%3D%5C%22popeye.sections%5B6%5D.issues%5C%22%20%7C%20json%20issuesGateways%3D%5C%22popeye.sections%5B7%5D.issues%5C%22%20%7C%20json%20issuesGatewayClasses%3D%5C%22popeye.sections%5B8%5D.issues%5C%22%20%7C%20json%20issuesHorizontalPodAutoscalers%3D%5C%22popeye.sections%5B9%5D.issues%5C%22%20%7C%20json%20issuesHttpRoutes%3D%5C%22popeye.sections%5B10%5D.issues%5C%22%20%7C%20json%20issuesIngresses%3D%5C%22popeye.sections%5B11%5D.issues%5C%22%20%7C%20json%20issuesJobs%3D%5C%22popeye.sections%5B12%5D.issues%5C%22%20%7C%20json%20issuesNamespaces%3D%5C%22popeye.sections%5B13%5D.issues%5C%22%20%7C%20json%20issuesNetworkPolicies%3D%5C%22popeye.sections%5B14%5D.issues%5C%22%20%7C%20json%20issuesNodes%3D%5C%22popeye.sections%5B15%5D.issues%5C%22%20%7C%20json%20issuesPersistentVolumes%3D%5C%22popeye.sections%5B16%5D.issues%5C%22%20%7C%20json%20issuesPersistentVolumeClaims%3D%5C%22popeye.sections%5B17%5D.issues%5C%22%20%7C%20json%20issuesPods%3D%5C%22popeye.sections%5B18%5D.issues%5C%22%20%7C%20json%20issuesPoddisruptionBudgets%3D%5C%22popeye.sections%5B19%5D.issues%5C%22%20%7C%20json%20issuesReplicaSets%3D%5C%22popeye.sections%5B20%5D.issues%5C%22%20%7C%20json%20issuesRoles%3D%5C%22popeye.sections%5B21%5D.issues%5C%22%20%7C%20json%20issuesRoleBindings%3D%5C%22popeye.sections%5B22%5D.issues%5C%22%20%7C%20json%20issuesSecrets%3D%5C%22popeye.sections%5B23%5D.issues%5C%22%20%7C%20json%20issuesServices%3D%5C%22popeye.sections%5B24%5D.issues%5C%22%20%7C%20json%20issuesServiceAccounts%3D%5C%22popeye.sections%5B25%5D.issues%5C%22%20%7C%20json%20issuesStatefulSets%3D%5C%22popeye.sections%5B26%5D.issues%5C%22%20%7C%20popeye_score%20%3C%20100%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22ef97fhyk0nfuoc%22%7D,%22editorMode%22:%22code%22,%22direction%22:%22backward%22%7D%5D,%22range%22:%7B%22from%22:%22now-24h%22,%22to%22:%22now%22%7D,%22panelsState%22:%7B%22logs%22:%7B%22visualisationType%22:%22logs%22,%22columns%22:%7B%220%22:%22Time%22,%221%22:%22Line%22%7D,%22labelFieldName%22:%22labels%22,%22refId%22:%22A%22%7D%7D%7D%7D\u0026orgId=1"
               }
             ],
             "mappings": [
@@ -410,7 +410,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "editorMode": "code",
@@ -484,7 +484,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -916,7 +916,7 @@
             }
           ]
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1300,7 +1300,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1371,7 +1371,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1438,7 +1438,7 @@
               {
                 "targetBlank": true,
                 "title": "Personal Dashboard",
-                "url": "http://grafana.fiora.li/d/MV_Jte97k/personal"
+                "url": "http://grafana-oss.fiora.li/d/MV_Jte97k/personal"
               }
             ],
             "mappings": [
@@ -1505,7 +1505,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1652,7 +1652,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "dataset": "postgres",
@@ -1802,7 +1802,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1930,7 +1930,7 @@
           "unwrappedColumns": false,
           "wrapLogMessage": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2066,7 +2066,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2186,7 +2186,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2312,7 +2312,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2442,7 +2442,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2539,7 +2539,7 @@
           "sizing": "auto",
           "valueMode": "color"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2640,7 +2640,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2740,7 +2740,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2825,7 +2825,7 @@
           "sizing": "auto",
           "valueMode": "color"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2939,7 +2939,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3042,7 +3042,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3154,7 +3154,7 @@
           "sizing": "auto",
           "valueMode": "color"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3263,7 +3263,7 @@
           "text": {},
           "valueMode": "color"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3359,7 +3359,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3465,7 +3465,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3691,7 +3691,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3804,7 +3804,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -3919,7 +3919,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4029,7 +4029,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4138,7 +4138,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4249,7 +4249,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4356,7 +4356,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4464,7 +4464,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4573,7 +4573,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -4691,7 +4691,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -5010,7 +5010,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -5156,7 +5156,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -5265,7 +5265,7 @@
             "sort": "desc"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -5286,7 +5286,7 @@
       }
     ],
     "preload": false,
-    "refresh": false,
+    "refresh": "auto",
     "schemaVersion": 42,
     "tags": [],
     "templating": {
@@ -5312,10 +5312,30 @@
           },
           "includeAll": false,
           "name": "resolution",
-          "options": [],
+          "options": [
+            {
+              "selected": false,
+              "text": "30s",
+              "value": "30s"
+            },
+            {
+              "selected": false,
+              "text": "1m",
+              "value": "1m"
+            },
+            {
+              "selected": true,
+              "text": "3m",
+              "value": "3m"
+            },
+            {
+              "selected": false,
+              "text": "5m",
+              "value": "5m"
+            }
+          ],
           "query": "30s, 1m, 3m, 5m",
-          "type": "custom",
-          "valuesFormat": "csv"
+          "type": "custom"
         },
         {
           "baseFilters": [],
@@ -5338,7 +5358,6 @@
       "refresh_intervals": []
     },
     "timezone": "browser",
-    "title": "Kubernetes Dashboard",
-    "weekStart": ""
+    "title": "Kubernetes Dashboard"
   }
 }
