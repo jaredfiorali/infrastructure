@@ -1581,8 +1581,8 @@
       },
       {
         "datasource": {
-          "type": "grafana-postgresql-datasource",
-          "uid": "dfcd2p27r1mo0c"
+          "type": "loki",
+          "uid": "ef97fhyk0nfuoc"
         },
         "description": "When the last dawarich location was logged",
         "fieldConfig": {
@@ -1655,33 +1655,16 @@
         "pluginVersion": "12.3.1",
         "targets": [
           {
-            "dataset": "postgres",
             "datasource": {
-              "type": "grafana-postgresql-datasource",
-              "uid": "dfcd2p27r1mo0c"
+              "type": "loki",
+              "uid": "ef97fhyk0nfuoc"
             },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT COUNT(*) FROM points WHERE timestamp \u003e extract(epoch from now())-86400",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
+            "direction": "backward",
+            "editorMode": "builder",
+            "expr": "count_over_time({container=\"dawarich-app\"} | pattern `Enqueued Tracks::RealtimeGenerationJob (Job ID: \u003cjob_id\u003e) to Sidekiq(tracks) at \u003ctimestamp\u003e UTC with arguments: 1` | timestamp =~ `[\\d]?` [$__auto])",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
           }
         ],
         "timeFrom": "48h",
@@ -5351,7 +5334,7 @@
       ]
     },
     "time": {
-      "from": "now-3h",
+      "from": "now-12h",
       "to": "now"
     },
     "timepicker": {
