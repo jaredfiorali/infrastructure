@@ -1922,7 +1922,7 @@
             },
             "direction": "backward",
             "editorMode": "code",
-            "expr": "{cluster=`default`} | logfmt | detected_level=`error` | job != `loki/nginx` | app !~ `grafana` | container != `popeye` | container != `sillytavern` | container != `unifi-poller` | container != `scrypted` | container != `distributor` | container != `querier` | container != `postgres-exporter` !~ `SocketSlack` !~ `has.* snapshot` !~ `motion recording closed`",
+            "expr": "{cluster=\"default\", detected_level=\"error\"}\n  | logfmt\n  | job != `loki/nginx`\n  | app !~ `grafana`\n  | container !~ `popeye|sillytavern|unifi-poller|scrypted|distributor|querier|postgres-exporter`\n  | line !~ `SocketSlack|has.* snapshot|motion recording closed`",
             "queryType": "range",
             "refId": "A"
           },
@@ -1933,7 +1933,7 @@
             },
             "direction": "backward",
             "editorMode": "code",
-            "expr": "{cluster=`default`} | logfmt | level=`error` | job != `loki/nginx` | app !~ `grafana` | container != `popeye` | container != `sillytavern` | container != `unifi-poller` | container != `scrypted` | container != `distributor` | container != `querier` | container != `postgres-exporter` !~ `SocketSlack` !~ `has.* snapshot` !~ `motion recording closed`",
+            "expr": "{cluster=\"default\", level=\"error\"}\n  | logfmt\n  | job != `loki/nginx`\n  | app !~ `grafana`\n  | container !~ `popeye|sillytavern|unifi-poller|scrypted|distributor|querier|postgres-exporter`\n  | line !~ `SocketSlack|has.* snapshot|motion recording closed`",
             "queryType": "range",
             "refId": "B"
           }
