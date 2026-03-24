@@ -190,8 +190,8 @@
             },
             "decimals": 2,
             "mappings": [],
-            "max": 220,
-            "min": 180,
+            "max": 230,
+            "min": 190,
             "thresholds": {
               "mode": "percentage",
               "steps": [
