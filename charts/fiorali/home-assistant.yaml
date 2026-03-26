@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/homeassistant/home-assistant
-  tag: latest@sha256:0e091dfce3068339c3e1d14382e6c34141e05cd589a1972ebd4d9a8e6b5d8969
+  tag: latest@sha256:916682086154a7390114a9788782b8efb199852d4f7d47066722c2bc5d1829e6
 containerPorts:
 - containerPort: 8123
   name: home-assistant
