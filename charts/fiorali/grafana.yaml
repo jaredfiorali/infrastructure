@@ -48,7 +48,7 @@ service:
     targetPort: grafana
 env:
 - name: GF_FEATURE_TOGGLES_ENABLE
-  value: "provisioning,kubernetesDashboards"
+  value: "provisioning"
 - name: GF_ALERTING_ENABLED
   value: "false"
 - name: GF_ALERTING_EXECUTE_ALERTS_ENABLED
@@ -150,11 +150,20 @@ volumeMounts:
   mountPath: /var/lib/grafana
 - name: tmp
   mountPath: /tmp
+- name: grafana-custom-ini
+  mountPath: /etc/grafana/custom.ini
+  subPath: custom.ini
+  configMap: grafana-custom-ini
+  readOnly: true
 volumes:
 - name: grafana-storage
   emptyDir: {}
 - name: tmp
   emptyDir: {}
+- name: grafana-custom-ini
+  configMap:
+    name: grafana-custom-ini
+    defaultMode: 511
 networkpolicy:
   ingress:
     internal: true
