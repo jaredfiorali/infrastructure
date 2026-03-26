@@ -190,8 +190,8 @@
             },
             "decimals": 2,
             "mappings": [],
-            "max": 220,
-            "min": 180,
+            "max": 230,
+            "min": 190,
             "thresholds": {
               "mode": "percentage",
               "steps": [
@@ -1581,8 +1581,8 @@
       },
       {
         "datasource": {
-          "type": "grafana-postgresql-datasource",
-          "uid": "dfcd2p27r1mo0c"
+          "type": "loki",
+          "uid": "ef97fhyk0nfuoc"
         },
         "description": "When the last dawarich location was logged",
         "fieldConfig": {
@@ -1655,33 +1655,16 @@
         "pluginVersion": "12.3.1",
         "targets": [
           {
-            "dataset": "postgres",
             "datasource": {
-              "type": "grafana-postgresql-datasource",
-              "uid": "dfcd2p27r1mo0c"
+              "type": "loki",
+              "uid": "ef97fhyk0nfuoc"
             },
-            "editorMode": "code",
-            "format": "table",
-            "rawQuery": true,
-            "rawSql": "SELECT COUNT(*) FROM points WHERE timestamp \u003e extract(epoch from now())-86400",
-            "refId": "A",
-            "sql": {
-              "columns": [
-                {
-                  "parameters": [],
-                  "type": "function"
-                }
-              ],
-              "groupBy": [
-                {
-                  "property": {
-                    "type": "string"
-                  },
-                  "type": "groupBy"
-                }
-              ],
-              "limit": 50
-            }
+            "direction": "backward",
+            "editorMode": "builder",
+            "expr": "count_over_time({container=\"dawarich-app\"} | pattern `Enqueued Tracks::RealtimeGenerationJob (Job ID: \u003cjob_id\u003e) to Sidekiq(tracks) at \u003ctimestamp\u003e UTC with arguments: 1` | timestamp =~ `[\\d]?` [$__auto])",
+            "legendFormat": "",
+            "queryType": "instant",
+            "refId": "A"
           }
         ],
         "timeFrom": "48h",
@@ -1939,7 +1922,8 @@
             },
             "direction": "backward",
             "editorMode": "code",
-            "expr": "{cluster=`default`} | logfmt | detected_level=`error` | job != `loki/nginx` | app !~ `grafana` | container != `popeye` | container != `sillytavern` | container != `unifi-poller` | container != `scrypted` | container != `distributor` | container != `querier` | container != `postgres-exporter` !~ `SocketSlack` !~ `has.* snapshot` !~ `motion recording closed`",
+            "expr": "{cluster=\"default\", detected_level=\"error\"}\n  | logfmt\n  | job != `loki/nginx`\n  | container !~ `grafana|popeye|sillytavern|unifi-poller|scrypted|distributor|querier|postgres-exporter`\n  | line !~ `SocketSlack|has.* snapshot|motion recording closed`",
+            "hide": false,
             "queryType": "range",
             "refId": "A"
           },
@@ -1950,7 +1934,8 @@
             },
             "direction": "backward",
             "editorMode": "code",
-            "expr": "{cluster=`default`} | logfmt | level=`error` | job != `loki/nginx` | app !~ `grafana` | container != `popeye` | container != `sillytavern` | container != `unifi-poller` | container != `scrypted` | container != `distributor` | container != `querier` | container != `postgres-exporter` !~ `SocketSlack` !~ `has.* snapshot` !~ `motion recording closed`",
+            "expr": "{cluster=\"default\", level=\"error\"}\n  | logfmt\n  | job != `loki/nginx`\n  | container !~ `grafana|popeye|sillytavern|unifi-poller|scrypted|distributor|querier|postgres-exporter`\n  | line !~ `SocketSlack|has.* snapshot|motion recording closed`",
+            "hide": false,
             "queryType": "range",
             "refId": "B"
           }
@@ -5351,7 +5336,7 @@
       ]
     },
     "time": {
-      "from": "now-3h",
+      "from": "now-12h",
       "to": "now"
     },
     "timepicker": {
