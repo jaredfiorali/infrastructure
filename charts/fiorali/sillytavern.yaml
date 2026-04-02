@@ -17,9 +17,11 @@ resources:
     cpu: 1
     memory: 500Mi
 probes:
-  httpGet:
-    path: /manifest.json
-    port: sillytavern
+  exec:
+    command:
+    - sh
+    - -c
+    - node src/healthcheck.js
 service:
   enabled: true
   ports:
@@ -38,38 +40,67 @@ env:
   value: 'false'
 - name: SILLYTAVERN_BACKUPS_CHAT_ENABLED
   value: 'false'
-- name: SILLYTAVERN_SECURITYOVERRIDE
+- name: SILLYTAVERN_THUMBNAILS_ENABLED
+  value: 'false'
+- name: SILLYTAVERN_EXTENSIONS_ENABLED
+  value: 'false'
+- name: SILLYTAVERN_ENABLESERVERPLUGINS
+  value: 'false'
+- name: SILLYTAVERN_LOGGING_ENABLEACCESSLOG
+  value: 'false'
+- name: SILLYTAVERN_LOGGING_MINLOGLEVEL
+  value: '3'
+- name: SILLYTAVERN_HEARTBEATINTERVAL
+  value: '15'
+- name: SILLYTAVERN_BROWSERLAUNCH_ENABLED
+  value: 'false'
+- name: SILLYTAVERN_BASICAUTHMODE
   value: 'true'
+- name: SILLYTAVERN_BASICAUTHUSER_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: sillytavern-credentials
+      key: BASICAUTHUSER_USERNAME
+- name: SILLYTAVERN_BASICAUTHUSER_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: sillytavern-credentials
+      key: BASICAUTHUSER_PASSWORD
+- name: SILLYTAVERN_DATAROOT
+  value: '/app/data'
+- name: SILLYTAVERN_HOSTWHITELIST_ENABLED
+  value: 'true'
+- name: SILLYTAVERN_HOSTWHITELIST_HOSTS
+  value: '["sillytavern.fiora.li"]'
 ingress:
   enabled: true
 volumeMounts:
 - name: sillytavern-persistent-storage
-  mountPath: /home/node/app/config
-  subPath: data/config
-- name: sillytavern-persistent-storage
-  mountPath: /home/node/app/data
+  mountPath: /app/data
   subPath: data/data
-- name: sillytavern-persistent-storage
-  mountPath: /home/node/app/plugins
-  subPath: data/plugins
-- name: sillytavern-persistent-storage
+- name: tmp
+  mountPath: /home/node/app/config
+  subPath: config
+- name: tmp
   mountPath: /home/node/app/extensions
-  subPath: data/extensions
-- name: error
+  subPath: extensions
+- name: tmp
+  mountPath: /home/node/app/plugins
+  subPath: plugins
+- name: tmp
   mountPath: /home/node/app/public/error
-- name: backups
+  subPath: error
+- name: tmp
   mountPath: /home/node/app/backups
-- name: third-party
+  subPath: backups
+- name: tmp
   mountPath: /home/node/app/public/scripts/extensions/third-party
+  subPath: exports
 volumes:
 - name: sillytavern-persistent-storage
   persistentVolumeClaim:
     claimName: sillytavern
-- name: error
-  emptyDir: {}
-- name: backups
-  emptyDir: {}
-- name: third-party
+- name: tmp
   emptyDir: {}
 networkpolicy:
   ingress:
@@ -93,3 +124,12 @@ volume:
   size: "1073741824"
 imageUpdater:
   enabled: true
+externalSecrets:
+  - name: sillytavern-credentials
+    data:
+      - secretKey: BASICAUTHUSER_USERNAME
+        remoteRef:
+          key: /homelab/sillytavern/BASICAUTHUSER_USERNAME
+      - secretKey: BASICAUTHUSER_PASSWORD
+        remoteRef:
+          key: /homelab/sillytavern/BASICAUTHUSER_PASSWORD
