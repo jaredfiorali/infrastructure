@@ -187,14 +187,29 @@ configMap:
               instances:
                 - labels:
                     app: [git-sync, kometa]
+                    app.kubernetes.io/managed-by: [grafana-operator]
                   codes: [400] # => Secret not assigned
+                - labels:
+                    app: [grafana-oss]
+                  codes: [401] # => Secret not assigned
             services:
               instances:
                 - labels:
                     app: [cloudflared, plex]
                   codes: [1103, 1107] # Load balancer services
+                - labels:
+                    app.kubernetes.io/name: [kubeview]
+                  codes: [1102, 1103, 1107] # Load balancer services
+            ingresses:
+              instances:
+                - labels:
+                    app.kubernetes.io/name: [grafana, headlamp, kubeview]
+                  codes: [1403] # Ingress backend uses a port#, prefer a named port
             serviceaccounts:
               instances:
+                - labels:
+                    app.kubernetes.io/instance: [grafana-operator]
+                  codes: [303] # Unable to locate resource reference
                 - labels:
                     app: [git-sync, kometa]
                   codes: [400] # Unable to locate resource reference
@@ -233,10 +248,20 @@ configMap:
                   codes: [110] # => Memory Current/Request threshold
                 - containers: [kometa-init, home-assistant-init]
                   codes: [101] # => Image tagged 'latest' in use
+                - containers: [kubeview]
+                  codes: [101, 105, 105, 206, 306, 302, 110]
+                - containers: [headlamp]
+                  codes: [106, 301]
+                - containers: [grafana-operator]
+                  codes: [106, 105, 105, 206, 301]
+                - containers: [grafana]
+                  codes: [106, 206, 301]
             deployments:
               instances:
-                - containers: [home-assistant-init]
+                - containers: [home-assistant-init, kubeview]
                   codes: [101] # => Image tagged 'latest' in use
+                - containers: [headlamp, grafana-operator, grafana]
+                  codes: [106]
         resources:
           # Configure node resources.
           node:
