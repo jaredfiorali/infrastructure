@@ -1733,7 +1733,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Percent Cached"
+                "options": "Block Rate"
               },
               "properties": [
                 {
@@ -1756,6 +1756,29 @@
                   "id": "color",
                   "value": {
                     "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Error Rate"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "semi-dark-red",
                     "mode": "fixed"
                   }
                 }
@@ -1809,10 +1832,10 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "sum by (service) (coredns_cache_requests_total)",
+            "expr": "sum(rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"REFUSED\"}[$__rate_interval]))\n/\nsum(rate(coredns_dns_responses_total{container=\"cloudflared\"}[$__rate_interval]))",
             "instant": false,
             "interval": "$resolution",
-            "legendFormat": "coredns_cache_requests_total",
+            "legendFormat": "Block Rate",
             "range": true,
             "refId": "B"
           },
@@ -1822,64 +1845,16 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "sum by (service) (coredns_cache_hits_total)",
+            "expr": "sum by (container) (rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"SERVFAIL\"}[$__rate_interval])) * 60",
+            "hide": false,
             "instant": false,
             "interval": "$resolution",
-            "legendFormat": "coredns_cache_hits_total",
+            "legendFormat": "Error Rate",
             "range": true,
             "refId": "C"
           }
         ],
         "title": "CloudFlare DNS Usage",
-        "transformations": [
-          {
-            "id": "calculateField",
-            "options": {
-              "alias": "Percent Cached",
-              "binary": {
-                "left": {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "coredns_cache_hits_total"
-                  }
-                },
-                "operator": "/",
-                "right": {
-                  "matcher": {
-                    "id": "byName",
-                    "options": "coredns_cache_requests_total"
-                  }
-                }
-              },
-              "mode": "binary",
-              "reduce": {
-                "reducer": "sum"
-              },
-              "replaceFields": false
-            }
-          },
-          {
-            "id": "filterFieldsByName",
-            "options": {
-              "include": {
-                "names": [
-                  "Time",
-                  "rpi4-node-1",
-                  "rpi4-node-2",
-                  "rpi4-node-3",
-                  "rpi4-node-4",
-                  "rpi4-node-5",
-                  "rpi5-node-1",
-                  "rpi5-node-2",
-                  "rpi5-node-3",
-                  "rpi5-node-4",
-                  "rpi5-node-5",
-                  "Percent Cached"
-                ]
-              }
-            }
-          }
-        ],
         "type": "timeseries"
       },
       {
@@ -5336,7 +5311,7 @@
       ]
     },
     "time": {
-      "from": "now-12h",
+      "from": "now-24h",
       "to": "now"
     },
     "timepicker": {
