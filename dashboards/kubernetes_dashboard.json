@@ -1997,7 +1997,36 @@
             },
             "unit": "iops"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byFrameRefID",
+                "options": "C"
+              },
+              "properties": [
+                {
+                  "id": "custom.axisPlacement",
+                  "value": "right"
+                },
+                {
+                  "id": "custom.drawStyle",
+                  "value": "line"
+                },
+                {
+                  "id": "custom.fillOpacity",
+                  "value": 10
+                },
+                {
+                  "id": "custom.lineWidth",
+                  "value": 1
+                },
+                {
+                  "id": "unit",
+                  "value": "bytes"
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 6,
@@ -2006,7 +2035,6 @@
           "y": 20
         },
         "id": 732,
-        "interval": "15s",
         "options": {
           "legend": {
             "calcs": [
@@ -2022,7 +2050,7 @@
           "tooltip": {
             "hideZeros": false,
             "maxHeight": 600,
-            "mode": "multi",
+            "mode": "single",
             "sort": "none"
           }
         },
@@ -2035,7 +2063,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "-sum(longhorn_volume_read_iops{volume!~\"pvc.*\"}) by (volume) \u003c 0",
+            "expr": "-sum(longhorn_volume_read_iops{volume!~\"pvc.*\"}) by (volume)",
             "interval": "$resolution",
             "legendFormat": "Read IOps {{volume}}",
             "range": true,
@@ -2047,12 +2075,25 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "sum(longhorn_volume_write_iops{volume!~\"pvc.*\"}) by (volume) \u003e 0",
+            "expr": "sum(longhorn_volume_write_iops{volume!~\"pvc.*\"}) by (volume)",
             "format": "time_series",
             "interval": "$resolution",
             "legendFormat": "Write IOps {{volume}}",
             "range": true,
             "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "bf97cjlrdkkxsb"
+            },
+            "editorMode": "code",
+            "expr": "sum(longhorn_volume_write_throughput{volume!~\"pvc.*\"}) by (volume)",
+            "format": "time_series",
+            "interval": "$resolution",
+            "legendFormat": "Write Throughput {{volume}}",
+            "range": true,
+            "refId": "C"
           }
         ],
         "title": "Volume IOps",
@@ -2103,7 +2144,7 @@
                 "mode": "off"
               }
             },
-            "decimals": 0,
+            "decimals": 2,
             "mappings": [],
             "noValue": "0",
             "thresholds": {
@@ -2115,7 +2156,7 @@
                 }
               ]
             },
-            "unit": "ns"
+            "unit": "ms"
           },
           "overrides": []
         },
@@ -2126,7 +2167,6 @@
           "y": 20
         },
         "id": 733,
-        "interval": "15s",
         "options": {
           "legend": {
             "calcs": [
@@ -2142,7 +2182,7 @@
           "tooltip": {
             "hideZeros": false,
             "maxHeight": 600,
-            "mode": "multi",
+            "mode": "single",
             "sort": "none"
           }
         },
@@ -2154,7 +2194,7 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "-sum(longhorn_volume_read_latency{volume!~\"pvc.*\"}) by (volume) \u003c 0",
+            "expr": "-sum(longhorn_volume_read_latency{volume!~\"pvc.*\"}) by (volume) / 1e6",
             "interval": "$resolution",
             "legendFormat": "Read Latency {{volume}}",
             "range": true,
@@ -2166,7 +2206,7 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "sum(longhorn_volume_write_latency{volume!~\"pvc.*\"}) by (volume) \u003e 0",
+            "expr": "sum(longhorn_volume_write_latency{volume!~\"pvc.*\"}) by (volume) / 1e6",
             "interval": "$resolution",
             "legendFormat": "Write Latency {{volume}}",
             "range": true,
@@ -5267,8 +5307,8 @@
         },
         {
           "current": {
-            "text": "3m",
-            "value": "3m"
+            "text": "1m",
+            "value": "1m"
           },
           "includeAll": false,
           "name": "resolution",
@@ -5279,12 +5319,12 @@
               "value": "30s"
             },
             {
-              "selected": false,
+              "selected": true,
               "text": "1m",
               "value": "1m"
             },
             {
-              "selected": true,
+              "selected": false,
               "text": "3m",
               "value": "3m"
             },
@@ -5311,7 +5351,7 @@
       ]
     },
     "time": {
-      "from": "now-24h",
+      "from": "now-3h",
       "to": "now"
     },
     "timepicker": {
