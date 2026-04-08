@@ -1853,7 +1853,7 @@
               "uid": "bf97cjlrdkkxsb"
             },
             "editorMode": "code",
-            "expr": "sum by (container) (rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"SERVFAIL\"}[$__rate_interval])) * 60",
+            "expr": "sum(rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"SERVFAIL\"}[$__rate_interval]))\n/\nsum(rate(coredns_dns_responses_total{container=\"cloudflared\"}[$__rate_interval]))",
             "hide": false,
             "instant": false,
             "interval": "$resolution",
