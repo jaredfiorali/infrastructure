@@ -86,16 +86,16 @@ externalSecrets:
   data:
   - secretKey: ADMIN_USER
     remoteRef:
-      key: /homelab/grafana/ADMIN_USER
+      key: /homelab/grafana-oss/ADMIN_USER
   - secretKey: ADMIN_PASSWORD
     remoteRef:
-      key: /homelab/grafana/ADMIN_PASSWORD
+      key: /homelab/grafana-oss/ADMIN_PASSWORD
   - secretKey: GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
     remoteRef:
-      key: /homelab/grafana/GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
+      key: /homelab/grafana-oss/GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
   - secretKey: GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
     remoteRef:
-      key: /homelab/grafana/GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
+      key: /homelab/grafana-oss/GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
   - secretKey: GRAFANA_GIT_SYNC_TOKEN
     remoteRef:
-      key: /homelab/grafana/GRAFANA_GIT_SYNC_TOKEN
+      key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_TOKEN
