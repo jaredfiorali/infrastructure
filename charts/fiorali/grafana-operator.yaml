@@ -15,9 +15,9 @@ grafana:
   enabled: true
   url: http://grafana-oss.monitoring
   userName: grafana-oss
-  userKey: admin-user
+  userKey: ADMIN_USER
   passwordName: grafana-oss
-  passwordKey: admin-password
+  passwordKey: ADMIN_PASSWORD
   instanceLabel: grafana-oss
   serviceAccount:
     name: "git-sync"
