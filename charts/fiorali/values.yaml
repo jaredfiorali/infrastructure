@@ -221,3 +221,15 @@ sidecarContainers:
   containers: []
 
 externalSecrets: []
+
+grafana:
+  enabled: false
+  url: ""
+  userName: ""
+  userKey: ""
+  passwordName: ""
+  passwordKey: ""
+  instanceLabel: ""
+  datasources: []
+  serviceAccount:
+    enabled: false
