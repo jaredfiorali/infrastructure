@@ -1,0 +1,93 @@
+name: grafana
+namespace: monitoring
+deployment:
+  enabled: false
+replicaCount: 0
+grafana:
+  enabled: true
+  url: http://grafana-oss.monitoring
+  userName: grafana-oss
+  userKey: admin-password
+  passwordName: grafana-oss
+  passwordKey: admin-user
+  instanceLabel: grafana-oss
+  serviceAccount:
+    name: "git-sync"
+    role: "Admin"
+    token:
+      name: "git-sync"
+      secretName: "git-sync"
+  datasources:
+    - resourceName: prometheus
+      uid: bf97cjlrdkkxsb
+      name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus-kube-prometheus-prometheus:9090
+      isDefault: true
+    - resourceName: loki
+      uid: ef97fhyk0nfuoc
+      name: loki
+      type: loki
+      access: proxy
+      url: http://loki-gateway.loki
+    - resourceName: alertmanager
+      uid: df97fkv0rs16of
+      name: alertmanager
+      type: alertmanager
+      access: proxy
+      url: http://prometheus-kube-prometheus-alertmanager:9093
+      jsonData:
+        implementation: prometheus
+    - resourceName: influxdb-home-assistant
+      uid: ffcflxi88lq80c
+      name: Home Assistant
+      type: influxdb
+      access: proxy
+      url: http://influxdb.monitoring:8086
+      jsonData:
+        dbName: home_assistant
+        httpHeaderName1: Authorization
+        httpMode: GET
+        tlsSkipVerify: true
+      secureJsonData:
+        httpHeaderValue1: "${GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT}"
+      valuesFrom:
+        - targetPath: "secureJsonData.httpHeaderValue1"
+          secretName: grafana-oss
+          secretKey: GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
+    - resourceName: influxdb-personal
+      uid: cf97esvx41ssgf
+      name: Personal
+      type: influxdb
+      access: proxy
+      url: http://influxdb.monitoring:8086
+      jsonData:
+        dbName: personal
+        httpHeaderName1: Authorization
+        httpMode: GET
+        tlsSkipVerify: true
+      secureJsonData:
+        httpHeaderValue1: "${GRAFANA_DATASOURCE_INFLUXDB_PERSONAL}"
+      valuesFrom:
+        - targetPath: "secureJsonData.httpHeaderValue1"
+          secretName: grafana-oss
+          secretKey: GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
+externalSecrets:
+- name: grafana-oss
+  data:
+  - secretKey: ADMIN_USER
+    remoteRef:
+      key: /homelab/grafana/ADMIN_USER
+  - secretKey: ADMIN_PASSWORD
+    remoteRef:
+      key: /homelab/grafana/ADMIN_PASSWORD
+  - secretKey: GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
+    remoteRef:
+      key: /homelab/grafana/GRAFANA_DATASOURCE_INFLUXDB_PERSONAL
+  - secretKey: GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
+    remoteRef:
+      key: /homelab/grafana/GRAFANA_DATASOURCE_INFLUXDB_HOME_ASSISTANT
+  - secretKey: GRAFANA_GIT_SYNC_TOKEN
+    remoteRef:
+      key: /homelab/grafana/GRAFANA_GIT_SYNC_TOKEN

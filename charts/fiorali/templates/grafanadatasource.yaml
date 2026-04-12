@@ -1,0 +1,41 @@
+{{- range .Values.grafana.datasources }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: {{ .resourceName }}
+  namespace: {{ $.Values.namespace }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: {{ $.Values.grafana.instanceLabel }}
+  allowCrossNamespaceImport: true
+  {{- if .valuesFrom }}
+  valuesFrom:
+    {{- range .valuesFrom }}
+    - targetPath: {{ .targetPath | quote }}
+      valueFrom:
+        secretKeyRef:
+          name: {{ .secretName }}
+          key: {{ .secretKey }}
+    {{- end }}
+  {{- end }}
+  datasource:
+    uid: {{ .uid }}
+    name: {{ .name }}
+    type: {{ .type }}
+    access: {{ .access }}
+    url: {{ .url }}
+    {{- if .isDefault }}
+    isDefault: {{ .isDefault }}
+    {{- end }}
+    jsonData:
+      pdcInjected: false
+      {{- if .jsonData }}
+      {{- toYaml .jsonData | nindent 6 }}
+      {{- end }}
+    {{- if .secureJsonData }}
+    secureJsonData:
+      {{- toYaml .secureJsonData | nindent 6 }}
+    {{- end }}
+{{- end }}

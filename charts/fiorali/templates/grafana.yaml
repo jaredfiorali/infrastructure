@@ -1,0 +1,16 @@
+{{ if .Values.grafana.enabled -}}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  external:
+    url: {{ .Values.grafana.url }}
+    adminUser:
+      name: {{ .Values.grafana.userName }}
+      key: {{ .Values.grafana.userKey }}
+    adminPassword:
+      name: {{ .Values.grafana.passwordName }}
+      key: {{ .Values.grafana.passwordKey }}
+{{- end }}
