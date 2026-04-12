@@ -1,15 +1,23 @@
-name: grafana
+name: grafana-oss
 namespace: monitoring
 deployment:
   enabled: false
 replicaCount: 0
+networkpolicy:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
+service:
+  enabled: false
+serviceAccount:
+  enabled: false
 grafana:
   enabled: true
   url: http://grafana-oss.monitoring
   userName: grafana-oss
-  userKey: admin-password
+  userKey: ADMIN_USER
   passwordName: grafana-oss
-  passwordKey: admin-user
+  passwordKey: ADMIN_PASSWORD
   instanceLabel: grafana-oss
   serviceAccount:
     name: "git-sync"
