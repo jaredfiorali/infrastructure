@@ -1249,7 +1249,7 @@
               {
                 "targetBlank": true,
                 "title": "CloudFlare Zero Trust Dashboard",
-                "url": "https://one.dash.cloudflare.com/9fce377f61409a58bc2f6402b19d548a/insights/logs/gateway?tab=dns"
+                "url": "https://dash.cloudflare.com/9fce377f61409a58bc2f6402b19d548a/one/insights/logs/gateway/dns"
               }
             ],
             "mappings": [],
@@ -5359,7 +5359,7 @@
       ]
     },
     "time": {
-      "from": "now-12h",
+      "from": "now-3h",
       "to": "now"
     },
     "timepicker": {
