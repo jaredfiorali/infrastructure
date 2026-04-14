@@ -47,11 +47,6 @@ initContainers:
         cpu: 10m
         memory: 10Mi
     env:
-    - name: INFLUXDB_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: home-assistant-credentials
-          key: INFLUXDB_TOKEN
     - name: WEBHOOK_GARAGE_SIREN
       valueFrom:
         secretKeyRef:
@@ -170,13 +165,6 @@ configMap:
         trusted_proxies:
           - 0.0.0.0/0
       influxdb:
-        api_version: 2
-        ssl: false
-        host: influxdb.fiora.li
-        port: 80
-        token: ${INFLUXDB_TOKEN}
-        organization: fiorali
-        bucket: home_assistant
         measurement_attr: entity_id
       alarm_control_panel:
         - platform: manual
@@ -258,9 +246,6 @@ imageUpdater:
 externalSecrets:
 - name: home-assistant-credentials
   data:
-  - secretKey: INFLUXDB_TOKEN
-    remoteRef:
-      key: /homelab/home-assistant/INFLUXDB_TOKEN
   - secretKey: WEBHOOK_GARAGE_SIREN
     remoteRef:
       key: /homelab/home-assistant/WEBHOOK_GARAGE_SIREN
