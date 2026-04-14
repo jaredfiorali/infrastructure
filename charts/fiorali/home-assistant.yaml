@@ -164,6 +164,10 @@ configMap:
         use_x_forwarded_for: true
         trusted_proxies:
           - 0.0.0.0/0
+      influxdb:
+        api_version: 2
+        ssl: false
+        measurement_attr: entity_id
       alarm_control_panel:
         - platform: manual
           name: Security System
