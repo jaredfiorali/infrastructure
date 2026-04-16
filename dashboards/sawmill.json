@@ -196,7 +196,7 @@
           "textMode": "auto",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "editorMode": "code",
@@ -284,7 +284,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "editorMode": "code",
@@ -381,7 +381,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -513,7 +513,7 @@
           "textMode": "value",
           "wideLayout": true
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -754,7 +754,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -856,7 +856,7 @@
           "showThresholdMarkers": true,
           "sizing": "auto"
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1013,7 +1013,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Away Arm",
@@ -1344,7 +1344,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1546,7 +1546,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1714,6 +1714,7 @@
             },
             "decimals": 0,
             "mappings": [],
+            "max": 100,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1797,7 +1798,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -1999,7 +2000,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "datasource": {
@@ -2170,7 +2171,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -2378,7 +2379,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -2593,7 +2594,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -2835,7 +2836,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -3083,7 +3084,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -3291,7 +3292,7 @@
             "sort": "none"
           }
         },
-        "pluginVersion": "12.4.1",
+        "pluginVersion": "12.3.1",
         "targets": [
           {
             "alias": "Indoor",
@@ -3399,10 +3400,80 @@
           },
           "description": "",
           "name": "min_interval",
-          "options": [],
+          "options": [
+            {
+              "selected": false,
+              "text": "30s",
+              "value": "30s"
+            },
+            {
+              "selected": false,
+              "text": "1m",
+              "value": "1m"
+            },
+            {
+              "selected": false,
+              "text": "3m",
+              "value": "3m"
+            },
+            {
+              "selected": false,
+              "text": "5m",
+              "value": "5m"
+            },
+            {
+              "selected": false,
+              "text": "10m",
+              "value": "10m"
+            },
+            {
+              "selected": false,
+              "text": "30m",
+              "value": "30m"
+            },
+            {
+              "selected": true,
+              "text": "1h",
+              "value": "1h"
+            },
+            {
+              "selected": false,
+              "text": "6h",
+              "value": "6h"
+            },
+            {
+              "selected": false,
+              "text": "12h",
+              "value": "12h"
+            },
+            {
+              "selected": false,
+              "text": "1d",
+              "value": "1d"
+            },
+            {
+              "selected": false,
+              "text": "3h",
+              "value": "3h"
+            },
+            {
+              "selected": false,
+              "text": "12h",
+              "value": "12h"
+            },
+            {
+              "selected": false,
+              "text": "2d",
+              "value": "2d"
+            },
+            {
+              "selected": false,
+              "text": "7d",
+              "value": "7d"
+            }
+          ],
           "query": "30s, 1m, 3m, 5m, 10m, 30m, 1h,6h,12h,1d,3h,12h,2d,7d",
-          "type": "custom",
-          "valuesFormat": "csv"
+          "type": "custom"
         }
       ]
     },
@@ -3420,7 +3491,6 @@
       ]
     },
     "timezone": "America/Toronto",
-    "title": "Sawmill",
-    "weekStart": ""
+    "title": "Sawmill"
   }
 }
