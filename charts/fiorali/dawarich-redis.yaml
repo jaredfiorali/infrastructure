@@ -5,7 +5,7 @@ deployment:
 replicaCount: 1
 image:
   repository: docker.io/redis
-  tag: alpine@sha256:885cba5f568cc9b05cbeb1fd7d41b860da06983c24bbb0d7027332a2e82def87
+  tag: alpine@sha256:c5e375abb885e6b2021c0377879e4890bf76f9065b8922ffc113f2b226b9fc17
 containerPorts:
 - containerPort: 6379
   name: redis
