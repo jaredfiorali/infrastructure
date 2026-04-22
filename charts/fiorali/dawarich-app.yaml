@@ -81,6 +81,9 @@ env:
     value: 'redis://dawarich-redis:6379'
   - name: RAILS_LOG_LEVEL
     value: info
+  - name: RAILS_MAX_THREADS
+    value: '2'
+
   - name: DATABASE_USERNAME
     valueFrom:
       secretKeyRef:
