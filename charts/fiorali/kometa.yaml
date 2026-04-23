@@ -72,11 +72,11 @@ initContainers:
       runAsUser: 911
     resources:
       limits:
-        cpu: 25m
-        memory: 25Mi
+        cpu: 250m
+        memory: 100Mi
       requests:
-        cpu: 10m
-        memory: 10Mi
+        cpu: 100m
+        memory: 50Mi
     env:
     - name: PLEX_TOKEN
       valueFrom:
