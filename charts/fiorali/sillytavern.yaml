@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: ghcr.io/sillytavern/sillytavern
-  tag: latest@sha256:5520831198cdb30ede4ae6c481a5a36257d4e9e3177512d6e28d0c7bb1c9e76f
+  tag: latest@sha256:46dffb0390d9148df6f197f1f96d6d23c22e8b85ee71902857b52699f9bc21be
 containerPorts:
 - containerPort: 8000
   name: sillytavern
@@ -125,11 +125,11 @@ volume:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: sillytavern-credentials
-    data:
-      - secretKey: BASICAUTHUSER_USERNAME
-        remoteRef:
-          key: /homelab/sillytavern/BASICAUTHUSER_USERNAME
-      - secretKey: BASICAUTHUSER_PASSWORD
-        remoteRef:
-          key: /homelab/sillytavern/BASICAUTHUSER_PASSWORD
+- name: sillytavern-credentials
+  data:
+  - secretKey: BASICAUTHUSER_USERNAME
+    remoteRef:
+      key: /homelab/sillytavern/BASICAUTHUSER_USERNAME
+  - secretKey: BASICAUTHUSER_PASSWORD
+    remoteRef:
+      key: /homelab/sillytavern/BASICAUTHUSER_PASSWORD
