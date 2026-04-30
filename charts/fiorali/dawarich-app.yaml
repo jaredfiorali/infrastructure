@@ -5,7 +5,7 @@ deployment:
 replicaCount: 1
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:a884f69f19ce0f66992f3872d24544d1e587e133b8a003e072711aafc1e02429
+  tag: latest@sha256:20e2fc135c3724de2a8b447ffc2b062c2ad2b3c631f909efdf132108bb6c14e4
 containerPorts:
   - containerPort: 3000
     name: dawarich
