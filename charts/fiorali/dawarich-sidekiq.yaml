@@ -5,7 +5,7 @@ deployment:
 replicaCount: 1
 image:
   repository: docker.io/freikin/dawarich
-  tag: latest@sha256:8199a4d41ad72b2e159f571953cec0398f6f272421afb18c89636232c956f92e
+  tag: latest@sha256:dceef4bf7bd5e6a842d61cdd2a82440a0db34f70dc766e02b0b3b212e13b4ba6
 containerPorts:
 - containerPort: 3000
   name: sidekiq
