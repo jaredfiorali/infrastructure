@@ -12,6 +12,7 @@ networkpolicy:
       - monitoring
   egress:
     internal: true
+    kubeApiServer: true
 serviceAccount:
   enabled: false
 podDisruptionBudget:
