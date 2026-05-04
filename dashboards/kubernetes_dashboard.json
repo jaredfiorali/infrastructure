@@ -5294,7 +5294,7 @@
       }
     ],
     "preload": false,
-    "refresh": "auto",
+    "refresh": "",
     "schemaVersion": 42,
     "tags": [],
     "templating": {
@@ -5359,11 +5359,16 @@
       ]
     },
     "time": {
-      "from": "now-3h",
+      "from": "now-30m",
       "to": "now"
     },
     "timepicker": {
-      "refresh_intervals": []
+      "refresh_intervals": [
+        "30s",
+        "1m",
+        "3m",
+        "5m"
+      ]
     },
     "timezone": "browser",
     "title": "Kubernetes Dashboard"
