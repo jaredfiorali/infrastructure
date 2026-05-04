@@ -139,12 +139,14 @@ networkpolicy:
     internal: false
     network: false
     internet: false
+    kubeApiServer: false
   egress:
     allowAll: false
     namespaces: []
     internal: false
     network: false
     internet: false
+    kubeApiServer: false
 
 prometheusRules:
   enabled: false
