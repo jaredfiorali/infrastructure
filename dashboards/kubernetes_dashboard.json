@@ -76,12 +76,6 @@
             "uid": "bf97cjlrdkkxsb"
           },
           "enable": true,
-          "filter": {
-            "exclude": false,
-            "ids": [
-              750
-            ]
-          },
           "hide": true,
           "iconColor": "yellow",
           "name": "Fan On",
