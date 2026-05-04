@@ -5359,7 +5359,7 @@
       ]
     },
     "time": {
-      "from": "now-30m",
+      "from": "now-24h",
       "to": "now"
     },
     "timepicker": {
@@ -5371,6 +5371,7 @@
       ]
     },
     "timezone": "browser",
-    "title": "Kubernetes Dashboard"
+    "title": "Kubernetes Dashboard",
+    "weekStart": "sunday"
   }
 }
