@@ -164,6 +164,12 @@ configMap:
           include_entities:
             - sensor.transmission_started_torrents
             - sensor.fiorali_plex
+            - alarm_control_panel.security_system
+            - alarm_control_panel.kid_system
+            - input_boolean.alarm_guest_mode
+            - sensor.pool_table_carbon_dioxide
+            - sensor.pool_table_pm2_5
+            - sensor.pool_table_volatile_organic_compounds_parts
       http:
         use_x_forwarded_for: true
         trusted_proxies:
