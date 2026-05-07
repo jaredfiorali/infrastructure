@@ -170,6 +170,30 @@ configMap:
           - 0.0.0.0/0
       influxdb:
         measurement_attr: entity_id
+        include:
+          domains:
+            - sun
+            - alarm_control_panel
+            - input_boolean
+          entity_globs:
+            - sensor.*_temperature
+            - sensor.*_humidity
+            - sensor.*_illuminance
+            - sensor.*_light_level
+            - sensor.*_motion
+            - sensor.*_carbon_dioxide
+            - sensor.*_pm2_5
+            - sensor.*_pm1
+            - sensor.*_volatile_organic_compounds*
+            - sensor.*_radon
+            - sensor.*_atmospheric_pressure
+            - sensor.*_air_quality_index
+            - binary_sensor.*_motion
+            - sensor.jaredfiorali_*_trophies
+          entities:
+            - sensor.mississauga_ontario_canada_pressure
+            - sensor.mississauga_ontario_canada_pm2_5
+            - sensor.jaredfiorali_now_playing
       alarm_control_panel:
         - platform: manual
           name: Security System
