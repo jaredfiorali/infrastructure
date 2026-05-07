@@ -5,19 +5,13 @@ deployment:
 service:
   enabled: false
 networkpolicy:
-  egress:
-    internal: true
-  ingress:
-    internal: true
-    namespaces:
-      - monitoring
+  enabled: false
 serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
 ingress:
-  enabled: true
-  portName: http-metrics
+  enabled: false
 containerSecurityContext:
   enabled: false
 configMap:
@@ -46,10 +40,10 @@ configMap:
         }
       }
 
+      // Map standard labels
       discovery.relabel "pod_logs" {
         targets = discovery.kubernetes.pods.targets
 
-        // 1. Map standard labels
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
           target_label  = "namespace"
@@ -62,52 +56,30 @@ configMap:
           source_labels = ["__meta_kubernetes_pod_container_name"]
           target_label  = "container"
         }
-
-        // 2. Build the directory string: namespace_podname_uid
         rule {
-          source_labels = [
-            "__meta_kubernetes_namespace",
-            "__meta_kubernetes_pod_name",
-            "__meta_kubernetes_pod_uid",
-          ]
-          separator    = "_"
-          target_label = "tmp_folder"
-        }
-
-        // 3. Final Path Construction
-        rule {
-          source_labels = ["tmp_folder", "__meta_kubernetes_pod_container_name"]
-          separator     = "/"
-          replacement   = "/var/log/pods/$1$2/0.log"
-          target_label  = "__path__"
+          source_labels = ["__meta_kubernetes_pod_node_name"]
+          target_label  = "node"
         }
       }
 
-      loki.source.file "pod_logs" {
+      // Stream logs via Kubernetes API — handles rotation, symlinks, path construction natively
+      loki.source.kubernetes "pod_logs" {
         targets    = discovery.relabel.pod_logs.output
         forward_to = [loki.process.pod_logs.receiver]
-        // Critical for RPi/Busy clusters to avoid 400 errors
-        tail_from_end = true
       }
 
       loki.process "pod_logs" {
         forward_to = [loki.write.fiorali.receiver]
 
-        // 1. Parse the CRI format
-        // This extracts the real timestamp and removes the "stdout F" junk
-        stage.cri {}
-
-        // 2. (Optional) Parse JSON if the app logs in JSON
-        // If emulatorjs logs look like {"level":"info", "msg":"..."},
-        // this will turn those into searchable labels.
+        // 1. Parse JSON if the app logs in JSON
         stage.json {
           expressions = {
-            level  = "level",
-            msg    = "message",
+            level = "level",
+            msg   = "message",
           }
         }
 
-        // 3. Set a fallback level if JSON parsing fails
+        // 2. Set level label (falls back to empty if JSON parsing didn't find it)
         stage.labels {
           values = {
             level = "level",
