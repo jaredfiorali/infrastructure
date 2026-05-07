@@ -160,6 +160,10 @@ configMap:
       zeroconf:
       prometheus:
         requires_auth: false
+        filter:
+          include_entities:
+            - sensor.transmission_started_torrents
+            - sensor.fiorali_plex
       http:
         use_x_forwarded_for: true
         trusted_proxies:
