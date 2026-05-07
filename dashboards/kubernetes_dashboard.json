@@ -140,6 +140,31 @@
         "kind": "AnnotationQuery",
         "spec": {
           "enable": true,
+          "hide": false,
+          "iconColor": "purple",
+          "legacyOptions": {
+            "titleFormat": "Transmission - Active Torrent"
+          },
+          "name": "Transmission (Duration)",
+          "query": {
+            "datasource": {
+              "name": "bf97cjlrdkkxsb"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "expr": "homeassistant_sensor_unit_torrents{entity=\"sensor.transmission_active_torrents\"}",
+              "interval": "",
+              "refId": "Anno"
+            },
+            "version": "v0"
+          }
+        }
+      },
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "enable": true,
           "hide": true,
           "iconColor": "yellow",
           "legacyOptions": {
@@ -255,31 +280,6 @@
             "kind": "DataQuery",
             "spec": {
               "expr": "",
-              "interval": "",
-              "refId": "Anno"
-            },
-            "version": "v0"
-          }
-        }
-      },
-      {
-        "kind": "AnnotationQuery",
-        "spec": {
-          "enable": true,
-          "hide": false,
-          "iconColor": "purple",
-          "legacyOptions": {
-            "titleFormat": "Transmission - Active Torrent"
-          },
-          "name": "Transmission (Duration)",
-          "query": {
-            "datasource": {
-              "name": "bf97cjlrdkkxsb"
-            },
-            "group": "prometheus",
-            "kind": "DataQuery",
-            "spec": {
-              "expr": "homeassistant_sensor_unit_torrents{entity=\"sensor.transmission_active_torrents\"}",
               "interval": "",
               "refId": "Anno"
             },
