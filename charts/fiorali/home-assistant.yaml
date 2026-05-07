@@ -164,8 +164,8 @@ configMap:
           include_entities:
             - sensor.transmission_started_torrents
             - sensor.fiorali_plex
-            - alarm_control_panel.security_system
-            - alarm_control_panel.kid_system
+            - alarm_control_panel.alarm_system
+            - alarm_control_panel.kid_alarm
             - input_boolean.alarm_guest_mode
             - sensor.pool_table_carbon_dioxide
             - sensor.pool_table_pm2_5
