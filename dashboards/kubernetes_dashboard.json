@@ -264,28 +264,6 @@
             "version": "v0"
           }
         }
-      },
-      {
-        "kind": "AnnotationQuery",
-        "spec": {
-          "enable": true,
-          "hide": false,
-          "iconColor": "red",
-          "name": "New annotation",
-          "query": {
-            "datasource": {
-              "name": "bf97cjlrdkkxsb"
-            },
-            "group": "prometheus",
-            "kind": "DataQuery",
-            "spec": {
-              "expr": "",
-              "interval": "",
-              "refId": "Anno"
-            },
-            "version": "v0"
-          }
-        }
       }
     ],
     "cursorSync": "Crosshair",
