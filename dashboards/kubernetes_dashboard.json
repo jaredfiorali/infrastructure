@@ -34,7 +34,7 @@
         "kind": "AnnotationQuery",
         "spec": {
           "enable": true,
-          "hide": true,
+          "hide": false,
           "iconColor": "blue",
           "legacyOptions": {
             "expr": "{container=\"tautulli\"} |= `started by user` | pattern `\u003cdate\u003e \u003ctime\u003e - \u003clevel\u003e :: \u003cthread\u003e : Tautulli ActivityHandler :: \u003csession\u003e (\u003cuser\u003e) \u003cratingKey\u003e (\u003cshowName\u003e)`",
@@ -44,6 +44,7 @@
             "titleFormat": "Plex Playback"
           },
           "name": "Plex Playback Start",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "ef97fhyk0nfuoc"
@@ -71,6 +72,7 @@
             }
           },
           "name": "Plex Playback Duration",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "bf97cjlrdkkxsb"
@@ -90,7 +92,7 @@
         "kind": "AnnotationQuery",
         "spec": {
           "enable": true,
-          "hide": true,
+          "hide": false,
           "iconColor": "purple",
           "legacyOptions": {
             "expr": "{container=\"sonarr\"}|=\"Report sent to Transmission\" | pattern `[\u003clevel\u003e] \u003cservice\u003e: \u003creport\u003e. \u003cindexer\u003e. \u003cfile\u003e`",
@@ -100,6 +102,7 @@
             "titleFormat": "Transmission Download Start"
           },
           "name": "Transmission - Download Start (TV)",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "ef97fhyk0nfuoc"
@@ -115,7 +118,7 @@
         "kind": "AnnotationQuery",
         "spec": {
           "enable": true,
-          "hide": true,
+          "hide": false,
           "iconColor": "purple",
           "legacyOptions": {
             "expr": "{container=\"radarr\"}|=\"DownloadService\" | pattern `[\u003clevel\u003e] \u003cservice\u003e: Report for \u003cMovie\u003e sent to Transmission from indexer \u003cindexer\u003e. \u003cfile\u003e`",
@@ -125,6 +128,7 @@
             "titleFormat": "Transmission Download Start"
           },
           "name": "Transmission - Download Start (Movies)",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "ef97fhyk0nfuoc"
@@ -146,6 +150,7 @@
             "titleFormat": "Transmission - Active Torrent"
           },
           "name": "Transmission (Duration)",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "bf97cjlrdkkxsb"
@@ -165,13 +170,14 @@
         "kind": "AnnotationQuery",
         "spec": {
           "enable": true,
-          "hide": true,
+          "hide": false,
           "iconColor": "yellow",
           "legacyOptions": {
             "textFormat": "{{instance}}",
             "titleFormat": "Fan On"
           },
           "name": "Fan On",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "bf97cjlrdkkxsb"
@@ -199,6 +205,7 @@
             "titleFormat": "Pod Not Ready"
           },
           "name": "Pod Not Ready",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "bf97cjlrdkkxsb"
@@ -226,6 +233,7 @@
             "titleFormat": "Volume Rebuild"
           },
           "name": "Degraded Volume",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "bf97cjlrdkkxsb"
@@ -254,6 +262,7 @@
             "titleFormat": "{{probetype}} Probe Failed"
           },
           "name": "Probe Alert",
+          "placement": "inControlsMenu",
           "query": {
             "datasource": {
               "name": "ef97fhyk0nfuoc"
@@ -7166,7 +7175,7 @@
     "preload": false,
     "tags": [],
     "timeSettings": {
-      "autoRefresh": "",
+      "autoRefresh": "1m",
       "autoRefreshIntervals": [
         "30s",
         "1m",
