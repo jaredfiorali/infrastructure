@@ -5,7 +5,6 @@ metadata:
   name: {{ .Values.name }}
   namespace: argocd
 spec:
-  namespace: "argocd"
   writeBackConfig:
     method: "git"
     gitConfig:
