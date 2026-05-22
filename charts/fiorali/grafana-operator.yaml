@@ -19,6 +19,8 @@ grafana:
   passwordName: grafana-oss
   passwordKey: ADMIN_PASSWORD
   instanceLabel: grafana-oss
+  repository:
+    enabled: true
   serviceAccount:
     name: "git-sync"
     role: "Admin"
@@ -99,3 +101,12 @@ externalSecrets:
   - secretKey: GRAFANA_GIT_SYNC_TOKEN
     remoteRef:
       key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_TOKEN
+  - secretKey: GRAFANA_GIT_SYNC_APP_ID
+    remoteRef:
+      key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_APP_ID
+  - secretKey: GRAFANA_GIT_SYNC_INSTALLATION_ID
+    remoteRef:
+      key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_INSTALLATION_ID
+  - secretKey: GRAFANA_GIT_SYNC_PRIVATE_KEY
+    remoteRef:
+      key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_PRIVATE_KEY

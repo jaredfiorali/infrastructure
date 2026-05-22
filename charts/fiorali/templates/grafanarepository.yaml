@@ -1,0 +1,75 @@
+{{ if .Values.grafana.repository.enabled -}}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaManifest
+metadata:
+  name: jaredfiorali-infrastructure-repository
+  namespace: {{ .Values.namespace }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: {{ $.Values.grafana.instanceLabel }}
+  template:
+    apiVersion: provisioning.grafana.app/v0alpha1
+    kind: Repository
+    metadata:
+      name: jaredfiorali-infrastructure-repository
+    spec:
+      type: github
+      connection:
+        name: jaredfiorali-infrastructure-connection
+      github:
+        url: 'https://github.com/jaredfiorali/infrastructure'
+        branch: 'main'
+        path: 'dashboards/'
+      sync:
+        enabled: true
+        intervalSeconds: 60
+        target: folder
+      workflows:
+        - write
+        - branch
+      title: 'Repository'
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaManifest
+metadata:
+  name: jaredfiorali-infrastructure-connection
+  namespace: {{ .Values.namespace }}
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: {{ $.Values.grafana.instanceLabel }}
+  patch:
+    env:
+    - name: GRAFANA_GIT_SYNC_APP_ID
+      valueFrom:
+        secretKeyRef:
+          key: GRAFANA_GIT_SYNC_APP_ID
+          name: grafana-oss
+    - name: GRAFANA_GIT_SYNC_INSTALLATION_ID
+      valueFrom:
+        secretKeyRef:
+          key: GRAFANA_GIT_SYNC_INSTALLATION_ID
+          name: grafana-oss
+    - name: GRAFANA_GIT_SYNC_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          key: GRAFANA_GIT_SYNC_PRIVATE_KEY
+          name: grafana-oss
+    scripts:
+    - .spec.github.appID=env.GRAFANA_GIT_SYNC_APP_ID
+    - .spec.github.installationID=env.GRAFANA_GIT_SYNC_INSTALLATION_ID
+    - .secure.privateKey.create=env.GRAFANA_GIT_SYNC_PRIVATE_KEY
+  template:
+    apiVersion: provisioning.grafana.app/v0alpha1
+    kind: Connection
+    metadata:
+      name: jaredfiorali-infrastructure-connection
+    spec:
+      title: grafana
+      type: github
+      url: https://github.com/jaredfiorali/infrastructure
+      github:
+        appID: '<GRAFANA_GIT_SYNC_APP_ID>'
+        installationID: '<GRAFANA_GIT_SYNC_INSTALLATION_ID>'
+{{- end }}
