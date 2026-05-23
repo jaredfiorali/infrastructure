@@ -235,3 +235,5 @@ grafana:
   datasources: []
   serviceAccount:
     enabled: false
+  repository:
+    enabled: false
