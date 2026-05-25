@@ -20,6 +20,14 @@ bgpPeer:
   peerAddress: 192.168.20.1
   peerASN: 65000
   myASN: 65001
+bfdProfile:
+  enabled: true
+  name: "fast"
+  receiveInterval: 300
+  transmitInterval: 300
+  detectMultiplier: 3
+  echoMode: false
+  passiveMode: false
 bgpAdvertisement:
   enabled: true
   name: "default"

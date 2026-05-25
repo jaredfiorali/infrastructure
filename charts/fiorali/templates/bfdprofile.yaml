@@ -1,0 +1,13 @@
+{{ if .Values.bfdProfile.enabled -}}
+apiVersion: metallb.io/v1beta1
+kind: BFDProfile
+metadata:
+  name: {{ .Values.bfdProfile.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  receiveInterval: {{ .Values.bfdProfile.receiveInterval | default 300 }}
+  transmitInterval: {{ .Values.bfdProfile.transmitInterval | default 300 }}
+  detectMultiplier: {{ .Values.bfdProfile.detectMultiplier | default 3 }}
+  echoMode: {{ .Values.bfdProfile.echoMode | default "false" }}
+  passiveMode: {{ .Values.bfdProfile.passiveMode | default "false" }}
+{{- end }}

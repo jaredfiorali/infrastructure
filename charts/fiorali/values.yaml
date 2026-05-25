@@ -213,6 +213,15 @@ bgpPeer:
   peerASN: ""
   myASN: ""
 
+bgpProfile:
+  enabled: false
+  name: ""
+  receiveInterval: ""
+  transmitInterval: ""
+  detectMultiplier: ""
+  echoMode: ""
+  passiveMode: ""
+
 bgpAdvertisement:
   enabled: false
   name: ""
