@@ -213,7 +213,7 @@ bgpPeer:
   peerASN: ""
   myASN: ""
 
-bgpProfile:
+bfdProfile:
   enabled: false
   name: ""
   receiveInterval: ""
