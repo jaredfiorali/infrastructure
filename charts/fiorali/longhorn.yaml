@@ -16,6 +16,15 @@ podDisruptionBudget:
   enabled: false
 containerSecurityContext:
   enabled: false
+storageClasses:
+  ssd:
+    enabled: true
+    name: longhorn-ssd
+    replicas: 2
+  usb:
+    enabled: true
+    name: longhorn-usb
+    replicas: 2
 prometheusRules:
   enabled: true
   rules:

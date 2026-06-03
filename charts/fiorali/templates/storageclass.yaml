@@ -1,0 +1,32 @@
+{{- if .Values.storageClasses.ssd.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClasses.ssd.name | default "longhorn-ssd" }}
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  numberOfReplicas: {{ .Values.storageClasses.ssd.replicas | default "2" | quote }}
+  staleReplicaTimeout: "30"
+  diskSelector: "ssd"
+  dataLocality: "best-effort"
+  shareManagerNodeSelector: "storage-tier:ssd"
+{{- end }}
+---
+{{- if .Values.storageClasses.usb.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .Values.storageClasses.usb.name | default "longhorn-usb" }}
+provisioner: driver.longhorn.io
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+  numberOfReplicas: {{ .Values.storageClasses.usb.replicas | default "2" | quote }}
+  staleReplicaTimeout: "30"
+  diskSelector: "usb"
+  dataLocality: "disabled"
+{{- end }}
