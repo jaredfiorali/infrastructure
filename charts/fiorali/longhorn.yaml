@@ -16,8 +16,6 @@ podDisruptionBudget:
   enabled: false
 containerSecurityContext:
   enabled: false
-namespaceChart:
-  enabled: true
 prometheusRules:
   enabled: true
   rules:
