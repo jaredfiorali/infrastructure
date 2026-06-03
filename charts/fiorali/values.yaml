@@ -187,6 +187,16 @@ volume:
   snapshotMaxCount: 15
   size: 0
 
+storageClasses:
+  ssd:
+    enabled: false
+    name: ""
+    replicas: 2
+  usb:
+    enabled: false
+    name: ""
+    replicas: 2
+
 imageUpdater:
   enabled: false
   alias: ""
