@@ -171,3 +171,5 @@ containerSecurityContext:
     type: RuntimeDefault
 imageUpdater:
   enabled: true
+postsyncMetallbRestart:
+  enabled: true

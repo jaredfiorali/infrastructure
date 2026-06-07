@@ -256,3 +256,6 @@ grafana:
     enabled: false
   repository:
     enabled: false
+
+postsyncMetallbRestart:
+  enabled: false

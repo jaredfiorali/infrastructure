@@ -1,0 +1,57 @@
+{{ if .Values.postsyncMetallbRestart.enabled -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: plex-postsync
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: plex-postsync-metallb-restart
+rules:
+  - apiGroups: ["apps"]
+    resources: ["daemonsets"]
+    verbs: ["get", "list", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["daemonsets/rollout"]
+    verbs: ["update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: plex-postsync-metallb-restart
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: plex-postsync-metallb-restart
+subjects:
+  - kind: ServiceAccount
+    name: plex-postsync
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: plex-postsync-metallb-restart
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: plex-postsync
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: bitnami/kubectl:latest
+          command:
+            - kubectl
+            - rollout
+            - restart
+            - daemonset/metallb-speaker
+            - -n
+            - metallb-system
+{{- end }}
