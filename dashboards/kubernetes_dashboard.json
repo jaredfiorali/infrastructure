@@ -273,6 +273,32 @@
             "version": "v0"
           }
         }
+      },
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "enable": true,
+          "hide": false,
+          "iconColor": "red",
+          "legacyOptions": {
+            "titleFormat": "Argo Syncing - {{name}}"
+          },
+          "name": "Argo Sync",
+          "placement": "inControlsMenu",
+          "query": {
+            "datasource": {
+              "name": "bf97cjlrdkkxsb"
+            },
+            "group": "prometheus",
+            "kind": "DataQuery",
+            "spec": {
+              "expr": "argocd_app_info{health_status!=\"Healthy\"}",
+              "interval": "",
+              "refId": "Anno"
+            },
+            "version": "v0"
+          }
+        }
       }
     ],
     "cursorSync": "Crosshair",
