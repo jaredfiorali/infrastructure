@@ -279,7 +279,7 @@
         "spec": {
           "enable": true,
           "hide": false,
-          "iconColor": "red",
+          "iconColor": "green",
           "legacyOptions": {
             "titleFormat": "Argo Syncing - {{name}}"
           },
