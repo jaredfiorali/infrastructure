@@ -28,26 +28,23 @@ configMap:
       token: $slack-token
       defaultRecipients: [jared-notifications]
     # --- Triggers ---
-    trigger.on-sync-succeeded: |
-      - when: app.status.operationState.phase in ['Succeeded'] and app.status.sync.status == 'Synced'
-        send: [app-sync-succeeded]
     trigger.on-sync-failed: |
-      - when: app.status.operationState.phase in ['Failed']
+      - when: app.status.operationState != nil and app.status.operationState.phase in ['Failed']
         send: [app-sync-failed]
     trigger.on-deployed: |
-      - when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+      - when: app.status.operationState != nil and app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
         send: [app-deployed]
     trigger.on-deleted: |
       - when: app.metadata.deletionTimestamp != nil
         send: [app-deleted]
     trigger.on-health-degraded: |
-      - when: app.status.health.status == 'Degraded'
+      - when: app.status.operationState != nil and app.status.health.status == 'Degraded'
         send: [app-health-degraded]
     trigger.on-sync-status-unknown: |
-      - when: app.status.sync.status == 'Unknown'
+      - when: app.status.operationState != nil and app.status.sync.status == 'Unknown'
         send: [app-sync-status-unknown]
     trigger.on-sync-status-out-of-sync: |
-      - when: app.status.sync.status == 'OutOfSync'
+      - when: app.status.operationState != nil and app.status.sync.status == 'OutOfSync'
         send: [app-sync-status-out-of-sync]
     # --- Templates ---
     template.app-sync-succeeded: |
