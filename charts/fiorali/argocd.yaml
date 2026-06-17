@@ -34,6 +34,9 @@ configMap:
     trigger.on-deployed: |
       - when: app.status.operationState != nil and app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
         send: [app-deployed]
+    trigger.on-sync-succeeded: |
+      - when: app.status.operationState != nil and app.status.operationState.phase in ['Succeeded'] and app.status.sync.status == 'Synced'
+        send: []
     trigger.on-deleted: |
       - when: app.metadata.deletionTimestamp != nil
         send: [app-deleted]
