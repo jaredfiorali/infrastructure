@@ -229,7 +229,7 @@ configMap:
         token: ${SONARR_TOKEN}
         add_missing: true
         add_existing: false
-        root_folder_path: /media-tv-2
+        root_folder_path: /media/TV
         monitor: pilot
         quality_profile: HD-1080p
         language_profile: English

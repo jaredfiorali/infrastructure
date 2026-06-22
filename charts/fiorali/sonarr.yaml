@@ -108,8 +108,6 @@ ingress:
 volumeMounts:
 - name: sonarr-data
   mountPath: /config
-- name: media-bittorrent
-  mountPath: /media-bittorrent
 - name: media-tv-0
   mountPath: /media-tv-0
 - name: media-tv-1
@@ -126,14 +124,13 @@ volumeMounts:
   mountPath: /media-tv-7
 - name: media-tv-8
   mountPath: /media-tv-8
+- name: media
+  mountPath: /media
 - name: run
   mountPath: /run
 volumes:
 - name: sonarr-data
   emptyDir: {}
-- name: media-bittorrent
-  persistentVolumeClaim:
-    claimName: media-bittorrent
 - name: media-tv-0
   persistentVolumeClaim:
     claimName: media-tv-0
@@ -158,6 +155,9 @@ volumes:
 - name: media-tv-8
   persistentVolumeClaim:
     claimName: media-tv-8
+- name: media
+  persistentVolumeClaim:
+    claimName: media
 - name: run
   emptyDir: {}
 networkpolicy:

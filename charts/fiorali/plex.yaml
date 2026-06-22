@@ -63,29 +63,8 @@ volumeMounts:
 - name: media-movies-3
   mountPath: /media-movies-3
   readOnly: true
-- name: media-tv-0
-  mountPath: /media-tv-0
-  readOnly: true
-- name: media-tv-1
-  mountPath: /media-tv-1
-  readOnly: true
-- name: media-tv-2
-  mountPath: /media-tv-2
-  readOnly: true
-- name: media-tv-4
-  mountPath: /media-tv-4
-  readOnly: true
-- name: media-tv-5
-  mountPath: /media-tv-5
-  readOnly: true
-- name: media-tv-6
-  mountPath: /media-tv-6
-  readOnly: true
-- name: media-tv-7
-  mountPath: /media-tv-7
-  readOnly: true
-- name: media-tv-8
-  mountPath: /media-tv-8
+- name: media
+  mountPath: /media
   readOnly: true
 - name: media-workout-0
   mountPath: /media-workout-0
@@ -114,30 +93,9 @@ volumes:
 - name: media-movies-3
   persistentVolumeClaim:
     claimName: media-movies-3
-- name: media-tv-0
+- name: media
   persistentVolumeClaim:
-    claimName: media-tv-0
-- name: media-tv-1
-  persistentVolumeClaim:
-    claimName: media-tv-1
-- name: media-tv-2
-  persistentVolumeClaim:
-    claimName: media-tv-2
-- name: media-tv-4
-  persistentVolumeClaim:
-    claimName: media-tv-4
-- name: media-tv-5
-  persistentVolumeClaim:
-    claimName: media-tv-5
-- name: media-tv-6
-  persistentVolumeClaim:
-    claimName: media-tv-6
-- name: media-tv-7
-  persistentVolumeClaim:
-    claimName: media-tv-7
-- name: media-tv-8
-  persistentVolumeClaim:
-    claimName: media-tv-8
+    claimName: media
 - name: media-workout-0
   persistentVolumeClaim:
     claimName: media-workout-0

@@ -43,8 +43,8 @@ env:
 ingress:
   enabled: true
 volumeMounts:
-- name: media-bittorrent
-  mountPath: /media-bittorrent
+- name: media
+  mountPath: /media
 - name: config
   mountPath: /config
 - name: run
@@ -54,9 +54,9 @@ volumes:
   configMap:
     name: transmission-configmap
     defaultMode: 511
-- name: media-bittorrent
+- name: media
   persistentVolumeClaim:
-    claimName: media-bittorrent
+    claimName: media
 - name: port-forward
   emptyDir: {}
 - name: config
@@ -255,13 +255,13 @@ configMap:
         "cache-size-mb": 4,
         "default-trackers": "",
         "dht-enabled": true,
-        "download-dir": "/media-bittorrent/completed",
+        "download-dir": "/media/bittorrent/completed",
         "download-queue-enabled": true,
         "download-queue-size": 4,
         "encryption": 0,
         "idle-seeding-limit": 30,
         "idle-seeding-limit-enabled": false,
-        "incomplete-dir": "/media-bittorrent/incomplete",
+        "incomplete-dir": "/media/bittorrent/incomplete",
         "incomplete-dir-enabled": true,
         "lpd-enabled": true,
         "message-level": 2,
@@ -315,7 +315,7 @@ configMap:
         "umask": "000",
         "upload-slots-per-torrent": 14,
         "utp-enabled": true,
-        "watch-dir": "/media-bittorrent/watch",
+        "watch-dir": "/media/bittorrent/watch",
         "watch-dir-enabled": false
       }
 externalSecrets:
