@@ -169,7 +169,7 @@
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "enable": true,
+          "enable": false,
           "hide": false,
           "iconColor": "yellow",
           "legacyOptions": {
@@ -196,7 +196,7 @@
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "enable": true,
+          "enable": false,
           "hide": false,
           "iconColor": "red",
           "legacyOptions": {
@@ -224,7 +224,7 @@
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "enable": true,
+          "enable": false,
           "hide": false,
           "iconColor": "orange",
           "legacyOptions": {
@@ -252,7 +252,7 @@
       {
         "kind": "AnnotationQuery",
         "spec": {
-          "enable": true,
+          "enable": false,
           "hide": false,
           "iconColor": "red",
           "legacyOptions": {
@@ -5951,7 +5951,7 @@
                       "spec": {
                         "disableTextWrap": false,
                         "editorMode": "code",
-                        "expr": "sum(rate(unpoller_client_receive_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "expr": "sum(rate(unpoller_client_transmit_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
                         "format": "time_series",
                         "fullMetaSearch": false,
                         "includeNullMetadata": true,
@@ -5981,7 +5981,7 @@
                       "spec": {
                         "disableTextWrap": false,
                         "editorMode": "code",
-                        "expr": "-sum(rate(unpoller_client_transmit_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "expr": "-sum(rate(unpoller_client_receive_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
                         "format": "time_series",
                         "fullMetaSearch": false,
                         "includeNullMetadata": true,
