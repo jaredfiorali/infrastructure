@@ -6064,7 +6064,7 @@
                       }
                     ]
                   },
-                  "unit": "decbits"
+                  "unit": "Bps"
                 },
                 "overrides": []
               },
@@ -7327,8 +7327,8 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "1m",
-            "value": "1m"
+            "text": "3m",
+            "value": "3m"
           },
           "hide": "dontHide",
           "includeAll": false,
