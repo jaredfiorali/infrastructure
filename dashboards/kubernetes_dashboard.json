@@ -420,6 +420,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": true,
                   "sortBy": "Max",
@@ -432,7 +434,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -549,6 +551,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -561,7 +565,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -710,6 +714,8 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "hidden",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": false
                 },
@@ -720,7 +726,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -866,7 +872,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -985,6 +991,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -997,7 +1005,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -1110,6 +1118,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -1122,7 +1132,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -1535,6 +1545,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Max",
@@ -1547,7 +1559,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -1664,6 +1676,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -1676,7 +1690,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -1801,6 +1815,8 @@
                     "min"
                   ],
                   "displayMode": "hidden",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": false
                 },
@@ -1811,7 +1827,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -1894,7 +1910,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -2018,6 +2034,8 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "hidden",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": false
                 },
@@ -2028,7 +2046,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -2146,6 +2164,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -2158,7 +2178,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -2344,6 +2364,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -2357,7 +2379,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -2490,6 +2512,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -2503,7 +2527,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -2639,6 +2663,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -2652,7 +2678,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -3044,6 +3070,8 @@
                     "lastNotNull"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Last *",
@@ -3058,7 +3086,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -3205,6 +3233,8 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": false
                 },
@@ -3216,7 +3246,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -3325,7 +3355,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -3430,7 +3460,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -3554,7 +3584,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4152,7 +4182,7 @@
                 ]
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4251,7 +4281,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4354,7 +4384,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4483,7 +4513,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4650,6 +4680,8 @@
                     "lastNotNull"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Last *",
@@ -4664,7 +4696,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4840,7 +4872,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -4949,7 +4981,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -5172,6 +5204,8 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "right",
                   "showLegend": false
                 },
@@ -5182,126 +5216,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
-          }
-        }
-      },
-      "panel-757": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "bf97cjlrdkkxsb"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "editorMode": "code",
-                        "exemplar": false,
-                        "expr": "(\n  sum by (project) (\n    increase(supavisor_client_network_recv[12h])\n    +\n    increase(supavisor_client_network_send[12h])\n  )\n)\n-\n(\n  sum by (project) (\n    increase(supavisor_client_network_recv[12h] offset 12h)\n    +\n    increase(supavisor_client_network_send[12h] offset 12h)\n  )\n)\n",
-                        "interval": "$resolution",
-                        "legendFormat": "{{project}}",
-                        "range": true
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                }
-              ],
-              "queryOptions": {},
-              "transformations": []
-            }
-          },
-          "description": "Delta for the amount of data (increase or decrease)",
-          "id": 757,
-          "links": [],
-          "title": "Postgres 24h Egress Change",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "line",
-                    "fillOpacity": 0,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "never",
-                    "showValues": false,
-                    "spanNulls": true,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "decimals": 0,
-                  "noValue": "0",
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "decbytes"
-                },
-                "overrides": []
-              },
-              "options": {
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": false
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -5381,6 +5296,7 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false
                 },
@@ -5401,7 +5317,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -5483,6 +5399,7 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false
                 },
@@ -5503,7 +5420,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -5612,6 +5529,8 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false
                 },
@@ -5622,7 +5541,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -6008,7 +5927,168 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
+          }
+        }
+      },
+      "panel-765": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "disableTextWrap": false,
+                        "editorMode": "code",
+                        "expr": "sum(rate(unpoller_client_receive_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "fullMetaSearch": false,
+                        "includeNullMetadata": true,
+                        "interval": "$resolution",
+                        "intervalFactor": 1,
+                        "legendFormat": "Received",
+                        "metric": "network",
+                        "range": true,
+                        "step": 10,
+                        "useBackend": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "disableTextWrap": false,
+                        "editorMode": "code",
+                        "expr": "-sum(rate(unpoller_client_transmit_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "format": "time_series",
+                        "fullMetaSearch": false,
+                        "includeNullMetadata": true,
+                        "interval": "$resolution",
+                        "intervalFactor": 1,
+                        "legendFormat": "Sent",
+                        "metric": "network",
+                        "range": true,
+                        "step": 10,
+                        "useBackend": false
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "B"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 765,
+          "links": [],
+          "title": "UNAS",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": true,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 30,
+                    "gradientMode": "opacity",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "smooth",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "never",
+                    "showValues": false,
+                    "spanNulls": true,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 1,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "decbits"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "hidden",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.1.0"
           }
         }
       },
@@ -6132,6 +6212,7 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false
                 },
@@ -6152,7 +6233,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -6276,6 +6357,7 @@
                 "legend": {
                   "calcs": [],
                   "displayMode": "list",
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false
                 },
@@ -6297,7 +6379,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -6413,6 +6495,8 @@
                     "mean"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": false,
                   "sortBy": "Mean",
@@ -6425,7 +6509,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -6539,6 +6623,8 @@
                     "max"
                   ],
                   "displayMode": "table",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
                   "placement": "bottom",
                   "showLegend": true,
                   "sortBy": "Max",
@@ -6551,7 +6637,7 @@
                 }
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       },
@@ -6635,7 +6721,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.0.1+security-01"
+            "version": "13.1.0"
           }
         }
       }
@@ -6879,7 +6965,7 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-757"
+                          "name": "panel-765"
                         },
                         "height": 5,
                         "width": 6,
