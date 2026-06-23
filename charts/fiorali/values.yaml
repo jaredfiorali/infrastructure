@@ -183,7 +183,7 @@ volume:
   diskSelector:
     - SSD
   encrypted: true
-  numberOfReplicas: 2
+  numberOfReplicas: 5
   snapshotMaxCount: 15
   size: 0
 
