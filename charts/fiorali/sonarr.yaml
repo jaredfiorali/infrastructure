@@ -108,22 +108,6 @@ ingress:
 volumeMounts:
 - name: sonarr-data
   mountPath: /config
-- name: media-tv-0
-  mountPath: /media-tv-0
-- name: media-tv-1
-  mountPath: /media-tv-1
-- name: media-tv-2
-  mountPath: /media-tv-2
-- name: media-tv-4
-  mountPath: /media-tv-4
-- name: media-tv-5
-  mountPath: /media-tv-5
-- name: media-tv-6
-  mountPath: /media-tv-6
-- name: media-tv-7
-  mountPath: /media-tv-7
-- name: media-tv-8
-  mountPath: /media-tv-8
 - name: media
   mountPath: /media
 - name: run
@@ -131,30 +115,6 @@ volumeMounts:
 volumes:
 - name: sonarr-data
   emptyDir: {}
-- name: media-tv-0
-  persistentVolumeClaim:
-    claimName: media-tv-0
-- name: media-tv-1
-  persistentVolumeClaim:
-    claimName: media-tv-1
-- name: media-tv-2
-  persistentVolumeClaim:
-    claimName: media-tv-2
-- name: media-tv-4
-  persistentVolumeClaim:
-    claimName: media-tv-4
-- name: media-tv-5
-  persistentVolumeClaim:
-    claimName: media-tv-5
-- name: media-tv-6
-  persistentVolumeClaim:
-    claimName: media-tv-6
-- name: media-tv-7
-  persistentVolumeClaim:
-    claimName: media-tv-7
-- name: media-tv-8
-  persistentVolumeClaim:
-    claimName: media-tv-8
 - name: media
   persistentVolumeClaim:
     claimName: media
