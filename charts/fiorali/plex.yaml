@@ -51,18 +51,6 @@ volumeMounts:
 - name: plex-persistent-storage
   mountPath: /config
   subPath: config
-- name: media-movies-0
-  mountPath: /media-movies-0
-  readOnly: true
-- name: media-movies-1
-  mountPath: /media-movies-1
-  readOnly: true
-- name: media-movies-2
-  mountPath: /media-movies-2
-  readOnly: true
-- name: media-movies-3
-  mountPath: /media-movies-3
-  readOnly: true
 - name: media
   mountPath: /media
   readOnly: true
@@ -81,18 +69,6 @@ volumes:
 - name: plex-persistent-storage
   persistentVolumeClaim:
     claimName: plex
-- name: media-movies-0
-  persistentVolumeClaim:
-    claimName: media-movies-0
-- name: media-movies-1
-  persistentVolumeClaim:
-    claimName: media-movies-1
-- name: media-movies-2
-  persistentVolumeClaim:
-    claimName: media-movies-2
-- name: media-movies-3
-  persistentVolumeClaim:
-    claimName: media-movies-3
 - name: media
   persistentVolumeClaim:
     claimName: media
@@ -131,3 +107,6 @@ imageUpdater:
   enabled: true
 postsyncMetallbRestart:
   enabled: true
+volume:
+  enabled: true
+  size: "64424509440"

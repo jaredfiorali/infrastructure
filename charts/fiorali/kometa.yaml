@@ -218,7 +218,7 @@ configMap:
         token: ${RADARR_TOKEN}
         add_missing: true
         add_existing: false
-        root_folder_path: /media-movies-3
+        root_folder_path: /media/Movies
         monitor: true
         availability: released
         quality_profile: HD-1080p
