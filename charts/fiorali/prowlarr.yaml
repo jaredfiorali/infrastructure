@@ -2,7 +2,7 @@ name: prowlarr
 namespace: downloader
 deployment:
   enabled: true
-replicaCount: 1
+replicaCount: 2
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
