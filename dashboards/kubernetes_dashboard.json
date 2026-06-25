@@ -3300,8 +3300,8 @@
                     "mode": "thresholds"
                   },
                   "decimals": 2,
-                  "max": 230,
-                  "min": 190,
+                  "max": 250,
+                  "min": 220,
                   "thresholds": {
                     "mode": "percentage",
                     "steps": [
@@ -3311,11 +3311,11 @@
                       },
                       {
                         "color": "#EAB839",
-                        "value": 70
+                        "value": 60
                       },
                       {
                         "color": "red",
-                        "value": 85
+                        "value": 80
                       }
                     ]
                   },
@@ -3325,7 +3325,7 @@
               },
               "options": {
                 "barShape": "flat",
-                "barWidthFactor": 0.5,
+                "barWidthFactor": 0.54,
                 "effects": {
                   "barGlow": false,
                   "centerGlow": false,
@@ -5876,7 +5876,7 @@
                   },
                   "decimals": 0,
                   "max": 200,
-                  "min": 120,
+                  "min": 160,
                   "thresholds": {
                     "mode": "percentage",
                     "steps": [
