@@ -87,6 +87,6 @@ podSecurityContext:
   runAsGroup: 1000
 volume:
   enabled: true
-  size: "1073741824"
+  size: "2147483648"
 imageUpdater:
   enabled: true
