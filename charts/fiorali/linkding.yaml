@@ -3,7 +3,7 @@ namespace: linkding
 deployment:
   enabled: true
   strategyType: RollingUpdate
-replicaCount: 1
+replicaCount: 2
 image:
   repository: docker.io/sissbruecker/linkding
   tag: latest@sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060
@@ -92,11 +92,21 @@ volumeMounts:
     mountPath: /etc/linkding/data
   - name: tmp
     mountPath: /tmp
+  - name: linkding-secret-key
+    mountPath: /etc/linkding/data/secretkey.txt
+    subPath: SECRET_KEY
+    readOnly: true
 volumes:
   - name: linkding-data
     emptyDir: {}
   - name: tmp
     emptyDir: {}
+  - name: linkding-secret-key
+    secret:
+      secretName: linkding-credentials
+      items:
+        - key: SECRET_KEY
+          path: SECRET_KEY
 networkpolicy:
   ingress:
     internal: true
@@ -125,6 +135,9 @@ externalSecrets:
       - secretKey: SUPERUSER_PASSWORD
         remoteRef:
           key: /homelab/linkding/SUPERUSER_PASSWORD
+      - secretKey: SECRET_KEY
+        remoteRef:
+          key: /homelab/linkding/SECRET_KEY
   - name: linkding-postgres-credentials
     data:
       - secretKey: DB_USERNAME
