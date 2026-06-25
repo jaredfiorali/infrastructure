@@ -2,7 +2,7 @@ name: kromgo
 namespace: monitoring
 deployment:
   enabled: true
-replicaCount: 1
+replicaCount: 2
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/kashalls/kromgo
