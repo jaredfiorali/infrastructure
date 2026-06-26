@@ -141,9 +141,9 @@ configMap:
           colors:
           - color: "green"
             min: 0
-            max: 230
+            max: 260
           - color: "red"
-            min: 231
+            min: 261
             max: 1000
         - name: cluster_popeye_score
           query: popeye_report_score{}
