@@ -54,9 +54,6 @@ volumeMounts:
 - name: media
   mountPath: /media
   readOnly: true
-- name: media-workout-0
-  mountPath: /media-workout-0
-  readOnly: true
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 - name: transcode
@@ -72,9 +69,6 @@ volumes:
 - name: media
   persistentVolumeClaim:
     claimName: media
-- name: media-workout-0
-  persistentVolumeClaim:
-    claimName: media-workout-0
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi
