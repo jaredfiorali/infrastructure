@@ -2,7 +2,7 @@ name: kometa
 namespace: downloader
 image:
   repository: docker.io/kometateam/kometa
-  tag: latest@sha256:f04bec1140f3e3aae4b87567246d9d0a23319eb4c6feaf9d874acdba067a23fa
+  tag: latest@sha256:98a0df2694edea467ac8870bcecddea3ec0bc14a071721372fb9fa811a829902
 deployment:
   enabled: false
 resources:
