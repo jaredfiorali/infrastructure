@@ -6,7 +6,7 @@ replicaCount: 2
 strategyType: RollingUpdate
 image:
   repository: docker.io/linuxserver/prowlarr
-  tag: latest@sha256:3e9bd62ca90c97c5df75b7012e10a29f6926e62807deeddc1dc89e6e2fd141e1
+  tag: latest@sha256:536036aeb2c740d1a660ccf143b58a8bd6222f09010258fdfc10a538af7bec78
 containerPorts:
 - containerPort: 9696
   name: prowlarr
