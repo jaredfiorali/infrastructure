@@ -1,0 +1,47 @@
+name: gatus
+namespace: gatus
+deployment:
+  enabled: true
+replicaCount: 1
+strategyType: RollingUpdate
+image:
+  repository: ghcr.io/twin/gatus
+  tag: latest@sha256:ef87c00b0bfd4fcd57bf86f704f5c773747bf8bee0c67a3934eb3f11795b40c9
+containerPorts:
+  - containerPort: 8080
+    name: gatus
+    protocol: TCP
+resources:
+  limits:
+    cpu: 250m
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+probes:
+  httpGet:
+    path: /
+    port: gatus
+service:
+  enabled: true
+  ports:
+    - name: gatus
+      port: 8080
+      protocol: TCP
+      targetPort: gatus
+networkpolicy:
+  ingress:
+    internal: true
+ingress:
+  enabled: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  runAsNonRoot: true
+imageUpdater:
+  enabled: true
