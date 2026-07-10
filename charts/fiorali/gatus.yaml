@@ -22,6 +22,53 @@ probes:
   httpGet:
     path: /
     port: gatus
+initContainers:
+  enabled: true
+  containers:
+  - name: gatus-init
+    image: docker.io/alpine/curl:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 911
+    resources:
+      limits:
+        cpu: 25m
+        memory: 25Mi
+      requests:
+        cpu: 10m
+        memory: 10Mi
+    env:
+    - name: SLACK_WEBHOOK_URL
+      valueFrom:
+        secretKeyRef:
+          name: gatus-credentials
+          key: SLACK_WEBHOOK_URL
+    command:
+    - sh
+    - -c
+    - |
+      cd /tmp
+      curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
+      chmod +x envsubst
+      # Process all config files with environment variable substitution
+      ./envsubst < /tmp/config.yaml > /config/config.yaml
+      echo "Config files processed successfully"
+      echo "Processed files:"
+      ls -la /config/config.yaml
+    volumeMounts:
+    - name: config
+      mountPath: /config
+    - name: tmp
+      mountPath: /tmp
+    - name: gatus-configmap
+      mountPath: /tmp/config.yaml
+      subPath: config.yaml
+      readOnly: true
 service:
   enabled: true
   ports:
@@ -29,9 +76,23 @@ service:
       port: 8080
       protocol: TCP
       targetPort: gatus
+volumeMounts:
+- name: config
+  mountPath: /config
+volumes:
+- name: config
+  emptyDir: {}
+- name: tmp
+  emptyDir: {}
+- name: gatus-configmap
+  configMap:
+    name: gatus-configmap
+    defaultMode: 511
 networkpolicy:
   ingress:
     internal: true
+  egress:
+    allowAll: true # For env substitution and Slack alerting
 ingress:
   enabled: true
 containerSecurityContext:
@@ -45,3 +106,175 @@ podSecurityContext:
   runAsNonRoot: false
 imageUpdater:
   enabled: true
+externalSecrets:
+- name: gatus-credentials
+  data:
+  - secretKey: SLACK_WEBHOOK_URL
+    remoteRef:
+      key: /homelab/gatus/SLACK_WEBHOOK_URL
+configMap:
+  enabled: true
+  value: |-
+    config.yaml: |
+      alerting:
+        slack:
+          webhook-url: "${SLACK_WEBHOOK_URL}"
+          default-alert:
+            enabled: true
+            failure-threshold: 3
+            success-threshold: 2
+            send-on-resolved: true
+            description: "Gatus check failed"
+      endpoints:
+        - name: argo
+          url: http://argo.fiora.li
+          group: kubernetes core
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: dawarich
+          url: http://dawarich.fiora.li
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: plex
+          url: http://plex.fiora.li/identity
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: prowlarr
+          url: http://prowlarr.fiora.li/ping
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: radarr
+          url: http://radarr.fiora.li/ping
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: sonarr
+          url: http://sonarr.fiora.li/ping
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: transmission
+          url: http://transmission.fiora.li/transmission/rpc
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 409"
+            - "[RESPONSE_TIME] < 2000"
+        - name: emulatorjs
+          url: http://emulatorjs.fiora.li
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: home-assistant
+          url: http://home-assistant.fiora.li/api/
+          group: home security
+          interval: 1m
+          conditions:
+            - "[STATUS] == 401"
+            - "[RESPONSE_TIME] < 2000"
+        - name: linkding
+          url: http://linkding.fiora.li/health
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: longhorn
+          url: http://longhorn.fiora.li
+          group: kubernetes core
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: grafana-oss
+          url: http://grafana-oss.fiora.li/api/health
+          group: monitoring
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: influxdb
+          url: http://influxdb.fiora.li/health
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: kromgo
+          url: http://kromgo.fiora.li
+          group: monitoring
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: prometheus
+          url: http://prometheus.fiora.li/-/ready
+          group: monitoring
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: scrypted
+          url: http://scrypted.fiora.li
+          group: home security
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: sillytavern
+          url: http://sillytavern.fiora.li
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 401"
+            - "[RESPONSE_TIME] < 2000"
+        - name: speedtest
+          url: http://speedtest.fiora.li
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+        - name: tautulli
+          url: http://tautulli.fiora.li/status
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 2000"
+
+        - name: traefik
+          url: "tcp://192.168.20.20:80"
+          group: metallb
+          interval: 1m
+          conditions:
+            - "[CONNECTED] == true"
+        - name: cloudflared
+          url: "tcp://192.168.20.21:53"
+          group: metallb
+          interval: 1m
+          conditions:
+            - "[CONNECTED] == true"
+        - name: plex
+          url: "tcp://192.168.20.22:32400"
+          group: metallb
+          interval: 1m
+          conditions:
+            - "[CONNECTED] == true"
