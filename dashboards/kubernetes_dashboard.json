@@ -5446,7 +5446,7 @@
                         "exemplar": false,
                         "expr": "avg(gatus_results_duration_seconds)",
                         "interval": "$resolution",
-                        "legendFormat": "{{project}}",
+                        "legendFormat": "Response Time",
                         "range": true
                       },
                       "version": "v0"
