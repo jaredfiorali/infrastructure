@@ -42,6 +42,6 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
-  runAsNonRoot: true
+  runAsNonRoot: false
 imageUpdater:
   enabled: true
