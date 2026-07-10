@@ -105,6 +105,8 @@ containerSecurityContext:
   capabilities:
     drop:
       - ALL
+    add:
+      - NET_RAW
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
@@ -303,5 +305,78 @@ configMap:
           url: "tcp://192.168.20.22:32400"
           group: metallb
           interval: 1m
+          conditions:
+            - "[CONNECTED] == true"
+
+        - name: UDM-SE
+          url: "icmp://192.168.24.1"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Workshop Switch
+          url: "icmp://192.168.24.3"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Garage Switch
+          url: "icmp://192.168.24.4"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Power Bar
+          url: "icmp://192.168.24.5"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Theatre Switch
+          url: "icmp://192.168.24.6"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Office Switch
+          url: "icmp://192.168.24.7"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Family Room Switch
+          url: "icmp://192.168.24.9"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Theatre AP
+          url: "icmp://192.168.24.10"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Office AP
+          url: "icmp://192.168.24.12"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Family Room AP
+          url: "icmp://192.168.24.13"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Dining Room AP
+          url: "icmp://192.168.24.14"
+          group: infrastructure
+          interval: 30s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: UNAS
+          url: "icmp://192.168.24.18"
+          group: infrastructure
+          interval: 30s
           conditions:
             - "[CONNECTED] == true"
