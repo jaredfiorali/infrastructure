@@ -180,21 +180,21 @@ configMap:
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 500"
+            - "[RESPONSE_TIME] < 1000"
         - name: radarr
           url: http://radarr.fiora.li/ping
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 500"
+            - "[RESPONSE_TIME] < 1000"
         - name: sonarr
           url: http://sonarr.fiora.li/ping
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 500"
+            - "[RESPONSE_TIME] < 1000"
         - name: transmission
           url: http://transmission.fiora.li/transmission/rpc
           group: media management
@@ -222,7 +222,7 @@ configMap:
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 500"
+            - "[RESPONSE_TIME] < 1000"
         - name: longhorn
           url: http://longhorn.fiora.li
           group: kubernetes core
