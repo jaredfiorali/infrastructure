@@ -167,6 +167,13 @@ configMap:
           conditions:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 500"
+        - name: plex(remote)
+          url: http://99.246.152.8:32400/web/index.html
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 500"
         - name: prowlarr
           url: http://prowlarr.fiora.li/ping
           group: media management

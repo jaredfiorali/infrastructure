@@ -235,10 +235,10 @@ configMap:
             pods:
               instances:
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, emulatorjs, plex, transmission, gatus] # Exclude codes for any pods with specified labels
                   codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping, gatus] # Exclude codes for any pods with specified labels
                   codes: [306] # => Container could be running as root user. Check SecurityContext/Image
                 - labels:
                     app: [popeye, git-sync, kometa] # Exclude codes for any pods with specified labels
@@ -246,7 +246,7 @@ configMap:
                 - labels:
                     app: [radarr, sonarr, prowlarr, transmission] # Exclude codes for any pods with specified labels
                   codes: [110] # => Memory Current/Request threshold
-                - containers: [kometa-init, home-assistant-init]
+                - containers: [kometa-init, home-assistant-init, gatus-init]
                   codes: [101] # => Image tagged 'latest' in use
                 - containers: [kubeview]
                   codes: [101, 105, 105, 206, 306, 302, 110]
@@ -258,7 +258,7 @@ configMap:
                   codes: [106, 206, 301]
             deployments:
               instances:
-                - containers: [home-assistant-init, kubeview]
+                - containers: [home-assistant-init, gatus-init, kubeview]
                   codes: [101] # => Image tagged 'latest' in use
                 - containers: [headlamp, grafana-operator, grafana]
                   codes: [106]
