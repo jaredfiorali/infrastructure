@@ -48,6 +48,11 @@ initContainers:
         secretKeyRef:
           name: gatus-credentials
           key: SLACK_WEBHOOK_URL
+    - name: POSTGRES_CONNECTION_STRING
+      valueFrom:
+        secretKeyRef:
+          name: gatus-credentials
+          key: POSTGRES_CONNECTION_STRING
     command:
     - sh
     - -c
@@ -112,6 +117,9 @@ externalSecrets:
   - secretKey: SLACK_WEBHOOK_URL
     remoteRef:
       key: /homelab/gatus/SLACK_WEBHOOK_URL
+  - secretKey: POSTGRES_CONNECTION_STRING
+    remoteRef:
+      key: /homelab/gatus/POSTGRES_CONNECTION_STRING
 configMap:
   enabled: true
   value: |-
@@ -125,6 +133,9 @@ configMap:
             success-threshold: 2
             send-on-resolved: true
             description: "Gatus check failed"
+      storage:
+        type: postgres
+        path: "${POSTGRES_CONNECTION_STRING}"
       endpoints:
         - name: argo
           url: http://argo.fiora.li
@@ -132,133 +143,133 @@ configMap:
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: dawarich
           url: http://dawarich.fiora.li
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: plex
           url: http://plex.fiora.li/identity
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: prowlarr
           url: http://prowlarr.fiora.li/ping
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: radarr
           url: http://radarr.fiora.li/ping
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: sonarr
           url: http://sonarr.fiora.li/ping
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: transmission
           url: http://transmission.fiora.li/transmission/rpc
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 409"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: emulatorjs
           url: http://emulatorjs.fiora.li
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: home-assistant
           url: http://home-assistant.fiora.li/api/
           group: home security
           interval: 1m
           conditions:
             - "[STATUS] == 401"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: linkding
           url: http://linkding.fiora.li/health
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: longhorn
           url: http://longhorn.fiora.li
           group: kubernetes core
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: grafana-oss
           url: http://grafana-oss.fiora.li/api/health
           group: monitoring
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: influxdb
           url: http://influxdb.fiora.li/health
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: kromgo
           url: http://kromgo.fiora.li
           group: monitoring
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: prometheus
           url: http://prometheus.fiora.li/-/ready
           group: monitoring
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: scrypted
           url: http://scrypted.fiora.li
           group: home security
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: sillytavern
           url: http://sillytavern.fiora.li
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 401"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: speedtest
           url: http://speedtest.fiora.li
           group: other
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
         - name: tautulli
           url: http://tautulli.fiora.li/status
           group: media management
           interval: 1m
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 2000"
+            - "[RESPONSE_TIME] < 500"
 
         - name: traefik
           url: "tcp://192.168.20.20:80"
