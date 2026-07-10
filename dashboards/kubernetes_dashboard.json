@@ -5444,7 +5444,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "(\n  (\n    sum by (project) (\n      increase(supavisor_client_network_recv[12h])\n      +\n      increase(supavisor_client_network_send[12h])\n    )\n    -\n    sum by (project) (\n      increase(supavisor_client_network_recv[12h] offset 12h)\n      +\n      increase(supavisor_client_network_send[12h] offset 12h)\n    )\n  )\n)\n/\nclamp_min(\n  sum by (project) (\n    increase(supavisor_client_network_recv[12h] offset 12h)\n    +\n    increase(supavisor_client_network_send[12h] offset 12h)\n  ),\n  10 * 1024 * 1024  # 10 MB floor\n)\n",
+                        "expr": "avg(gatus_results_duration_seconds)",
                         "interval": "$resolution",
                         "legendFormat": "{{project}}",
                         "range": true
@@ -5459,10 +5459,10 @@
               "transformations": []
             }
           },
-          "description": "Percentage trend for egress (positive is bad, negative is good)",
+          "description": "",
           "id": 763,
           "links": [],
-          "title": "Postgres Egress Percent Trend",
+          "title": "Average Service Response Time",
           "vizConfig": {
             "group": "timeseries",
             "kind": "VizConfig",
@@ -5507,7 +5507,6 @@
                     }
                   },
                   "decimals": 1,
-                  "noValue": "0",
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -5517,7 +5516,7 @@
                       }
                     ]
                   },
-                  "unit": "percent"
+                  "unit": "s"
                 },
                 "overrides": []
               },
