@@ -14,10 +14,10 @@ containerPorts:
 resources:
   limits:
     cpu: 250m
-    memory: 100Mi
+    memory: 50Mi
   requests:
     cpu: 100m
-    memory: 50Mi
+    memory: 25Mi
 probes:
   httpGet:
     path: /
@@ -120,10 +120,15 @@ externalSecrets:
   - secretKey: POSTGRES_CONNECTION_STRING
     remoteRef:
       key: /homelab/gatus/POSTGRES_CONNECTION_STRING
+serviceMonitor:
+  enabled: true
+  appSelector: gatus
+  port: "gatus"
 configMap:
   enabled: true
   value: |-
     config.yaml: |
+      metrics: true
       alerting:
         slack:
           webhook-url: "${SLACK_WEBHOOK_URL}"
@@ -136,6 +141,10 @@ configMap:
       storage:
         type: postgres
         path: "${POSTGRES_CONNECTION_STRING}"
+      connectivity:
+        checker:
+          target: 1.1.1.1:53
+          interval: 60s
       endpoints:
         - name: argo
           url: http://argo.fiora.li
@@ -145,7 +154,7 @@ configMap:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 500"
         - name: dawarich
-          url: http://dawarich.fiora.li
+          url: http://dawarich.fiora.li/api/v1/health
           group: other
           interval: 1m
           conditions:
