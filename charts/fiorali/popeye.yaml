@@ -235,10 +235,10 @@ configMap:
             pods:
               instances:
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission, gatus] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, emulatorjs, plex, transmission] # Exclude codes for any pods with specified labels
                   codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping, gatus] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
                   codes: [306] # => Container could be running as root user. Check SecurityContext/Image
                 - labels:
                     app: [popeye, git-sync, kometa] # Exclude codes for any pods with specified labels
