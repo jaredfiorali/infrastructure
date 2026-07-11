@@ -343,12 +343,12 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 150
+              max: 500
             - color: "orange"
-              min: 151
-              max: 400
+              min: 501
+              max: 999
             - color: "red"
-              min: 401
+              min: 1000
               max: 999999
 
         - name: radarr_uptime
@@ -370,12 +370,12 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 150
+              max: 500
             - color: "orange"
-              min: 151
-              max: 400
+              min: 501
+              max: 999
             - color: "red"
-              min: 401
+              min: 1000
               max: 999999
 
         - name: sonarr_uptime
@@ -397,12 +397,12 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 150
+              max: 500
             - color: "orange"
-              min: 151
-              max: 400
+              min: 501
+              max: 999
             - color: "red"
-              min: 401
+              min: 1000
               max: 999999
 
         - name: tautulli_uptime
@@ -640,12 +640,12 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 150
+              max: 500
             - color: "orange"
-              min: 151
-              max: 400
+              min: 501
+              max: 999
             - color: "red"
-              min: 401
+              min: 1000
               max: 999999
 
         - name: sillytavern_uptime
