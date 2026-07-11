@@ -24,7 +24,7 @@ cronjob:
   schedule: "5 23 * * *"
 env:
 - name: KROMGO_QUERIES
-  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,longhorn_uptime,plex_uptime,plex_lb_uptime,plex_response_time"
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,home_assistant_uptime,home_assistant_response_time,scrypted_uptime,scrypted_response_time,argocd_uptime,argocd_response_time,longhorn_uptime,longhorn_response_time,plex_uptime,plex_lb_uptime,plex_response_time,plex_remote_uptime,plex_remote_response_time,prowlarr_uptime,prowlarr_response_time,radarr_uptime,radarr_response_time,sonarr_uptime,sonarr_response_time,tautulli_uptime,tautulli_response_time,transmission_uptime,transmission_response_time,grafana_uptime,grafana_response_time,kromgo_uptime,kromgo_response_time,prometheus_uptime,prometheus_response_time,dawarich_uptime,dawarich_response_time,emulatorjs_uptime,emulatorjs_response_time,influxdb_uptime,influxdb_response_time,linkding_uptime,linkding_response_time,sillytavern_uptime,sillytavern_response_time,speedtest_uptime,speedtest_response_time"
 - name: GATUS_BADGES
   value: "media-management_plex,uptime,7d;home-security_home-assistant,health,na;kubernetes-core_argo,response-time-chart,24h;kubernetes-core_longhorn,uptime,30d"
 - name: GITHUB_PAT

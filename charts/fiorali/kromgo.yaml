@@ -88,7 +88,6 @@ configMap:
           label: version
         - name: cluster_uptime_days
           query: ceil(avg(node_time_seconds - node_boot_time_seconds)/60/60/24)
-          prefix: ""
           suffix: "d"
           colors:
             - color: "green"
@@ -108,7 +107,6 @@ configMap:
               max: 1000
         - name: cluster_cpu_usage
           query: "round(cluster:node_cpu:ratio_rate5m * 100, 0.1)"
-          prefix: ""
           suffix: "%"
           colors:
             - color: "green"
@@ -122,7 +120,6 @@ configMap:
               max: 1000
         - name: cluster_memory_usage
           query: "round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)*100, 0.1)"
-          prefix: ""
           suffix: "%"
           colors:
             - color: "green"
@@ -136,7 +133,6 @@ configMap:
               max: 1000
         - name: cluster_power_usage
           query: unpoller_device_outlet_ac_power_consumption{}
-          prefix: ""
           suffix: "W"
           colors:
           - color: "green"
@@ -147,7 +143,6 @@ configMap:
             max: 1000
         - name: cluster_popeye_score
           query: popeye_report_score{}
-          prefix: ""
           suffix: "%"
           colors:
             - color: "red"
@@ -156,9 +151,90 @@ configMap:
             - color: "green"
               min: 100
               max: 1000
+
+        - name: home_assistant_uptime
+          query: round(sum(increase(gatus_results_total{key="home-security_home-assistant", success="true"}[7d])) / sum(increase(gatus_results_total{key="home-security_home-assistant"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: home_assistant_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_home-assistant"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: scrypted_uptime
+          query: round(sum(increase(gatus_results_total{key="home-security_scrypted", success="true"}[7d])) / sum(increase(gatus_results_total{key="home-security_scrypted"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: scrypted_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_scrypted"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: argocd_uptime
+          query: round(sum(increase(gatus_results_total{key="kubernetes-core_argo", success="true"}[7d])) / sum(increase(gatus_results_total{key="kubernetes-core_argo"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: argocd_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_argo"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
         - name: longhorn_uptime
           query: round(min(avg_over_time(up{job="longhorn-backend"}[7d]) * 100), 0.1)
-          prefix: ""
           suffix: "%"
           colors:
             - color: "red"
@@ -167,6 +243,20 @@ configMap:
             - color: "green"
               min: 100
               max: 1000
+        - name: longhorn_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_longhorn"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
         - name: plex_uptime
           query: round(sum(increase(gatus_results_total{key="media-management_plex", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_plex"}[7d])) * 100, 0.1)
           suffix: "%"
@@ -199,10 +289,415 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 200
+              max: 150
             - color: "orange"
-              min: 201
-              max: 500
+              min: 151
+              max: 400
             - color: "red"
-              min: 501
+              min: 401
+              max: 999999
+
+        - name: plex_remote_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_plex(remote)", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_plex(remote)"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: plex_remote_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex(remote)"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: prowlarr_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_prowlarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_prowlarr"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: prowlarr_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_prowlarr"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: radarr_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_radarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_radarr"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: radarr_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_radarr"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: sonarr_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_sonarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_sonarr"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: sonarr_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_sonarr"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: tautulli_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_tautulli", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_tautulli"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: tautulli_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tautulli"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: transmission_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_transmission", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_transmission"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: transmission_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_transmission"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: grafana_uptime
+          query: round(sum(increase(gatus_results_total{key="monitoring_grafana-oss", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_grafana-oss"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: grafana_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_grafana-oss"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: kromgo_uptime
+          query: round(sum(increase(gatus_results_total{key="monitoring_kromgo", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_kromgo"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: kromgo_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_kromgo"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: prometheus_uptime
+          query: round(sum(increase(gatus_results_total{key="monitoring_prometheus", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_prometheus"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: prometheus_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_prometheus"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: dawarich_uptime
+          query: round(sum(increase(gatus_results_total{key="other_dawarich", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_dawarich"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: dawarich_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_dawarich"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: emulatorjs_uptime
+          query: round(sum(increase(gatus_results_total{key="other_emulatorjs", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_emulatorjs"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: emulatorjs_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_emulatorjs"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: influxdb_uptime
+          query: round(sum(increase(gatus_results_total{key="other_influxdb", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_influxdb"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: influxdb_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_influxdb"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: linkding_uptime
+          query: round(sum(increase(gatus_results_total{key="other_linkding", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_linkding"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: linkding_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_linkding"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: sillytavern_uptime
+          query: round(sum(increase(gatus_results_total{key="other_sillytavern", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_sillytavern"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: sillytavern_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_sillytavern"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: speedtest_uptime
+          query: round(sum(increase(gatus_results_total{key="other_speedtest", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_speedtest"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: speedtest_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_speedtest"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
               max: 999999
