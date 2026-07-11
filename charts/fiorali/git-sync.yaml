@@ -24,7 +24,7 @@ cronjob:
   schedule: "5 23 * * *"
 env:
 - name: KROMGO_QUERIES
-  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,longhorn_uptime"
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,longhorn_uptime,plex_uptime,plex_lb_uptime,plex_response_time"
 - name: GATUS_BADGES
   value: "media-management_plex,uptime,7d;home-security_home-assistant,health,na;kubernetes-core_argo,response-time-chart,24h;kubernetes-core_longhorn,uptime,30d"
 - name: GITHUB_PAT

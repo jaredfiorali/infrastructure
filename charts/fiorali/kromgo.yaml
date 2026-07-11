@@ -157,7 +157,7 @@ configMap:
               min: 100
               max: 1000
         - name: longhorn_uptime
-          query: min(avg_over_time(up{job="longhorn-backend"}[7d]) * 100)
+          query: round(min(avg_over_time(up{job="longhorn-backend"}[7d]) * 100), 0.1)
           prefix: ""
           suffix: "%"
           colors:
@@ -167,3 +167,42 @@ configMap:
             - color: "green"
               min: 100
               max: 1000
+        - name: plex_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_plex", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_plex"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: plex_lb_uptime
+          query: round(sum(increase(gatus_results_total{key="metallb_plex", success="true"}[7d])) / sum(increase(gatus_results_total{key="metallb_plex"}[7d])) * 100, 0.1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: plex_response_time
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex"}[24h]) * 1000, 0.1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 200
+            - color: "orange"
+              min: 201
+              max: 500
+            - color: "red"
+              min: 501
+              max: 999999

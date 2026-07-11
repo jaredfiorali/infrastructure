@@ -14,6 +14,10 @@ Kubernetes cluster managed with ArgoCD and GitHub Actions, using Longhorn for pe
 ![Power](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_power_usage.json&style=flat-square&label=Power)
 ![Popeye](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_popeye_score.json&style=flat-square&label=Popeye)
 
+![Plex&nbsp;Uptime](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/plex_uptime.json&style=flat-square&label=Plex&nbsp;Uptime)
+![Plex&nbsp;LB&nbsp;Uptime](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/plex_lb_uptime.json&style=flat-square&label=Plex&nbsp;LB&nbsp;Uptime)
+![Plex&nbsp;Response&nbsp;Time](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/plex_response_time.json&style=flat-square&label=Plex&nbsp;Response&nbsp;Time)
+
 This is my attempt to formalize and document my homelab, partly for myself, and partly so there's some documentation if I get hit by a bus 🚌
 
 It's basically a mono repo for my home infrastructure and Kubernetes cluster. My aim is to follow Infrastructure as Code (IaC) principals and GitOps practices using tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable), [Kubernetes](https://kubernetes.io), and [GitHub Actions](https://github.com/features/actions).
