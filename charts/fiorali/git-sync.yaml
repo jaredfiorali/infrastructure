@@ -23,8 +23,10 @@ cronjob:
   enabled: true
   schedule: "5 23 * * *"
 env:
-- name: QUERIES
-  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score"
+- name: KROMGO_QUERIES
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,longhorn_uptime"
+- name: GATUS_BADGES
+  value: "media-management_plex,uptime,7d;home-security_home-assistant,health,na;kubernetes-core_argo,response-time-chart,24h;kubernetes-core_longhorn,uptime,30d"
 - name: GITHUB_PAT
   valueFrom:
     secretKeyRef:
@@ -70,16 +72,51 @@ configMap:
       set -x
       echo "Cloning git repository"
       git clone --depth 5 "https://jaredfiorali:$GITHUB_PAT@github.com/jaredfiorali/infrastructure.git" --single-branch --branch=gh-pages
-      # Move into the new directory
       cd /git/infrastructure
+
       # Set the IFS to comma
       IFS=','
-      # TODO: jfiorali - This needs to exit 1 if there are any issues pulling the metrics
       echo "Downloading metrics"
-      for query in $QUERIES; do
+      for query in $KROMGO_QUERIES; do
           wget -O "$query.json" "http://kromgo.monitoring:8080/$query"
       done
-      # echo "Set email and username for git push"
+
+      # Gatus badges: semicolon-separated entries, each entry is key,type,duration
+      # type: health | uptime | response-time-badge | response-time-chart
+      # duration: 1h | 24h | 7d | 30d (ignored for type=health)
+      # Example: GATUS_BADGES="media-management_plex,uptime,7d;home-assistant_home-assistant,health,kubernetes-core_argo,response-time-chart,24h"
+      GATUS_URL="${GATUS_URL:-http://gatus.gatus:8080}"
+      mkdir -p badges
+      echo "Downloading Gatus badges"
+      OLD_IFS="$IFS"
+      IFS=';'
+          for entry in $GATUS_BADGES; do
+        key=$(echo "$entry" | cut -d',' -f1)
+        type=$(echo "$entry" | cut -d',' -f2)
+        duration=$(echo "$entry" | cut -d',' -f3)
+
+        case "$type" in
+            health)
+                path="health/badge.svg"
+                ;;
+            uptime)
+                path="uptimes/$duration/badge.svg"
+                ;;
+            response-time-badge)
+                path="response-times/$duration/badge.svg"
+                ;;
+            response-time-chart)
+                path="response-times/$duration/chart.svg"
+                ;;
+            *)
+                echo "Unknown badge type: $type, skipping $key"
+                continue
+                ;;
+        esac
+
+        wget -O "badges/${key}-${type}-${duration}.svg" "$GATUS_URL/api/v1/endpoints/$key/$path"
+      done
+
       git config user.email "jaredfiorali@gmail.com"
       git config user.name "Jared Fiorali"
       echo "Commit metrics to git"

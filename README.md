@@ -6,7 +6,7 @@ Kubernetes cluster managed with ArgoCD and GitHub Actions, using Longhorn for pe
 [![DietPi](https://img.shields.io/endpoint?url=https%3A%2F%2Fjaredfiorali.github.io%2Finfrastructure%2Fdietpi_version.json&style=for-the-badge&logo=raspberrypi&logoColor=white&labelColor=blue&color=green&label=dietpi)](https://dietpi.com)
 [![ArgoCD](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/argocd_version.json&style=for-the-badge&logo=argo&logoColor=white&labelColor=blue&color=green&label=argocd)](https://argo-cd.readthedocs.io/en/stable)
 
-![Uptime](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_uptime_days.json&style=flat-square&label=Uptime)
+![CLuster Uptime](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_uptime_days.json&style=flat-square&label=Uptime)
 ![Nodes](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_node_count.json&style=flat-square&label=Nodes)
 ![Pods](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_pod_count.json&style=flat-square&label=Pods)
 ![CPU](https://img.shields.io/endpoint?url=https://jaredfiorali.github.io/infrastructure/cluster_cpu_usage.json&style=flat-square&label=CPU)

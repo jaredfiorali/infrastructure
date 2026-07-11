@@ -156,3 +156,14 @@ configMap:
             - color: "green"
               min: 100
               max: 1000
+        - name: longhorn_uptime
+          query: min(avg_over_time(up{job="longhorn-backend"}[7d]) * 100)
+          prefix: ""
+          suffix: "%"
+          colors:
+            - color: "red"
+              min: 0
+              max: 99
+            - color: "green"
+              min: 100
+              max: 1000
