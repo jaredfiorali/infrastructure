@@ -24,9 +24,7 @@ cronjob:
   schedule: "5 23 * * *"
 env:
 - name: KROMGO_QUERIES
-  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,home_assistant_uptime,home_assistant_response_time,scrypted_uptime,scrypted_response_time,argocd_uptime,argocd_response_time,longhorn_uptime,longhorn_response_time,plex_uptime,plex_lb_uptime,plex_response_time,plex_remote_uptime,plex_remote_response_time,prowlarr_uptime,prowlarr_response_time,radarr_uptime,radarr_response_time,sonarr_uptime,sonarr_response_time,tautulli_uptime,tautulli_response_time,transmission_uptime,transmission_response_time,grafana_uptime,grafana_response_time,kromgo_uptime,kromgo_response_time,prometheus_uptime,prometheus_response_time,dawarich_uptime,dawarich_response_time,emulatorjs_uptime,emulatorjs_response_time,influxdb_uptime,influxdb_response_time,linkding_uptime,linkding_response_time,sillytavern_uptime,sillytavern_response_time,speedtest_uptime,speedtest_response_time"
-- name: GATUS_BADGES
-  value: "media-management_plex,uptime,7d;home-security_home-assistant,health,na;kubernetes-core_argo,response-time-chart,24h;kubernetes-core_longhorn,uptime,30d"
+  value: "kubernetes_version,argocd_version,cluster_uptime_days,cluster_node_count,cluster_pod_count,cluster_cpu_usage,cluster_memory_usage,cluster_power_usage,cluster_popeye_score,home_assistant_uptime,scrypted_uptime,argocd_uptime,longhorn_uptime,plex_uptime,plex_lb_uptime,plex_remote_uptime,prowlarr_uptime,radarr_uptime,sonarr_uptime,tautulli_uptime,transmission_uptime,grafana_uptime,kromgo_uptime,prometheus_uptime,dawarich_uptime,emulatorjs_uptime,influxdb_uptime,linkding_uptime,sillytavern_uptime,speedtest_uptime,media-management_plex,media-management_prowlarr,media-management_radarr,media-management_sonarr,media-management_tautulli,media-management_transmission,kubernetes-core_argo,kubernetes-core_longhorn,monitoring_grafana-oss,monitoring_kromgo,home-security_scrypted,home-security_home-assistant,other_dawarich,other_emulatorjs,other_influxdb,other_linkding,other_sillytavern,other_speedtest"
 - name: GITHUB_PAT
   valueFrom:
     secretKeyRef:
@@ -81,40 +79,22 @@ configMap:
           wget -O "$query.json" "http://kromgo.monitoring:8080/$query"
       done
 
-      # Gatus badges: semicolon-separated entries, each entry is key,type,duration
-      # type: health | uptime | response-time-badge | response-time-chart
-      # duration: 1h | 24h | 7d | 30d (ignored for type=health)
-      # Example: GATUS_BADGES="media-management_plex,uptime,7d;home-assistant_home-assistant,health,kubernetes-core_argo,response-time-chart,24h"
+      # Gatus response-time charts: derived from KROMGO_QUERIES entries ending in _response_time
+      # Assumes kromgo metric names match Gatus endpoint keys exactly (e.g. media-management_plex_response_time)
       GATUS_URL="${GATUS_URL:-http://gatus.gatus:8080}"
       mkdir -p badges
-      echo "Downloading Gatus badges"
-      OLD_IFS="$IFS"
-      IFS=';'
-          for entry in $GATUS_BADGES; do
-        key=$(echo "$entry" | cut -d',' -f1)
-        type=$(echo "$entry" | cut -d',' -f2)
-        duration=$(echo "$entry" | cut -d',' -f3)
-
-        case "$type" in
-            health)
-                path="health/badge.svg"
-                ;;
-            uptime)
-                path="uptimes/$duration/badge.svg"
-                ;;
-            response-time-badge)
-                path="response-times/$duration/badge.svg"
-                ;;
-            response-time-chart)
-                path="response-times/$duration/chart.svg"
-                ;;
-            *)
-                echo "Unknown badge type: $type, skipping $key"
-                continue
-                ;;
-        esac
-
-        wget -O "badges/${key}-${type}-${duration}.svg" "$GATUS_URL/api/v1/endpoints/$key/$path"
+      echo "Downloading Gatus response-time charts"
+      IFS=','
+      for query in $KROMGO_QUERIES; do
+          case "$query" in
+              *_uptime|*_version|cluster_*)
+                  echo "Skipping $query (not a chart source)"
+                  ;;
+              *)
+                  echo "Fetching chart for $query"
+                  wget -O "badges/${query}-chart.svg" "$GATUS_URL/api/v1/endpoints/${query}/response-times/24h/chart.svg"
+                  ;;
+          esac
       done
 
       git config user.email "jaredfiorali@gmail.com"

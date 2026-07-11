@@ -165,7 +165,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: home_assistant_response_time
+        - name: home-security_home-assistant
           query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_home-assistant"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -192,7 +192,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: scrypted_response_time
+        - name: home-security_scrypted
           query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_scrypted"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -219,7 +219,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: argocd_response_time
+        - name: kubernetes-core_argo
           query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_argo"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -243,7 +243,7 @@ configMap:
             - color: "green"
               min: 100
               max: 1000
-        - name: longhorn_response_time
+        - name: kubernetes-core_longhorn
           query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_longhorn"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -283,7 +283,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: plex_response_time
+        - name: media-management_plex
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -310,7 +310,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: plex_remote_response_time
+        - name: media-management_plex(remote)
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex(remote)"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -337,7 +337,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: prowlarr_response_time
+        - name: media-management_prowlarr
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_prowlarr"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -364,7 +364,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: radarr_response_time
+        - name: media-management_radarr
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_radarr"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -391,7 +391,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: sonarr_response_time
+        - name: media-management_sonarr
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_sonarr"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -418,7 +418,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: tautulli_response_time
+        - name: media-management_tautulli
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tautulli"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -445,7 +445,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: transmission_response_time
+        - name: media-management_transmission
           query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_transmission"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -472,7 +472,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: grafana_response_time
+        - name: monitoring_grafana-oss
           query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_grafana-oss"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -499,7 +499,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: kromgo_response_time
+        - name: monitoring_kromgo
           query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_kromgo"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -526,7 +526,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: prometheus_response_time
+        - name: monitoring_prometheus
           query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_prometheus"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -553,7 +553,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: dawarich_response_time
+        - name: other_dawarich
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_dawarich"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -580,7 +580,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: emulatorjs_response_time
+        - name: other_emulatorjs
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_emulatorjs"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -607,7 +607,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: influxdb_response_time
+        - name: other_influxdb
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_influxdb"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -634,7 +634,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: linkding_response_time
+        - name: other_linkding
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_linkding"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -661,7 +661,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: sillytavern_response_time
+        - name: other_sillytavern
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_sillytavern"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
@@ -688,7 +688,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: speedtest_response_time
+        - name: other_speedtest
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_speedtest"}[24h]) * 1000, 0.1)
           suffix: "ms"
           colors:
