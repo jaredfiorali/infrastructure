@@ -153,7 +153,7 @@ configMap:
               max: 1000
 
         - name: home_assistant_uptime
-          query: round(sum(increase(gatus_results_total{key="home-security_home-assistant", success="true"}[7d])) / sum(increase(gatus_results_total{key="home-security_home-assistant"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="home-security_home-assistant", success="true"}[30d])) / sum(increase(gatus_results_total{key="home-security_home-assistant"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -166,7 +166,7 @@ configMap:
               min: 0
               max: 94.99
         - name: home-security_home-assistant
-          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_home-assistant"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_home-assistant"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -180,7 +180,7 @@ configMap:
               max: 999999
 
         - name: scrypted_uptime
-          query: round(sum(increase(gatus_results_total{key="home-security_scrypted", success="true"}[7d])) / sum(increase(gatus_results_total{key="home-security_scrypted"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="home-security_scrypted", success="true"}[30d])) / sum(increase(gatus_results_total{key="home-security_scrypted"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -193,7 +193,7 @@ configMap:
               min: 0
               max: 94.99
         - name: home-security_scrypted
-          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_scrypted"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="home-security_scrypted"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -207,7 +207,7 @@ configMap:
               max: 999999
 
         - name: argocd_uptime
-          query: round(sum(increase(gatus_results_total{key="kubernetes-core_argo", success="true"}[7d])) / sum(increase(gatus_results_total{key="kubernetes-core_argo"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="kubernetes-core_argo", success="true"}[30d])) / sum(increase(gatus_results_total{key="kubernetes-core_argo"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -220,7 +220,7 @@ configMap:
               min: 0
               max: 94.99
         - name: kubernetes-core_argo
-          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_argo"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_argo"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -234,7 +234,7 @@ configMap:
               max: 999999
 
         - name: longhorn_uptime
-          query: round(min(avg_over_time(up{job="longhorn-backend"}[7d]) * 100), 0.1)
+          query: round(min(avg_over_time(up{job="longhorn-backend"}[30d]) * 100), 0.1)
           suffix: "%"
           colors:
             - color: "red"
@@ -244,7 +244,7 @@ configMap:
               min: 100
               max: 1000
         - name: kubernetes-core_longhorn
-          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_longhorn"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="kubernetes-core_longhorn"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -258,7 +258,7 @@ configMap:
               max: 999999
 
         - name: plex_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_plex", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_plex"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_plex", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_plex"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -271,7 +271,7 @@ configMap:
               min: 0
               max: 94.99
         - name: plex_lb_uptime
-          query: round(sum(increase(gatus_results_total{key="metallb_plex", success="true"}[7d])) / sum(increase(gatus_results_total{key="metallb_plex"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="metallb_plex", success="true"}[30d])) / sum(increase(gatus_results_total{key="metallb_plex"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -284,7 +284,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_plex
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -298,7 +298,7 @@ configMap:
               max: 999999
 
         - name: plex_remote_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_plex(remote)", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_plex(remote)"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_plex(remote)", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_plex(remote)"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -311,7 +311,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_plex(remote)
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex(remote)"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex(remote)"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -325,7 +325,7 @@ configMap:
               max: 999999
 
         - name: prowlarr_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_prowlarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_prowlarr"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_prowlarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_prowlarr"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -338,7 +338,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_prowlarr
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_prowlarr"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_prowlarr"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -352,7 +352,7 @@ configMap:
               max: 999999
 
         - name: radarr_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_radarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_radarr"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_radarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_radarr"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -365,7 +365,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_radarr
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_radarr"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_radarr"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -379,7 +379,7 @@ configMap:
               max: 999999
 
         - name: sonarr_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_sonarr", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_sonarr"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_sonarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_sonarr"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -392,7 +392,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_sonarr
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_sonarr"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_sonarr"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -406,7 +406,7 @@ configMap:
               max: 999999
 
         - name: tautulli_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_tautulli", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_tautulli"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_tautulli", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_tautulli"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -419,7 +419,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_tautulli
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tautulli"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tautulli"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -433,7 +433,7 @@ configMap:
               max: 999999
 
         - name: transmission_uptime
-          query: round(sum(increase(gatus_results_total{key="media-management_transmission", success="true"}[7d])) / sum(increase(gatus_results_total{key="media-management_transmission"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="media-management_transmission", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_transmission"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -446,7 +446,7 @@ configMap:
               min: 0
               max: 94.99
         - name: media-management_transmission
-          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_transmission"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_transmission"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -460,7 +460,7 @@ configMap:
               max: 999999
 
         - name: grafana_uptime
-          query: round(sum(increase(gatus_results_total{key="monitoring_grafana-oss", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_grafana-oss"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="monitoring_grafana-oss", success="true"}[30d])) / sum(increase(gatus_results_total{key="monitoring_grafana-oss"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -473,7 +473,7 @@ configMap:
               min: 0
               max: 94.99
         - name: monitoring_grafana-oss
-          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_grafana-oss"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_grafana-oss"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -487,7 +487,7 @@ configMap:
               max: 999999
 
         - name: kromgo_uptime
-          query: round(sum(increase(gatus_results_total{key="monitoring_kromgo", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_kromgo"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="monitoring_kromgo", success="true"}[30d])) / sum(increase(gatus_results_total{key="monitoring_kromgo"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -500,7 +500,7 @@ configMap:
               min: 0
               max: 94.99
         - name: monitoring_kromgo
-          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_kromgo"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_kromgo"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -514,7 +514,7 @@ configMap:
               max: 999999
 
         - name: prometheus_uptime
-          query: round(sum(increase(gatus_results_total{key="monitoring_prometheus", success="true"}[7d])) / sum(increase(gatus_results_total{key="monitoring_prometheus"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="monitoring_prometheus", success="true"}[30d])) / sum(increase(gatus_results_total{key="monitoring_prometheus"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -527,7 +527,7 @@ configMap:
               min: 0
               max: 94.99
         - name: monitoring_prometheus
-          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_prometheus"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_prometheus"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -541,7 +541,7 @@ configMap:
               max: 999999
 
         - name: dawarich_uptime
-          query: round(sum(increase(gatus_results_total{key="other_dawarich", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_dawarich"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_dawarich", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_dawarich"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -554,7 +554,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_dawarich
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_dawarich"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_dawarich"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -568,7 +568,7 @@ configMap:
               max: 999999
 
         - name: emulatorjs_uptime
-          query: round(sum(increase(gatus_results_total{key="other_emulatorjs", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_emulatorjs"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_emulatorjs", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_emulatorjs"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -581,7 +581,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_emulatorjs
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_emulatorjs"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_emulatorjs"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -595,7 +595,7 @@ configMap:
               max: 999999
 
         - name: influxdb_uptime
-          query: round(sum(increase(gatus_results_total{key="other_influxdb", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_influxdb"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_influxdb", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_influxdb"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -608,7 +608,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_influxdb
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_influxdb"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_influxdb"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -622,7 +622,7 @@ configMap:
               max: 999999
 
         - name: linkding_uptime
-          query: round(sum(increase(gatus_results_total{key="other_linkding", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_linkding"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_linkding", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_linkding"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -635,7 +635,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_linkding
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_linkding"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_linkding"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -649,7 +649,7 @@ configMap:
               max: 999999
 
         - name: sillytavern_uptime
-          query: round(sum(increase(gatus_results_total{key="other_sillytavern", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_sillytavern"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_sillytavern", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_sillytavern"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -662,7 +662,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_sillytavern
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_sillytavern"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_sillytavern"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -676,7 +676,7 @@ configMap:
               max: 999999
 
         - name: speedtest_uptime
-          query: round(sum(increase(gatus_results_total{key="other_speedtest", success="true"}[7d])) / sum(increase(gatus_results_total{key="other_speedtest"}[7d])) * 100, 0.1)
+          query: round(sum(increase(gatus_results_total{key="other_speedtest", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_speedtest"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -689,7 +689,7 @@ configMap:
               min: 0
               max: 94.99
         - name: other_speedtest
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_speedtest"}[24h]) * 1000, 0.1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_speedtest"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"

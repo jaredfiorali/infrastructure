@@ -92,7 +92,7 @@ configMap:
                   ;;
               *)
                   echo "Fetching chart for $query"
-                  wget -O "badges/${query}-chart.svg" "$GATUS_URL/api/v1/endpoints/${query}/response-times/24h/chart.svg"
+                  wget -O "badges/${query}-chart.svg" "$GATUS_URL/api/v1/endpoints/${query}/response-times/30d/chart.svg"
                   ;;
           esac
       done
