@@ -1,1 +1,1 @@
-{"label":"influxdb_uptime","message":"NaN%","schemaVersion":1}
+{"color":"green","label":"influxdb_uptime","message":"100%","schemaVersion":1}
