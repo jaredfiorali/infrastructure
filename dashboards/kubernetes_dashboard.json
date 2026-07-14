@@ -5444,9 +5444,9 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "avg(gatus_results_duration_seconds)",
+                        "expr": "sum(gatus_results_duration_seconds) by (name)",
                         "interval": "$resolution",
-                        "legendFormat": "Response Time",
+                        "legendFormat": "{{name}}",
                         "range": true
                       },
                       "version": "v0"
@@ -5506,7 +5506,8 @@
                       "mode": "off"
                     }
                   },
-                  "decimals": 1,
+                  "decimals": 0,
+                  "min": 0,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -7326,8 +7327,8 @@
         "spec": {
           "allowCustomValue": true,
           "current": {
-            "text": "3m",
-            "value": "3m"
+            "text": "5m",
+            "value": "5m"
           },
           "hide": "dontHide",
           "includeAll": false,
