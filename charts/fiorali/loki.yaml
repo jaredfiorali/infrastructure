@@ -5,15 +5,7 @@ deployment:
 service:
   enabled: false
 networkpolicy:
-  podSelector: false
-  ingress:
-    internal: true
-    namespaces:
-      - monitoring
-      - gatus
-  egress:
-    internal: true
-    kubeApiServer: true
+  enabled: false
 serviceAccount:
   enabled: false
 podDisruptionBudget:
