@@ -797,7 +797,7 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
-        - name: other_loki
+        - name: monitoring_loki
           query: round(avg_over_time(gatus_results_duration_seconds{key="other_loki"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
