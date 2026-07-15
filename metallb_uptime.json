@@ -1,1 +1,1 @@
-{"color":"green","label":"metallb_uptime","message":"100%","schemaVersion":1}
+{"color":"red","label":"metallb_uptime","message":"0%","schemaVersion":1}
