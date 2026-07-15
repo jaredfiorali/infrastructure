@@ -148,12 +148,19 @@ configMap:
         path: "${POSTGRES_CONNECTION_STRING}"
       connectivity:
         checker:
-          target: 1.1.1.1:53
+          target: 192.168.20.21:53
           interval: 60s
       endpoints:
         - name: argo
           url: http://argo.fiora.li
           group: kubernetes core
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 500"
+        - name: alloy
+          url: http://alloy.fiora.li/-/ready
+          group: monitoring
           interval: 1m
           conditions:
             - "[STATUS] == 200"
@@ -228,6 +235,13 @@ configMap:
           conditions:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 1000"
+        - name: loki
+          url: http://loki.loki:3100/ready
+          group: other
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 500"
         - name: longhorn
           url: http://longhorn.fiora.li
           group: kubernetes core

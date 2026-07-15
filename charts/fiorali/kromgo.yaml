@@ -701,3 +701,31 @@ configMap:
             - color: "red"
               min: 401
               max: 999999
+
+        - name: other_cloudflared
+          query: round(max(histogram_quantile(0.95, rate(coredns_dns_request_duration_seconds_bucket[24h])) * 1000), 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: metallb_uptime
+          query: min(avg_over_time(metallb_bgp_session_up[24h]) * 100)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99

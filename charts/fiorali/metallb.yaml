@@ -34,3 +34,6 @@ bgpAdvertisement:
   ipAddressPools: ["pi-vips"]
 containerSecurityContext:
   enabled: false
+serviceMonitor:
+  enabled: true
+  port: "7472"
