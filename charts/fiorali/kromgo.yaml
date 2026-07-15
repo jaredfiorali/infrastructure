@@ -233,6 +233,33 @@ configMap:
               min: 401
               max: 999999
 
+        - name: external-secrets_uptime
+          query: round(sum(externalsecret_status_condition{status="True", condition="Ready"}) / count(externalsecret_status_condition{status="True", condition="Ready"}) * 100, 1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: kubernetes-core_external-secrets
+          query: round(histogram_quantile(0.95, rate(controller_runtime_reconcile_time_seconds_bucket{controller="externalsecret"}[24h])) * 1000, 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
         - name: longhorn_uptime
           query: round(min(avg_over_time(up{job="longhorn-backend"}[30d]) * 100), 0.1)
           suffix: "%"
@@ -527,7 +554,7 @@ configMap:
               min: 0
               max: 94.99
         - name: monitoring_prometheus
-          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_prometheus"}[30d]) * 1000, 1)
+          query: round(histogram_quantile(0.95, rate(prometheus_engine_query_duration_histogram_seconds_bucket{slice="inner_eval"}[24h])) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
@@ -717,7 +744,7 @@ configMap:
               max: 999999
 
         - name: metallb_uptime
-          query: min(avg_over_time(metallb_bgp_session_up[24h]) * 100)
+          query: max(avg_over_time(metallb_bgp_session_up[24h]) * 100)
           suffix: "%"
           colors:
             - color: "green"
@@ -729,3 +756,57 @@ configMap:
             - color: "red"
               min: 0
               max: 94.99
+
+        - name: alloy_uptime
+          query: round(avg_over_time(up{job="alloy"}[7d]) * 100, 1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: monitoring_alloy
+          query: round(histogram_quantile(0.95, sum(rate(alloy_component_evaluation_seconds_bucket[24h])) by (le)) * 1000, 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
+
+        - name: loki_uptime
+          query: round(sum(increase(gatus_results_total{key="other_loki", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_loki"}[30d])) * 100, 1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: other_loki
+          query: round(avg_over_time(gatus_results_duration_seconds{key="other_loki"}[30d]) * 1000, 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999

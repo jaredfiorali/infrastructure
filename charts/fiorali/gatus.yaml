@@ -236,12 +236,11 @@ configMap:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 1000"
         - name: loki
-          url: http://loki.loki:3100/ready
-          group: other
-          interval: 1m
+          url: http://loki.loki:3100/loki/api/v1/query?query=count_over_time({job="varlogs"}[5m])
+          group: monitoring
           conditions:
             - "[STATUS] == 200"
-            - "[RESPONSE_TIME] < 500"
+            - "[BODY].status == success"
         - name: longhorn
           url: http://longhorn.fiora.li
           group: kubernetes core
