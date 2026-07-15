@@ -10,6 +10,7 @@ networkpolicy:
     internal: true
     namespaces:
       - monitoring
+      - gatus
   egress:
     internal: true
     kubeApiServer: true
