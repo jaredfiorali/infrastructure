@@ -252,12 +252,12 @@ configMap:
           colors:
             - color: "green"
               min: 0
-              max: 150
+              max: 500
             - color: "orange"
-              min: 151
-              max: 400
+              min: 501
+              max: 999
             - color: "red"
-              min: 401
+              min: 1000
               max: 999999
 
         - name: longhorn_uptime
@@ -809,4 +809,62 @@ configMap:
               max: 400
             - color: "red"
               min: 401
+              max: 999999
+
+        - name: unpoller_uptime
+          query: round(increase(unpoller_prometheus_refresh_failures_total[24h]), 1)
+          suffix: ""
+          colors:
+            - color: "green"
+              min: 0
+              max: 1
+            - color: "orange"
+              min: 2
+              max: 3
+            - color: "red"
+              min: 4
+              max: 999999
+
+        - name: kometa_uptime
+          query: round((time() - max(kube_job_status_completion_time{job_name=~"kometa-.*"} and on(job_name) kube_job_status_succeeded{job_name=~"kometa-.*"} == 1)) / 3600, 1)
+          title: "Kometa Hours Since Success"
+          suffix: "h"
+          colors:
+            - color: "green"
+              min: 0
+              max: 26
+            - color: "orange"
+              min: 27
+              max: 48
+            - color: "red"
+              min: 49
+              max: 999999
+        - name: popeye_uptime
+          query: "time() - max(kube_job_status_completion_time{job_name=~\"popeye-.*\"} and on(job_name) kube_job_status_succeeded{job_name=~\"popeye-.*\"} == 1)"
+          title: "Popeye Last Success"
+          valueTemplate: "{{ . | humanDuration }}"
+          colors:
+            - color: "green"
+              min: 0
+              max: 900
+            - color: "orange"
+              min: 901
+              max: 1800
+            - color: "red"
+              min: 1801
+              max: 999999
+
+        - name: git_sync_uptime
+          query: "time() - max(kube_job_status_completion_time{job_name=~\"git-sync-.*\"} and on(job_name) kube_job_status_succeeded{job_name=~\"git-sync-.*\"} == 1)"
+          title: "Git Sync Last Success"
+          valueTemplate: "{{ . | humanDuration }}"
+          colors:
+            - color: "green"
+              min: 0
+              max: 90000
+            - color: "orange"
+              min: 90001
+              max: 172800
+            - color: "red"
+              min: 172801
               max: 999999

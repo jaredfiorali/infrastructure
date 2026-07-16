@@ -129,6 +129,7 @@ serviceMonitor:
   enabled: true
   appSelector: gatus
   port: "gatus"
+  interval: "5m"
 configMap:
   enabled: true
   value: |-
