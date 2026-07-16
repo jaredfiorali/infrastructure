@@ -785,7 +785,7 @@ configMap:
               max: 999999
 
         - name: loki_uptime
-          query: round(sum(increase(gatus_results_total{key="other_loki", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_loki"}[30d])) * 100, 1)
+          query: round(sum(increase(gatus_results_total{key="monitoring_loki", success="true"}[30d])) / sum(increase(gatus_results_total{key="monitoring_loki"}[30d])) * 100, 1)
           suffix: "%"
           colors:
             - color: "green"
@@ -798,7 +798,7 @@ configMap:
               min: 0
               max: 94.99
         - name: monitoring_loki
-          query: round(avg_over_time(gatus_results_duration_seconds{key="other_loki"}[30d]) * 1000, 1)
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_loki"}[30d]) * 1000, 1)
           suffix: "ms"
           colors:
             - color: "green"
