@@ -6,11 +6,11 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/twin/gatus
-  tag: latest@sha256:ef87c00b0bfd4fcd57bf86f704f5c773747bf8bee0c67a3934eb3f11795b40c9
+  tag: latest@sha256:402a546868d51006bbe984bbcbf64ba24a0bbd4c221722906468b6b026d05778
 containerPorts:
-  - containerPort: 8080
-    name: gatus
-    protocol: TCP
+- containerPort: 8080
+  name: gatus
+  protocol: TCP
 resources:
   limits:
     cpu: 250m
@@ -77,10 +77,10 @@ initContainers:
 service:
   enabled: true
   ports:
-    - name: gatus
-      port: 8080
-      protocol: TCP
-      targetPort: gatus
+  - name: gatus
+    port: 8080
+    protocol: TCP
+    targetPort: gatus
 volumeMounts:
 - name: config
   mountPath: /config
@@ -104,9 +104,9 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
     add:
-      - NET_RAW
+    - NET_RAW
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
