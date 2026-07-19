@@ -1,0 +1,175 @@
+name: dnscrypt
+namespace: dns
+deployment:
+  enabled: false
+daemonSet:
+  enabled: true
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 50%
+terminationGracePeriodSeconds: 5
+initContainers:
+  enabled: true
+  containers:
+  - name: dnscrypt-init
+    image: docker.io/alpine/curl:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 911
+    resources:
+      limits:
+        cpu: 250m
+        memory: 100Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    env:
+    - name: UPSTREAM_DNS
+      valueFrom:
+        secretKeyRef:
+          name: dnscrypt-dns
+          key: UPSTREAM_DNS
+    command:
+    - sh
+    - -c
+    - |
+      cd /tmp
+      curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
+      chmod +x envsubst
+      # Process all config files with environment variable substitution
+      ./envsubst < /tmp/dnscrypt-proxy.toml > /config/dnscrypt-proxy.toml
+      echo "Config files processed successfully"
+      echo "Processed files:"
+      ls -la /config/
+      cat /config/dnscrypt-proxy.toml
+    volumeMounts:
+    - name: dnscrypt-configmap
+      mountPath: /tmp/dnscrypt-proxy.toml
+      subPath: dnscrypt-proxy.toml
+    - name: config
+      mountPath: /config
+    - name: tmp
+      mountPath: /tmp
+image:
+  repository: docker.io/klutchell/dnscrypt-proxy
+  tag: main@sha256:5a768c578c57199260ac81ff557246f60fb8c7a60bd63ffc59ba71e185746536
+containerPorts:
+- containerPort: 5053
+  name: dns-tcp
+  protocol: TCP
+- containerPort: 5053
+  name: dns-udp
+  protocol: UDP
+- containerPort: 8080
+  name: metrics
+  protocol: TCP
+serviceMonitor:
+  enabled: true
+  appSelector: dnscrypt
+  port: "metrics"
+resources:
+  limits:
+    cpu: 250m
+    memory: 128Mi
+  requests:
+    cpu: 25m
+    memory: 64Mi
+command:
+  enabled: true
+  args: ["-config", "/config/dnscrypt-proxy.toml"]
+volumes:
+- name: config
+  emptyDir: {}
+- name: toml
+  emptyDir: {}
+- name: tmp
+  emptyDir: {}
+- name: dnscrypt-configmap
+  configMap:
+    name: dnscrypt-configmap
+    defaultMode: 511
+volumeMounts:
+- name: config
+  mountPath: /config/dnscrypt-proxy.toml
+  subPath: dnscrypt-proxy.toml
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+probes:
+  exec:
+    command:
+    - /usr/local/bin/dnsprobe
+    - google.com
+    - 127.0.0.1:5053
+service:
+  enabled: true
+  loadBalancerIP: 192.168.20.24
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  ports:
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+    targetPort: dns-tcp
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: dns-udp
+  - name: metrics
+    port: 8080
+    protocol: TCP
+    targetPort: metrics
+networkpolicy:
+  ingress:
+    allowAll: true
+  egress:
+    internet: true
+imageUpdater:
+  enabled: true
+externalSecrets:
+  - name: dnscrypt-dns
+    data:
+      - secretKey: UPSTREAM_DNS
+        remoteRef:
+          key: /homelab/dnscrypt/UPSTREAM_DNS
+configMap:
+  enabled: true
+  value: |-
+    dnscrypt-proxy.toml: |
+      listen_addresses = ['0.0.0.0:5053']
+      server_names = ['secure-vlan-gateway']
+
+      cache = true
+      cache_size = 4096
+      cache_min_ttl = 60
+      cache_max_ttl = 86400
+      cache_neg_min_ttl = 30
+      cache_neg_max_ttl = 600
+
+      require_dnssec = false
+
+      [static.'secure-vlan-gateway']
+      stamp = '${UPSTREAM_DNS}'
+
+      [monitoring_ui]
+      enabled = true
+      listen_address = '0.0.0.0:8080'
+      username = ""
+      password = ""
+      prometheus_enabled = true
+      prometheus_path = "/metrics"
