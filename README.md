@@ -136,6 +136,7 @@ graph LR
         C[radarr]:::red
         D[sonarr]:::red
         B[prowlarr]:::red
+        P[flaresolverr]:::red
         F[transmission]:::red
         G[gluetun]:::red
         A[plex]:::red
@@ -170,9 +171,10 @@ graph LR
     O --> K
 
     %% Media management flow
-    C --> B
+    P --> B
+    B --> C
     C --> F
-    D --> B
+    B --> D
     D --> F
     F --> G
     E --> A
