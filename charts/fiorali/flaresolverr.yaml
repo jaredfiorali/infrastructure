@@ -1,0 +1,89 @@
+name: flaresolverr
+namespace: downloader
+deployment:
+  enabled: true
+replicaCount: 2
+strategyType: RollingUpdate
+image:
+  repository: docker.io/flaresolverr/flaresolverr
+  tag: latest@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
+containerPorts:
+  - containerPort: 8191
+    name: flaresolverr
+    protocol: TCP
+resources:
+  limits:
+    cpu: 1
+    memory: 500Mi
+  requests:
+    cpu: 500m
+    memory: 250Mi
+probes:
+  httpGet:
+    path: /health
+    port: flaresolverr
+service:
+  enabled: true
+  ports:
+    - name: flaresolverr
+      port: 8191
+      protocol: TCP
+      targetPort: flaresolverr
+initContainers:
+  enabled: true
+  containers:
+  - name: flaresolverr-init
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    command:
+      - "sh"
+      - "-c"
+      - "cp -r /app/. /app-writable/"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 1000
+    resources:
+      limits:
+        cpu: 250m
+        memory: 100Mi
+      requests:
+        cpu: 100m
+        memory: 50Mi
+    volumeMounts:
+      - name: app-writable
+        mountPath: /app-writable
+networkpolicy:
+  ingress:
+    internal: true
+  egress:
+    internet: true
+ingress:
+  enabled: true
+volumeMounts:
+  - name: tmp
+    mountPath: /tmp
+  - name: app-writable
+    mountPath: /app
+volumes:
+  - name: tmp
+    emptyDir: {}
+  - name: app-writable
+    emptyDir: {}
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+imageUpdater:
+  enabled: true
