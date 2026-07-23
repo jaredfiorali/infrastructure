@@ -225,6 +225,9 @@ configMap:
           armed_away:
             arming_time: 30
             delay_time: 30
+          armed_night:
+            arming_time: 30
+            delay_time: 30
         - platform: manual
           name: Kid Alarm
           unique_id: kid_system
