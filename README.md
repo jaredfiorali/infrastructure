@@ -130,6 +130,7 @@ graph LR
         O[loki]:::blue
         K[alloy]:::blue
         W[cloudflared]:::blue
+        Q[gatus]:::blue
     end
 
     subgraph "Media Management"
@@ -164,6 +165,7 @@ graph LR
     D -.-> Y
     V -.-> Y
     T -.-> Y
+    Q -.-> Y
 
     %% Monitoring flow
     Z --> N
