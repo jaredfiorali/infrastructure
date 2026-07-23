@@ -378,6 +378,33 @@ configMap:
               min: 1000
               max: 999999
 
+        - name: flaresolverr_uptime
+          query: round(sum(increase(gatus_results_total{key="media-management_flaresolverr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_flaresolverr"}[30d])) * 100, 1)
+          suffix: "%"
+          colors:
+            - color: "green"
+              min: 99
+              max: 100
+            - color: "orange"
+              min: 95
+              max: 98.99
+            - color: "red"
+              min: 0
+              max: 94.99
+        - name: media-management_flaresolverr
+          query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_flaresolverr"}[30d]) * 1000, 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 500
+            - color: "orange"
+              min: 501
+              max: 999
+            - color: "red"
+              min: 1000
+              max: 999999
+
         - name: radarr_uptime
           query: round(sum(increase(gatus_results_total{key="media-management_radarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_radarr"}[30d])) * 100, 1)
           suffix: "%"

@@ -194,6 +194,13 @@ configMap:
           conditions:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 1000"
+        - name: flaresolverr
+          url: http://flaresolverr.downloader/health
+          group: media management
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 500"
         - name: radarr
           url: http://radarr.fiora.li/ping
           group: media management
