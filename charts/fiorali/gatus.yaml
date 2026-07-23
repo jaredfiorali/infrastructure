@@ -195,7 +195,7 @@ configMap:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 1000"
         - name: flaresolverr
-          url: http://flaresolverr.downloader/health
+          url: http://flaresolverr.fiora.li/health
           group: media management
           interval: 1m
           conditions:

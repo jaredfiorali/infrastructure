@@ -229,7 +229,7 @@ configMap:
                     app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, radarr, ssh, sonarr, transmission, tautulli]
+                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli]
                   codes: [1207] # => Can't match 192.168.0.0/16 (egress)
             # Configure the pods linter for v1/pods.
             pods:
@@ -246,7 +246,7 @@ configMap:
                 - labels:
                     app: [radarr, sonarr, prowlarr, transmission] # Exclude codes for any pods with specified labels
                   codes: [110] # => Memory Current/Request threshold
-                - containers: [kometa-init, home-assistant-init, gatus-init]
+                - containers: [kometa-init, home-assistant-init, gatus-init, flaresolverr-init]
                   codes: [101] # => Image tagged 'latest' in use
                 - containers: [kubeview]
                   codes: [101, 105, 105, 206, 306, 302, 110]
@@ -258,7 +258,7 @@ configMap:
                   codes: [106, 206, 301]
             deployments:
               instances:
-                - containers: [home-assistant-init, gatus-init, kubeview]
+                - containers: [flaresolverr-init, home-assistant-init, gatus-init, kubeview]
                   codes: [101] # => Image tagged 'latest' in use
                 - containers: [headlamp, grafana-operator, grafana]
                   codes: [106]
