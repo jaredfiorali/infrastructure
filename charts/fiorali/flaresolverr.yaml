@@ -35,9 +35,10 @@ initContainers:
   - name: flaresolverr-init
     image: ghcr.io/flaresolverr/flaresolverr:latest
     command:
-      - "sh"
-      - "-c"
-      - "cp -r /app/. /app-writable/"
+      - sh
+      - -c
+      - |
+        cp -r /app/. /app-writable/
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
