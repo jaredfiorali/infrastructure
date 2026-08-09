@@ -6,11 +6,11 @@ deployment:
 replicaCount: 2
 image:
   repository: docker.io/sissbruecker/linkding
-  tag: latest@sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060
+  tag: latest@sha256:49eff0b0b90c63760fda75e615357a0e55fcb7dc51876f2a0a5dddb958bd3df4
 containerPorts:
-  - containerPort: 9090
-    name: linkding
-    protocol: TCP
+- containerPort: 9090
+  name: linkding
+  protocol: TCP
 resources:
   limits:
     cpu: 500m
@@ -40,73 +40,73 @@ probes:
 service:
   enabled: true
   ports:
-    - name: linkding
-      port: 9090
-      protocol: TCP
-      targetPort: linkding
+  - name: linkding
+    port: 9090
+    protocol: TCP
+    targetPort: linkding
 env:
-  - name: LD_SUPERUSER_NAME
-    valueFrom:
-      secretKeyRef:
-        name: linkding-credentials
-        key: SUPERUSER_USERNAME
-  - name: LD_SUPERUSER_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: linkding-credentials
-        key: SUPERUSER_PASSWORD
-  - name: LD_DB_USER
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_USERNAME
-  - name: LD_DB_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_PASSWORD
-  - name: LD_DB_HOST
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_HOST
-  - name: LD_DB_ENGINE
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_TYPE
-  - name: LD_DB_DATABASE
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_NAME
-  - name: LD_DB_PORT
-    valueFrom:
-      secretKeyRef:
-        name: linkding-postgres-credentials
-        key: DB_PORT
+- name: LD_SUPERUSER_NAME
+  valueFrom:
+    secretKeyRef:
+      name: linkding-credentials
+      key: SUPERUSER_USERNAME
+- name: LD_SUPERUSER_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: linkding-credentials
+      key: SUPERUSER_PASSWORD
+- name: LD_DB_USER
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_USERNAME
+- name: LD_DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_PASSWORD
+- name: LD_DB_HOST
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_HOST
+- name: LD_DB_ENGINE
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_TYPE
+- name: LD_DB_DATABASE
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_NAME
+- name: LD_DB_PORT
+  valueFrom:
+    secretKeyRef:
+      name: linkding-postgres-credentials
+      key: DB_PORT
 ingress:
   enabled: true
 volumeMounts:
-  - name: linkding-data
-    mountPath: /etc/linkding/data
-  - name: tmp
-    mountPath: /tmp
-  - name: linkding-secret-key
-    mountPath: /etc/linkding/data/secretkey.txt
-    subPath: SECRET_KEY
-    readOnly: true
+- name: linkding-data
+  mountPath: /etc/linkding/data
+- name: tmp
+  mountPath: /tmp
+- name: linkding-secret-key
+  mountPath: /etc/linkding/data/secretkey.txt
+  subPath: SECRET_KEY
+  readOnly: true
 volumes:
-  - name: linkding-data
-    emptyDir: {}
-  - name: tmp
-    emptyDir: {}
-  - name: linkding-secret-key
-    secret:
-      secretName: linkding-credentials
-      items:
-        - key: SECRET_KEY
-          path: SECRET_KEY
+- name: linkding-data
+  emptyDir: {}
+- name: tmp
+  emptyDir: {}
+- name: linkding-secret-key
+  secret:
+    secretName: linkding-credentials
+    items:
+    - key: SECRET_KEY
+      path: SECRET_KEY
 networkpolicy:
   ingress:
     internal: true
@@ -116,7 +116,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-      - ALL
+    - ALL
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
@@ -127,34 +127,34 @@ podSecurityContext:
 imageUpdater:
   enabled: true
 externalSecrets:
-  - name: linkding-credentials
-    data:
-      - secretKey: SUPERUSER_USERNAME
-        remoteRef:
-          key: /homelab/linkding/SUPERUSER_USERNAME
-      - secretKey: SUPERUSER_PASSWORD
-        remoteRef:
-          key: /homelab/linkding/SUPERUSER_PASSWORD
-      - secretKey: SECRET_KEY
-        remoteRef:
-          key: /homelab/linkding/SECRET_KEY
-  - name: linkding-postgres-credentials
-    data:
-      - secretKey: DB_USERNAME
-        remoteRef:
-          key: /homelab/linkding/DB_USERNAME
-      - secretKey: DB_PASSWORD
-        remoteRef:
-          key: /homelab/linkding/DB_PASSWORD
-      - secretKey: DB_HOST
-        remoteRef:
-          key: /homelab/linkding/DB_HOST
-      - secretKey: DB_TYPE
-        remoteRef:
-          key: /homelab/linkding/DB_TYPE
-      - secretKey: DB_NAME
-        remoteRef:
-          key: /homelab/linkding/DB_NAME
-      - secretKey: DB_PORT
-        remoteRef:
-          key: /homelab/linkding/DB_PORT
+- name: linkding-credentials
+  data:
+  - secretKey: SUPERUSER_USERNAME
+    remoteRef:
+      key: /homelab/linkding/SUPERUSER_USERNAME
+  - secretKey: SUPERUSER_PASSWORD
+    remoteRef:
+      key: /homelab/linkding/SUPERUSER_PASSWORD
+  - secretKey: SECRET_KEY
+    remoteRef:
+      key: /homelab/linkding/SECRET_KEY
+- name: linkding-postgres-credentials
+  data:
+  - secretKey: DB_USERNAME
+    remoteRef:
+      key: /homelab/linkding/DB_USERNAME
+  - secretKey: DB_PASSWORD
+    remoteRef:
+      key: /homelab/linkding/DB_PASSWORD
+  - secretKey: DB_HOST
+    remoteRef:
+      key: /homelab/linkding/DB_HOST
+  - secretKey: DB_TYPE
+    remoteRef:
+      key: /homelab/linkding/DB_TYPE
+  - secretKey: DB_NAME
+    remoteRef:
+      key: /homelab/linkding/DB_NAME
+  - secretKey: DB_PORT
+    remoteRef:
+      key: /homelab/linkding/DB_PORT
