@@ -124,6 +124,7 @@ prometheusRules:
       labels:
         issue: Popeye score is less than 100.
         severity: critical
+        namespace: monitoring
 imageUpdater:
   enabled: true
   rootImageTag: "v0.22.0"

@@ -33,11 +33,12 @@ prometheusRules:
         description: The actual space used by Longhorn volume {{$labels.volume}} on {{$labels.node}} is at {{$value}}% capacity for
           more than 5 minutes.
         summary: The actual used space of Longhorn volume is over 90% of the capacity.
-      expr: (longhorn_volume_actual_size_bytes{volume!~"pvc-.*|media-.*|backups-0|lychee-0|roms-0|timemachine"} / longhorn_volume_capacity_bytes{volume!~"pvc-.*|media-.*|backups-0|lychee-0|roms-0|timemachine"}) * 100 > 90
+      expr: (longhorn_volume_actual_size_bytes{volume!~"pvc-.*|backups-0|lychee-0|roms-0"} / longhorn_volume_capacity_bytes{volume!~"pvc-.*|backups-0|lychee-0|roms-0"}) * 100 > 90
       for: 5m
       labels:
         issue: The actual used space of Longhorn volume {{$labels.volume}} on {{$labels.node}} is high.
         severity: warning
+        namespace: monitoring
     - alert: LonghornVolumeStatusCritical
       annotations:
         description: Longhorn volume {{$labels.volume}} on {{$labels.node}} is Fault for
@@ -48,6 +49,7 @@ prometheusRules:
       labels:
         issue: Longhorn volume {{$labels.volume}} is Fault.
         severity: critical
+        namespace: monitoring
     - alert: LonghornVolumeStatusWarning
       annotations:
         description: Longhorn volume {{$labels.volume}} on {{$labels.node}} is Degraded for
@@ -58,6 +60,7 @@ prometheusRules:
       labels:
         issue: Longhorn volume {{$labels.volume}} is Degraded.
         severity: warning
+        namespace: monitoring
     - alert: LonghornNodeStorageWarning
       annotations:
         description: The used storage of node {{$labels.node}} is at {{$value}}% capacity for
@@ -68,6 +71,7 @@ prometheusRules:
       labels:
         issue: The used storage of node {{$labels.node}} is high.
         severity: warning
+        namespace: monitoring
     - alert: LonghornDiskStorageWarning
       annotations:
         description: The used storage of disk {{$labels.disk}} on node {{$labels.node}} is at {{$value}}% capacity for
@@ -78,6 +82,7 @@ prometheusRules:
       labels:
         issue: The used storage of disk {{$labels.disk}} on node {{$labels.node}} is high.
         severity: warning
+        namespace: monitoring
     - alert: LonghornNodeDown
       annotations:
         description: There are {{$value}} Longhorn nodes which have been offline for more than 5 minutes.
@@ -87,6 +92,7 @@ prometheusRules:
       labels:
         issue: There are {{$value}} Longhorn nodes are offline
         severity: critical
+        namespace: monitoring
     - alert: LonghornInstanceManagerCPUUsageWarning
       annotations:
         description: Longhorn instance manager {{$labels.instance_manager}} on {{$labels.node}} has CPU Usage / CPU request is {{$value}}% for
@@ -97,6 +103,7 @@ prometheusRules:
       labels:
         issue: Longhorn instance manager {{$labels.instance_manager}} on {{$labels.node}} consumes 3 times the CPU request.
         severity: warning
+        namespace: monitoring
     - alert: LonghornNodeCPUUsageWarning
       annotations:
         description: Longhorn node {{$labels.node}} has CPU Usage / CPU capacity is {{$value}}% for
@@ -107,3 +114,4 @@ prometheusRules:
       labels:
         issue: Longhorn node {{$labels.node}} experiences high CPU pressure.
         severity: warning
+        namespace: monitoring
