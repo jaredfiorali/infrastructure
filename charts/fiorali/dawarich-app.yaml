@@ -49,8 +49,8 @@ command:
   enabled: true
   exec: ["/bin/sh", "-c", "web-entrypoint.sh bin/rails server -p 3000 -b ::"]
 volumeMounts:
-  - name: public
-    mountPath: /var/app/public
+  # - name: public
+  #   mountPath: /var/app/public
   - name: watched
     mountPath: /var/app/tmp/imports/watched
   - name: storage
@@ -62,8 +62,8 @@ volumeMounts:
   - name: run
     mountPath: /run
 volumes:
-  - name: public
-    emptyDir: {}
+  # - name: public
+  #   emptyDir: {}
   - name: watched
     emptyDir: {}
   - name: storage
