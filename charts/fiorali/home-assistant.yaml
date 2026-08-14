@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/homeassistant/home-assistant
-  tag: latest@sha256:6340a3de3917a9b19368e767310a96dd090f6a19aca8aeadf87fd1145cec9682
+  tag: latest@sha256:56690a89c79a0de98035e1719f8324a92d5859c1192ff45adb0230ea81cb42a5
 containerPorts:
 - containerPort: 8123
   name: home-assistant
@@ -153,36 +153,36 @@ serviceMonitor:
 prometheusRules:
   enabled: true
   rules:
-    - alert: HighCO2Level
-      expr: homeassistant_sensor_carbon_dioxide_ppm > 1000
-      for: 15m
-      labels:
-        severity: warning
-        component: air-quality
-        namespace: monitoring
-      annotations:
-        summary: "CO2 elevated: {{ $value | printf \"%.0f\" }}ppm"
-        description: "House CO2 has been above 1000ppm for 15+ minutes. Open some windows!"
-    - alert: CriticalCO2Level
-      expr: homeassistant_sensor_carbon_dioxide_ppm > 1500
-      for: 15m
-      labels:
-        severity: critical
-        component: air-quality
-        namespace: monitoring
-      annotations:
-        summary: "CO2 elevated: {{ $value | printf \"%.0f\" }}ppm"
-        description: "House CO2 has been above 1500ppm for 15+ minutes. Open some windows!"
-    - alert: HighVOCLevel
-      expr: homeassistant_sensor_volatile_organic_compounds_parts_ppb > 2000
-      for: 15m
-      labels:
-        severity: critical
-        component: air-quality
-        namespace: monitoring
-      annotations:
-        summary: "VOC elevated: {{ $value | printf \"%.0f\" }}ppb"
-        description: "House VOC has been above 2000ppb for 15+ minutes. Open some windows!"
+  - alert: HighCO2Level
+    expr: homeassistant_sensor_carbon_dioxide_ppm > 1000
+    for: 15m
+    labels:
+      severity: warning
+      component: air-quality
+      namespace: monitoring
+    annotations:
+      summary: "CO2 elevated: {{ $value | printf \"%.0f\" }}ppm"
+      description: "House CO2 has been above 1000ppm for 15+ minutes. Open some windows!"
+  - alert: CriticalCO2Level
+    expr: homeassistant_sensor_carbon_dioxide_ppm > 1500
+    for: 15m
+    labels:
+      severity: critical
+      component: air-quality
+      namespace: monitoring
+    annotations:
+      summary: "CO2 elevated: {{ $value | printf \"%.0f\" }}ppm"
+      description: "House CO2 has been above 1500ppm for 15+ minutes. Open some windows!"
+  - alert: HighVOCLevel
+    expr: homeassistant_sensor_volatile_organic_compounds_parts_ppb > 2000
+    for: 15m
+    labels:
+      severity: critical
+      component: air-quality
+      namespace: monitoring
+    annotations:
+      summary: "VOC elevated: {{ $value | printf \"%.0f\" }}ppb"
+      description: "House VOC has been above 2000ppb for 15+ minutes. Open some windows!"
 configMap:
   enabled: true
   value: |
