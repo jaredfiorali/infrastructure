@@ -156,6 +156,7 @@ prometheusRules:
   - alert: HighCO2Level
     expr: homeassistant_sensor_carbon_dioxide_ppm > 1000
     for: 15m
+    keep_firing_for: 1h
     labels:
       severity: warning
       component: air-quality
@@ -166,6 +167,7 @@ prometheusRules:
   - alert: CriticalCO2Level
     expr: homeassistant_sensor_carbon_dioxide_ppm > 1500
     for: 15m
+    keep_firing_for: 1h
     labels:
       severity: critical
       component: air-quality
@@ -176,6 +178,7 @@ prometheusRules:
   - alert: HighVOCLevel
     expr: homeassistant_sensor_volatile_organic_compounds_parts_ppb > 2000
     for: 15m
+    keep_firing_for: 1h
     labels:
       severity: critical
       component: air-quality
