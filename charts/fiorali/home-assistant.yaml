@@ -212,10 +212,6 @@ configMap:
             - sensor.pool_table_carbon_dioxide
             - sensor.pool_table_pm2_5
             - sensor.pool_table_volatile_organic_compounds_parts
-      http:
-        use_x_forwarded_for: true
-        trusted_proxies:
-          - 0.0.0.0/0
       influxdb:
         measurement_attr: entity_id
         include:
