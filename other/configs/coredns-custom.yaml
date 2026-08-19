@@ -8,7 +8,7 @@ data:
     rewrite name exact _grpc_config.localhost localhost
 
     # Forward all other queries to the internal DNS server
-    forward . 192.168.20.21 {
+    forward . 192.168.21.21 {
       prefer_udp
       max_fails 3
       expire 10s

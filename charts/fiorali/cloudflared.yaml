@@ -59,7 +59,7 @@ probes:
     port: 53
 service:
   enabled: true
-  loadBalancerIP: 192.168.20.21
+  loadBalancerIP: 192.168.21.21
   externalTrafficPolicy: Local
   type: LoadBalancer
   ports:

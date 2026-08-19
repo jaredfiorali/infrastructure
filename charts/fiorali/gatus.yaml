@@ -149,7 +149,7 @@ configMap:
         path: "${POSTGRES_CONNECTION_STRING}"
       connectivity:
         checker:
-          target: 192.168.20.21:53
+          target: 192.168.21.21:53
           interval: 60s
       endpoints:
         - name: argo
@@ -314,19 +314,19 @@ configMap:
             - "[RESPONSE_TIME] < 500"
 
         - name: traefik
-          url: "tcp://192.168.20.20:80"
+          url: "tcp://192.168.21.20:80"
           group: metallb
           interval: 1m
           conditions:
             - "[CONNECTED] == true"
         - name: cloudflared
-          url: "tcp://192.168.20.21:53"
+          url: "tcp://192.168.21.21:53"
           group: metallb
           interval: 1m
           conditions:
             - "[CONNECTED] == true"
         - name: plex
-          url: "tcp://192.168.20.22:32400"
+          url: "tcp://192.168.21.22:32400"
           group: metallb
           interval: 1m
           conditions:
