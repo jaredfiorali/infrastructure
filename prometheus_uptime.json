@@ -1,1 +1,1 @@
-{"label":"prometheus_uptime","message":"NaN%","schemaVersion":1}
+{"color":"green","label":"prometheus_uptime","message":"100%","schemaVersion":1}
