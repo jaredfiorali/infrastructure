@@ -851,6 +851,19 @@ configMap:
             - color: "red"
               min: 4
               max: 999999
+        - name: monitoring_unpoller
+          query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_unpoller"}[30d]) * 1000, 1)
+          suffix: "ms"
+          colors:
+            - color: "green"
+              min: 0
+              max: 150
+            - color: "orange"
+              min: 151
+              max: 400
+            - color: "red"
+              min: 401
+              max: 999999
 
         - name: kometa_uptime
           query: round((time() - max(kube_job_status_completion_time{job_name=~"kometa-.*"} and on(job_name) kube_job_status_succeeded{job_name=~"kometa-.*"} == 1)) / 3600, 1)

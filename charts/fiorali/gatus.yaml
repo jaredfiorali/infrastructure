@@ -284,6 +284,13 @@ configMap:
           conditions:
             - "[STATUS] == 200"
             - "[RESPONSE_TIME] < 500"
+        - name: unpoller
+          url: http://unpoller.fiora.li/health
+          group: monitoring
+          interval: 1m
+          conditions:
+            - "[STATUS] == 200"
+            - "[RESPONSE_TIME] < 500"
         - name: scrypted
           url: http://scrypted.fiora.li
           group: home security
