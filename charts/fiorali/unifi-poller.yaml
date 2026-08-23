@@ -19,8 +19,11 @@ resources:
     cpu: 250m
     memory: 50Mi
 probes:
-  tcpSocket:
-    port: poller
+  exec:
+    command:
+    - sh
+    - -c
+    - /usr/bin/unpoller --health
 service:
   enabled: true
   ports:
