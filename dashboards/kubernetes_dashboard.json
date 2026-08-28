@@ -434,7 +434,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -565,7 +565,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -726,7 +726,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -872,7 +872,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1005,7 +1005,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1132,7 +1132,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1559,7 +1559,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1690,7 +1690,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1827,7 +1827,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -1910,7 +1910,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -2046,7 +2046,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -2178,7 +2178,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -2379,7 +2379,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -2527,7 +2527,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -2678,7 +2678,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -3086,7 +3086,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -3246,7 +3246,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -3355,7 +3355,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -3460,7 +3460,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -3584,7 +3584,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4182,7 +4182,7 @@
                 ]
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4281,7 +4281,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4384,7 +4384,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4513,7 +4513,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4696,7 +4696,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4872,7 +4872,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -4981,7 +4981,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5216,7 +5216,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5317,7 +5317,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5420,7 +5420,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5541,7 +5541,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5927,7 +5927,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -5951,7 +5951,7 @@
                       "spec": {
                         "disableTextWrap": false,
                         "editorMode": "code",
-                        "expr": "sum(rate(unpoller_client_transmit_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "expr": "sum(rate(unpoller_client_transmit_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))*8",
                         "format": "time_series",
                         "fullMetaSearch": false,
                         "includeNullMetadata": true,
@@ -5981,7 +5981,7 @@
                       "spec": {
                         "disableTextWrap": false,
                         "editorMode": "code",
-                        "expr": "-sum(rate(unpoller_client_receive_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))",
+                        "expr": "-sum(rate(unpoller_client_receive_bytes_total{name=\"UNAS-2\"}[$__rate_interval]))*8",
                         "format": "time_series",
                         "fullMetaSearch": false,
                         "includeNullMetadata": true,
@@ -6064,7 +6064,7 @@
                       }
                     ]
                   },
-                  "unit": "Bps"
+                  "unit": "binbps"
                 },
                 "overrides": []
               },
@@ -6088,7 +6088,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -6233,7 +6233,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -6379,7 +6379,7 @@
                 "valueMode": "color"
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -6509,7 +6509,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -6637,7 +6637,7 @@
                 }
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       },
@@ -6721,7 +6721,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.0"
+            "version": "13.2.0"
           }
         }
       }
@@ -7269,20 +7269,7 @@
         ]
       }
     },
-    "links": [
-      {
-        "asDropdown": false,
-        "icon": "external link",
-        "includeVars": false,
-        "keepTime": false,
-        "tags": [],
-        "targetBlank": true,
-        "title": "Source (GitHub)",
-        "tooltip": "View source file in repository",
-        "type": "link",
-        "url": "https://github.com/jaredfiorali/infrastructure/blob/main/dashboards/kubernetes_dashboard.json"
-      }
-    ],
+    "links": [],
     "liveNow": false,
     "preload": false,
     "tags": [],
