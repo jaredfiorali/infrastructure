@@ -19,7 +19,7 @@ resources:
     cpu: '1'
     memory: 100Mi
   requests:
-    cpu: 250m
+    cpu: 500m
     memory: 50Mi
 probes:
   httpGet:
