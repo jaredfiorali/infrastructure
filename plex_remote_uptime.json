@@ -1,1 +1,1 @@
-{"label":"plex_remote_uptime","message":"metric returned no data%","schemaVersion":1}
+{"color":"red","label":"plex_remote_uptime","message":"0%","schemaVersion":1}
