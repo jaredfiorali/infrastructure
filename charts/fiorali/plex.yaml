@@ -57,6 +57,9 @@ volumeMounts:
 - name: movies
   mountPath: /media/Movies
   readOnly: true
+- name: tv
+  mountPath: /media/TV
+  readOnly: true
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 - name: transcode
@@ -75,6 +78,9 @@ volumes:
 - name: movies
   persistentVolumeClaim:
     claimName: movies
+- name: tv
+  persistentVolumeClaim:
+    claimName: tv
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi
