@@ -109,16 +109,26 @@ ingress:
 volumeMounts:
 - name: radarr-data
   mountPath: /config
-- name: media
-  mountPath: /media
+# - name: media
+#   mountPath: /media
+- name: movies
+  mountPath: /media/Movies
+- name: bittorrent
+  mountPath: /media/bittorrent
 - name: run
   mountPath: /run
 volumes:
 - name: radarr-data
   emptyDir: {}
-- name: media
+# - name: media
+#   persistentVolumeClaim:
+#     claimName: media
+- name: movies
   persistentVolumeClaim:
-    claimName: media
+    claimName: movies
+- name: bittorrent
+  persistentVolumeClaim:
+    claimName: bittorrent
 - name: run
   emptyDir: {}
 networkpolicy:
