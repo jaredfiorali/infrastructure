@@ -56,10 +56,10 @@ volumeMounts:
 #   readOnly: true
 - name: movies
   mountPath: /media/Movies
-  readOnly: true
 - name: tv
   mountPath: /media/TV
-  readOnly: true
+- name: bittorrent
+  mountPath: /media/TV
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 - name: transcode
@@ -81,6 +81,9 @@ volumes:
 - name: tv
   persistentVolumeClaim:
     claimName: tv
+- name: bittorrent
+  persistentVolumeClaim:
+    claimName: bittorrent
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi
