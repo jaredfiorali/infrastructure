@@ -59,7 +59,7 @@ volumeMounts:
 - name: tv
   mountPath: /media/TV
 - name: bittorrent
-  mountPath: /media/TV
+  mountPath: /media/bittorrent
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 - name: transcode
