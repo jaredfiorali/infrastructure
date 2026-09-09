@@ -5239,7 +5239,7 @@
                       "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by (volume) (longhorn_volume_actual_size_bytes{volume !~ \"media.*|roms-0|backups-0|lychee-0|pvc.*|''\"})\n/\nsum by (volume) (longhorn_volume_capacity_bytes{volume !~ \"media.*|roms-0|backups-0|lychee-0|pvc.*|''\"})\n",
+                        "expr": "sum by (volume) (longhorn_volume_actual_size_bytes{volume !~ \"roms-0|backups-0|lychee-0|bittorrent|movies|tv|''\"})\n/\nsum by (volume) (longhorn_volume_capacity_bytes{volume !~ \"roms-0|backups-0|lychee-0|bittorrent|movies|tv|''\"})",
                         "interval": "$resolution",
                         "legendFormat": "{{volume}}",
                         "range": true
