@@ -107,3 +107,17 @@ externalSecrets:
   - secretKey: UP_UNIFI_DEFAULT_PASS
     remoteRef:
       key: /homelab/unifi-poller/UP_UNIFI_DEFAULT_PASS
+prometheusRules:
+  enabled: true
+  rules:
+    - alert: BackupWAN
+      annotations:
+        description: If the primary internet service is down, the backup WAN will take over
+        summary: The backup WAN is in use
+      expr: (unpoller_wan_interface_state{wan_interface='Roamless'} == 1) or (unpoller_wan_interface_state{wan_interface='Rogers'} == 0)
+      for: 30s
+      keep_firing_for: 1h
+      labels:
+        issue: Backup WAN in use
+        severity: critical
+        namespace: monitoring
