@@ -73,6 +73,8 @@ env:
   value: "false"
 - name: UP_LOKI_URL
   value: "http://loki.loki:3100"
+- name: UP_LOKI_TENANT_ID
+  value: "fiorali"
 - name: UP_POLLER_QUIET
   value: "true"
 volumeMounts:
