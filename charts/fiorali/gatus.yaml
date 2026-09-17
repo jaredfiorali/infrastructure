@@ -22,6 +22,9 @@ probes:
   httpGet:
     path: /
     port: gatus
+env:
+  - name: GATUS_LOG_LEVEL
+    value: WARN
 initContainers:
   enabled: true
   containers:
