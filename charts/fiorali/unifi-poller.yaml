@@ -70,6 +70,10 @@ env:
 - name: unifi-poller_TOKEN_STORE
   value: "/opt/unifi-poller/unifi-poller.store"
 - name: UP_LOKI_DISABLE
+  value: "false"
+- name: UP_LOKI_URL
+  value: "http://loki.loki:3100"
+- name: UP_POLLER_QUIET
   value: "true"
 volumeMounts:
 - name: token
