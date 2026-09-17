@@ -72,7 +72,7 @@ env:
 - name: UP_LOKI_DISABLE
   value: "false"
 - name: UP_LOKI_URL
-  value: "http://loki.loki:3100"
+  value: "http://loki-gateway.loki/loki/api/v1/push"
 - name: UP_LOKI_TENANT_ID
   value: "fiorali"
 - name: UP_POLLER_QUIET
