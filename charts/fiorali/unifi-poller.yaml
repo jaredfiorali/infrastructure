@@ -93,6 +93,7 @@ networkpolicy:
     internal: true
   egress:
     network: true
+    namespaces: [loki]
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
