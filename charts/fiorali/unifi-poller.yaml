@@ -114,7 +114,7 @@ prometheusRules:
       annotations:
         description: If the primary internet service is down, the backup WAN will take over
         summary: The backup WAN is in use
-      expr: (unpoller_wan_interface_state{wan_interface='Roamless'} == 1) or (unpoller_wan_interface_state{wan_interface='Rogers'} == 0)
+      expr: unpoller_wan_interface_state{wan_interface="Roamless", state="ACTIVE"} == 1
       for: 30s
       keep_firing_for: 1h
       labels:

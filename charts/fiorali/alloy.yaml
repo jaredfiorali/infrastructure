@@ -71,15 +71,72 @@ configMap:
       loki.process "pod_logs" {
         forward_to = [loki.write.fiorali.receiver]
 
-        // 1. Parse JSON if the app logs in JSON
-        stage.json {
-          expressions = {
-            level = "level",
-            msg   = "message",
+        // Drop noisy scrypted heartbeat lines before any other processing
+        stage.match {
+          selector      = "{container=\"scrypted\"}"
+          pipeline_name = "scrypted_noise_filter"
+
+          stage.drop {
+            expression          = "motionDetected: (true|false)|rebroadcast clients: \\d+"
+            drop_counter_reason = "scrypted_noise"
           }
         }
 
-        // 2. Set level label (falls back to empty if JSON parsing didn't find it)
+        // Strip ANSI color codes some apps emit when run interactively/in a TTY
+        stage.decolorize {}
+
+        // Branch 1: JSON-looking lines
+        stage.match {
+          selector      = "{}"
+          pipeline_name = "json_logs"
+
+          stage.regex {
+            expression = "^\\s*\\{"
+          }
+          stage.json {
+            expressions = {
+              level     = "level",
+              message   = "message",
+              timestamp = "time",
+            }
+          }
+        }
+
+        // Branch 2: logfmt-looking lines (key=value pairs, common for Go apps)
+        stage.match {
+          selector      = "{}"
+          pipeline_name = "logfmt_logs"
+
+          stage.regex {
+            expression = "^\\S+=\\S+"
+          }
+          stage.logfmt {
+            mapping = {
+              level     = "level",
+              message   = "msg",
+              timestamp = "time",
+            }
+          }
+        }
+
+        // Fallback: grab a leading level token from plain-text lines that didn't
+        // match either branch above, e.g. "2026-09-17T09:00:00 ERROR something broke"
+        stage.regex {
+          expression = "(?i)(?P<level>trace|debug|info|warn(?:ing)?|error|fatal|panic)"
+        }
+
+        // Normalize casing/values so level doesn't fragment into extra streams
+        stage.template {
+          source   = "level"
+          template = "{{ ToLower .Value }}"
+        }
+
+        // Use the extracted timestamp when we have one, instead of ingestion time
+        stage.timestamp {
+          source = "timestamp"
+          format = "RFC3339"
+        }
+
         stage.labels {
           values = {
             level = "level",
