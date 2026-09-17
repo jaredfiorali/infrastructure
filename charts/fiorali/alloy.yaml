@@ -100,6 +100,13 @@ configMap:
               timestamp = "time",
             }
           }
+          // Only rewrite the timestamp when this branch actually extracted one;
+          // fall back to scrape time on failure instead of a shared fudge counter
+          stage.timestamp {
+            source             = "timestamp"
+            format             = "RFC3339"
+            action_on_failure  = "skip"
+          }
         }
 
         // Branch 2: logfmt-looking lines (key=value pairs, common for Go apps)
@@ -117,6 +124,11 @@ configMap:
               timestamp = "time",
             }
           }
+          stage.timestamp {
+            source             = "timestamp"
+            format             = "RFC3339"
+            action_on_failure  = "skip"
+          }
         }
 
         // Fallback: grab a leading level token from plain-text lines that didn't
@@ -129,12 +141,6 @@ configMap:
         stage.template {
           source   = "level"
           template = "{{ ToLower .Value }}"
-        }
-
-        // Use the extracted timestamp when we have one, instead of ingestion time
-        stage.timestamp {
-          source = "timestamp"
-          format = "RFC3339"
         }
 
         stage.labels {
