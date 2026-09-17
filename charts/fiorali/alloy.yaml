@@ -87,7 +87,7 @@ configMap:
 
         // Branch 1: JSON-looking lines
         stage.match {
-          selector      = "{}"
+          selector      = "{namespace=~\".+\"}"
           pipeline_name = "json_logs"
 
           stage.regex {
@@ -104,7 +104,7 @@ configMap:
 
         // Branch 2: logfmt-looking lines (key=value pairs, common for Go apps)
         stage.match {
-          selector      = "{}"
+          selector      = "{namespace=~\".+\"}"
           pipeline_name = "logfmt_logs"
 
           stage.regex {
