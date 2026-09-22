@@ -51,15 +51,9 @@ volumeMounts:
 - name: plex-persistent-storage
   mountPath: /config
   subPath: config
-# - name: media
-#   mountPath: /media
-#   readOnly: true
-- name: movies
-  mountPath: /media/Movies
-- name: tv
-  mountPath: /media/TV
-- name: bittorrent
-  mountPath: /media/bittorrent
+- name: media
+  mountPath: /media
+  readOnly: true
 - name: phototranscoder-cache
   mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
 - name: transcode
@@ -72,18 +66,9 @@ volumes:
 - name: plex-persistent-storage
   persistentVolumeClaim:
     claimName: plex
-# - name: media
-#   persistentVolumeClaim:
-#     claimName: media
-- name: movies
+- name: media
   persistentVolumeClaim:
-    claimName: movies
-- name: tv
-  persistentVolumeClaim:
-    claimName: tv
-- name: bittorrent
-  persistentVolumeClaim:
-    claimName: bittorrent
+    claimName: media
 - name: phototranscoder-cache
   emptyDir:
     sizeLimit: 2Gi

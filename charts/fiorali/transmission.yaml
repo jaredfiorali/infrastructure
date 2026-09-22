@@ -43,10 +43,8 @@ env:
 ingress:
   enabled: true
 volumeMounts:
-# - name: media
-#   mountPath: /media
-- name: bittorrent
-  mountPath: /media/bittorrent
+- name: media
+  mountPath: /media
 - name: config
   mountPath: /config
 - name: run
@@ -56,12 +54,9 @@ volumes:
   configMap:
     name: transmission-configmap
     defaultMode: 511
-# - name: media
-#   persistentVolumeClaim:
-#     claimName: media
-- name: bittorrent
+- name: media
   persistentVolumeClaim:
-    claimName: bittorrent
+    claimName: media
 - name: port-forward
   emptyDir: {}
 - name: config

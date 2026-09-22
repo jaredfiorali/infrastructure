@@ -109,26 +109,16 @@ ingress:
 volumeMounts:
 - name: sonarr-data
   mountPath: /config
-# - name: media
-#   mountPath: /media
-- name: movies
-  mountPath: /media/Movies
-- name: bittorrent
-  mountPath: /media/bittorrent
+- name: media
+  mountPath: /media
 - name: run
   mountPath: /run
 volumes:
 - name: sonarr-data
   emptyDir: {}
-# - name: media
-#   persistentVolumeClaim:
-#     claimName: media
-- name: movies
+- name: media
   persistentVolumeClaim:
-    claimName: movies
-- name: bittorrent
-  persistentVolumeClaim:
-    claimName: bittorrent
+    claimName: media
 - name: run
   emptyDir: {}
 networkpolicy:
