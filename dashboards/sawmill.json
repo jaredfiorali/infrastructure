@@ -135,7 +135,6 @@
       }
     ],
     "cursorSync": "Crosshair",
-    "description": "",
     "editable": true,
     "elements": {
       "panel-1": {
@@ -419,7 +418,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -522,7 +521,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -643,7 +642,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -802,7 +801,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -1043,7 +1042,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -1284,7 +1283,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -1583,7 +1582,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -1824,7 +1823,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -2064,7 +2063,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -2230,7 +2229,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -2480,7 +2479,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -2611,7 +2610,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -3028,7 +3027,272 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
+          }
+        }
+      },
+      "panel-27": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "ffcflxi88lq80c"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "groupBy": [
+                          {
+                            "params": [
+                              "$__interval"
+                            ],
+                            "type": "time"
+                          },
+                          {
+                            "params": [
+                              "0"
+                            ],
+                            "type": "fill"
+                          }
+                        ],
+                        "measurement": "sensor.grizzl_e_charger_current",
+                        "orderByTime": "ASC",
+                        "policy": "default",
+                        "resultFormat": "time_series",
+                        "select": [
+                          [
+                            {
+                              "params": [
+                                "value"
+                              ],
+                              "type": "field"
+                            },
+                            {
+                              "params": [],
+                              "type": "mean"
+                            }
+                          ]
+                        ],
+                        "tags": []
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 27,
+          "links": [],
+          "title": "Current Charge",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "max": 40,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "blue",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "amp"
+                },
+                "overrides": []
+              },
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.54,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": false
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 63,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
+              }
+            },
+            "version": "13.2.2"
+          }
+        }
+      },
+      "panel-28": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "ffcflxi88lq80c"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "groupBy": [
+                          {
+                            "params": [
+                              "$__interval"
+                            ],
+                            "type": "time"
+                          },
+                          {
+                            "params": [
+                              "previous"
+                            ],
+                            "type": "fill"
+                          }
+                        ],
+                        "measurement": "sensor.grizzl_e_charger_total_energy",
+                        "orderByTime": "ASC",
+                        "policy": "default",
+                        "resultFormat": "time_series",
+                        "select": [
+                          [
+                            {
+                              "params": [
+                                "value"
+                              ],
+                              "type": "field"
+                            },
+                            {
+                              "params": [],
+                              "type": "last"
+                            }
+                          ]
+                        ],
+                        "tags": []
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "calculateField",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "binary": {
+                        "left": {
+                          "matcher": {
+                            "id": "byName",
+                            "options": "sensor.grizzl_e_charger_total_energy.last"
+                          }
+                        },
+                        "operator": "*",
+                        "right": {
+                          "fixed": "0.098"
+                        }
+                      },
+                      "mode": "binary",
+                      "reduce": {
+                        "reducer": "sum"
+                      },
+                      "replaceFields": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 28,
+          "links": [],
+          "title": "Cost",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "currencyUSD"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              }
+            },
+            "version": "13.2.2"
           }
         }
       },
@@ -3317,7 +3581,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -3593,7 +3857,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -3769,7 +4033,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       },
@@ -3937,7 +4201,7 @@
                 }
               }
             },
-            "version": "13.1.3"
+            "version": "13.2.2"
           }
         }
       }
@@ -4039,7 +4303,7 @@
                           "kind": "ElementReference",
                           "name": "panel-26"
                         },
-                        "height": 5,
+                        "height": 3,
                         "width": 24,
                         "x": 0,
                         "y": 4
@@ -4052,10 +4316,10 @@
                           "kind": "ElementReference",
                           "name": "panel-6"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 24,
                         "x": 0,
-                        "y": 9
+                        "y": 7
                       }
                     }
                   ]
@@ -4077,9 +4341,49 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
+                          "name": "panel-27"
+                        },
+                        "height": 6,
+                        "width": 4,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-28"
+                        },
+                        "height": 6,
+                        "width": 4,
+                        "x": 4,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Electric Car"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
                           "name": "panel-3"
                         },
-                        "height": 14,
+                        "height": 13,
                         "width": 8,
                         "x": 0,
                         "y": 0
@@ -4092,7 +4396,7 @@
                           "kind": "ElementReference",
                           "name": "panel-4"
                         },
-                        "height": 14,
+                        "height": 13,
                         "width": 8,
                         "x": 8,
                         "y": 0
@@ -4105,7 +4409,7 @@
                           "kind": "ElementReference",
                           "name": "panel-5"
                         },
-                        "height": 14,
+                        "height": 13,
                         "width": 8,
                         "x": 16,
                         "y": 0
@@ -4118,10 +4422,10 @@
                           "kind": "ElementReference",
                           "name": "panel-18"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 0,
-                        "y": 14
+                        "y": 13
                       }
                     },
                     {
@@ -4131,10 +4435,10 @@
                           "kind": "ElementReference",
                           "name": "panel-21"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 8,
-                        "y": 14
+                        "y": 13
                       }
                     },
                     {
@@ -4144,10 +4448,10 @@
                           "kind": "ElementReference",
                           "name": "panel-20"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 16,
-                        "y": 14
+                        "y": 13
                       }
                     },
                     {
@@ -4157,10 +4461,10 @@
                           "kind": "ElementReference",
                           "name": "panel-1"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 0,
-                        "y": 25
+                        "y": 23
                       }
                     },
                     {
@@ -4170,10 +4474,10 @@
                           "kind": "ElementReference",
                           "name": "panel-22"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 8,
-                        "y": 25
+                        "y": 23
                       }
                     },
                     {
@@ -4183,10 +4487,10 @@
                           "kind": "ElementReference",
                           "name": "panel-19"
                         },
-                        "height": 11,
+                        "height": 10,
                         "width": 8,
                         "x": 16,
-                        "y": 25
+                        "y": 23
                       }
                     }
                   ]
@@ -4198,20 +4502,7 @@
         ]
       }
     },
-    "links": [
-      {
-        "asDropdown": false,
-        "icon": "external link",
-        "includeVars": false,
-        "keepTime": false,
-        "tags": [],
-        "targetBlank": true,
-        "title": "Source (GitHub)",
-        "tooltip": "View source file in repository",
-        "type": "link",
-        "url": "https://github.com/jaredfiorali/infrastructure/blob/main/dashboards/sawmill.json"
-      }
-    ],
+    "links": [],
     "liveNow": false,
     "preload": false,
     "tags": [],
