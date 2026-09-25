@@ -3175,7 +3175,7 @@
                             "type": "fill"
                           }
                         ],
-                        "measurement": "sensor.grizzl_e_charger_state",
+                        "measurement": "binary_sensor.grizzl_e_charger_session_started",
                         "orderByTime": "ASC",
                         "policy": "default",
                         "resultFormat": "time_series",
@@ -3202,33 +3202,7 @@
                 }
               ],
               "queryOptions": {},
-              "transformations": [
-                {
-                  "group": "calculateField",
-                  "kind": "Transformation",
-                  "spec": {
-                    "options": {
-                      "binary": {
-                        "left": {
-                          "matcher": {
-                            "id": "byName",
-                            "options": "sensor.grizzl_e_charger_total_energy.last"
-                          }
-                        },
-                        "operator": "*",
-                        "right": {
-                          "fixed": "0.098"
-                        }
-                      },
-                      "mode": "binary",
-                      "reduce": {
-                        "reducer": "sum"
-                      },
-                      "replaceFields": true
-                    }
-                  }
-                }
-              ]
+              "transformations": []
             }
           },
           "description": "",
@@ -3245,6 +3219,29 @@
                     "mode": "thresholds"
                   },
                   "decimals": 2,
+                  "mappings": [
+                    {
+                      "options": {
+                        "1": {
+                          "color": "green",
+                          "index": 0,
+                          "text": "Connected"
+                        }
+                      },
+                      "type": "value"
+                    },
+                    {
+                      "options": {
+                        "pattern": "[^1]",
+                        "result": {
+                          "color": "red",
+                          "index": 1,
+                          "text": "Disconnected"
+                        }
+                      },
+                      "type": "regex"
+                    }
+                  ],
                   "min": 0,
                   "thresholds": {
                     "mode": "percentage",
