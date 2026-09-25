@@ -3096,7 +3096,7 @@
           "description": "",
           "id": 27,
           "links": [],
-          "title": "Current Charge",
+          "title": "Active Charge",
           "vizConfig": {
             "group": "gauge",
             "kind": "VizConfig",
@@ -3190,7 +3190,7 @@
                             "type": "fill"
                           }
                         ],
-                        "measurement": "sensor.grizzl_e_charger_total_energy",
+                        "measurement": "sensor.grizzl_e_charger_state",
                         "orderByTime": "ASC",
                         "policy": "default",
                         "resultFormat": "time_series",
@@ -3249,7 +3249,7 @@
           "description": "",
           "id": 28,
           "links": [],
-          "title": "Cost",
+          "title": "Status",
           "vizConfig": {
             "group": "stat",
             "kind": "VizConfig",
@@ -3269,8 +3269,7 @@
                         "value": 0
                       }
                     ]
-                  },
-                  "unit": "currencyUSD"
+                  }
                 },
                 "overrides": []
               },
@@ -3290,6 +3289,138 @@
                 "showPercentChange": false,
                 "textMode": "auto",
                 "wideLayout": true
+              }
+            },
+            "version": "13.2.2"
+          }
+        }
+      },
+      "panel-29": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "ffcflxi88lq80c"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "groupBy": [
+                          {
+                            "params": [
+                              "$__interval"
+                            ],
+                            "type": "time"
+                          },
+                          {
+                            "params": [
+                              "previous"
+                            ],
+                            "type": "fill"
+                          }
+                        ],
+                        "measurement": "sensor.grizzl_e_charger_temperature_2",
+                        "orderByTime": "ASC",
+                        "policy": "default",
+                        "resultFormat": "time_series",
+                        "select": [
+                          [
+                            {
+                              "params": [
+                                "value"
+                              ],
+                              "type": "field"
+                            },
+                            {
+                              "params": [],
+                              "type": "last"
+                            }
+                          ]
+                        ],
+                        "tags": []
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 29,
+          "links": [],
+          "title": "Temperature 2",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 40,
+                  "min": 10,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": 0
+                      },
+                      {
+                        "color": "green",
+                        "value": 40
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "celsius"
+                },
+                "overrides": []
+              },
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.54,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": false
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 63,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
               }
             },
             "version": "13.2.2"
@@ -3579,6 +3710,276 @@
                   "mode": "multi",
                   "sort": "none"
                 }
+              }
+            },
+            "version": "13.2.2"
+          }
+        }
+      },
+      "panel-30": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "ffcflxi88lq80c"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "groupBy": [
+                          {
+                            "params": [
+                              "$__interval"
+                            ],
+                            "type": "time"
+                          },
+                          {
+                            "params": [
+                              "previous"
+                            ],
+                            "type": "fill"
+                          }
+                        ],
+                        "measurement": "sensor.grizzl_e_charger_temperature_1",
+                        "orderByTime": "ASC",
+                        "policy": "default",
+                        "resultFormat": "time_series",
+                        "select": [
+                          [
+                            {
+                              "params": [
+                                "value"
+                              ],
+                              "type": "field"
+                            },
+                            {
+                              "params": [],
+                              "type": "last"
+                            }
+                          ]
+                        ],
+                        "tags": []
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 30,
+          "links": [],
+          "title": "Temperature 1",
+          "vizConfig": {
+            "group": "gauge",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "max": 40,
+                  "min": 10,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "color": "blue",
+                        "value": 0
+                      },
+                      {
+                        "color": "green",
+                        "value": 40
+                      },
+                      {
+                        "color": "red",
+                        "value": 80
+                      }
+                    ]
+                  },
+                  "unit": "celsius"
+                },
+                "overrides": []
+              },
+              "options": {
+                "barShape": "flat",
+                "barWidthFactor": 0.54,
+                "effects": {
+                  "barGlow": false,
+                  "centerGlow": false,
+                  "gradient": false
+                },
+                "endpointMarker": "point",
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "segmentCount": 63,
+                "segmentSpacing": 0.3,
+                "shape": "gauge",
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto",
+                "sparkline": true,
+                "textMode": "auto"
+              }
+            },
+            "version": "13.2.2"
+          }
+        }
+      },
+      "panel-31": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "ffcflxi88lq80c"
+                      },
+                      "group": "influxdb",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "groupBy": [
+                          {
+                            "params": [
+                              "$__interval"
+                            ],
+                            "type": "time"
+                          },
+                          {
+                            "params": [
+                              "previous"
+                            ],
+                            "type": "fill"
+                          }
+                        ],
+                        "measurement": "sensor.grizzl_e_charger_total_energy",
+                        "orderByTime": "ASC",
+                        "policy": "default",
+                        "resultFormat": "time_series",
+                        "select": [
+                          [
+                            {
+                              "params": [
+                                "value"
+                              ],
+                              "type": "field"
+                            },
+                            {
+                              "params": [],
+                              "type": "last"
+                            }
+                          ]
+                        ],
+                        "tags": []
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": [
+                {
+                  "group": "calculateField",
+                  "kind": "Transformation",
+                  "spec": {
+                    "options": {
+                      "binary": {
+                        "left": {
+                          "matcher": {
+                            "id": "byName",
+                            "options": "sensor.grizzl_e_charger_total_energy.last"
+                          }
+                        },
+                        "operator": "*",
+                        "right": {
+                          "fixed": "0.098"
+                        }
+                      },
+                      "mode": "binary",
+                      "reduce": {
+                        "reducer": "sum"
+                      },
+                      "replaceFields": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "description": "",
+          "id": 31,
+          "links": [],
+          "title": "Lifetime Cost",
+          "vizConfig": {
+            "group": "stat",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "decimals": 2,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "currencyUSD"
+                },
+                "overrides": []
+              },
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
               }
             },
             "version": "13.2.2"
@@ -4341,9 +4742,9 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-27"
+                          "name": "panel-28"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 4,
                         "x": 0,
                         "y": 0
@@ -4354,11 +4755,50 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-28"
+                          "name": "panel-31"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 4,
                         "x": 4,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-27"
+                        },
+                        "height": 5,
+                        "width": 4,
+                        "x": 8,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-30"
+                        },
+                        "height": 5,
+                        "width": 4,
+                        "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-29"
+                        },
+                        "height": 5,
+                        "width": 4,
+                        "x": 16,
                         "y": 0
                       }
                     }
