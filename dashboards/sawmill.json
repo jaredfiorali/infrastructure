@@ -3216,6 +3216,7 @@
               "fieldConfig": {
                 "defaults": {
                   "color": {
+                    "fixedColor": "#ad46ff",
                     "mode": "thresholds"
                   },
                   "decimals": 2,
@@ -3223,7 +3224,6 @@
                     {
                       "options": {
                         "1": {
-                          "color": "green",
                           "index": 0,
                           "text": "Connected"
                         }
@@ -3234,7 +3234,6 @@
                       "options": {
                         "pattern": "[^1]",
                         "result": {
-                          "color": "red",
                           "index": 1,
                           "text": "Disconnected"
                         }
@@ -3244,11 +3243,15 @@
                   ],
                   "min": 0,
                   "thresholds": {
-                    "mode": "percentage",
+                    "mode": "absolute",
                     "steps": [
                       {
-                        "color": "green",
+                        "color": "red",
                         "value": 0
+                      },
+                      {
+                        "color": "green",
+                        "value": 1
                       }
                     ]
                   }
@@ -3256,8 +3259,8 @@
                 "overrides": []
               },
               "options": {
-                "colorMode": "value",
-                "graphMode": "area",
+                "colorMode": "background",
+                "graphMode": "none",
                 "justifyMode": "auto",
                 "orientation": "auto",
                 "percentChangeColorMode": "standard",
