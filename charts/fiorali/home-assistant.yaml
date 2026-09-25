@@ -234,6 +234,8 @@ configMap:
             - sensor.*_air_quality_index
             - binary_sensor.*_motion
             - sensor.jaredfiorali_*_trophies
+            - sensor.grizzl_e_charger_*
+            - binary_sensor.grizzl_e_charger_*
           entities:
             - sensor.mississauga_ontario_canada_pressure
             - sensor.mississauga_ontario_canada_pm2_5
