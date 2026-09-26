@@ -196,7 +196,7 @@ configMap:
             services:
               instances:
                 - labels:
-                    app: [cloudflared, plex]
+                    app: [cloudflared, plex, tdarr]
                   codes: [1103, 1107] # Load balancer services
                 - labels:
                     app.kubernetes.io/name: [kubeview]
@@ -230,7 +230,7 @@ configMap:
                     app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli]
+                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli, tdarr]
                   codes: [1207] # => Can't match 192.168.0.0/16 (egress)
             # Configure the pods linter for v1/pods.
             pods:
