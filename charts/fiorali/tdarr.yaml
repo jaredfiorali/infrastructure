@@ -1,0 +1,132 @@
+name: tdarr
+namespace: downloader
+deployment:
+  enabled: true
+replicaCount: 1
+strategyType: RollingUpdate
+image:
+  repository: ghcr.io/haveagitgat/tdarr
+  tag: latest@sha256:da53b682b85ad74241557ed6ed840504391dededac9824b5e27b6d1bba24335a
+containerPorts:
+- containerPort: 8265
+  name: tdarr
+  protocol: TCP
+- containerPort: 8266
+  name: tdarr-server
+  protocol: TCP
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+probes:
+  httpGet:
+    path: /
+    port: tdarr
+service:
+  enabled: true
+  loadBalancerIP: 192.168.21.23
+  ports:
+  - name: tdarr
+    port: 8265
+    protocol: TCP
+    targetPort: tdarr
+  - name: tdarr-server
+    port: 8266
+    protocol: TCP
+    targetPort: tdarr-server
+  externalTrafficPolicy: Cluster
+  type: LoadBalancer
+env:
+- name: SERVERIP
+  value: "0.0.0.0"
+- name: SERVERPORT
+  value: "8266"
+- name: WEBUIPORT
+  value: "8265"
+- name: INTERNALNODE
+  value: "false"
+- name: INCONTAINER
+  value: "true"
+- name: FFMPEGVERSION
+  value: "7"
+- name: NODENAME
+  value: "MacStudio"
+- name: AUTH
+  value: "false"
+- name: OPENBROWSER
+  value: "false"
+- name: MAXLOGSIZEMB
+  value: "10"
+- name: CRONPLUGINUPDATE
+  value: ""
+- name: PUID
+  value: "1000"
+- name: PGID
+  value: "1000"
+- name: TZ
+  value: "America/Toronto"
+- name: S6_READ_ONLY_ROOT
+  value: "1"
+- name: S6_YES_I_WANT_A_WORLD_WRITABLE_RUN_BECAUSE_KUBERNETES
+  value: "1"
+- name: S6_VERBOSITY
+  value: "2"
+ingress:
+  enabled: true
+volumeMounts:
+- name: tdarr-persistent-storage
+  mountPath: /app/server
+  subPath: server
+- name: tdarr-persistent-storage
+  mountPath: /app/configs
+  subPath: configs
+- name: tdarr-persistent-storage
+  mountPath: /app/logs
+  subPath: logs
+- name: media
+  mountPath: /media
+  readOnly: true
+- name: run
+  mountPath: /run
+- name: cache
+  mountPath: /tmp/cache
+volumes:
+- name: tdarr-persistent-storage
+  persistentVolumeClaim:
+    claimName: tdarr
+- name: media
+  persistentVolumeClaim:
+    claimName: media
+- name: run
+  emptyDir: {}
+- name: cache
+  emptyDir: {}
+networkpolicy:
+  ingress:
+    internal: true
+    network: true
+  egress:
+    internet: true
+containerSecurityContext:
+  enabled: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+    - ALL
+    add:
+    - CHOWN
+    - SETUID
+    - SETGID
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+imageUpdater:
+  enabled: true
