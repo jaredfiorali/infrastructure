@@ -227,7 +227,7 @@ configMap:
                     app: [git-sync, kometa, popeye]
                   codes: [1200] # => No pods match network policy
                 - labels:
-                    app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller]
+                    app: [homepage, home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller, tdarr]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
                     app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli, tdarr]
