@@ -3178,7 +3178,7 @@
                         "measurement": "sensor.grizzl_e_charger_state",
                         "orderByTime": "ASC",
                         "policy": "default",
-                        "resultFormat": "table",
+                        "resultFormat": "time_series",
                         "select": [
                           [
                             {
@@ -3192,7 +3192,8 @@
                               "type": "last"
                             }
                           ]
-                        ]
+                        ],
+                        "tags": []
                       },
                       "version": "v0"
                     },
@@ -3218,7 +3219,8 @@
                     "fixedColor": "#ad46ff",
                     "mode": "thresholds"
                   },
-                  "decimals": 2,
+                  "decimals": 0,
+                  "fieldMinMax": false,
                   "mappings": [
                     {
                       "options": {
@@ -3253,17 +3255,12 @@
                       "type": "special"
                     }
                   ],
-                  "min": 0,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
                         "color": "red",
                         "value": 0
-                      },
-                      {
-                        "color": "green",
-                        "value": 1
                       }
                     ]
                   }
@@ -3280,7 +3277,7 @@
                   "calcs": [
                     "lastNotNull"
                   ],
-                  "fields": "/^last$/",
+                  "fields": "/^sensor\\.grizzl_e_charger_state\\.last$/",
                   "values": false
                 },
                 "showPercentChange": false,
