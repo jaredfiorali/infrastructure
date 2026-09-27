@@ -3175,15 +3175,15 @@
                             "type": "fill"
                           }
                         ],
-                        "measurement": "binary_sensor.grizzl_e_charger_session_started",
+                        "measurement": "sensor.grizzl_e_charger_state",
                         "orderByTime": "ASC",
                         "policy": "default",
-                        "resultFormat": "time_series",
+                        "resultFormat": "table",
                         "select": [
                           [
                             {
                               "params": [
-                                "value"
+                                "state"
                               ],
                               "type": "field"
                             },
@@ -3192,8 +3192,7 @@
                               "type": "last"
                             }
                           ]
-                        ],
-                        "tags": []
+                        ]
                       },
                       "version": "v0"
                     },
@@ -3223,22 +3222,35 @@
                   "mappings": [
                     {
                       "options": {
-                        "1": {
-                          "index": 0,
-                          "text": "Connected"
+                        "Charging Complete": {
+                          "color": "green",
+                          "index": 4
+                        },
+                        "Standby": {
+                          "color": "orange",
+                          "index": 3
+                        },
+                        "Vehicle Charging": {
+                          "color": "blue",
+                          "index": 1
+                        },
+                        "Vehicle Connected": {
+                          "color": "purple",
+                          "index": 2
                         }
                       },
                       "type": "value"
                     },
                     {
                       "options": {
-                        "pattern": "[^1]",
+                        "match": "null",
                         "result": {
-                          "index": 1,
-                          "text": "Disconnected"
+                          "color": "red",
+                          "index": 0,
+                          "text": "Unplugged"
                         }
                       },
-                      "type": "regex"
+                      "type": "special"
                     }
                   ],
                   "min": 0,
@@ -3268,7 +3280,7 @@
                   "calcs": [
                     "lastNotNull"
                   ],
-                  "fields": "",
+                  "fields": "/^last$/",
                   "values": false
                 },
                 "showPercentChange": false,
