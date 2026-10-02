@@ -90,7 +90,7 @@ env:
   valueFrom:
     secretKeyRef:
       name: kometa-api-credentials
-      key: MDBLISTAPIKEY
+      key: MDBLIST_APIKEY
 externalSecrets:
 - name: kometa-api-credentials
   data:
