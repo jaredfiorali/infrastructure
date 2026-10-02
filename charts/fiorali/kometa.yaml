@@ -33,6 +33,8 @@ volumeMounts:
   mountPath: /config/tv.yml
   subPath: tv.yml
   readOnly: true
+- name: config
+  mountPath: /config
 volumes:
 - name: config
   emptyDir: {}
