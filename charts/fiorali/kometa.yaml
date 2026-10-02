@@ -17,13 +17,14 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  args: ["--run", "--read-only-config"]
+  args: ["--run"]
 cronjob:
   enabled: true
   schedule: "35 2 * * *"
 volumeMounts:
 - name: config
   mountPath: /config
+  readOnly: true
 - name: kometa-configmap
   mountPath: /config/movies.yml
   subPath: movies.yml
@@ -34,8 +35,6 @@ volumeMounts:
   readOnly: true
 volumes:
 - name: config
-  emptyDir: {}
-- name: tmp
   emptyDir: {}
 - name: kometa-configmap
   configMap:
@@ -57,79 +56,41 @@ networkpolicy:
   egress:
     internet: true
     namespaces: [tautulli]
-initContainers:
-  enabled: true
-  containers:
-  - name: kometa-init
-    image: docker.io/alpine/curl:latest
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsUser: 911
-    resources:
-      limits:
-        cpu: 250m
-        memory: 100Mi
-      requests:
-        cpu: 100m
-        memory: 50Mi
-    env:
-    - name: PLEX_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: PLEX_TOKEN
-    - name: TMDB_APIKEY
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: TMDB_APIKEY
-    - name: TAUTULLI_APIKEY
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: TAUTULLI_APIKEY
-    - name: RADARR_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: RADARR_TOKEN
-    - name: SONARR_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: SONARR_TOKEN
-    - name: MDBLIST_APIKEY
-      valueFrom:
-        secretKeyRef:
-          name: kometa-api-credentials
-          key: MDBLIST_APIKEY
-    command:
-    - sh
-    - -c
-    - |
-      cd /tmp
-      curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
-      chmod +x envsubst
-      # Process all config files with environment variable substitution
-      ./envsubst < /tmp/config.yml > /config/config.yml
-      echo "Config files processed successfully"
-      echo "Processed files:"
-      ls -la /config/
-    volumeMounts:
-    - name: kometa-configmap
-      mountPath: /tmp/config.yml
-      subPath: config.yml
-    - name: config
-      mountPath: /config
-    - name: tmp
-      mountPath: /tmp
 imageUpdater:
   enabled: true
+env:
+- name: KOMETA_READ_ONLY_CONFIG
+  value: "true"
+- name: KOMETA_PLEXTOKEN
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: PLEX_TOKEN
+- name: KOMETA_TMDBAPIKEY
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: TMDB_APIKEY
+- name: KOMETA_TAUTULLIAPIKEY
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: TAUTULLI_APIKEY
+- name: KOMETA_RADARRTOKEN
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: RADARR_TOKEN
+- name: KOMETA_SONARRTOKEN
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: SONARR_TOKEN
+- name: KOMETA_MDBLISTAPIKEY
+  valueFrom:
+    secretKeyRef:
+      name: kometa-api-credentials
+      key: MDBLISTAPIKEY
 externalSecrets:
 - name: kometa-api-credentials
   data:
@@ -199,23 +160,23 @@ configMap:
           - overlays
       plex:
         url: http://plex.downloader:32400
-        token: ${PLEX_TOKEN}
+        token: <<plextoken>>
         timeout: 60
         clean_bundles: false
         empty_trash: false
         optimize: false
       tmdb:
-        apikey: ${TMDB_APIKEY}
+        apikey: <<tmdbapikey>>
         language: en
       mdblist:
-        apikey: ${MDBLIST_APIKEY}
+        apikey: <<mdblistapikey>>
         cache_expiration: 60
       tautulli:
         url: http://tautulli.tautulli:8181
-        apikey: ${TAUTULLI_APIKEY}
+        apikey: <<tautulliapikey>>
       radarr:
         url: http://radarr.downloader:7878
-        token: ${RADARR_TOKEN}
+        token: <<radarrtoken>>
         add_missing: true
         add_existing: false
         root_folder_path: /media/Movies
@@ -226,7 +187,7 @@ configMap:
         search: true
       sonarr:
         url: http://sonarr.downloader:8989
-        token: ${SONARR_TOKEN}
+        token: <<sonarrtoken>>
         add_missing: true
         add_existing: false
         root_folder_path: /media/TV
