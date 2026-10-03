@@ -17,7 +17,7 @@ service:
 podDisruptionBudget:
   enabled: false
 command:
-  args: ["--run"]
+  args: ["--run", "-read-only-config"]
 cronjob:
   enabled: true
   schedule: "35 2 * * *"
@@ -31,6 +31,10 @@ volumeMounts:
 - name: kometa-configmap
   mountPath: /config/tv.yml
   subPath: tv.yml
+  readOnly: true
+- name: kometa-configmap
+  mountPath: /config/config.yml
+  subPath: config.yml
   readOnly: true
 volumes:
 - name: config
@@ -157,16 +161,28 @@ configMap:
           - metadata
           - collections
           - overlays
+        prioritize_assets: false
+        show_missing_episode_assets: false
+        show_asset_not_needed: true
+        item_refresh_delay: 0
+        show_unconfigured: true
+        show_unfiltered: false
+        playlist_report: true
+        overlay_artwork_filetype: webp_lossy
+        overlay_artwork_quality: 90
       plex:
         url: http://plex.downloader:32400
         token: <<plextoken>>
         timeout: 60
+        verify_ssl: false          # explicit; matches your settings-level value
         clean_bundles: false
         empty_trash: false
         optimize: false
       tmdb:
         apikey: <<tmdbapikey>>
         language: en
+        cache_expiration: 60
+        region: CA
       mdblist:
         apikey: <<mdblistapikey>>
         cache_expiration: 60
@@ -184,6 +200,9 @@ configMap:
         quality_profile: HD-1080p
         tag: kometa
         search: true
+        upgrade_existing: false
+        monitor_existing: false
+        ignore_cache: false
       sonarr:
         url: http://sonarr.downloader:8989
         token: <<sonarrtoken>>
@@ -198,6 +217,9 @@ configMap:
         tag: kometa
         search: true
         cutoff_search: false
+        upgrade_existing: false
+        monitor_existing: false
+        ignore_cache: false
     movies.yml: |
       collections:
         Top Rated Movies:
