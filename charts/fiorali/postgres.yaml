@@ -1,0 +1,116 @@
+name: postgres
+namespace: postgres
+deployment:
+  enabled: true
+image:
+  repository: docker.io/postgres
+  tag: alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+containerPorts:
+- containerPort: 5432
+  name: postgres
+  protocol: TCP
+resources:
+  limits:
+    cpu: 250m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 250Mi
+probes:
+  tcpSocket:
+    port: postgres
+service:
+  enabled: true
+  ports:
+  - name: postgres
+    port: 5432
+    protocol: TCP
+    targetPort: postgres
+ingress:
+  enabled: false
+env:
+- name: POSTGRES_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: postgres-credentials
+      key: POSTGRES_PASSWORD
+volumeMounts:
+- name: postgres-storage
+  mountPath: /var/lib/postgresql
+- name: tmp
+  mountPath: /tmp
+- name: run
+  mountPath: /run
+volumes:
+- name: postgres-storage
+  persistentVolumeClaim:
+    claimName: postgres
+- name: tmp
+  emptyDir: {}
+- name: run
+  emptyDir: {}
+networkpolicy:
+  ingress:
+    internal: true
+    network: true
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+volume:
+  enabled: true
+  size: "1073741824"
+imageUpdater:
+  enabled: true
+  rootImageTag: "alpine"
+externalSecrets:
+- name: postgres-credentials
+  data:
+  - secretKey: POSTGRES_PASSWORD
+    remoteRef:
+      key: /homelab/postgres/POSTGRES_PASSWORD
+  - secretKey: POSTGRES_URI
+    remoteRef:
+      key: /homelab/postgres/POSTGRES_URI
+sidecarContainers:
+  enabled: true
+  containers:
+  - name: postgrest
+    image: docker.io/postgrest/postgrest:latest@sha256:d155c6718ed9a9f990d159a2ab7c0a3f16944dbb6d0a0344557421042acfe0df
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      privileged: false
+      readOnlyRootFilesystem: true
+      runAsUser: 1000
+    resources:
+      limits:
+        cpu: 100m
+        memory: 100Mi
+      requests:
+        cpu: 50m
+        memory: 50Mi
+    ports:
+      - containerPort: 3000
+        name: postgrest
+    env:
+    - name: PGRST_DB_URI
+      valueFrom:
+        secretKeyRef:
+          name: postgres-credentials
+          key: POSTGRES_URI
+    volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+    - name: run
+      mountPath: /run
