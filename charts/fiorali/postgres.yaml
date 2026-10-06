@@ -26,8 +26,13 @@ service:
     port: 5432
     protocol: TCP
     targetPort: postgres
+  - name: postgrest
+    port: 3000
+    protocol: TCP
+    targetPort: postgrest
 ingress:
-  enabled: false
+  enabled: true
+  portName: postgrest
 env:
 - name: POSTGRES_PASSWORD
   valueFrom:
@@ -80,6 +85,9 @@ externalSecrets:
   - secretKey: POSTGRES_URI
     remoteRef:
       key: /homelab/postgres/POSTGRES_URI
+  - secretKey: PGRST_JWT_SECRET
+    remoteRef:
+      key: /homelab/postgres/PGRST_JWT_SECRET
 sidecarContainers:
   enabled: true
   containers:
@@ -100,6 +108,27 @@ sidecarContainers:
       requests:
         cpu: 50m
         memory: 50Mi
+    livenessProbe:
+      failureThreshold: 3
+      periodSeconds: 30
+      successThreshold: 1
+      tcpSocket:
+        port: postgrest
+      timeoutSeconds: 5
+    readinessProbe:
+      failureThreshold: 2
+      periodSeconds: 10
+      successThreshold: 2
+      tcpSocket:
+        port: postgrest
+      timeoutSeconds: 5
+    startupProbe:
+      failureThreshold: 15
+      periodSeconds: 10
+      successThreshold: 1
+      tcpSocket:
+        port: postgrest
+      timeoutSeconds: 15
     ports:
       - containerPort: 3000
         name: postgrest
@@ -109,6 +138,11 @@ sidecarContainers:
         secretKeyRef:
           name: postgres-credentials
           key: POSTGRES_URI
+    - name: PGRST_JWT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: postgres-credentials
+          key: PGRST_JWT_SECRET
     volumeMounts:
     - name: tmp
       mountPath: /tmp
