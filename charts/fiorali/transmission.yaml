@@ -135,7 +135,7 @@ initContainers:
           name: pia-credentials
           key: PIA_PASSWORD
     - name: SERVER_REGIONS
-      value: "CA Toronto"
+      value: "CA Montreal"
     - name: PORT_FORWARD_ONLY
       value: "true"
     - name: VPN_PORT_FORWARDING
