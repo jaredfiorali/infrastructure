@@ -2,6 +2,7 @@ name: transmission
 namespace: downloader
 deployment:
   enabled: true
+replicaCount: 1
 image:
   repository: docker.io/linuxserver/transmission
   tag: latest@sha256:4813745e2c721997d8849f5718786fd4406b3c656fbef479f87a161e51383cbd

@@ -2,7 +2,6 @@ name: tdarr
 namespace: downloader
 deployment:
   enabled: true
-replicaCount: 1
 strategyType: Recreate
 image:
   repository: ghcr.io/haveagitgat/tdarr
