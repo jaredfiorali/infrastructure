@@ -28,9 +28,6 @@ service:
       targetPort: scrypted
 ingress:
   enabled: true
-env:
-  - name: SCRYPTED_DISABLE_AUTHENTICATION
-    value: "true"
 volumeMounts:
   - name: scrypted-persistent-storage
     mountPath: /server/volume

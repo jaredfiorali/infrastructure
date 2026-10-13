@@ -65,8 +65,6 @@ env:
   value: "false"
 - name: RADARR__AUTH__METHOD
   value: "Forms"
-- name: RADARR__AUTH__REQUIRED
-  value: "DisabledForLocalAddresses"
 - name: RADARR__UPDATE__MECHANISM
   value: "docker"
 - name: RADARR__POSTGRES__PORT

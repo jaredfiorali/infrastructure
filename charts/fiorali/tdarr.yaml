@@ -53,8 +53,6 @@ env:
   value: "7"
 - name: NODENAME
   value: "MacStudio"
-- name: AUTH
-  value: "false"
 - name: OPENBROWSER
   value: "false"
 - name: MAXLOGSIZEMB

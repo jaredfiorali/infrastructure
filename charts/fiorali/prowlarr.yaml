@@ -65,8 +65,6 @@ env:
   value: "false"
 - name: PROWLARR__AUTH__METHOD
   value: "Forms"
-- name: PROWLARR__AUTH__REQUIRED
-  value: "DisabledForLocalAddresses"
 - name: PROWLARR__UPDATE__MECHANISM
   value: "docker"
 - name: PROWLARR__POSTGRES__PORT

@@ -64,8 +64,6 @@ env:
   value: "false"
 - name: SONARR__AUTH__METHOD
   value: "Forms"
-- name: SONARR__AUTH__REQUIRED
-  value: "DisabledForLocalAddresses"
 - name: SONARR__UPDATE__MECHANISM
   value: "docker"
 - name: SONARR__POSTGRES__PORT
