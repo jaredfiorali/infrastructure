@@ -20,6 +20,27 @@ deployment:
       - name: loki-tmpfs
         mountPath: /tmp/loki
 
+# Container ports for the Fiorali service template
+containerPorts:
+  - name: http-metrics
+    containerPort: 3100
+    protocol: TCP
+  - name: grpc
+    containerPort: 9095
+    protocol: TCP
+  - name: grpclb
+    containerPort: 9096
+    protocol: TCP
+  - name: http
+    containerPort: 3100
+    protocol: TCP
+  - name: grpc-v2
+    containerPort: 9095
+    protocol: TCP
+  - name: grpc-lb
+    containerPort: 9096
+    protocol: TCP
+
 # Loki-specific settings
 loki:
   schemaConfig:
@@ -117,10 +138,28 @@ read:
 write:
   replicas: 0
 
-# Gateway configuration
+# Gateway and Service configuration
 gateway:
   service:
     type: ClusterIP
+
+# Service ports for the Fiorali service template
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: http-metrics
+      port: 3100
+      protocol: TCP
+      targetPort: http-metrics
+    - name: grpc
+      port: 9095
+      protocol: TCP
+      targetPort: grpc
+    - name: grpclb
+      port: 9096
+      protocol: TCP
+      targetPort: grpclb
 
 # Ingress
 ingress:
