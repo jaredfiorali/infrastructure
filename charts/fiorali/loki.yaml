@@ -2,162 +2,8 @@ name: loki
 namespace: loki
 deployment:
   enabled: false
-  deploymentMode: SingleBinary
-  singleBinary:
-    replicas: 1
-    resources:
-      requests:
-        cpu: "250m"
-        memory: "2Gi"
-      limits:
-        memory: "4Gi"
-    extraVolumes:
-      - name: loki-tmpfs
-        emptyDir:
-          medium: Memory
-          sizeLimit: "2Gi"
-    extraVolumeMounts:
-      - name: loki-tmpfs
-        mountPath: /tmp/loki
-
-# Container ports for the Fiorali deployment template
-containerPorts:
-  - name: http-metrics
-    containerPort: 3100
-    protocol: TCP
-  - name: grpc
-    containerPort: 9095
-    protocol: TCP
-  - name: grpclb
-    containerPort: 9096
-    protocol: TCP
-
-# Loki-specific settings
-loki:
-  schemaConfig:
-    configs:
-      - from: "2024-04-01"
-        store: tsdb
-        object_store: filesystem
-        schema: v13
-        index:
-          period: "24h"
-          prefix: loki_index_
-  storage:
-    type: filesystem
-    type_config: {}
-  storage_config:
-    filesystem:
-      directory: /tmp/loki/chunks
-    tsdb_shipper:
-      active_index_directory: /tmp/loki/index
-      cache_location: /tmp/loki/index_cache
-  ingester:
-    chunk_encoding: zstd
-    chunk_idle_period: 2h
-    chunk_target_size: 1572864
-    lifecycler:
-      ring:
-        kvstore:
-          store: inmemory
-    wal:
-      enabled: true
-      dir: /tmp/loki/wal
-  commonConfig:
-    replication_factor: 1
-  queryRange:
-    results_cache:
-      cache:
-        embedded_cache:
-          enabled: true
-          max_size_mb: 256
-  querier:
-    max_concurrent: 4
-    tail_max_duration: 24h
-  limits_config:
-    max_streams_per_user: 5000
-    max_concurrent_tail_requests: 15
-    retention_period: 48h
-    allow_structured_metadata: true
-    volume_enabled: true
-  compactor:
-    compaction_interval: 2h
-    delete_request_store: filesystem
-    delete_request_store_key_prefix: delete-requests/
-    retention_enabled: true
-    working_directory: /tmp/loki/compactor
-  pattern_ingester:
-    enabled: true
-  lokiCanary:
-    enabled: true
-  analytics:
-    reporting_enabled: false
-  auth_enabled: false
-  server:
-    log_level: info
-    grpc_server_max_recv_msg_size: 4194304
-    grpc_server_max_send_msg_size: 4194304
-  chunksCache:
-    enabled: true
-    allocatedMemory: "1024"
-
-# Disable backend components
-backend:
-  replicas: 0
-bloomBuilder:
-  replicas: 0
-bloomGateway:
-  replicas: 0
-bloomPlanner:
-  replicas: 0
-compactor:
-  replicas: 0
-distributor:
-  replicas: 0
-indexGateway:
-  replicas: 0
-ingester:
-  replicas: 0
-querier:
-  replicas: 0
-queryFrontend:
-  replicas: 0
-queryScheduler:
-  replicas: 0
-read:
-  replicas: 0
-write:
-  replicas: 0
-
-# Gateway — kept by Grafana chart, not managed by Fiorali
-gateway:
-  service:
-    type: ClusterIP
-
-# Disable the Fiorali service template — the Grafana Helm chart
-# manages the loki service via its parameters (loki-gateway, ports, etc.)
-# The Fiorali chart keeps only deployment, ingress, networkpolicy, etc.
 service:
   enabled: false
-
-# Ingress
-ingress:
-  enabled: true
-  hosts:
-    - loki.fiora.li
-  paths:
-    querier:
-      - /api/prom
-      - /loki/api/v1
-      - /ready
-  pathType: Prefix
-
-# Pod disruption budget
-podDisruptionBudget:
-  enabled: true
-  minAvailable: 1
-
-# Network policy
 networkpolicy:
   podSelector: false
   ingress:
@@ -168,3 +14,9 @@ networkpolicy:
   egress:
     internal: true
     kubeApiServer: true
+serviceAccount:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
+containerSecurityContext:
+  enabled: false
