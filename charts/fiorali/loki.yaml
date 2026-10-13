@@ -20,7 +20,7 @@ deployment:
       - name: loki-tmpfs
         mountPath: /tmp/loki
 
-# Container ports for the Fiorali service template
+# Container ports for the Fiorali deployment template
 containerPorts:
   - name: http-metrics
     containerPort: 3100
@@ -29,15 +29,6 @@ containerPorts:
     containerPort: 9095
     protocol: TCP
   - name: grpclb
-    containerPort: 9096
-    protocol: TCP
-  - name: http
-    containerPort: 3100
-    protocol: TCP
-  - name: grpc-v2
-    containerPort: 9095
-    protocol: TCP
-  - name: grpc-lb
     containerPort: 9096
     protocol: TCP
 
@@ -138,28 +129,16 @@ read:
 write:
   replicas: 0
 
-# Gateway and Service configuration
+# Gateway — kept by Grafana chart, not managed by Fiorali
 gateway:
   service:
     type: ClusterIP
 
-# Service ports for the Fiorali service template
+# Disable the Fiorali service template — the Grafana Helm chart
+# manages the loki service via its parameters (loki-gateway, ports, etc.)
+# The Fiorali chart keeps only deployment, ingress, networkpolicy, etc.
 service:
-  enabled: true
-  type: ClusterIP
-  ports:
-    - name: http-metrics
-      port: 3100
-      protocol: TCP
-      targetPort: http-metrics
-    - name: grpc
-      port: 9095
-      protocol: TCP
-      targetPort: grpc
-    - name: grpclb
-      port: 9096
-      protocol: TCP
-      targetPort: grpclb
+  enabled: false
 
 # Ingress
 ingress:
