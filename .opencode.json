@@ -1,0 +1,34 @@
+{
+  // NOTE: Do not auto-commit changes unless explicitly asked. When committing, increment Chart.yaml version (chore: bump chart version for deployment) to trigger ArgoCD sync.
+  "memory": [
+    "This is a Kubernetes homelab called 'fiorali' running k3s on 10 Raspberry Pis (5 RPi 4 workers, 5 RPi 5 masters). Chart version in Chart.yaml drives ArgoCD deployments, not commit hash.",
+    "Charts live in charts/fiorali/ with ~38 per-service override YAMLs (e.g. plex.yaml, sonarr.yaml) plus 27 shared templates. Values.yaml provides defaults.",
+    "charts/fiorali/other/ contains non-helm utilities and configs; root-level other/ has scripts (video-file-conversion.sh, upgrade-k3s-cluster.sh, etc.) and external configs (bgp.conf, coredns-custom.yaml).",
+    "CI/CD: GitHub Actions packages helm chart on main push, publishes to GitHub Pages. ArgoCD watches chart version for sync. argocd-image-updater handles container image updates (except Longhorn which is manual).",
+    "Secrets are managed via AWS Parameter Store using the External Secrets Operator. Do not hardcode sensitive values in override files.",
+    "Storage: Longhorn persistent volumes (SSD for speed, USB for long-term), S3 for critical backups (~5G). Supabase hosts postgres for sonarr, prowlarr, radarr, linkding, dawarich.",
+    "Namespaces: argocd, cloudflared, dawarich, downloader, emulatorjs, external-secrets, home-assistant, loki, longhorn-system, metallb-system, monitoring, popeye, scrypted, sillytavern, tautulli, gatus, falco, gates, postgres, pinchflat, default (26+ active).",
+    "Monitoring: Prometheus, Grafana, Loki, Alloy, Kromgo, Popeye, Unifi Poller, Gatus. Dashboards live in dashboards/.",
+    "Networking: MetalLB, cloudflared tunnel (ingress class: cloudflared), Unifi VLANs (3,5,8,9,10,15,20,24). DNS routes through Cloudflare Zero Trust with CIPA filter.",
+    "Critical services: Longhorn (storage, manual upgrade), ArgoCD (controls all deployments), MetalLB (LoadBalancer IPs), cloudflared (external DNS/ingress), home-assistant (739Mi RAM), loki (773Mi, runs across all nodes).",
+    "Resource patterns: CPU-intensive (transmission 147m, loki 327m, prometheus-operator). Memory-intensive (home-assistant 739Mi, dawarich 483Mi, loki 773Mi). Small (gatus 10Mi, grafana 30-100Mi, traefik 49Mi). Longhorn pods heavy on Pi 4.",
+    "Resource guidelines for new services: CPU-bound request 200m+, limit 500m. Memory-bound request 256Mi+, limit 1Gi. Small services: 50m CPU, 100Mi memory.",
+    "Version bumping: patch (0.2.X) for routine deploys, minor (0.X.0) for significant changes, major (X.0.0) for breaking changes.",
+    "Pod anti-affinity is used for critical services to spread across nodes. New namespace pattern: individual namespace per service.",
+    "KEY COMMANDS: kubectl -f kubeconfig (kubeconfig at repo root). ArgoCD: kubectl get application -n argocd. Pod logs: kubectl logs <pod> -n <namespace>. Top: kubectl top pods --all-namespaces."
+  ],
+  "ignore": [
+    "*.DS_Store",
+    "**/.DS_Store",
+    "kubeconfig",
+    "other/scripts/tmp/",
+    ".github/workflows/*.md",
+    "node_modules/"
+  ],
+  "skills": [
+    "infrastructure",
+    "infrastructure/add-service",
+    "infrastructure/deploy",
+    "infrastructure/update-service"
+  ]
+}
