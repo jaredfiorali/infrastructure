@@ -1,0 +1,168 @@
+# -- Overrides the chart's name
+name: loki
+# -- Overrides the chart's namespace
+namespace: loki
+# -- Deployment mode (SingleBinary, SimpleScalable, Distributed)
+deploymentMode: SingleBinary
+
+# -- SingleBinary configuration
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: false
+  resources:
+    requests:
+      memory: "2Gi"
+    limits:
+      memory: "4Gi"
+  # -- Extra volumes for tmpfs storage
+  extraVolumes:
+    - name: loki-tmpfs
+      emptyDir:
+        medium: Memory
+        sizeLimit: "2Gi"
+  # -- Extra volume mounts
+  extraVolumeMounts:
+    - name: loki-tmpfs
+      mountPath: /tmp/loki
+
+# -- Loki-specific settings
+loki:
+  auth_enabled: false
+  server:
+    log_level: info
+    grpc_server_max_recv_msg_size: 4194304
+    grpc_server_max_send_msg_size: 4194304
+
+  # -- Storage configuration
+  storage:
+    type: filesystem
+  storage_config:
+    filesystem:
+      directory: /tmp/loki/chunks
+    tsdb_shipper:
+      active_index_directory: /tmp/loki/index
+      cache_location: /tmp/loki/index_cache
+
+  # -- Schema config (v13 with TSDB)
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          period: "24h"
+          prefix: loki_index_
+
+  # -- Common config
+  commonConfig:
+    replication_factor: 1
+
+  # -- Ingester configuration
+  ingester:
+    wal:
+      enabled: true
+      dir: /tmp/loki/wal
+    chunk_encoding: zstd
+    chunk_idle_period: 2h
+    chunk_target_size: 1572864
+    max_chunk_age: 2h
+    lifecycler:
+      ring:
+        kvstore:
+          store: inmemory
+
+  # -- Limits configuration
+  limits_config:
+    max_streams_per_user: 5000
+    max_concurrent_tail_requests: 15
+    retention_period: 48h
+    allow_structured_metadata: true
+    volume_enabled: true
+
+  # -- Compactor configuration
+  compactor:
+    compaction_interval: 2h
+    retention_enabled: true
+    delete_request_store: filesystem
+    delete_request_store_key_prefix: delete-requests/
+    working_directory: /tmp/loki/compactor
+
+  # -- Querier configuration
+  querier:
+    max_concurrent: 4
+    tail_max_duration: 24h
+
+  # -- Query range (results cache)
+  queryRange:
+    results_cache:
+      cache:
+        embedded_cache:
+          enabled: true
+          max_size_mb: 256
+
+  # -- Pattern ingester
+  pattern_ingester:
+    enabled: true
+
+  # -- Canary
+  lokiCanary:
+    enabled: true
+
+  # -- Analytics
+  analytics:
+    reporting_enabled: false
+
+# -- Gateway service configuration
+gateway:
+  service:
+    type: ClusterIP
+
+# -- Ingress configuration
+ingress:
+  enabled: true
+  hosts:
+    - loki.fiora.li
+  paths:
+    querier:
+      - /api/prom
+      - /loki/api/v1
+      - /ready
+
+# -- Chunks cache
+chunksCache:
+  enabled: true
+  allocatedMemory: "1024"
+
+# -- Component replica counts (all 0 except singleBinary)
+backend:
+  replicas: 0
+bloomBuilder:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+bloomPlanner:
+  replicas: 0
+compactor:
+  replicas: 0
+distributor:
+  replicas: 0
+indexGateway:
+  replicas: 0
+ingester:
+  replicas: 0
+querier:
+  replicas: 0
+queryFrontend:
+  replicas: 0
+queryScheduler:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+# -- Test
+test:
+  enabled: false
