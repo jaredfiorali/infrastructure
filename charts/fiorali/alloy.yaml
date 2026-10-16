@@ -5,15 +5,27 @@ deployment:
 service:
   enabled: false
 networkpolicy:
-  enabled: false
+  enabled: true
 serviceAccount:
   enabled: false
 podDisruptionBudget:
   enabled: false
 ingress:
-  enabled: false
+  enabled: true
+  name: alloy
+  portName: alloy
+  hosts:
+    - host: alloy.fiora.li
+  faroPort: 12345
 containerSecurityContext:
   enabled: false
+alloy:
+  configMap:
+    create: false
+    name: alloy-configmap
+  enableReporting: false
+  mounts:
+    varlog: true
 configMap:
   enabled: true
   value: |-
