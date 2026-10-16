@@ -4,8 +4,29 @@ kind: Ingress
 metadata:
   name: {{ .Values.name }}-ingress
   namespace: {{ .Values.namespace }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
 spec:
+{{- if .Values.ingress.className }}
+  ingressClassName: {{ .Values.ingress.className }}
+{{- end }}
   rules:
+    {{- if .Values.ingress.hosts }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: {{ $.Values.name }}
+                port:
+                  name: {{ $.Values.ingress.portName | default $.Values.name }}
+    {{- end }}
+    {{- else }}
     - host: {{ .Values.ingress.name | default .Values.name }}.fiora.li
       http:
         paths:
@@ -16,4 +37,17 @@ spec:
                 name: {{ .Values.ingress.serviceName | default .Values.name }}
                 port:
                   name: {{ .Values.ingress.portName | default .Values.name }}
+    {{- end }}
+{{- with .Values.ingress.faroPort }}
+    - host: {{ $.Values.name }}.fiora.li
+      http:
+        paths:
+          - path: /faro
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Values.name }}
+                port:
+                  number: {{ . }}
+{{- end }}
 {{- end }}
