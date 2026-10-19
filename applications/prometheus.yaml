@@ -17,9 +17,10 @@ spec:
     helm:
       parameters:
       # alertmanager
-      - name: alertmanager.config.global.slack_api_url
-        value: <<SLACK_WEBHOOK_URL>>
-        forceString: true
+      - name: alertmanager.alertmanagerSpec.secrets[0]
+        value: alertmanager-slack-webhook
+      - name: alertmanager.config.global.slack_api_url_file
+        value: /etc/alertmanager/secrets/alertmanager-slack-webhook/slack_api_url
 
       # default rules / grafana
       - name: defaultRules.rules.kubernetesStorage
@@ -108,6 +109,13 @@ spec:
         value: instance
   - chart: prometheus-pushgateway
     repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - prometheus.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
     targetRevision: '*'
   syncPolicy:
     automated:
