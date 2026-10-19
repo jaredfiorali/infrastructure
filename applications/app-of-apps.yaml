@@ -9,7 +9,7 @@ spec:
     namespace: default
   project: default
   source:
-    repoURL: git@github.com:jaredfiorali/infrastructure.git
+    repoURL: https://github.com/jaredfiorali/infrastructure.git
     path: applications
     targetRevision: HEAD
   syncPolicy:
