@@ -21,9 +21,9 @@ spec:
     targetRevision: '*'
   syncPolicy:
     automated:
-      enabled: false
-      prune: false
-      selfHeal: false
+      enabled: true
+      prune: true
+      selfHeal: true
     syncOptions:
     - ServerSideApply=true
     - CreateNamespace=true
