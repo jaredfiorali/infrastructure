@@ -1,0 +1,165 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+  name: loki
+  namespace: argocd
+spec:
+  destination:
+    namespace: loki
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: loki
+    helm:
+      parameters:
+      - name: backend.replicas
+        value: '0'
+      - name: bloomBuilder.replicas
+        value: '0'
+      - name: bloomGateway.replicas
+        value: '0'
+      - name: bloomPlanner.replicas
+        value: '0'
+      - name: chunksCache.allocatedMemory
+        value: '1024'
+      - name: compactor.replicas
+        value: '0'
+      - name: deploymentMode
+        value: SingleBinary
+      - name: distributor.replicas
+        value: '0'
+      - name: gateway.service.type
+        value: ClusterIP
+      - name: indexGateway.replicas
+        value: '0'
+      - name: ingester.replicas
+        value: '0'
+      - name: ingress.enabled
+        value: 'true'
+      - name: ingress.hosts[0]
+        value: loki.fiora.li
+      - name: ingress.paths.querier[2]
+        value: /ready
+      - name: loki.analytics.reporting_enabled
+        value: 'false'
+      - name: loki.auth_enabled
+        value: 'false'
+      - name: loki.commonConfig.replication_factor
+        value: '1'
+      - name: loki.compactor.compaction_interval
+        value: 2h
+      - name: loki.compactor.delete_request_store
+        value: filesystem
+      - name: loki.compactor.delete_request_store_key_prefix
+        value: delete-requests/
+      - name: loki.compactor.retention_enabled
+        value: 'true'
+      - name: loki.compactor.working_directory
+        value: /tmp/loki/compactor
+      - name: loki.ingester.chunk_encoding
+        value: zstd
+      - name: loki.ingester.chunk_idle_period
+        value: 2h
+      - name: loki.ingester.chunk_target_size
+        value: '1572864'
+      - name: loki.ingester.lifecycler.ring.kvstore.store
+        value: inmemory
+      - name: loki.ingester.max_chunk_age
+        value: 2h
+      - name: loki.ingester.wal.dir
+        value: /tmp/loki/wal
+      - name: loki.ingester.wal.enabled
+        value: 'true'
+      - name: loki.limits_config.allow_structured_metadata
+        value: 'true'
+      - name: loki.limits_config.max_concurrent_tail_requests
+        value: '15'
+      - name: loki.limits_config.max_streams_per_user
+        value: '5000'
+      - name: loki.limits_config.retention_period
+        value: 48h
+      - name: loki.limits_config.volume_enabled
+        value: 'true'
+      - name: loki.pattern_ingester.enabled
+        value: 'true'
+      - name: loki.querier.max_concurrent
+        value: '4'
+      - name: loki.querier.tail_max_duration
+        value: 24h
+      - name: loki.queryRange.results_cache.cache.embedded_cache.enabled
+        value: 'true'
+      - name: loki.queryRange.results_cache.cache.embedded_cache.max_size_mb
+        value: '256'
+      - name: loki.schemaConfig.configs[0].from
+        value: '2024-04-01'
+      - name: loki.schemaConfig.configs[0].index.period
+        value: 24h
+      - name: loki.schemaConfig.configs[0].index.prefix
+        value: loki_index_
+      - name: loki.schemaConfig.configs[0].object_store
+        value: filesystem
+      - name: loki.schemaConfig.configs[0].schema
+        value: v13
+      - name: loki.schemaConfig.configs[0].store
+        value: tsdb
+      - name: loki.server.log_level
+        value: info
+      - name: loki.storage.type
+        value: filesystem
+      - name: loki.storage_config.filesystem.directory
+        value: /tmp/loki/chunks
+      - name: loki.storage_config.tsdb_shipper.active_index_directory
+        value: /tmp/loki/index
+      - name: loki.storage_config.tsdb_shipper.cache_location
+        value: /tmp/loki/index_cache
+      - name: lokiCanary.enabled
+        value: 'true'
+      - name: querier.replicas
+        value: '0'
+      - name: queryFrontend.replicas
+        value: '0'
+      - name: queryScheduler.replicas
+        value: '0'
+      - name: read.replicas
+        value: '0'
+      - name: singleBinary.extraVolumeMounts[0].mountPath
+        value: /tmp/loki
+      - name: singleBinary.extraVolumeMounts[0].name
+        value: loki-tmpfs
+      - name: singleBinary.extraVolumes[0].emptyDir.medium
+        value: Memory
+      - name: singleBinary.extraVolumes[0].emptyDir.sizeLimit
+        value: 2Gi
+      - name: singleBinary.extraVolumes[0].name
+        value: loki-tmpfs
+      - name: singleBinary.persistence.enabled
+        value: 'false'
+      - name: singleBinary.replicas
+        value: '1'
+      - name: singleBinary.resources.limits.memory
+        value: 4Gi
+      - name: singleBinary.resources.requests.memory
+        value: 2Gi
+      - name: test.enabled
+        value: 'false'
+      - name: write.replicas
+        value: '0'
+    repoURL: https://grafana-community.github.io/helm-charts
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - loki.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

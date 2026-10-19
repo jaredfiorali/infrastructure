@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - pre-delete-finalizer.argocd.argoproj.io
+  - pre-delete-finalizer.argocd.argoproj.io/cleanup
+  labels:
+    fiorali: 'true'
+  name: longhorn
+  namespace: argocd
+spec:
+  destination:
+    namespace: longhorn-system
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - kind: Namespace
+    name: longhorn-system
+  project: default
+  sources:
+  - chart: longhorn
+    helm:
+      parameters:
+      - name: metrics.serviceMonitor.enabled
+        value: 'true'
+      - name: ingress.enabled
+        value: 'true'
+      - name: ingress.host
+        value: longhorn.fiora.li
+      - name: namespaceOverride
+        value: longhorn-system
+      - name: csi.snapshotterReplicaCount
+        value: '1'
+      - name: csi.attacherReplicaCount
+        value: '2'
+      - name: csi.provisionerReplicaCount
+        value: '2'
+      - name: csi.resizerReplicaCount
+        value: '2'
+      - name: systemManagedComponentsNodeSelector
+        value: storage-tier:ssd
+      - name: networkPolicies.restrictInternalTraffic
+        value: 'false'
+    repoURL: https://charts.longhorn.io
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - longhorn.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

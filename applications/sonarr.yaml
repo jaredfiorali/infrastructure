@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+    supabase: 'true'
+  name: sonarr
+  namespace: argocd
+spec:
+  destination:
+    namespace: downloader
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: fiorali
+    helm:
+      parameters:
+      - name: replicaCount
+        value: '1'
+      valueFiles:
+      - values.yaml
+      - sonarr.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

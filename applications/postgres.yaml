@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'false'
+  name: postgres
+  namespace: argocd
+spec:
+  destination:
+    namespace: postgres
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - postgres.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

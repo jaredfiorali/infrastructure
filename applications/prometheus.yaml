@@ -1,0 +1,119 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'false'
+  name: prometheus
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: '*'
+    helm:
+      parameters:
+      # alertmanager
+      - name: alertmanager.config.global.slack_api_url
+        value: <<SLACK_WEBHOOK_URL>>
+        forceString: true
+
+      # default rules / grafana
+      - name: defaultRules.rules.kubernetesStorage
+        value: "false"
+      - name: grafana.enabled
+        value: "false"
+
+      # kube-controller-manager
+      - name: kubeControllerManager.enabled
+        value: "false"
+      - name: kubeControllerManager.service.port
+        value: "10257"
+      - name: kubeControllerManager.service.targetPort
+        value: "10257"
+      - name: kubeControllerManager.serviceMonitor.https
+        value: "true"
+      - name: kubeControllerManager.serviceMonitor.insecureSkipVerify
+        value: "true"
+
+      # etcd / proxy
+      - name: kubeEtcd.service.port
+        value: "2381"
+      - name: kubeEtcd.service.targetPort
+        value: "2381"
+      - name: kubeProxy.enabled
+        value: "false"
+
+      # kube-scheduler
+      - name: kubeScheduler.enabled
+        value: "false"
+      - name: kubeScheduler.service.port
+        value: "10259"
+      - name: kubeScheduler.service.targetPort
+        value: "10259"
+      - name: kubeScheduler.serviceMonitor.https
+        value: "true"
+      - name: kubeScheduler.serviceMonitor.insecureSkipVerify
+        value: "true"
+
+      # prometheus ingress
+      - name: prometheus.ingress.enabled
+        value: "true"
+      - name: prometheus.ingress.annotations.kubernetes\.io/ingress\.class
+        value: traefik
+      - name: prometheus.ingress.hosts[0]
+        value: prometheus.fiora.li
+
+      # prometheusSpec
+      - name: prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues
+        value: "false"
+      - name: prometheus.prometheusSpec.probeSelectorNilUsesHelmValues
+        value: "false"
+      - name: prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues
+        value: "false"
+      - name: prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues
+        value: "false"
+      - name: prometheus.prometheusSpec.retention
+        value: 1d
+      - name: prometheus.prometheusSpec.resources.limits.cpu
+        value: "3"
+        forceString: true
+      - name: prometheus.prometheusSpec.resources.limits.memory
+        value: 4G
+      - name: prometheus.prometheusSpec.resources.requests.cpu
+        value: "2"
+        forceString: true
+      - name: prometheus.prometheusSpec.resources.requests.memory
+        value: 2G
+
+      # node-exporter
+      - name: prometheus-node-exporter.hostNetwork
+        value: "false"
+      - name: prometheus-node-exporter.hostPID
+        value: "false"
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[0].action
+        value: replace
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[0].sourceLabels[0]
+        value: __meta_kubernetes_pod_ip
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[0].targetLabel
+        value: pod_ip
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[1].action
+        value: replace
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[1].sourceLabels[0]
+        value: __meta_kubernetes_pod_node_name
+      - name: prometheus-node-exporter.prometheus.monitor.relabelings[1].targetLabel
+        value: instance
+  - chart: prometheus-pushgateway
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

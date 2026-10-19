@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+  name: argocd
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: argo-cd
+    helm:
+      values: |
+        server:
+          ingress:
+            enabled: "true"
+          metrics:
+            enabled: "true"
+            serviceMonitor:
+              enabled: "true"
+              honorLabels: true
+        global:
+          domain: argo.fiora.li
+        applicationSet:
+          metrics:
+            enabled: "true"
+            serviceMonitor:
+              enabled: "true"
+              honorLabels: true
+        controller:
+          metrics:
+            enabled: "true"
+            serviceMonitor:
+              enabled: "true"
+        repoServer:
+          metrics:
+            enabled: "true"
+            serviceMonitor:
+              enabled: "true"
+        notifications:
+          cm:
+            create: "false"
+        configs:
+          params:
+            server.insecure: true
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - argocd.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

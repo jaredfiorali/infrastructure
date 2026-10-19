@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+  name: grafana-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: grafana-operator
+    helm:
+      parameters:
+      - name: serviceMonitor.enabled
+        value: 'true'
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      parameters:
+      - name: grafana.passwordKey
+        value: ADMIN_PASSWORD
+      - name: grafana.userKey
+        value: ADMIN_USER
+      valueFiles:
+      - values.yaml
+      - grafana-operator.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

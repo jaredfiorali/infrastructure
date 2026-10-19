@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+  name: metallb
+  namespace: argocd
+spec:
+  destination:
+    namespace: metallb-system
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: metallb
+    helm:
+      parameters:
+      - name: controller.serviceAccount.name
+      - name: prometheus.namespace
+        value: monitoring
+      - name: prometheus.serviceAccount
+        value: prometheus-kube-prometheus-prometheus
+      - name: prometheus.serviceMonitor.enabled
+        value: 'true'
+    repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.15.3
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - metallb.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

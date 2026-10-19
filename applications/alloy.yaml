@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'true'
+  name: alloy
+  namespace: argocd
+spec:
+  destination:
+    namespace: loki
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - chart: alloy
+    helm:
+      values: |
+        alloy:
+          configMap:
+            create: "false"
+            name: alloy-configmap
+          enableReporting: "false"
+          mounts:
+            varlog: "true"
+        serviceMonitor:
+          enabled: "true"
+        ingress:
+          enabled: "true"
+          hosts:
+            - alloy.fiora.li
+          faroPort: "12345"
+        networkPolicy:
+          enabled: "true"
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: '*'
+  - chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - alloy.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

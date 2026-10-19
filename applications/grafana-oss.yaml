@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    fiorali: 'false'
+  name: grafana-oss
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: grafana
+    helm:
+      parameters:
+      - name: admin.existingSecret
+        value: grafana-oss
+      - name: grafana\.ini.analytics.check_for_updates
+        value: 'false'
+      - name: grafana\.ini.analytics.enabled
+        value: 'false'
+      - name: grafana\.ini.feature_toggles.enable
+        value: provisioning,kubernetesDashboards
+      - name: ingress.enabled
+        value: 'true'
+      - name: ingress.hosts[0]
+        value: grafana-oss.fiora.li
+      - name: admin.passwordKey
+        value: ADMIN_PASSWORD
+      - name: admin.userKey
+        value: ADMIN_USER
+      - name: networkPolicy.enabled
+        value: 'true'
+      - name: grafana\.ini.auth\.anonymous.enabled
+        value: 'true'
+      - name: grafana\.ini.auth\.anonymous.org_role
+        value: Admin
+      - name: grafana\.ini.auth\.anonymous.org_name
+        value: Main Org.
+      - name: grafana\.ini.auth.disable_login_form
+        value: 'false'
+    repoURL: https://grafana-community.github.io/helm-charts
+    targetRevision: '*'
+  syncPolicy:
+    automated:
+      enabled: false
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
