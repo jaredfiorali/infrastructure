@@ -2,6 +2,7 @@
   // NOTE: Do not auto-commit changes unless explicitly asked. When committing, increment Chart.yaml version (chore: bump chart version for deployment) to trigger ArgoCD sync.
   "memory": [
     "This is a Kubernetes homelab called 'fiorali' running k3s on 10 Raspberry Pis (5 RPi 4 workers, 5 RPi 5 masters). Chart version in Chart.yaml drives ArgoCD deployments, not commit hash.",
+    "Applications use ArgoCD file-based manifests (app-of-apps pattern): applications/app-of-apps.yaml watches all .yaml files in applications/ directory and deploys each as an ArgoCD Application resource. 34+ services defined as individual Application manifests with auto-sync, prune, and self-heal enabled.",
     "Charts live in charts/fiorali/ with ~38 per-service override YAMLs (e.g. plex.yaml, sonarr.yaml) plus 27 shared templates. Values.yaml provides defaults.",
     "charts/fiorali/other/ contains non-helm utilities and configs; root-level other/ has scripts (video-file-conversion.sh, upgrade-k3s-cluster.sh, etc.) and external configs (bgp.conf, coredns-custom.yaml).",
     "CI/CD: GitHub Actions packages helm chart on main push, publishes to GitHub Pages. ArgoCD watches chart version for sync. argocd-image-updater handles container image updates (except Longhorn which is manual).",

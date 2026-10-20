@@ -204,9 +204,11 @@ classDef purple stroke:#a5f
 
 ### Deployment workflow
 
-#### Codebase (Helm)
+#### Codebase (ArgoCD File-Based & Helm)
 
-Each application is defined by a unique helm chart. The helm chart defines what kind of resources each application will need (deployment, service, networkPolicy, etc).
+Applications are deployed using ArgoCD's [file-based manifest](https://argo-cd.readthedocs.io/en/stable/user-guide/multiple_sources/#file-based) and [app-of-apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/) patterns. The `applications/app-of-apps.yaml` acts as the central coordinator, watching all `.yaml` files in the `applications/` directory and deploying each as an individual ArgoCD Application resource. Each application manifest can optionally compose multiple Helm charts (typically a community chart plus a custom `fiorali` chart with per-service overrides).
+
+Individual helm charts in `charts/fiorali/` are also compiled and published for flexibility, allowing changes to be managed at either the chart level or the manifest level.
 
 #### Compiling Charts (Github Action)
 
@@ -216,7 +218,7 @@ When code is pushed to the `main` branch, it triggers a [Github action](https://
 
 [ArgoCD](https://argo-cd.readthedocs.io) is the deployment automation tool that I use to keep each defined application in sync with the code defined in this repo. ArgoCD will watch for any code changes, and if any changes are discovered, it will auto-sync the updated application code with the cluster.
 
-Most applications are configured to automatically sync with the latest version, with Longhorn as a notable exception. Given how critical that application is (as it manages the storage for most other applications), I have decided it makes sense to have it manually updated.
+All 34+ services are configured with auto-sync, auto-prune, and self-heal. Longhorn is the notable exception — its auto-sync is disabled given how critical it is for storage.
 
 #### Updates (argocd-image-updater)
 
@@ -536,6 +538,7 @@ Here's a list of all the services that can be reached via a web portal (within t
 - [argocd](http://argo.fiora.li)
 - [dawarich](http://dawarich.fiora.li)
 - [emulatorjs](http://emulatorjs.fiora.li)
+- [gatus](http://gatus.fiora.li)
 - [grafana](http://grafana.fiora.li)
 - [home-assistant](http://home-assistant.fiora.li)
 - [influxdb](http://influxdb.fiora.li)
