@@ -1,0 +1,5 @@
+# HashiCorp Terraform
+*.tfstate
+*.tfstate.backup
+*.tfstate.vars
+.terraform/

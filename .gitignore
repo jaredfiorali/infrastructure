@@ -1,4 +1,8 @@
 debug.yaml
 /other/scripts/tmp
+kubeconfig
+other/configs/prometheus-additional.yaml
+other/configs/additional-scrape-configs.yaml
+other/scripts/trim_volume.sh
 .DS_Store
 **/.DS_Store
