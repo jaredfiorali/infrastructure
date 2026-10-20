@@ -1,0 +1,127 @@
+---
+# Site-wide management: apt + firmware + k3s + reboot
+# Run all maintenance in a single pass
+
+- name: Full hardware maintenance
+  hosts: k3s
+  become: true
+  gather_facts: true
+  serial: 1  # One node at a time for safety
+  tags: [site]
+  vars:
+    upgrade_log_dir: /var/log/hw-manage
+    firmware_channel: stable
+    k3s_extra_args: "--disable servicelb --etcd-expose-metrics=true --kube-proxy-arg metrics-bind-address=0.0.0.0 --kube-controller-manager-arg bind-address=0.0.0.0 --kube-scheduler-arg bind-address=0.0.0.0"
+
+  pre_tasks:
+    - name: Ensure log directory exists
+      ansible.builtin.file:
+        path: "{{ upgrade_log_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Log start of maintenance
+      ansible.builtin.command:
+        cmd: "sh -c 'echo \"{{ inventory_hostname }}: maintenance start $(date -Iseconds)\" >> {{ upgrade_log_dir }}/site.log'"
+      changed_when: false
+
+    - name: Show disk usage before
+      ansible.builtin.shell:
+        cmd: df -h / | tail -1
+      register: disk_before
+      changed_when: false
+
+  tasks:
+    # Package upgrade
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Upgrade packages
+      ansible.builtin.apt:
+        upgrade: dist
+      register: apt_result
+
+    - name: Autoremove
+      ansible.builtin.apt:
+        autoremove: true
+
+    # Firmware (Raspberry Pi specific)
+    - name: Check firmware version (RPi)
+      ansible.builtin.shell:
+        cmd: "cat /boot/firmware/VERSION.txt 2>/dev/null || echo 'unknown'"
+      register: firmware_version
+      changed_when: false
+      ignore_errors: true
+
+    - name: Upgrade firmware (RPi)
+      ansible.builtin.shell:
+        cmd: "apt install -y rpi-update && rpi-update"
+      when:
+        - "'masters' in group_names"
+        - ansible_facts.get_distribution_name | default('') in ['Raspbian', 'Debian', 'Ubuntu']
+      register: firmware_upgrade
+      retries: 2
+      delay: 10
+      ignore_errors: true
+
+    # K3s upgrade (skip if environment variable not set)
+    - name: Check k3s upgrade needed
+      ansible.builtin.command:
+        cmd: "k3s --version | head -1"
+      register: current_k3s
+      changed_when: false
+
+    - name: Upgrade k3s on master (if K3S_VERSION set)
+      ansible.builtin.shell:
+        cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ k3s_version }} sh -s - server {{ k3s_extra_args }}"
+      when:
+        - k3s_version is defined
+        - current_k3s.stdout | trim != k3s_version | trim
+        - "'masters' in group_names"
+      register: k3s_upgrade
+      retries: 3
+      delay: 10
+
+    - name: Upgrade k3s on worker (if K3S_VERSION set)
+      ansible.builtin.shell:
+        cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ k3s_version }} sh -s - agent"
+      when:
+        - k3s_version is defined
+        - current_k3s.stdout | trim != k3s_version | trim
+        - "'workers' in group_names"
+      register: k3s_upgrade
+      retries: 3
+      delay: 10
+
+    - name: Log upgrade results
+      ansible.builtin.command:
+        cmd: "sh -c 'echo \"{{ inventory_hostname }}: apt={{ apt_result.changed }} firmware={{ firmware_upgrade.changed | default(false) }} k3s={{ k3s_upgrade.changed | default(false) }}\" >> {{ upgrade_log_dir }}/site.log'"
+      changed_when: false
+
+  post_tasks:
+    - name: Show disk usage after
+      ansible.builtin.shell:
+        cmd: df -h / | tail -1
+      register: disk_after
+      changed_when: false
+
+    - name: Check reboot requirement
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_needed
+
+    - name: Set upgrade flag
+      ansible.builtin.set_fact:
+        upgrade_occurred: true
+      when:
+        - (firmware_upgrade | default(false) | bool) or (k3s_upgrade | default(false) | bool)
+
+    - name: Log end of maintenance
+      ansible.builtin.command:
+        cmd: "sh -c 'echo \"{{ inventory_hostname }}: reboot={{ reboot_needed.stat.exists }}\" >> {{ upgrade_log_dir }}/site.log'"
+      changed_when: false
+
+    - name: Print reboot status
+      ansible.builtin.debug:
+        msg: "Reboot: {{ 'YES' if reboot_needed.stat.exists else 'no' }}"

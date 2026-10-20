@@ -1,0 +1,38 @@
+# Inventory for hw-manage
+# Old-style format compatible with all Ansible versions
+
+[masters]
+rpi5-node-1 ansible_host=192.168.20.10
+rpi5-node-2 ansible_host=192.168.20.11
+rpi5-node-3 ansible_host=192.168.20.12
+rpi5-node-4 ansible_host=192.168.20.13
+rpi5-node-5 ansible_host=192.168.20.14
+
+[workers]
+rpi4-node-1 ansible_host=192.168.20.2
+rpi4-node-2 ansible_host=192.168.20.3
+rpi4-node-3 ansible_host=192.168.20.4
+rpi4-node-4 ansible_host=192.168.20.5
+rpi4-node-5 ansible_host=192.168.20.6
+
+[k3s:children]
+masters
+workers
+
+[pi4:children]
+workers
+
+[pi5:children]
+masters
+
+[k3s:vars]
+ansible_user=root
+ansible_python_interpreter=/usr/bin/python3
+upgrade_reboot=true
+upgrade_log_dir=/var/log/hw-manage
+
+[pi4:vars]
+pi_type=pi4
+
+[pi5:vars]
+pi_type=pi5

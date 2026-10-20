@@ -1,0 +1,49 @@
+---
+# Status playbook: shows cluster health across all nodes
+
+- name: Check cluster status
+  hosts: k3s
+  gather_facts: true
+  become: true
+  serial: 1
+  tasks:
+    - name: Print node info
+      ansible.builtin.debug:
+        msg: >-
+          {{ inventory_hostname }} ({{ ansible_hostname }}):
+          CPU: {{ ansible_processor | default('unknown') }} / {{ ansible_processor_count | default('unknown') }} cores,
+          RAM: {{ ansible_memtotal_mb | default('unknown') }}MB,
+          OS: {{ ansible_distribution | default('unknown') }} {{ ansible_distribution_version | default('') }},
+          Kernel: {{ ansible_kernel | default('unknown') }}
+
+    - name: Check disk usage
+      ansible.builtin.shell:
+        cmd: df -h / | tail -1
+      register: disk_usage
+      changed_when: false
+
+    - name: Print disk info
+      ansible.builtin.debug:
+        msg: "Disk: {{ disk_usage.stdout | default('unknown') }}"
+
+    - name: Check k3s version
+      ansible.builtin.command:
+        cmd: "k3s --version | head -1"
+      register: k3s_ver
+      changed_when: false
+      ignore_errors: true
+      when: "'k3s' in group_names"
+
+    - name: Print k3s info
+      ansible.builtin.debug:
+        msg: "k3s: {{ k3s_ver.stdout | default('not installed') }}"
+      when: "'k3s' in group_names"
+
+    - name: Check if reboot needed
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_needed
+
+    - name: Print reboot status
+      ansible.builtin.debug:
+        msg: "Reboot: {{ 'YES' if reboot_needed.stat.exists else 'no' }}"

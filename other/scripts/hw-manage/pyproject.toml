@@ -1,0 +1,17 @@
+# hw-manage for Fiorali Cluster
+# Run hardware management operations
+
+PYTHON_VERSION = "3.10"
+
+[project]
+name = "hw-manage"
+version = "0.1.0"
+description = "Hardware management for Fiorali k3s cluster"
+requires-python = ">= 3.10"
+dependencies = [
+    "ansible-core>=2.15",
+]
+
+[tool.ansible-runner]
+inventory = "inventory/hosts.yml"
+private_data_dir = "."

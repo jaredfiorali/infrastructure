@@ -1,0 +1,91 @@
+---
+# Reboot nodes that need it (in safe order)
+# Masters first, then workers, with cordon/drain for workers
+
+- name: Reboot cluster nodes
+  hosts: k3s
+  become: true
+  gather_facts: true
+  serial:
+    - 1
+    - "100%"
+  vars:
+    reboot_message: "hw-manage: Rebooting after maintenance"
+    scale_longhorn: false
+
+  tasks:
+    # ── Standard reboot flow ─────────────────────────────────────────
+    - name: Check if reboot is needed
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_needed
+
+    # ── Longhorn pre-reboot (if enabled + upgrade occurred) ────────────
+    - name: Scale down Longhorn workloads before reboot
+      ansible.builtin.script:
+        src: longhorn-reboot.sh
+        argv:
+          - "{{ inventory_hostname }}"
+          - --check
+      when:
+        - scale_longhorn | bool
+        - upgrade_occurred | default(false) | bool
+        - reboot_needed.stat.exists
+      ignore_errors: true
+      changed_when: false
+
+    - name: Skip nodes that don't need reboot
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} does not need reboot"
+      when: not reboot_needed.stat.exists
+
+    - name: Cordon node (workers only)
+      ansible.builtin.command:
+        cmd: "kubectl cordon {{ inventory_hostname }}"
+      when: "'worker' in group_names and reboot_needed.stat.exists"
+      ignore_errors: true
+      changed_when: false
+
+    - name: Drain node (workers only)
+      ansible.builtin.command:
+        cmd: "kubectl drain {{ inventory_hostname }} --ignore-daemonsets --delete-emptydir-data"
+      when: "'worker' in group_names and reboot_needed.stat.exists"
+      ignore_errors: true
+      changed_when: false
+
+    - name: Reboot node
+      ansible.builtin.reboot:
+        msg: "{{ reboot_message }}"
+        connect_timeout: 10
+        reboot_timeout: 300
+        test_command: uptime
+      when: reboot_needed.stat.exists
+
+    - name: Uncordon node (workers only)
+      ansible.builtin.command:
+        cmd: "kubectl uncordon {{ inventory_hostname }}"
+      when: "'worker' in group_names and reboot_needed.stat.exists"
+      ignore_errors: true
+      changed_when: false
+      register: uncordon_result
+
+    - name: Verify node is back
+      ansible.builtin.wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        timeout: 120
+      when: reboot_needed.stat.exists
+
+    - name: Scale up Longhorn after reboot
+      ansible.builtin.script:
+        src: longhorn-reboot.sh
+        argv:
+          - "{{ inventory_hostname }}"
+          - --scale-up
+      when:
+        - scale_longhorn | bool
+        - upgrade_occurred | default(false) | bool
+        - reboot_needed.stat.exists
+      ignore_errors: true
+      changed_when: false
