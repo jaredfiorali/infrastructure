@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/postgres
-  tag: alpine@sha256:83148c0bc09eac4d598b70a61e1404d0212b76c95c504bfd6c81a4c59ec91792
+  tag: alpine@sha256:898c60cb390d1085bc97bdd6a1ae968757421df394b071848b52b1c09c89d6a5
 containerPorts:
 - containerPort: 5432
   name: postgres
