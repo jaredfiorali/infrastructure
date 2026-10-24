@@ -6,7 +6,7 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: docker.io/openspeedtest/latest
-  tag: latest@sha256:1745e913f596fe98882b286a67751efdae74774e9caa742a4934bb056e8748d2
+  tag: latest@sha256:a44c4789798fd975f25cfd0cdd6515d6349775cecca9dd9d3285919db9303509
 containerPorts:
   - containerPort: 3000
     name: speedtest
