@@ -29,20 +29,20 @@ spec:
     {{- if .Values.networkpolicy.ingress.internal }}
     - from:
         - ipBlock:
-            cidr: 10.0.0.0/8  # RFC1918 private network
+            cidr: {{ .Values.networkpolicy.cidrs.podCluster }}
     {{- end }}
     {{- if .Values.networkpolicy.ingress.network }}
     - from:
         - ipBlock:
-            cidr: 192.168.0.0/16  # RFC1918 private network
+            cidr: {{ .Values.networkpolicy.cidrs.lan }}
     {{- end }}
     {{- if .Values.networkpolicy.ingress.internet }}
     - from:
         - ipBlock:
-            cidr: 0.0.0.0/0  # Allow internet
+            cidr: 0.0.0.0/0
             except:
-              - 10.0.0.0/8  # RFC1918 private network
-              - 192.168.0.0/16  # RFC1918 private network
+              - {{ .Values.networkpolicy.cidrs.podCluster }}
+              - {{ .Values.networkpolicy.cidrs.lan }}
     {{- end }}
   {{- end }}
   egress:
@@ -69,7 +69,7 @@ spec:
     {{- if .Values.networkpolicy.egress.internal }}
     - to:
         - ipBlock:
-            cidr: 10.0.0.0/8  # RFC1918 private network
+            cidr: {{ .Values.networkpolicy.cidrs.podCluster }}
     {{- end }}
     {{- if .Values.networkpolicy.egress.kubeApiServer }}
     - to:
@@ -84,15 +84,15 @@ spec:
     {{- if .Values.networkpolicy.egress.network }}
     - to:
         - ipBlock:
-            cidr: 192.168.0.0/16  # RFC1918 private network
+            cidr: {{ .Values.networkpolicy.cidrs.lan }}
     {{- end }}
     {{- if or .Values.networkpolicy.egress.internet .Values.networkpolicy.egress.supabase }}
     - to:
         - ipBlock:
-            cidr: 0.0.0.0/0  # Allow internet
+            cidr: 0.0.0.0/0
             except:
-              - 10.0.0.0/8  # RFC1918 private network
-              - 192.168.0.0/16  # RFC1918 private network
+              - {{ .Values.networkpolicy.cidrs.podCluster }}
+              - {{ .Values.networkpolicy.cidrs.lan }}
       {{- if .Values.networkpolicy.egress.supabase }}
       ports:
         - protocol: TCP

@@ -130,6 +130,9 @@ tests:
 networkpolicy:
   enabled: true
   podSelector: true
+  cidrs:
+    podCluster: "10.0.0.0/8"   # Kubernetes pod network
+    lan: "192.168.0.0/16"      # Local LAN (Unifi/UDM-SE)
   ingress:
     allowAll: false
     namespaces: []
