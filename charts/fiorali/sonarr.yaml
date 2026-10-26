@@ -2,7 +2,7 @@ name: sonarr
 namespace: downloader
 deployment:
   enabled: true
-replicaCount: 1
+replicaCount: 2
 image:
   repository: docker.io/linuxserver/sonarr
   tag: latest@sha256:48e36b608b461273b9dae857725cd0561a127f2c694b687318f6d0c5ce63e5c9
