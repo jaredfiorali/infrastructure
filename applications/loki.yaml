@@ -154,7 +154,7 @@ spec:
       - values.yaml
       - loki.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.38'
+    targetRevision: '0.3.39'
   syncPolicy:
     automated:
       enabled: true
