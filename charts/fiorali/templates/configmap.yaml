@@ -7,5 +7,9 @@ metadata:
   labels:
     app: {{ .Values.name }}
 data:
+  {{- if .Values.configMap.valueFile }}
+  {{- $.Files.Get .Values.configMap.valueFile | nindent 2 }}
+  {{- else }}
   {{- .Values.configMap.value | nindent 2 }}
+  {{- end }}
 {{- end }}
