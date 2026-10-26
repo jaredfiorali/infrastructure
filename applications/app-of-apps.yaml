@@ -9,10 +9,9 @@ spec:
     namespace: default
   project: default
   source:
-    repoURL: ghcr.io/jaredfiorali/helm-charts
+    repoURL: https://github.com/jaredfiorali/infrastructure.git
     path: applications
-    targetRevision: '*'
-    chart: fiorali
+    targetRevision: HEAD
   syncPolicy:
     automated:
       enabled: true
