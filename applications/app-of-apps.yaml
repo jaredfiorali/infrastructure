@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: ghcr.io/jaredfiorali/helm-charts
     path: applications
-    targetRevision: HEAD
+    targetRevision: '*'
     chart: fiorali
   syncPolicy:
     automated:
