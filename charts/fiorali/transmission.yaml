@@ -333,7 +333,7 @@ prometheusRules:
       summary: "Gluetun VPN container is down"
       description: "The Gluetun VPN container has been down for 2+ minutes."
   - alert: GluetunPortNotForwarded
-    expr: file_exists("/gluetun/forwarded_port.txt") == 0
+    expr: up{container="gluetun"} < 1
     for: 5m
     labels:
       severity: warning
@@ -341,7 +341,7 @@ prometheusRules:
       namespace: monitoring
     annotations:
       summary: "VPN port not forwarded"
-      description: "The Gluetun VPN port has not been forwarded in 5+ minutes."
+      description: "The Gluetun VPN container is not reporting as up."
   - alert: TransmissionStaleTorrents
     expr: transmission_stalled_torrents > 10
     for: 30m
