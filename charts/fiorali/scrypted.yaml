@@ -70,6 +70,7 @@ prometheusRules:
     annotations:
       summary: "Scrypted is down"
       description: "Scrypted has been down for 2+ minutes."
+    repeat_interval: 24h
   - alert: ScryptedHighLatency
     expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="scrypted"}[24h])) > 1
     for: 15m
@@ -80,6 +81,7 @@ prometheusRules:
     annotations:
       summary: "Scrypted P95 latency high: {{ $value }}s"
       description: "Scrypted P95 request latency has exceeded 1 second for 15+ minutes."
+    repeat_interval: 24h
 volume:
   enabled: true
   size: "1073741824"

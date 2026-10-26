@@ -218,6 +218,7 @@ prometheusRules:
     annotations:
       summary: "Alarm triggered: {{ $labels.entity_id }}"
       description: "An alarm has been triggered on {{ $labels.entity_id }}"
+    repeat_interval: 24h
 configMap:
   enabled: true
   value: |

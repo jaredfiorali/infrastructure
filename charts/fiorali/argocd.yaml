@@ -166,6 +166,7 @@ prometheusRules:
     annotations:
       summary: "ArgoCD app degraded: {{ $labels.name }}"
       description: "An ArgoCD application has been degraded for 10+ minutes."
+    repeat_interval: 24h
   - alert: ArgoCDAppSyncFailed
     expr: argocd_app_info{sync_status="OutOfSync"} == 1
     for: 30m
@@ -176,3 +177,4 @@ prometheusRules:
     annotations:
       summary: "ArgoCD app out of sync: {{ $labels.name }}"
       description: "An ArgoCD application is out of sync for 30+ minutes."
+    repeat_interval: 24h

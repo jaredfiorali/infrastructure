@@ -67,6 +67,7 @@ prometheusRules:
     annotations:
       summary: "Dawarich redis is down"
       description: "Dawarich redis has been down for 1+ minutes."
+    repeat_interval: 24h
   - alert: DawarichRedisHighLatency
     expr: histogram_quantile(0.95, rate(redis_seconds_total[5m])) > 0.5
     for: 15m
@@ -77,6 +78,7 @@ prometheusRules:
     annotations:
       summary: "Dawarich redis latency high: {{ $value }}s"
       description: "Dawarich redis P95 latency has exceeded 500ms for 15+ minutes."
+    repeat_interval: 24h
 imageUpdater:
   enabled: true
   rootImageTag: "7-alpine"

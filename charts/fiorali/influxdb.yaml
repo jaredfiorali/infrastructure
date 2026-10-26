@@ -64,6 +64,7 @@ prometheusRules:
     annotations:
       summary: "InfluxDB is down"
       description: "InfluxDB has been down for more than 1 minute."
+    repeat_interval: 24h
   - alert: InfluxDBHighDiskUsage
     expr: (influxdb_disk_usage_bytes / influxdb_disk_capacity_bytes) * 100 > 80
     for: 15m
@@ -74,6 +75,7 @@ prometheusRules:
     annotations:
       summary: "InfluxDB disk usage high: {{ $value }}%"
       description: "InfluxDB disk usage has exceeded 80% for 15+ minutes."
+    repeat_interval: 24h
 imageUpdater:
   enabled: true
   rootImageTag: "alpine"

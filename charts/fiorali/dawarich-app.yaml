@@ -183,6 +183,7 @@ prometheusRules:
     annotations:
       summary: "Dawarich app is down"
       description: "Dawarich app has been down for 2+ minutes."
+    repeat_interval: 24h
   - alert: DawarichAppHighLatency
     expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="dawarich-app"}[24h])) > 5
     for: 15m
@@ -193,6 +194,7 @@ prometheusRules:
     annotations:
       summary: "Dawarich P95 latency high: {{ $value }}s"
       description: "Dawarich P95 request latency has exceeded 5 seconds for 15+ minutes."
+    repeat_interval: 24h
 imageUpdater:
   enabled: true
 externalSecrets:
