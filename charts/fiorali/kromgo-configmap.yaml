@@ -137,6 +137,14 @@ config.yaml: |-
       query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tautulli"}[30d]) * 1000, 1)
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
+    - name: tdarr_uptime
+      query: round(sum(increase(gatus_results_total{key="media-management_tdarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_tdarr"}[30d])) * 100, 1)
+      suffix: "%"
+      colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
+    - name: media-management_tdarr
+      query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_tdarr"}[30d]) * 1000, 1)
+      suffix: "ms"
+      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: transmission_uptime
       query: round(sum(increase(gatus_results_total{key="media-management_transmission", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_transmission"}[30d])) * 100, 1)
       suffix: "%"
@@ -217,6 +225,10 @@ config.yaml: |-
       query: round(avg_over_time(gatus_results_duration_seconds{key="other_speedtest"}[30d]) * 1000, 1)
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
+    - name: cloudflared_uptime
+      query: round(max(histogram_quantile(0.95, rate(coredns_dns_request_duration_seconds_bucket[24h])) * 1000), 1)
+      suffix: "ms"
+      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: other_cloudflared
       query: round(max(histogram_quantile(0.95, rate(coredns_dns_request_duration_seconds_bucket[24h])) * 1000), 1)
       suffix: "ms"
@@ -225,6 +237,10 @@ config.yaml: |-
       query: max(avg_over_time(metallb_bgp_session_up[24h]) * 100)
       suffix: "%"
       colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
+    - name: monitoring_metallb
+      query: round(avg_over_time(gatus_results_duration_seconds{key="metallb"}[30d]) * 1000, 1)
+      suffix: "ms"
+      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: alloy_uptime
       query: round(avg_over_time(up{job="alloy"}[7d]) * 100, 1)
       suffix: "%"
@@ -247,6 +263,10 @@ config.yaml: |-
       colors: [{color: "green", min: 0, max: 1}, {color: "orange", min: 2, max: 3}, {color: "red", min: 4, max: 999999}]
     - name: monitoring_unpoller
       query: round(avg_over_time(gatus_results_duration_seconds{key="monitoring_unpoller"}[30d]) * 1000, 1)
+      suffix: "ms"
+      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
+    - name: cloudflared_uptime
+      query: round(max(histogram_quantile(0.95, rate(coredns_dns_request_duration_seconds_bucket[24h])) * 1000), 1)
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: kometa_uptime
