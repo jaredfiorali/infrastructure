@@ -21,7 +21,7 @@ spec:
       - values.yaml
       - sonarr.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.35'
+    targetRevision: '0.3.36'
   syncPolicy:
     automated:
       enabled: true
