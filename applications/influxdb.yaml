@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - influxdb.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.33'
+    targetRevision: '0.3.34'
   syncPolicy:
     automated:
       enabled: true
