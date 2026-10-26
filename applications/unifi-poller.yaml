@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - unifi-poller.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.29'
+    targetRevision: '0.3.30'
   syncPolicy:
     automated:
       enabled: true
