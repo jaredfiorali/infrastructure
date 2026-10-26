@@ -1,5 +1,4 @@
 config.yaml: |
-  default-conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 500"]
   metrics: true
   alerting:
     slack:
@@ -21,18 +20,23 @@ config.yaml: |
     - name: argo
       url: http://argo.fiora.li
       group: kubernetes core
+      conditions: ["[STATUS] == 200"]
     - name: alloy
       url: http://alloy.fiora.li/-/ready
       group: monitoring
+      conditions: ["[STATUS] == 200"]
     - name: dawarich
       url: http://dawarich.fiora.li/api/v1/health
       group: other
+      conditions: ["[STATUS] == 200"]
     - name: plex
       url: http://plex.fiora.li/identity
       group: media management
+      conditions: ["[STATUS] == 200"]
     - name: plex(remote)
       url: http://99.246.152.8:32400/web/index.html
       group: media management
+      conditions: ["[STATUS] == 200"]
     - name: prowlarr
       url: http://prowlarr.fiora.li/ping
       group: media management
@@ -40,6 +44,7 @@ config.yaml: |
     - name: flaresolverr
       url: http://flaresolverr.fiora.li/health
       group: media management
+      conditions: ["[STATUS] == 200"]
     - name: radarr
       url: http://radarr.fiora.li/ping
       group: media management
@@ -55,6 +60,7 @@ config.yaml: |
     - name: emulatorjs
       url: http://emulatorjs.fiora.li
       group: other
+      conditions: ["[STATUS] == 200"]
     - name: home-assistant
       url: http://home-assistant.fiora.li/api/
       group: home security
@@ -70,24 +76,31 @@ config.yaml: |
     - name: longhorn
       url: http://longhorn.fiora.li
       group: kubernetes core
+      conditions: ["[STATUS] == 200"]
     - name: grafana-oss
       url: http://grafana-oss.fiora.li/api/health
       group: monitoring
+      conditions: ["[STATUS] == 200"]
     - name: influxdb
       url: http://influxdb.fiora.li/health
       group: other
+      conditions: ["[STATUS] == 200"]
     - name: kromgo
       url: http://kromgo.fiora.li
       group: monitoring
+      conditions: ["[STATUS] == 200"]
     - name: prometheus
       url: http://prometheus.fiora.li/-/ready
       group: monitoring
+      conditions: ["[STATUS] == 200"]
     - name: unpoller
       url: http://unpoller.fiora.li/health
       group: monitoring
+      conditions: ["[STATUS] == 200"]
     - name: scrypted
       url: http://scrypted.fiora.li
       group: home security
+      conditions: ["[STATUS] == 200"]
     - name: sillytavern
       url: http://sillytavern.fiora.li
       group: other
@@ -95,12 +108,15 @@ config.yaml: |
     - name: speedtest
       url: http://speedtest.fiora.li
       group: other
+      conditions: ["[STATUS] == 200"]
     - name: tautulli
       url: http://tautulli.fiora.li/status
       group: media management
+      conditions: ["[STATUS] == 200"]
     - name: tdarr
       url: http://tdarr.fiora.li
       group: media management
+      conditions: ["[STATUS] == 200"]
     - name: postgres
       url: tcp://postgres.fiora.li:5432
       group: media management
