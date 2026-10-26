@@ -12,6 +12,8 @@ config.yaml: |
   storage:
     type: postgres
     path: "${POSTGRES_CONNECTION_STRING}"
+    caching: true
+  skip-invalid-config-update: true
   connectivity:
     checker:
       target: 192.168.21.21:53
