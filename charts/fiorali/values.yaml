@@ -35,9 +35,6 @@ probes:
   startupProbe: {}
   livenessProbe: {}
   readinessProbe: {}
-startupProbe: {}
-livenessProbe: {}
-readinessProbe: {}
 
 imagePullSecrets: []
 nameOverride: ""

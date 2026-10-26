@@ -17,6 +17,5 @@ spec:
   ports:
     {{- toYaml .Values.service.ports | nindent 4 }}
   selector:
-    app:
-      {{ .Values.name }}
+    app: {{ .Values.name }}
 {{- end }}
