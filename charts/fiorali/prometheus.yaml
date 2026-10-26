@@ -13,7 +13,8 @@ podDisruptionBudget:
 containerSecurityContext:
   enabled: false
 externalSecrets:
-- name: prometheus
+- name: prometheus-credentials
+  skipPopeye: true
   data:
   - secretKey: SLACK_API_URL
     remoteRef:
