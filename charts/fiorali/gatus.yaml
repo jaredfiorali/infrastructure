@@ -133,6 +133,29 @@ serviceMonitor:
   appSelector: gatus
   port: "gatus"
   interval: "5m"
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: GatusEndpointStale
+    expr: time() - max(gatus_results_duration_seconds > 0) > 600
+    for: 5m
+    labels:
+      severity: warning
+      component: gatus
+      namespace: monitoring
+    annotations:
+      summary: "Gatus endpoints stale"
+      description: "Some Gatus endpoints haven't responded in 10+ minutes."
+  - alert: GatusHighFailureRate
+    expr: sum(increase(gatus_results_total{success="false"}[1h])) / sum(increase(gatus_results_total[1h])) > 0.1
+    for: 15m
+    labels:
+      severity: warning
+      component: gatus
+      namespace: monitoring
+    annotations:
+      summary: "Gatus failure rate: {{ $value | humanizePercentage }}"
+      description: "More than 10% of Gatus endpoint checks have failed in the last hour."
 configMap:
   enabled: true
   valueFile: gatus-configmap.yaml

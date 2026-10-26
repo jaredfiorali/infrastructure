@@ -57,6 +57,29 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: ScryptedDown
+    expr: up{job="scrypted"} == 0
+    for: 2m
+    labels:
+      severity: critical
+      component: scrypted
+      namespace: monitoring
+    annotations:
+      summary: "Scrypted is down"
+      description: "Scrypted has been down for 2+ minutes."
+  - alert: ScryptedHighLatency
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="scrypted"}[24h])) > 1
+    for: 15m
+    labels:
+      severity: warning
+      component: scrypted
+      namespace: monitoring
+    annotations:
+      summary: "Scrypted P95 latency high: {{ $value }}s"
+      description: "Scrypted P95 request latency has exceeded 1 second for 15+ minutes."
 volume:
   enabled: true
   size: "1073741824"

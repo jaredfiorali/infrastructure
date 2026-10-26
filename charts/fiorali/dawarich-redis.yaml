@@ -54,6 +54,29 @@ podSecurityContext:
   fsGroup: 999
   runAsNonRoot: true
   runAsUser: 999
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: DawarichRedisDown
+    expr: up{job="dawarich-redis"} == 0
+    for: 1m
+    labels:
+      severity: critical
+      component: dawarich
+      namespace: monitoring
+    annotations:
+      summary: "Dawarich redis is down"
+      description: "Dawarich redis has been down for 1+ minutes."
+  - alert: DawarichRedisHighLatency
+    expr: histogram_quantile(0.95, rate(redis_seconds_total[5m])) > 0.5
+    for: 15m
+    labels:
+      severity: warning
+      component: dawarich
+      namespace: monitoring
+    annotations:
+      summary: "Dawarich redis latency high: {{ $value }}s"
+      description: "Dawarich redis P95 latency has exceeded 500ms for 15+ minutes."
 imageUpdater:
   enabled: true
   rootImageTag: "7-alpine"

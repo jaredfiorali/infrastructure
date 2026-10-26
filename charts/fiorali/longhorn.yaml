@@ -115,3 +115,43 @@ prometheusRules:
         issue: Longhorn node {{$labels.node}} experiences high CPU pressure.
         severity: warning
         namespace: monitoring
+    - alert: LonghornPVCRsv
+      annotations:
+        description: PVC reserve on volume {{$labels.volume}} is at {{$value}}% of capacity.
+        summary: PVC reserve is high on Longhorn volume.
+      expr: (longhorn_volume_pvc_reserve_bytes{volume!~"pvc-.*|backups-0|lychee-0|roms-0"} / longhorn_volume_capacity_bytes{volume!~"pvc-.*|backups-0|lychee-0|roms-0"}) * 100 > 15
+      for: 10m
+      labels:
+        issue: PVC reserve is above 15% of capacity.
+        severity: warning
+        namespace: monitoring
+    - alert: LonghornReplicationLag
+      annotations:
+        description: Longhorn volume {{$labels.volume}} replication is lagging.
+        summary: Longhorn replication lag detected.
+      expr: time() - max(longhorn_volume_replica_last_update_time{volume!~"pvc-.*|backups-0|lychee-0|roms-0"}) > 600
+      for: 5m
+      labels:
+        issue: Longhorn volume replication is more than 10 minutes behind.
+        severity: warning
+        namespace: monitoring
+    - alert: LonghornCSIVolumeCrashLoop
+      annotations:
+        description: CSI volume driver has crashed {{$value}} times.
+        summary: CSI volume crash loop detected.
+      expr: increase(kube_pod_container_status_restarts_total{pod=~"longhorn.*csi.*"}[1h]) > 3
+      for: 5m
+      labels:
+        issue: CSI volume driver restarted more than 3 times in 1 hour.
+        severity: warning
+        namespace: monitoring
+    - alert: LonghornSnapshotStale
+      annotations:
+        description: Longhorn volume {{$labels.volume}} has a stale snapshot.
+        summary: Longhorn snapshot is older than 24 hours.
+      expr: time() - max(longhorn_volume_snapshot_time{volume!~"pvc-.*|backups-0|lychee-0|roms-0"}) > 86400
+      for: 10m
+      labels:
+        issue: Longhorn snapshot older than 24 hours.
+        severity: warning
+        namespace: monitoring

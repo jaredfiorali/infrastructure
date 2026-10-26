@@ -134,5 +134,28 @@ networkpolicy:
     allowAll: true
   egress:
     internet: true
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: DawarichSidekiqDown
+    expr: up{job="dawarich-sidekiq"} == 0
+    for: 2m
+    labels:
+      severity: critical
+      component: dawarich
+      namespace: monitoring
+    annotations:
+      summary: "Dawarich sidekiq is down"
+      description: "Dawarich sidekiq has been down for 2+ minutes."
+  - alert: DawarichSidekiqHighJobFailures
+    expr: rate(sidekiq_jobs_failed_total{job="dawarich-sidekiq"}[1h]) > 1
+    for: 15m
+    labels:
+      severity: warning
+      component: dawarich
+      namespace: monitoring
+    annotations:
+      summary: "Dawarich sidekiq job failures: {{ $value }}/hr"
+      description: "Dawarich sidekiq is experiencing more than 1 job failure per minute."
 imageUpdater:
   enabled: true

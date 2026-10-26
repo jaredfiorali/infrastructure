@@ -238,3 +238,26 @@ configMap:
           sync_mode: sync
           collection_order: custom
           minimum_items: 1
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: KometaStale
+    expr: time() - max(kube_job_status_completion_time{job_name=~"kometa-.*"} and on(job_name) kube_job_status_succeeded{job_name=~"kometa-.*"} == 1) > 108000
+    for: 5m
+    labels:
+      severity: warning
+      component: kometa
+      namespace: monitoring
+    annotations:
+      summary: "Kometa has not run in {{ $value | humanDuration }}"
+      description: "Kometa hasn't completed a successful run in 30+ hours."
+  - alert: KometaFailed
+    expr: kube_job_status_failed{job_name=~"kometa-.*"} > 0
+    for: 0m
+    labels:
+      severity: critical
+      component: kometa
+      namespace: monitoring
+    annotations:
+      summary: "Kometa job failed"
+      description: "A Kometa job has failed. Check the job logs."

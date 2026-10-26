@@ -51,9 +51,29 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
-volume:
+prometheusRules:
   enabled: true
-  size: "524288000"
+  rules:
+  - alert: InfluxDBDown
+    expr: up{job="influxdb"} == 0
+    for: 1m
+    labels:
+      severity: critical
+      component: influxdb
+      namespace: monitoring
+    annotations:
+      summary: "InfluxDB is down"
+      description: "InfluxDB has been down for more than 1 minute."
+  - alert: InfluxDBHighDiskUsage
+    expr: (influxdb_disk_usage_bytes / influxdb_disk_capacity_bytes) * 100 > 80
+    for: 15m
+    labels:
+      severity: warning
+      component: influxdb
+      namespace: monitoring
+    annotations:
+      summary: "InfluxDB disk usage high: {{ $value }}%"
+      description: "InfluxDB disk usage has exceeded 80% for 15+ minutes."
 imageUpdater:
   enabled: true
   rootImageTag: "alpine"

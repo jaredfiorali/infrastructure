@@ -110,3 +110,106 @@ externalSecrets:
   - secretKey: GRAFANA_GIT_SYNC_PRIVATE_KEY
     remoteRef:
       key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_PRIVATE_KEY
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: HighPodRestartRate
+    expr: rate(kube_pod_container_status_restarts_total[1h]) * 3600 > 3
+    for: 10m
+    labels:
+      severity: warning
+      component: kubernetes
+      namespace: monitoring
+    annotations:
+      summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} restarting frequently ({{ $value }} restarts/hr)"
+      description: "Pod has been restarting more than 3 times per hour for 10+ minutes."
+  - alert: NodeNotReady
+    expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+    for: 5m
+    labels:
+      severity: critical
+      component: kubernetes
+      namespace: monitoring
+    annotations:
+      summary: "Node {{ $labels.node }} is not ready"
+      description: "The node has been in NotReady state for 5+ minutes."
+  - alert: NodeDiskPressure
+    expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+    for: 5m
+    labels:
+      severity: critical
+      component: kubernetes
+      namespace: monitoring
+    annotations:
+      summary: "Node {{ $labels.node }} under disk pressure"
+      description: "Node has disk pressure for 5+ minutes."
+  - alert: PDBViolation
+    expr: kube_pod_disruption_budget_violations > 0
+    for: 5m
+    labels:
+      severity: warning
+      component: kubernetes
+      namespace: monitoring
+    annotations:
+      summary: "PDB violation detected"
+      description: "A PodDisruptionBudget has been violated."
+  - alert: PrometheusEngineLatencyHigh
+    expr: histogram_quantile(0.95, rate(prometheus_engine_query_duration_seconds_bucket{slice="inner_eval"}[24h])) > 0.15
+    for: 15m
+    labels:
+      severity: warning
+      component: prometheus
+      namespace: monitoring
+    annotations:
+      summary: "Prometheus engine latency high: {{ $value }}s"
+      description: "Prometheus P95 query latency is above 150ms for 15+ minutes."
+  - alert: PrometheusSeriesCountHigh
+    expr: prometheus_tsdb_head_series > 1000000
+    for: 15m
+    labels:
+      severity: warning
+      component: prometheus
+      namespace: monitoring
+    annotations:
+      summary: "Prometheus series count high: {{ $value }}"
+      description: "Prometheus has more than 1M active series."
+  - alert: ExternalSecretStale
+    expr: time() - max(externalsecret_status_condition{status="True", condition="Ready"} != 1) > 3600
+    for: 30m
+    labels:
+      severity: warning
+      component: external-secrets
+      namespace: monitoring
+    annotations:
+      summary: "ExternalSecret is stale"
+      description: "An ExternalSecret has not synced in 1+ hours."
+  - alert: ArgoCDAppCrashLooping
+    expr: rate(argo_rollouts_rollout_status_phase{phase="CrashLooping"}[1h]) * 3600 > 0
+    for: 10m
+    labels:
+      severity: warning
+      component: argocd
+      namespace: monitoring
+    annotations:
+      summary: "ArgoCD app crash looping"
+      description: "ArgoCD application is crash looping."
+  - alert: ArgoCDApplicationProgressingSlow
+    expr: time() - max(argocd_app_info{status="progressing"}) > 3600
+    for: 30m
+    labels:
+      severity: warning
+      component: argocd
+      namespace: monitoring
+    annotations:
+      summary: "ArgoCD app progressing slowly"
+      description: "An ArgoCD application has been in 'progressing' state for 1+ hours."
+  - alert: ArgoCDAppSyncFailed
+    expr: argocd_app_info{sync_status="OutOfSync"} == 1
+    for: 30m
+    labels:
+      severity: warning
+      component: argocd
+      namespace: monitoring
+    annotations:
+      summary: "ArgoCD app out of sync"
+      description: "An ArgoCD application is out of sync for 30+ minutes."

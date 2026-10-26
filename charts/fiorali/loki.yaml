@@ -20,3 +20,26 @@ podDisruptionBudget:
   enabled: false
 containerSecurityContext:
   enabled: false
+prometheusRules:
+  enabled: true
+  rules:
+  - alert: LokiNoIncomingRequests
+    expr: rate(loki_request_duration_seconds_count{job="loki", handler="ingester"}[5m]) == 0
+    for: 10m
+    labels:
+      severity: critical
+      component: loki
+      namespace: monitoring
+    annotations:
+      summary: "Loki no incoming requests"
+      description: "Loki has received no log ingestion requests for 10+ minutes."
+  - alert: LokiCompactorFailures
+    expr: increase(loki_compactor_compact_fail_total[1h]) > 10
+    for: 15m
+    labels:
+      severity: warning
+      component: loki
+      namespace: monitoring
+    annotations:
+      summary: "Loki compactor failures: {{ $value }}"
+      description: "Loki compactor has had more than 10 failures in the last hour."
