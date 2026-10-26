@@ -144,6 +144,20 @@ spec:
         nameservers:
           {{- toYaml .Values.dnsConfig.nameservers | nindent 10 }}
       {{- end }}
+      {{- if gt .Values.replicaCount 1 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Values.name | quote }}
+              topologyKey: "kubernetes.io/hostname"
+      {{- end }}
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
