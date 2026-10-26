@@ -81,6 +81,16 @@ esac
 new_ver="${major}.${minor}.${patch}"
 sed -i '' "s/^version: $old_ver/version: $new_ver/" "$chart_file"
 
+# Bump targetRevision in all application manifests
+apps_dir="$CD/applications"
+if [[ -d "$apps_dir" ]]; then
+  echo "Bumping targetRevision → $new_ver in applications/*.yaml..."
+  find "$apps_dir" -name '*.yaml' -exec \
+    sed -i '' "s/targetRevision: '[^']*'/targetRevision: '$new_ver'/g" {} \;
+  find "$apps_dir" -name '*.yaml' -exec git add {} \;
+  apps_staged="yes"
+fi
+
 # Build commit message body
 if [[ -n "$changed" ]]; then
   body=$(echo "$changed" | sed 's|.*/||' | awk '{printf "- %s\n", $0}')
@@ -103,7 +113,11 @@ EOF
 )
 
 # Stage and commit
-git add "$chart_file" $(echo "$changed" | tr '\n' ' ')
+if [[ "$apps_staged" == "yes" ]]; then
+  git add "$chart_file" $(echo "$changed" | tr '\n' ' ')
+else
+  git add "$chart_file"
+fi
 git commit -m "$msg_body"
 
 echo ""
