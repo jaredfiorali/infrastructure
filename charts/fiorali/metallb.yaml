@@ -28,6 +28,7 @@ bfdProfile:
   detectMultiplier: 3
   echoMode: false
   passiveMode: false
+  bfdProfile: ''
 bgpAdvertisement:
   enabled: true
   name: "default"

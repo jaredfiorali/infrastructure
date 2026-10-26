@@ -10,4 +10,5 @@ spec:
   detectMultiplier: {{ .Values.bfdProfile.detectMultiplier | default 3 }}
   echoMode: {{ .Values.bfdProfile.echoMode | default "false" }}
   passiveMode: {{ .Values.bfdProfile.passiveMode | default "false" }}
+  passiveMode: {{ .Values.bfdProfile.bfdProfile | default "" }}
 {{- end }}
