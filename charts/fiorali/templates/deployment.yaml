@@ -144,7 +144,7 @@ spec:
         nameservers:
           {{- toYaml .Values.dnsConfig.nameservers | nindent 10 }}
       {{- end }}
-      {{- if gt .Values.replicaCount 1 }}
+      {{- if gt (int .Values.replicaCount) 1 }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
