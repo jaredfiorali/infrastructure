@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - gatus.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.34'
+    targetRevision: '0.3.35'
   syncPolicy:
     automated:
       enabled: true
