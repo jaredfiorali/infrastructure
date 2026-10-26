@@ -210,6 +210,7 @@ imageUpdater:
     method: git
     repoURL: git@github.com:jaredfiorali/infrastructure.git
     branch: main
+    targetPath: "charts/fiorali"
 
 ipAddressPool:
   enabled: false

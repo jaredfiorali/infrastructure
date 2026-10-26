@@ -9,8 +9,8 @@ spec:
     method: "git"
     gitConfig:
       repository: "git@github.com:jaredfiorali/infrastructure.git"
-      branch: "main"
-      writeBackTarget: "charts/fiorali/{{ .Values.name }}.yaml"
+      branch: {{ .Values.imageUpdater.writeBack.branch | quote }}
+      writeBackTarget: "{{ .Values.imageUpdater.writeBack.targetPath }}/{{ .Values.name }}.yaml"
   applicationRefs:
     - namePattern: {{ .Values.name | quote }}
       images:
