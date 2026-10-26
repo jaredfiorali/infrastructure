@@ -6,7 +6,7 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/unpoller/unpoller
-  tag: latest@sha256:4968b2589cda58d92837c1a5e559ea9bbf51eefd4d8a0b1c58394a1c43a405c6
+  tag: latest@sha256:6a474f5202d40864affe6be9882492061331d77d474593bb1cd4a8c737dc834f
 containerPorts:
 - containerPort: 9130
   name: poller
