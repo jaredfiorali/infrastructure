@@ -33,7 +33,6 @@ prometheusRules:
     annotations:
       summary: "Loki no incoming requests"
       description: "Loki has received no log ingestion requests for 10+ minutes."
-    repeat_interval: 24h
   - alert: LokiCompactorFailures
     expr: increase(loki_compactor_compact_fail_total[1h]) > 10
     for: 15m
@@ -44,4 +43,3 @@ prometheusRules:
     annotations:
       summary: "Loki compactor failures: {{ $value }}"
       description: "Loki compactor has had more than 10 failures in the last hour."
-    repeat_interval: 24h

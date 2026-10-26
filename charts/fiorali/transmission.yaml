@@ -332,7 +332,6 @@ prometheusRules:
     annotations:
       summary: "Gluetun VPN container is down"
       description: "The Gluetun VPN container has been down for 2+ minutes."
-    repeat_interval: 24h
   - alert: GluetunPortNotForwarded
     expr: up{container="gluetun"} < 1
     for: 5m
@@ -343,7 +342,6 @@ prometheusRules:
     annotations:
       summary: "VPN port not forwarded"
       description: "The Gluetun VPN container is not reporting as up."
-    repeat_interval: 24h
   - alert: TransmissionStaleTorrents
     expr: transmission_stalled_torrents > 10
     for: 30m
@@ -354,7 +352,6 @@ prometheusRules:
     annotations:
       summary: "{{ $value }} stalled torrents"
       description: "There are more than 10 stalled torrents for 30+ minutes."
-    repeat_interval: 24h
 externalSecrets:
 - name: pia-credentials
   data:

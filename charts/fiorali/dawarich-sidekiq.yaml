@@ -147,7 +147,6 @@ prometheusRules:
     annotations:
       summary: "Dawarich sidekiq is down"
       description: "Dawarich sidekiq has been down for 2+ minutes."
-    repeat_interval: 24h
   - alert: DawarichSidekiqHighJobFailures
     expr: rate(sidekiq_jobs_failed_total{job="dawarich-sidekiq"}[1h]) > 1
     for: 15m
@@ -158,6 +157,5 @@ prometheusRules:
     annotations:
       summary: "Dawarich sidekiq job failures: {{ $value }}/hr"
       description: "Dawarich sidekiq is experiencing more than 1 job failure per minute."
-    repeat_interval: 24h
 imageUpdater:
   enabled: true

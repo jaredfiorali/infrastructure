@@ -251,7 +251,6 @@ prometheusRules:
     annotations:
       summary: "Kometa has not run in {{ $value | humanDuration }}"
       description: "Kometa hasn't completed a successful run in 30+ hours."
-    repeat_interval: 24h
   - alert: KometaFailed
     expr: kube_job_status_failed{job_name=~"kometa-.*"} > 0
     for: 5m
@@ -262,4 +261,3 @@ prometheusRules:
     annotations:
       summary: "Kometa job failed"
       description: "A Kometa job has failed. Check the job logs."
-    repeat_interval: 24h

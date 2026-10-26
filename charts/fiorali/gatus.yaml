@@ -146,7 +146,6 @@ prometheusRules:
     annotations:
       summary: "Gatus endpoints stale"
       description: "Some Gatus endpoints haven't responded in 10+ minutes."
-    repeat_interval: 24h
   - alert: GatusHighFailureRate
     expr: sum(increase(gatus_results_total{success="false"}[1h])) / sum(increase(gatus_results_total[1h])) > 0.1
     for: 15m
@@ -157,7 +156,6 @@ prometheusRules:
     annotations:
       summary: "Gatus failure rate: {{ $value | humanizePercentage }}"
       description: "More than 10% of Gatus endpoint checks have failed in the last hour."
-    repeat_interval: 24h
 configMap:
   enabled: true
   valueFile: gatus-configmap.yaml

@@ -125,7 +125,6 @@ prometheusRules:
         issue: PVC reserve is above 15% of capacity.
         severity: warning
         namespace: monitoring
-      repeat_interval: 24h
     - alert: LonghornReplicationLag
       annotations:
         description: Longhorn volume {{$labels.volume}} replication is lagging.
@@ -136,7 +135,6 @@ prometheusRules:
         issue: Longhorn volume replication is more than 10 minutes behind.
         severity: warning
         namespace: monitoring
-      repeat_interval: 24h
     - alert: LonghornCSIVolumeCrashLoop
       annotations:
         description: CSI volume driver has crashed {{$value}} times.
@@ -147,7 +145,6 @@ prometheusRules:
         issue: CSI volume driver restarted more than 3 times in 1 hour.
         severity: warning
         namespace: monitoring
-      repeat_interval: 24h
     - alert: LonghornSnapshotStale
       annotations:
         description: Longhorn volume {{$labels.volume}} has a stale snapshot.
@@ -158,4 +155,3 @@ prometheusRules:
         issue: Longhorn snapshot older than 24 hours.
         severity: warning
         namespace: monitoring
-      repeat_interval: 24h

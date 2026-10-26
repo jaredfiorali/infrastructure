@@ -138,4 +138,3 @@ prometheusRules:
         issue: Unifi Poller refresh has stalled.
         severity: warning
         namespace: monitoring
-      repeat_interval: 24h
