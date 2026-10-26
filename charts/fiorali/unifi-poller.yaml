@@ -130,7 +130,7 @@ prometheusRules:
         namespace: monitoring
     - alert: UnifiStale
       annotations:
-        description: Unifi Poller has not refreshed in {{ $value | humanDuration }}.
+        description: Unifi Poller has not refreshed in {{ $value | humanizeDuration }}.
         summary: Unifi Poller is stale.
       expr: time() - unpoller_prometheus_refresh_time{job="unifi-poller"} > 1800
       for: 5m

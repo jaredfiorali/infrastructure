@@ -249,7 +249,7 @@ prometheusRules:
       component: kometa
       namespace: monitoring
     annotations:
-      summary: "Kometa has not run in {{ $value | humanDuration }}"
+      summary: "Kometa has not run in {{ $value | humanizeDuration }}"
       description: "Kometa hasn't completed a successful run in 30+ hours."
   - alert: KometaFailed
     expr: kube_job_status_failed{job_name=~"kometa-.*"} > 0
