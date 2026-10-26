@@ -1,0 +1,179 @@
+config.yaml: |
+  default-conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 500"]
+  metrics: true
+  alerting:
+    slack:
+      webhook-url: "${SLACK_WEBHOOK_URL}"
+      default-alert:
+        enabled: true
+        failure-threshold: 3
+        success-threshold: 2
+        send-on-resolved: true
+        description: "Gatus check failed"
+  storage:
+    type: postgres
+    path: "${POSTGRES_CONNECTION_STRING}"
+  connectivity:
+    checker:
+      target: 192.168.21.21:53
+      interval: 60s
+  endpoints:
+    - name: argo
+      url: http://argo.fiora.li
+      group: kubernetes core
+    - name: alloy
+      url: http://alloy.fiora.li/-/ready
+      group: monitoring
+    - name: dawarich
+      url: http://dawarich.fiora.li/api/v1/health
+      group: other
+    - name: plex
+      url: http://plex.fiora.li/identity
+      group: media management
+    - name: plex(remote)
+      url: http://99.246.152.8:32400/web/index.html
+      group: media management
+    - name: prowlarr
+      url: http://prowlarr.fiora.li/ping
+      group: media management
+      conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
+    - name: flaresolverr
+      url: http://flaresolverr.fiora.li/health
+      group: media management
+    - name: radarr
+      url: http://radarr.fiora.li/ping
+      group: media management
+      conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
+    - name: sonarr
+      url: http://sonarr.fiora.li/ping
+      group: media management
+      conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
+    - name: transmission
+      url: http://transmission.fiora.li/transmission/rpc
+      group: media management
+      conditions: ["[STATUS] == 409"]
+    - name: emulatorjs
+      url: http://emulatorjs.fiora.li
+      group: other
+    - name: home-assistant
+      url: http://home-assistant.fiora.li/api/
+      group: home security
+      conditions: ["[STATUS] == 401"]
+    - name: linkding
+      url: http://linkding.fiora.li/health
+      group: other
+      conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
+    - name: loki
+      url: http://loki.loki:3100/loki/api/v1/query?query=count_over_time({job="varlogs"}[5m])
+      group: monitoring
+      conditions: ["[STATUS] == 200", "[BODY].status == success"]
+    - name: longhorn
+      url: http://longhorn.fiora.li
+      group: kubernetes core
+    - name: grafana-oss
+      url: http://grafana-oss.fiora.li/api/health
+      group: monitoring
+    - name: influxdb
+      url: http://influxdb.fiora.li/health
+      group: other
+    - name: kromgo
+      url: http://kromgo.fiora.li
+      group: monitoring
+    - name: prometheus
+      url: http://prometheus.fiora.li/-/ready
+      group: monitoring
+    - name: unpoller
+      url: http://unpoller.fiora.li/health
+      group: monitoring
+    - name: scrypted
+      url: http://scrypted.fiora.li
+      group: home security
+    - name: sillytavern
+      url: http://sillytavern.fiora.li
+      group: other
+      conditions: ["[STATUS] == 401"]
+    - name: speedtest
+      url: http://speedtest.fiora.li
+      group: other
+    - name: tautulli
+      url: http://tautulli.fiora.li/status
+      group: media management
+    - name: tdarr
+      url: http://tdarr.fiora.li
+      group: media management
+    - name: postgres
+      url: tcp://postgres.fiora.li:5432
+      group: media management
+      conditions: ["[CONNECTED] == true"]
+    - name: traefik
+      url: "tcp://192.168.21.20:80"
+      group: metallb
+      conditions: ["[CONNECTED] == true"]
+    - name: cloudflared
+      url: "tcp://192.168.21.21:53"
+      group: metallb
+      conditions: ["[CONNECTED] == true"]
+    - name: plex
+      url: "tcp://192.168.21.22:32400"
+      group: metallb
+      conditions: ["[CONNECTED] == true"]
+    - name: UDM-SE
+      url: "icmp://192.168.24.1"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Workshop Switch
+      url: "icmp://192.168.24.3"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Garage Switch
+      url: "icmp://192.168.24.4"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Power Bar
+      url: "icmp://192.168.24.5"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Theatre Switch
+      url: "icmp://192.168.24.6"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Office Switch
+      url: "icmp://192.168.24.7"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Family Room Switch
+      url: "icmp://192.168.24.9"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Theatre AP
+      url: "icmp://192.168.24.10"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Office AP
+      url: "icmp://192.168.24.12"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Family Room AP
+      url: "icmp://192.168.24.13"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: Dining Room AP
+      url: "icmp://192.168.24.14"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: UNAS
+      url: "icmp://192.168.24.18"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
