@@ -41,7 +41,7 @@ spec:
       - name: grafana\.ini.auth.disable_login_form
         value: 'false'
     repoURL: https://grafana-community.github.io/helm-charts
-    targetRevision: '*'
+    targetRevision: '0.3.12'
   syncPolicy:
     automated:
       enabled: true

@@ -41,14 +41,14 @@ spec:
       - name: networkPolicies.restrictInternalTraffic
         value: 'false'
     repoURL: https://charts.longhorn.io
-    targetRevision: '*'
+    targetRevision: '0.3.12'
   - chart: fiorali
     helm:
       valueFiles:
       - values.yaml
       - longhorn.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '*'
+    targetRevision: '0.3.12'
   syncPolicy:
     automated:
       enabled: false
