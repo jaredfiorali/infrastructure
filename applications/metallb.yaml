@@ -21,6 +21,8 @@ spec:
         value: prometheus-kube-prometheus-prometheus
       - name: prometheus.serviceMonitor.enabled
         value: 'true'
+      - name: frrk8s.enabled
+        value: 'false'
     repoURL: https://metallb.github.io/metallb
     targetRevision: '*'
   - chart: fiorali
