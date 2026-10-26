@@ -13,7 +13,7 @@ spec:
   sources:
   - chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '0.3.17'
+    targetRevision: '0.3.19'
     helm:
       parameters:
       # alertmanager
@@ -109,14 +109,14 @@ spec:
         value: instance
   - chart: prometheus-pushgateway
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '0.3.17'
+    targetRevision: '0.3.19'
   - chart: fiorali
     helm:
       valueFiles:
       - values.yaml
       - prometheus.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.17'
+    targetRevision: '0.3.19'
   syncPolicy:
     automated:
       enabled: true
