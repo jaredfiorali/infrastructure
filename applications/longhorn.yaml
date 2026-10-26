@@ -41,7 +41,7 @@ spec:
       - name: networkPolicies.restrictInternalTraffic
         value: 'false'
     repoURL: https://charts.longhorn.io
-    targetRevision: '0.3.12'
+    targetRevision: '*'
   - chart: fiorali
     helm:
       valueFiles:

@@ -22,7 +22,7 @@ spec:
       - name: prometheus.serviceMonitor.enabled
         value: 'true'
     repoURL: https://metallb.github.io/metallb
-    targetRevision: 0.15.3
+    targetRevision: '*'
   - chart: fiorali
     helm:
       valueFiles:

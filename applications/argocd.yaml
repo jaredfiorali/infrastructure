@@ -47,7 +47,7 @@ spec:
           params:
             server.insecure: true
     repoURL: https://argoproj.github.io/argo-helm
-    targetRevision: '0.3.12'
+    targetRevision: '*'
   - chart: fiorali
     helm:
       valueFiles:
