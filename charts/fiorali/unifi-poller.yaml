@@ -132,7 +132,7 @@ prometheusRules:
       annotations:
         description: Unifi Poller has not refreshed in {{ $value | humanDuration }}.
         summary: Unifi Poller is stale.
-      expr: time() - max(unpoller_prometheus_refresh_time{job="unifi-poller"}) > 1800
+      expr: time() - unpoller_prometheus_refresh_time{job="unifi-poller"} > 1800
       for: 5m
       labels:
         issue: Unifi Poller refresh has stalled.
