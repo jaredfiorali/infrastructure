@@ -20,6 +20,7 @@ bgpPeer:
   peerAddress: 192.168.20.1
   peerASN: 65000
   myASN: 65001
+  bfdProfile: "fast"
 bfdProfile:
   enabled: true
   name: "fast"

@@ -8,5 +8,5 @@ spec:
   peerAddress: {{ .Values.bgpPeer.peerAddress }}
   peerASN: {{ .Values.bgpPeer.peerASN }}
   myASN: {{ .Values.bgpPeer.myASN }}
-  bfdProfile: {{ .Values.bgpPeer.bfdProfile | default "fast" }}
+  bfdProfile: {{ .Values.bgpPeer.bfdProfile | default .Values.bfdProfile.name | default "fast" }}
 {{- end }}
