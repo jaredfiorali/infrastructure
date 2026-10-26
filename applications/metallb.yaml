@@ -29,7 +29,7 @@ spec:
       - values.yaml
       - metallb.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.24'
+    targetRevision: '0.3.25'
   syncPolicy:
     automated:
       enabled: true
