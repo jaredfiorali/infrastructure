@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - plex.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.37'
+    targetRevision: '0.3.38'
   syncPolicy:
     automated:
       enabled: true
