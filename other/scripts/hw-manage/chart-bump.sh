@@ -81,12 +81,15 @@ esac
 new_ver="${major}.${minor}.${patch}"
 sed -i '' "s/^version: $old_ver/version: $new_ver/" "$chart_file"
 
-# Bump targetRevision in all application manifests
+# Bump targetRevision only for Fiorali chart sources
 apps_dir="$CD/applications"
 if [[ -d "$apps_dir" ]]; then
-  echo "Bumping targetRevision → $new_ver in applications/*.yaml..."
-  find "$apps_dir" -name '*.yaml' -exec \
-    sed -i '' "s/targetRevision: '[^']*'/targetRevision: '$new_ver'/g" {} \;
+  echo "Bumping targetRevision → $new_ver in Fiorali app manifests..."
+  find "$apps_dir" -name '*.yaml' | while IFS= read -r file; do
+    if grep -q "ghcr.io/jaredfiorali/helm-charts" "$file"; then
+      sed -i '' "/ghcr.io\/jaredfiorali\/helm-charts/{n;s/targetRevision: '[^']*'/targetRevision: '$new_ver'/;}" "$file"
+    fi
+  done
   find "$apps_dir" -name '*.yaml' -exec git add {} \;
   apps_staged="yes"
 fi
