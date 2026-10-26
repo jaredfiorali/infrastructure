@@ -147,14 +147,14 @@ spec:
       - name: write.replicas
         value: '0'
     repoURL: https://grafana-community.github.io/helm-charts
-    targetRevision: '*'
+    targetRevision: '0.3.17'
   - chart: fiorali
     helm:
       valueFiles:
       - values.yaml
       - loki.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.12'
+    targetRevision: '0.3.17'
   syncPolicy:
     automated:
       enabled: true

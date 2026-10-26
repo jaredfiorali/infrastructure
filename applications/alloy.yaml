@@ -31,14 +31,14 @@ spec:
         networkPolicy:
           enabled: "true"
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: '*'
+    targetRevision: '0.3.17'
   - chart: fiorali
     helm:
       valueFiles:
       - values.yaml
       - alloy.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.12'
+    targetRevision: '0.3.17'
   syncPolicy:
     automated:
       enabled: true

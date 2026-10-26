@@ -47,14 +47,14 @@ spec:
           params:
             server.insecure: true
     repoURL: https://argoproj.github.io/argo-helm
-    targetRevision: '*'
+    targetRevision: '0.3.17'
   - chart: fiorali
     helm:
       valueFiles:
       - values.yaml
       - argocd.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.12'
+    targetRevision: '0.3.17'
   syncPolicy:
     automated:
       enabled: true
