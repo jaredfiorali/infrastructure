@@ -22,7 +22,9 @@ spec:
       - name: prometheus.serviceMonitor.enabled
         value: 'true'
       - name: frrk8s.enabled
-        value: 'false'
+        value: 'true'
+      - name: speaker.frr.enabled
+        value: 'true'
     repoURL: https://metallb.github.io/metallb
     targetRevision: '*'
   - chart: fiorali
