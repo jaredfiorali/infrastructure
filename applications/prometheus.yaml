@@ -79,26 +79,40 @@ spec:
         value: prometheus
       - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.topologyKey
         value: kubernetes.io/hostname
+
+      # selector tuning — only pick up what helm rendered (not every labeled target)
       - name: prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues
-        value: "false"
+        value: "true"
       - name: prometheus.prometheusSpec.probeSelectorNilUsesHelmValues
-        value: "false"
+        value: "true"
       - name: prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues
-        value: "false"
+        value: "true"
       - name: prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues
-        value: "false"
+        value: "true"
+
+      # retention
       - name: prometheus.prometheusSpec.retention
         value: 1d
+      - name: prometheus.prometheusSpec.retention.size
+        value: "2GB"
+      - name: prometheus.prometheusSpec.walCompression
+        value: "true"
+
+      # resources — tightened from 4G limit
       - name: prometheus.prometheusSpec.resources.limits.cpu
         value: "3"
         forceString: true
       - name: prometheus.prometheusSpec.resources.limits.memory
-        value: 4G
+        value: 3G
       - name: prometheus.prometheusSpec.resources.requests.cpu
         value: "2"
         forceString: true
       - name: prometheus.prometheusSpec.resources.requests.memory
         value: 2G
+
+      # node selection — prefer Pi 4s with usb storage
+      - name: prometheus.prometheusSpec.nodeSelector.storage-tier
+        value: usb
 
       # node-exporter
       - name: prometheus-node-exporter.hostNetwork
