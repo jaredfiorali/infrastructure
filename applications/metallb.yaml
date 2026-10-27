@@ -24,7 +24,7 @@ spec:
       - name: frrk8s.enabled
         value: 'true'
       - name: speaker.frr.enabled
-        value: 'true'
+        value: 'false'
     repoURL: https://metallb.github.io/metallb
     targetRevision: '*'
   - chart: fiorali
