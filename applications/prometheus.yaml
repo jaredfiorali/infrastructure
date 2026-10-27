@@ -111,8 +111,8 @@ spec:
         value: 2G
 
       # node selection — prefer Pi 4s with usb storage
-      - name: prometheus.prometheusSpec.nodeSelector
-        value: '{storage-tier: "usb"}'
+      - name: prometheus.prometheusSpec.nodeSelector.storage-tier
+        value: usb
 
       # node-exporter
       - name: prometheus-node-exporter.hostNetwork
