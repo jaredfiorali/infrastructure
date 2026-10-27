@@ -116,7 +116,7 @@ spec:
       - values.yaml
       - prometheus.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.42'
+    targetRevision: '0.3.43'
   syncPolicy:
     automated:
       enabled: true
