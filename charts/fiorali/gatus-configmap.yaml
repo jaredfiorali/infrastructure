@@ -51,10 +51,6 @@ config.yaml: |
       url: http://radarr.fiora.li/ping
       group: media management
       conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
-    - name: sonarr
-      url: http://sonarr.fiora.li/ping
-      group: media management
-      conditions: ["[STATUS] == 200", "[RESPONSE_TIME] < 1000"]
     - name: transmission
       url: http://transmission.fiora.li/transmission/rpc
       group: media management
@@ -119,10 +115,6 @@ config.yaml: |
       url: http://tdarr.fiora.li
       group: media management
       conditions: ["[STATUS] == 200"]
-    - name: postgres
-      url: tcp://postgres.fiora.li:5432
-      group: media management
-      conditions: ["[CONNECTED] == true"]
     - name: traefik
       url: "tcp://192.168.21.20:80"
       group: metallb
