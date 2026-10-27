@@ -110,6 +110,43 @@ externalSecrets:
   - secretKey: GRAFANA_GIT_SYNC_PRIVATE_KEY
     remoteRef:
       key: /homelab/grafana-oss/GRAFANA_GIT_SYNC_PRIVATE_KEY
+alertmanagerConfig:
+  receivers:
+  - name: slack-critical
+    slackConfigs:
+    - channel: '#jared-notifications'
+      iconEmoji: ':rotating_light:'
+      sendResolved: true
+      text: |
+        {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+          *Description:* {{ .Annotations.description }}
+          *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+        {{ end }}
+  - name: slack-default
+    slackConfigs:
+    - channel: '#jared-notifications'
+      iconEmoji: ':bell:'
+      sendResolved: true
+      text: |
+        {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+          *Description:* {{ .Annotations.description }}
+          *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:>
+        {{ end }}
+  route:
+    receiver: slack-default
+    groupBy:
+    - severity
+    - job
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 24h
+    routes:
+    - matchers:
+      - name: severity
+        value: critical
+      receiver: slack-critical
 prometheusRules:
   enabled: true
   rules:

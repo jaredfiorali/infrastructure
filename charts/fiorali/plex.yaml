@@ -130,6 +130,7 @@ prometheusRules:
     annotations:
       summary: "Plex play queue building up: {{ $value }} items"
       description: "The play queue has grown to {{ $value }} items. Users may be queuing too many items."
+podAntiAffinity: true
 imageUpdater:
   enabled: true
 postsyncMetallbRestart:

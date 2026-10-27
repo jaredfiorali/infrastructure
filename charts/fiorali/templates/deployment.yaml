@@ -144,9 +144,12 @@ spec:
         nameservers:
           {{- toYaml .Values.dnsConfig.nameservers | nindent 10 }}
       {{- end }}
-      {{- if gt (int .Values.replicaCount) 1 }}
+      {{- if or (gt (int .Values.replicaCount) 1) .Values.podAntiAffinity }}
       affinity:
         podAntiAffinity:
+          {{- if and .Values.podAntiAffinity (kindIs "map" .Values.podAntiAffinity) }}
+          {{- toYaml .Values.podAntiAffinity | nindent 10 }}
+          {{- else }}
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 100
             podAffinityTerm:
@@ -157,6 +160,7 @@ spec:
                   values:
                   - {{ .Values.name | quote }}
               topologyKey: "kubernetes.io/hostname"
+          {{- end }}
       {{- end }}
       {{- with .Values.volumes }}
       volumes:

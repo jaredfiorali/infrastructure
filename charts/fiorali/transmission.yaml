@@ -230,6 +230,7 @@ containerSecurityContext:
     - SETGID
   seccompProfile:
     type: RuntimeDefault
+podAntiAffinity: true
 podSecurityContext: {} # gluetun needs root access to make changes to network settings
 imageUpdater:
   enabled: true

@@ -52,6 +52,7 @@ containerSecurityContext:
       - ALL
   readOnlyRootFilesystem: true
   privileged: false
+podAntiAffinity: true
 podSecurityContext:
   fsGroup: 1000
   runAsNonRoot: true
