@@ -54,7 +54,7 @@ spec:
       - values.yaml
       - argocd.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.44'
+    targetRevision: '0.3.45'
   syncPolicy:
     automated:
       enabled: true
