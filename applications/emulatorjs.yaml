@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - emulatorjs.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.41'
+    targetRevision: '0.3.42'
   syncPolicy:
     automated:
       enabled: true
