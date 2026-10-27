@@ -208,16 +208,6 @@ prometheusRules:
     annotations:
       summary: "PM2.5 elevated: {{ $value }} µg/m³"
       description: "PM2.5 has been above 35 µg/m³ for 6+ hours. Reduce outdoor air intake."
-  - alert: HAAlarmStateChanged
-    expr: homeassistant_alarm_control_panel_state{state="triggered"} == 1
-    for: 0m
-    labels:
-      severity: critical
-      component: security
-      namespace: monitoring
-    annotations:
-      summary: "Alarm triggered: {{ $labels.entity_id }}"
-      description: "An alarm has been triggered on {{ $labels.entity_id }}"
 configMap:
   enabled: true
   value: |
