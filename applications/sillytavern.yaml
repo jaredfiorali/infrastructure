@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - sillytavern.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.47'
+    targetRevision: '0.3.48'
   syncPolicy:
     automated:
       enabled: true
