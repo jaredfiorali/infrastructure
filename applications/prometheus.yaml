@@ -69,6 +69,16 @@ spec:
         value: prometheus.fiora.li
 
       # prometheusSpec
+      - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight
+        value: "100"
+      - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].key
+        value: app.kubernetes.io/name
+      - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].operator
+        value: In
+      - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.labelSelector.matchExpressions[0].values[0]
+        value: prometheus
+      - name: prometheus.prometheusSpec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].podAffinityTerm.topologyKey
+        value: kubernetes.io/hostname
       - name: prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues
         value: "false"
       - name: prometheus.prometheusSpec.probeSelectorNilUsesHelmValues
@@ -116,7 +126,7 @@ spec:
       - values.yaml
       - prometheus.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.45'
+    targetRevision: '0.3.46'
   syncPolicy:
     automated:
       enabled: true
