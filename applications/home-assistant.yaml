@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - home-assistant.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.69'
+    targetRevision: '0.3.70'
   syncPolicy:
     automated:
       enabled: true
