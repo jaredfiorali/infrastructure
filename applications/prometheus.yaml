@@ -18,7 +18,7 @@ spec:
       parameters:
       # alertmanager
       - name: alertmanager.alertmanagerSpec.secrets[0]
-        value: prometheus
+        value: prometheus-credentials
       - name: alertmanager.config.global.slack_api_url_file
         value: /etc/alertmanager/secrets/prometheus/SLACK_API_URL
 
