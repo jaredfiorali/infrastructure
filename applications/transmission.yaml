@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - transmission.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.61'
+    targetRevision: '0.3.62'
   syncPolicy:
     automated:
       enabled: true
