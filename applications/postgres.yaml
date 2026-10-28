@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - postgres.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.70'
+    targetRevision: '0.3.71'
   syncPolicy:
     automated:
       enabled: true
