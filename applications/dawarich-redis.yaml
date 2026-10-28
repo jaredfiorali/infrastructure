@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - dawarich-redis.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.60'
+    targetRevision: '0.3.61'
   syncPolicy:
     automated:
       enabled: true
