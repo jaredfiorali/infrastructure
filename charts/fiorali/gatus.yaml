@@ -25,6 +25,11 @@ probes:
 env:
   - name: GATUS_LOG_LEVEL
     value: WARN
+  - name: POSTGRES_CONNECTION_STRING
+    valueFrom:
+      secretKeyRef:
+        name: gatus-credentials
+        key: POSTGRES_CONNECTION_STRING
 service:
   enabled: true
   ports:
