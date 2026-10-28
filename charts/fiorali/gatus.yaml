@@ -25,58 +25,6 @@ probes:
 env:
   - name: GATUS_LOG_LEVEL
     value: WARN
-initContainers:
-  enabled: true
-  containers:
-  - name: gatus-init
-    image: docker.io/alpine/curl:latest
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-      privileged: false
-      readOnlyRootFilesystem: true
-      runAsUser: 911
-    resources:
-      limits:
-        cpu: 25m
-        memory: 25Mi
-      requests:
-        cpu: 10m
-        memory: 10Mi
-    env:
-    - name: SLACK_WEBHOOK_URL
-      valueFrom:
-        secretKeyRef:
-          name: gatus-credentials
-          key: SLACK_WEBHOOK_URL
-    - name: POSTGRES_CONNECTION_STRING
-      valueFrom:
-        secretKeyRef:
-          name: gatus-credentials
-          key: POSTGRES_CONNECTION_STRING
-    command:
-    - sh
-    - -c
-    - |
-      cd /tmp
-      curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-arm64 -o envsubst
-      chmod +x envsubst
-      # Process all config files with environment variable substitution
-      ./envsubst < /tmp/config.yaml > /config/config.yaml
-      echo "Config files processed successfully"
-      echo "Processed files:"
-      ls -la /config/config.yaml
-    volumeMounts:
-    - name: config
-      mountPath: /config
-    - name: tmp
-      mountPath: /tmp
-    - name: gatus-configmap
-      mountPath: /tmp/config.yaml
-      subPath: config.yaml
-      readOnly: true
 service:
   enabled: true
   ports:
@@ -100,7 +48,9 @@ networkpolicy:
   ingress:
     internal: true
   egress:
-    allowAll: true # For env substitution and Slack alerting
+    internal: true
+    network: true
+    supabase: true
 ingress:
   enabled: true
 containerSecurityContext:

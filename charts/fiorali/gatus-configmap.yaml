@@ -2,15 +2,6 @@ config.yaml: |
   metrics: true
   web:
     panel-time-range-seconds: 86400
-  alerting:
-    slack:
-      webhook-url: "${SLACK_WEBHOOK_URL}"
-      default-alert:
-        enabled: true
-        failure-threshold: 3
-        success-threshold: 2
-        send-on-resolved: true
-        description: "Gatus check failed"
   storage:
     type: postgres
     path: "${POSTGRES_CONNECTION_STRING}"
@@ -18,7 +9,7 @@ config.yaml: |
   skip-invalid-config-update: true
   connectivity:
     checker:
-      target: 1.1.1.1:53
+      target: 192.168.24.1:53
       interval: 60s
   endpoints:
     - name: argo
@@ -35,10 +26,6 @@ config.yaml: |
       conditions: ["[STATUS] == 200"]
     - name: plex
       url: http://plex.fiora.li/identity
-      group: media management
-      conditions: ["[STATUS] == 200"]
-    - name: plex(remote)
-      url: http://99.246.152.8:32400/web/index.html
       group: media management
       conditions: ["[STATUS] == 200"]
     - name: prowlarr
