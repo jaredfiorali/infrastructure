@@ -33,10 +33,6 @@ config.yaml: |
       url: http://plex.fiora.li/identity
       group: media management
       conditions: ["[STATUS] == 200"]
-    - name: plex(remote)
-      url: http://99.246.152.8:32400/web/index.html
-      group: media management
-      conditions: ["[STATUS] == 200"]
     - name: prowlarr
       url: http://prowlarr.fiora.li/ping
       group: media management
