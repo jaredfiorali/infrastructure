@@ -33,8 +33,10 @@ service:
     protocol: TCP
     targetPort: gatus
 volumeMounts:
-- name: config
-  mountPath: /config
+- name: gatus-configmap
+  mountPath: /config/config.yaml
+  subPath: config.yaml
+  readOnly: true
 volumes:
 - name: config
   emptyDir: {}
