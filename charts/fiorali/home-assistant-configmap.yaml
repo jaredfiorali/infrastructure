@@ -1,0 +1,125 @@
+configuration.yaml: |
+  # Loads default set of integrations. Do not remove.
+  default_config:
+  # Load frontend themes from the themes folder
+  frontend:
+    themes: !include_dir_merge_named themes
+  automation: !include automations.yaml
+  script: !include scripts.yaml
+  scene: !include scenes.yaml
+  zeroconf:
+  prometheus:
+    requires_auth: false
+    filter:
+      include_entities:
+        - sensor.transmission_started_torrents
+        - sensor.fiorali_plex
+        - alarm_control_panel.alarm_system
+        - alarm_control_panel.kid_alarm
+        - input_boolean.alarm_guest_mode
+        - sensor.pool_table_carbon_dioxide
+        - sensor.pool_table_pm2_5
+        - sensor.pool_table_volatile_organic_compounds_parts
+  influxdb:
+    measurement_attr: entity_id
+    include:
+      domains:
+        - sun
+        - alarm_control_panel
+        - input_boolean
+      entity_globs:
+        - sensor.*_temperature
+        - sensor.*_humidity
+        - sensor.*_illuminance
+        - sensor.*_light_level
+        - sensor.*_motion
+        - sensor.*_carbon_dioxide
+        - sensor.*_pm2_5
+        - sensor.*_pm1
+        - sensor.*_volatile_organic_compounds*
+        - sensor.*_radon
+        - sensor.*_atmospheric_pressure
+        - sensor.*_air_quality_index
+        - binary_sensor.*_motion
+        - sensor.jaredfiorali_*_trophies
+        - sensor.grizzl_e_charger_*
+        - binary_sensor.grizzl_e_charger_*
+      entities:
+        - sensor.mississauga_ontario_canada_pressure
+        - sensor.mississauga_ontario_canada_pm2_5
+        - sensor.jaredfiorali_now_playing
+  alarm_control_panel:
+    - platform: manual
+      name: Security System
+      unique_id: alarm_system
+      code_arm_required: false
+      delay_time: 0
+      arming_time: 0
+      arming_states:
+        - armed_home
+        - armed_away
+        - armed_night
+      disarmed:
+        trigger_time: 0
+      armed_away:
+        arming_time: 30
+        delay_time: 30
+      armed_night:
+        arming_time: 30
+        delay_time: 30
+    - platform: manual
+      name: Kid Alarm
+      unique_id: kid_system
+      code_arm_required: false
+      delay_time: 0
+      arming_time: 0
+      trigger_time: 300
+      arming_states:
+        - armed_home
+        - armed_away
+        - armed_night
+  rest_command:
+    push_position_to_dawarich:
+      url: http://dawarich-app.dawarich:3000/api/v1/overland/batches?api_key={{ api_key }}
+      method: POST
+      content_type: 'application/json'
+      payload: >
+        {
+          "locations": [
+          {
+            "type": "Feature",
+            "geometry":{
+              "type": "Point",
+              "coordinates":[
+                {{ longitude }},
+                {{ latitude }}
+              ]
+            },
+            "properties":{
+              "api_key": "{{ api_key }}",
+              "timestamp": "{{ now().isoformat() }}",
+              "altitude": {{ altitude }},
+              "speed": {{ speed }},
+              "horizontal_accuracy": 0,
+              "vertical_accuracy": {{ vertical_accuracy }},
+              "motion": [],
+              "pauses": false,
+              "activity": "{{ activity }}",
+              "desired_accuracy": 0,
+              "deferred": 0,
+              "significant_change": "unknown",
+              "locations_in_payload": 1,
+              "device_id": "{{device_id}}",
+              "wifi": "unknown",
+              "battery_state": "unknown",
+              "battery_level": {{ battery_level }}
+            }
+          }
+          ]
+        }
+    trigger_garage_siren:
+      url: https://192.168.24.20/proxy/protect/integration/v1/alarm-manager/webhook/${WEBHOOK_GARAGE_SIREN}
+      method: POST
+      verify_ssl: false
+      headers:
+        X-API-KEY: '{{ api_key }}'
