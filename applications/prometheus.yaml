@@ -20,7 +20,7 @@ spec:
       - name: alertmanager.alertmanagerSpec.secrets[0]
         value: prometheus-credentials
       - name: alertmanager.config.global.slack_api_url_file
-        value: /etc/alertmanager/secrets/prometheus/SLACK_API_URL
+        value: /etc/alertmanager/secrets/prometheus-credentials/SLACK_API_URL
 
       # default rules / grafana
       - name: defaultRules.rules.kubernetesStorage
