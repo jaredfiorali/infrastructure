@@ -49,7 +49,7 @@ config.yaml: |
       group: other
       conditions: ["[STATUS] == 200"]
     - name: home-assistant
-      url: http://home-assistant.fiora.li/api/
+      url: http://home-assistant.fiora.li/manifest.json
       group: home security
       conditions: ["[STATUS] == 401"]
     - name: linkding
