@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - flaresolverr.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.54'
+    targetRevision: '0.3.55'
   syncPolicy:
     automated:
       enabled: true
