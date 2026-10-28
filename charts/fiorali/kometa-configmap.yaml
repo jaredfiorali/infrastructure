@@ -1,0 +1,120 @@
+config.yml: |
+  libraries:
+    Movies:
+      language: en
+      collection_files:
+        - file: /config/movies.yml
+    TV Shows:
+      language: en
+      collection_files:
+        - file: /config/tv.yml
+  settings:
+    cache: true
+    cache_expiration: 60
+    asset_directory: /config/assets
+    asset_folders: true
+    asset_depth: 0
+    create_asset_folders: false
+    dimensional_asset_rename: false
+    download_url_assets: false
+    show_missing_season_assets: false
+    sync_mode: append
+    minimum_items: 5
+    default_collection_order: release
+    delete_below_minimum: true
+    delete_not_scheduled: false
+    run_again_delay: 10
+    missing_only_released: false
+    only_filter_missing: false
+    show_unmanaged: true
+    show_filtered: false
+    show_options: false
+    show_missing: true
+    show_missing_assets: true
+    save_report: true
+    show_report: true
+    tvdb_language: eng
+    playlist_sync_to_users: all
+    verify_ssl: false
+    run_order:
+      - operations
+      - metadata
+      - collections
+      - overlays
+    prioritize_assets: false
+    show_missing_episode_assets: false
+    show_asset_not_needed: true
+    item_refresh_delay: 0
+    show_unconfigured: true
+    show_unfiltered: false
+    playlist_report: true
+    overlay_artwork_filetype: webp_lossy
+    overlay_artwork_quality: 90
+  plex:
+    url: http://plex.downloader:32400
+    token: <<plextoken>>
+    timeout: 60
+    verify_ssl: false          # explicit; matches your settings-level value
+    clean_bundles: false
+    empty_trash: false
+    optimize: false
+  tmdb:
+    apikey: <<tmdbapikey>>
+    language: en
+    cache_expiration: 60
+    region: CA
+  mdblist:
+    apikey: <<mdblistapikey>>
+    cache_expiration: 60
+  tautulli:
+    url: http://tautulli.tautulli:8181
+    apikey: <<tautulliapikey>>
+  radarr:
+    url: http://radarr.downloader:7878
+    token: <<radarrtoken>>
+    add_missing: true
+    add_existing: false
+    root_folder_path: /media/Movies
+    monitor: true
+    availability: released
+    quality_profile: HD-1080p
+    tag: kometa
+    search: true
+    upgrade_existing: false
+    monitor_existing: false
+    ignore_cache: false
+  sonarr:
+    url: http://sonarr.downloader:8989
+    token: <<sonarrtoken>>
+    add_missing: true
+    add_existing: false
+    root_folder_path: /media/TV
+    monitor: pilot
+    quality_profile: HD-1080p
+    language_profile: English
+    series_type: standard
+    season_folder: false
+    tag: kometa
+    search: true
+    cutoff_search: false
+    upgrade_existing: false
+    monitor_existing: false
+    ignore_cache: false
+movies.yml: |
+  collections:
+    Top Rated Movies:
+      mdblist_list:
+        url: https://mdblist.com/lists/jaredfiorali/top-movies-recent
+        limit: 5
+      sync_mode: sync
+      collection_order: custom
+      minimum_items: 1
+tv.yml: |
+  collections:
+    Top Rated Shows:
+      mdblist_list:
+        url: https://mdblist.com/lists/jaredfiorali/top-shows-recent
+        limit: 5
+      sync_mode: sync
+      collection_order: custom
+      minimum_items: 1
