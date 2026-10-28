@@ -24,7 +24,7 @@ probes:
     port: gatus
 env:
   - name: GATUS_LOG_LEVEL
-    value: WARN
+    value: DEBUG
 initContainers:
   enabled: true
   containers:
