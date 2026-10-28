@@ -51,7 +51,7 @@ config.yaml: |
     - name: home-assistant
       url: http://home-assistant.fiora.li/manifest.json
       group: home security
-      conditions: ["[STATUS] == 401"]
+      conditions: ["[STATUS] == 200"]
     - name: linkding
       url: http://linkding.fiora.li/health
       group: other
