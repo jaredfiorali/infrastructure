@@ -70,6 +70,8 @@ ingress:
   enabled: true
 hostNetwork: true
 volumeMounts:
+- name: home-assistant-persistent-storage
+  mountPath: /config
 - name: home-assistant-configmap
   mountPath: /config/configuration.yaml
   subPath: configuration.yaml
@@ -85,7 +87,7 @@ volumes:
 - name: home-assistant-configmap
   configMap:
     name: home-assistant-configmap
-    defaultMode: 511
+    defaultMode: 0444
 - name: tmp
   emptyDir: {}
 - name: run
