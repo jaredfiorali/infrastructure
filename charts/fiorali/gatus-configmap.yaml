@@ -12,7 +12,6 @@ config.yaml: |
   storage:
     type: postgres
     path: "${POSTGRES_CONNECTION_STRING}"
-    caching: true
   skip-invalid-config-update: true
   connectivity:
     checker:
