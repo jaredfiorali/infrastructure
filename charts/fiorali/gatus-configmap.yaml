@@ -16,6 +16,10 @@ config.yaml: |
     path: "${POSTGRES_CONNECTION_STRING}"
     caching: true
   skip-invalid-config-update: true
+  connectivity:
+    checker:
+      target: 1.1.1.1:53
+      interval: 60s
   endpoints:
     - name: argo
       url: http://argo.fiora.li
@@ -31,6 +35,10 @@ config.yaml: |
       conditions: ["[STATUS] == 200"]
     - name: plex
       url: http://plex.fiora.li/identity
+      group: media management
+      conditions: ["[STATUS] == 200"]
+    - name: plex(remote)
+      url: http://99.246.152.8:32400/web/index.html
       group: media management
       conditions: ["[STATUS] == 200"]
     - name: prowlarr
