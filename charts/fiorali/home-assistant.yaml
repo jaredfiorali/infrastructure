@@ -66,6 +66,11 @@ env:
   value: "1"
 - name: S6_VERBOSITY
   value: "2"
+- name: WEBHOOK_GARAGE_SIREN
+  valueFrom:
+    secretKeyRef:
+      name: home-assistant-credentials
+      key: WEBHOOK_GARAGE_SIREN
 ingress:
   enabled: true
 hostNetwork: true
