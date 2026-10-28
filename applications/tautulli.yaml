@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - tautulli.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.71'
+    targetRevision: '0.3.72'
   syncPolicy:
     automated:
       enabled: true
