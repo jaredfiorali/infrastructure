@@ -1,5 +1,7 @@
 config.yaml: |
   metrics: true
+  web:
+    panel-time-range-seconds: 86400
   alerting:
     slack:
       webhook-url: "${SLACK_WEBHOOK_URL}"
