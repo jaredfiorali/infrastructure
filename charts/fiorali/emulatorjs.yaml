@@ -2,8 +2,6 @@ name: emulatorjs
 namespace: emulatorjs
 deployment:
   enabled: true
-  annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 image:
   repository: docker.io/linuxserver/emulatorjs
   tag: latest@sha256:bc892148cee315125f48640f5a2b7ca6bd599967574424d71060c064e8a36a48

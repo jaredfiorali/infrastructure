@@ -5,8 +5,6 @@ image:
   tag: latest@sha256:0309e3975174d93a02f7a33f918a49875bcf623f87ac539390b3450532781bbf
 deployment:
   enabled: false
-  annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 resources:
   limits:
     cpu: 250m
