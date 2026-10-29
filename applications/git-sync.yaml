@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - git-sync.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.85'
+    targetRevision: '0.3.86'
   syncPolicy:
     automated:
       enabled: true
