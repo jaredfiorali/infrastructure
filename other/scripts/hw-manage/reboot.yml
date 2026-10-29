@@ -29,7 +29,7 @@
           - --check
       when:
         - scale_longhorn | bool
-        - upgrade_occurred | default(false) | bool
+        - (upgrade_occurred | default) | bool
         - reboot_needed.stat.exists
       ignore_errors: true
       changed_when: false
@@ -85,7 +85,7 @@
           - --scale-up
       when:
         - scale_longhorn | bool
-        - upgrade_occurred | default(false) | bool
+        - (upgrade_occurred | default) | bool
         - reboot_needed.stat.exists
       ignore_errors: true
       changed_when: false

@@ -115,7 +115,7 @@
       ansible.builtin.set_fact:
         upgrade_occurred: true
       when:
-        - (firmware_upgrade | default(false) | bool) or (k3s_upgrade | default(false) | bool)
+        - (firmware_upgrade | default) | bool or (k3s_upgrade | default) | bool
 
     - name: Log end of maintenance
       ansible.builtin.command:
