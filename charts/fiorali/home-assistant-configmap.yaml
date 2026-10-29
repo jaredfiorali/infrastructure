@@ -124,7 +124,7 @@ configuration.yaml: |
           ]
         }
     trigger_garage_siren:
-      url: https://192.168.24.20/proxy/protect/integration/v1/alarm-manager/webhook/${WEBHOOK_GARAGE_SIREN}
+      url: !env_var WEBHOOK_GARAGE_SIREN_URL
       method: POST
       verify_ssl: false
       headers:
