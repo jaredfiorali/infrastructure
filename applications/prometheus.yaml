@@ -92,7 +92,7 @@ spec:
 
       # retention
       - name: prometheus.prometheusSpec.retention
-        value: 1d
+        value: 2d
       - name: prometheus.prometheusSpec.retentionSize
         value: "2GB"
       - name: prometheus.prometheusSpec.walCompression
@@ -140,7 +140,7 @@ spec:
       - values.yaml
       - prometheus.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.79'
+    targetRevision: '0.3.80'
   syncPolicy:
     automated:
       enabled: true
