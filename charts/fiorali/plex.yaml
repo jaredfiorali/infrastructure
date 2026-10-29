@@ -32,7 +32,7 @@ service:
   type: LoadBalancer
 env:
 - name: ADVERTISE_IP
-  value: http://192.168.20.10:32400/
+  value: http://192.168.21.22:32400/
 - name: PUID
   value: "1000"
 - name: PGID
@@ -54,14 +54,21 @@ volumeMounts:
 - name: media
   mountPath: /media
   readOnly: true
-- name: phototranscoder-cache
-  mountPath: /config/Library/Application Support/Plex Media Server/Cache/PhotoTranscoder
+- name: cache
+  mountPath: /config/Library/Application Support/Plex Media Server/Cache
+  subPath: cache
+- name: logs
+  mountPath: /config/Library/Application Support/Plex Media Server/Logs
+  subPath: logs
 - name: transcode
   mountPath: /transcode
+  subPath: transcode
 - name: tmp
   mountPath: /tmp
+  subPath: tmp
 - name: run
   mountPath: /run
+  subPath: run
 volumes:
 - name: plex-persistent-storage
   persistentVolumeClaim:
@@ -69,14 +76,7 @@ volumes:
 - name: media
   persistentVolumeClaim:
     claimName: media
-- name: phototranscoder-cache
-  emptyDir:
-    sizeLimit: 2Gi
-- name: transcode
-  emptyDir: {}
 - name: tmp
-  emptyDir: {}
-- name: run
   emptyDir: {}
 networkpolicy:
   ingress:
