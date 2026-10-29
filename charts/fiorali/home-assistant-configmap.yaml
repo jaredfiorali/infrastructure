@@ -124,7 +124,7 @@ configuration.yaml: |
           ]
         }
     trigger_garage_siren:
-      url: !env_var WEBHOOK_GARAGE_SIREN_URL
+      url: !env_var WEBHOOK_GARAGE_SIREN
       method: POST
       verify_ssl: false
       headers:
