@@ -71,6 +71,11 @@ env:
     secretKeyRef:
       name: home-assistant-credentials
       key: WEBHOOK_GARAGE_SIREN
+- name: POSTGRES_CONNECTION_STRING
+  valueFrom:
+    secretKeyRef:
+      name: home-assistant-credentials
+      key: POSTGRES_CONNECTION_STRING
 ingress:
   enabled: true
 hostNetwork: true

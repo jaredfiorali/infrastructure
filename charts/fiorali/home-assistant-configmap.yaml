@@ -8,6 +8,12 @@ configuration.yaml: |
   script: !include scripts.yaml
   scene: !include scenes.yaml
   zeroconf:
+  recorder:
+    db_url: ${POSTGRES_CONNECTION_STRING}
+    db_retry_wait: 10 # Wait 10 seconds before retrying
+    commit_interval: 30
+    purge_keep_days: 7
+    auto_purge: true
   prometheus:
     requires_auth: false
     filter:
