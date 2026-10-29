@@ -54,21 +54,21 @@ volumeMounts:
 - name: media
   mountPath: /media
   readOnly: true
-- name: cache
+- name: tmp
   mountPath: /config/Library/Application Support/Plex Media Server/Cache
   subPath: cache
-- name: logs
+- name: tmp
   mountPath: /config/Library/Application Support/Plex Media Server/Logs
   subPath: logs
-- name: transcode
+- name: tmp
   mountPath: /transcode
   subPath: transcode
 - name: tmp
-  mountPath: /tmp
-  subPath: tmp
-- name: run
   mountPath: /run
   subPath: run
+- name: tmp
+  mountPath: /tmp
+  subPath: tmp
 volumes:
 - name: plex-persistent-storage
   persistentVolumeClaim:
