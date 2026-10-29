@@ -191,3 +191,6 @@ externalSecrets:
   - secretKey: WEBHOOK_GARAGE_SIREN
     remoteRef:
       key: /homelab/home-assistant/WEBHOOK_GARAGE_SIREN
+  - secretKey: POSTGRES_CONNECTION_STRING
+    remoteRef:
+      key: /homelab/home-assistant/POSTGRES_CONNECTION_STRING
