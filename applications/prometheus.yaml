@@ -94,7 +94,7 @@ spec:
       - name: prometheus.prometheusSpec.retention
         value: 2d
       - name: prometheus.prometheusSpec.retentionSize
-        value: "2GB"
+        value: "10GB"
       - name: prometheus.prometheusSpec.walCompression
         value: "true"
 
