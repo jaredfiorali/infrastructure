@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - dawarich-app.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.83'
+    targetRevision: '0.3.84'
   syncPolicy:
     automated:
       enabled: true
