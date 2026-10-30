@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - kometa.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.94'
+    targetRevision: '0.3.95'
   syncPolicy:
     automated:
       enabled: true
