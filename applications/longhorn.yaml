@@ -48,7 +48,7 @@ spec:
       - values.yaml
       - longhorn.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.96'
+    targetRevision: '0.3.97'
   syncPolicy:
     automated:
       enabled: false
