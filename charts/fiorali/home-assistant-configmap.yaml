@@ -10,10 +10,18 @@ configuration.yaml: |
   zeroconf:
   recorder:
     db_url: !env_var POSTGRES_CONNECTION_STRING
-    db_retry_wait: 10 # Wait 10 seconds before retrying
+    db_retry_wait: 10
     commit_interval: 30
     purge_keep_days: 7
     auto_purge: true
+    exclude:
+      entity_globs:
+        - sensor.*_power
+        - sensor.*_current
+        - sensor.*_voltage
+        - sensor.*_power_factor
+      entities:
+        - media_player.family_room
   prometheus:
     requires_auth: false
     filter:
