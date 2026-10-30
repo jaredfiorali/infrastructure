@@ -21,7 +21,7 @@ spec:
       - values.yaml
       - prowlarr.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.99'
+    targetRevision: '0.3.100'
   syncPolicy:
     automated:
       enabled: true
