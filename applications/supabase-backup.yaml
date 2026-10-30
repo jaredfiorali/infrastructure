@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: supabase-backup
+  namespace: argocd
+  labels:
+    supabase: 'true'
+spec:
+  destination:
+    namespace: supabase
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: fiorali
+    helm:
+      valueFiles:
+      - values.yaml
+      - supabase-backup.yaml
+    repoURL: ghcr.io/jaredfiorali/helm-charts
+    targetRevision: '0.3.90'
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

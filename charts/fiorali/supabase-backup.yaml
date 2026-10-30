@@ -1,0 +1,82 @@
+name: supabase-backup
+namespace: supabase
+image:
+  repository: docker.io/library/postgres
+  tag: 17-alpine
+  pullPolicy: IfNotPresent
+cronjob:
+  enabled: true
+  schedule: "0 3 1 * *"
+  suspend: false
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  restartPolicy: Never
+serviceAccount:
+  enabled: true
+  name: supabase-backup-serviceaccount
+resource:
+  enabled: true
+  clusterRole:
+    apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
+  clusterRoleBinding:
+    enabled: true
+command:
+  exec: ["/bin/sh", "-c"]
+  args:
+  - |
+    set -e
+
+    echo "Discovering Supabase databases..."
+    SUCCESSES=0
+    FAILURES=0
+
+    # List secrets with supabase: 'true' and extract POSTGRES_CONNECTION_STRING
+    while IFS=$'\t' read -r service_name db_url_b64; do
+      [ -z "$db_url_b64" ] && continue
+
+      db_url=$(echo "$db_url_b64" | base64 -d)
+      name=$(echo "$service_name" | cut -d'/' -f2)
+
+      echo "Backing up '$name' ($db_url)..."
+      BACKUP_FILE="/backups/${name}-$(date +%Y-%m-%d).dump"
+
+      if pg_dump "$db_url" --format=custom --no-owner --no-privileges -f "$BACKUP_FILE"; then
+        echo "  -> $BACKUP_FILE"
+        SUCCESSES=$((SUCCESSES + 1))
+      else
+        echo "  -> FAILED"
+        FAILURES=$((FAILURES + 1))
+      fi
+    done < <(kubectl get secrets \
+      --all-namespaces \
+      -l supabase='true' \
+      -o jsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}{"\t"}{.data.POSTGRES_CONNECTION_STRING}{"\n"}{end}')
+
+    # Cleanup old backups (90 days)
+    find /backups -name '*.dump' -mtime +90 -delete
+
+    echo "Done: $SUCCESSES succeeded, $FAILURES failed."
+    if [ $FAILURES -gt 0 ]; then
+      exit 1
+    fi
+    exit 0
+
+env:
+- name: TZ
+  value: "UTC"
+
+volumeMounts:
+- name: backups
+  mountPath: /backups
+- name: tmp
+  mountPath: /tmp
+
+volumes:
+- name: backups
+  persistentVolumeClaim:
+    claimName: supabase-backups
+- name: tmp
+  emptyDir: {}
