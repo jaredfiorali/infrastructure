@@ -4,6 +4,12 @@ image:
   repository: docker.io/library/postgres
   tag: 17-alpine
   pullPolicy: IfNotPresent
+deployment:
+  enabled: false
+service:
+  enabled: false
+podDisruptionBudget:
+  enabled: false
 cronjob:
   enabled: true
   schedule: "0 3 1 * *"
