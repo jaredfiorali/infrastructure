@@ -10,6 +10,9 @@ service:
   enabled: false
 podDisruptionBudget:
   enabled: false
+resources:
+  limits: {}
+  requests: {}
 cronjob:
   enabled: true
   schedule: "0 3 1 * *"
