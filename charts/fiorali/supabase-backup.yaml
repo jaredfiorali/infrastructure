@@ -109,9 +109,8 @@ volumeMounts:
 - name: tmp
   mountPath: /var/log
   subPath: log
-- name: tmp
+- name: apk
   mountPath: /var/cache/apk
-  subPath: apk
 - name: tmp
   mountPath: /lib/apk
   subPath: lib-apk
@@ -124,6 +123,8 @@ volumes:
   persistentVolumeClaim:
     claimName: supabase-backup
 - name: tmp
+  emptyDir: {}
+- name: apk
   emptyDir: {}
 
 volume:
