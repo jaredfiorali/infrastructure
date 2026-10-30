@@ -38,6 +38,9 @@ command:
   - |
     set -e
 
+    # Install jq, postgresql and kubectl if not present
+    apk add --no-cache jq postgresql-client kubernetes-client
+
     echo "Discovering Supabase databases from ArgoCD Applications..."
     SUCCESSES=0
     FAILURES=0
