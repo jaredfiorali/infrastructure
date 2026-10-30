@@ -76,7 +76,7 @@ command:
       echo "Backing up '$app_name' ($db_url)..."
       BACKUP_FILE="/backups/${app_name}-$(date +%Y-%m-%d).dump"
 
-      if pg_dump "$db_url" --format=custom --no-owner --no-privileges --log-file=- -f "$BACKUP_FILE"; then
+      if pg_dump "$db_url" --format=custom --no-owner --no-privileges -f "$BACKUP_FILE"; then
         echo "  -> $BACKUP_FILE"
         SUCCESSES=$((SUCCESSES + 1))
       else
@@ -103,12 +103,16 @@ volumeMounts:
   mountPath: /backups
 - name: tmp
   mountPath: /tmp
+- name: varlog
+  mountPath: /var/log
 
 volumes:
 - name: backups
   persistentVolumeClaim:
     claimName: supabase-backup
 - name: tmp
+  emptyDir: {}
+- name: varlog
   emptyDir: {}
 
 volume:
