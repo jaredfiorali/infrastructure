@@ -1,8 +1,8 @@
 name: supabase-backup
 namespace: supabase
 image:
-  repository: docker.io/library/postgres
-  tag: 17-alpine
+  repository: docker.io/postgres
+  tag: latest@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
   pullPolicy: IfNotPresent
 deployment:
   enabled: false
