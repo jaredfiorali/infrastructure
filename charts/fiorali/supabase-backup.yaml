@@ -1,8 +1,8 @@
 name: supabase-backup
 namespace: supabase
 image:
-  repository: docker.io/postgres
-  tag: latest@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
+  repository: docker.io/library/alpine
+  tag: latest@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
   pullPolicy: IfNotPresent
 deployment:
   enabled: false
@@ -38,24 +38,11 @@ command:
   - |
     set -e
 
-    # Install jq if not present
-    if ! command -v jq >/dev/null 2>&1; then
-      apk add --no-cache jq
-    fi
-
-    APISERVER="https://kubernetes.default.svc"
-    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-    API_HEADER="Authorization: Bearer $TOKEN"
-
     echo "Discovering Supabase databases from ArgoCD Applications..."
     SUCCESSES=0
     FAILURES=0
 
     # List ArgoCD Apps with supabase: 'true', extract app name + destination namespace
-    apps_json=$(curl -s --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
-      -H "$API_HEADER" \
-      "$APISERVER/apis/argoproj.io/v1alpha1/applications?labelSelector=supabase%3Dtrue")
-
     while IFS=$'\t' read -r app_name app_ns; do
       [ -z "$app_name" ] && continue
       [ -z "$app_ns" ] && continue
@@ -64,11 +51,7 @@ command:
       db_secret="supabase-${app_name}-database-credentials"
 
       # Fetch the POSTGRES_CONNECTION_STRING from the secret
-      db_url_b64=$(curl -s --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
-        -H "$API_HEADER" \
-        "$APISERVER/api/v1/namespaces/$app_ns/secrets/$db_secret" | \
-        jq -r '.data.POSTGRES_CONNECTION_STRING // empty')
-
+      db_url_b64=$(kubectl get secret "$db_secret" -n "$app_ns" -o jsonpath='{.data.POSTGRES_CONNECTION_STRING}')
       if [ -z "$db_url_b64" ]; then
         echo "Skipping '$app_name': secret '$db_secret' not found or missing POSTGRES_CONNECTION_STRING"
         continue
@@ -85,7 +68,7 @@ command:
         echo "  -> FAILED"
         FAILURES=$((FAILURES + 1))
       fi
-    done < <(echo "$apps_json" | jq -r '.items[] | .metadata.name + "\t" + .spec.destination.namespace')
+    done < <(kubectl get applications -A -l supabase='true' -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.destination.namespace}{"\n"}{end}')
 
     # Cleanup old backups (90 days)
     find /backups -name '*.dump' -mtime +90 -delete
@@ -105,26 +88,12 @@ volumeMounts:
   mountPath: /backups
 - name: tmp
   mountPath: /tmp
-  subPath: tmp
-- name: tmp
-  mountPath: /var/log
-  subPath: log
-- name: apk
-  mountPath: /var/cache/apk
-- name: tmp
-  mountPath: /lib/apk
-  subPath: lib-apk
-- name: tmp
-  mountPath: /etc/apk
-  subPath: etc-apk
 
 volumes:
 - name: backups
   persistentVolumeClaim:
     claimName: supabase-backup
 - name: tmp
-  emptyDir: {}
-- name: apk
   emptyDir: {}
 
 volume:
