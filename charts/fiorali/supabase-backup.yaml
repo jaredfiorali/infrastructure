@@ -28,8 +28,9 @@ resource:
   enabled: true
   clusterRole:
     apiGroups: [""]
-    resources: ["secrets"]
+    resources: ["secrets", "applications"]
     verbs: ["get", "list", "watch"]
+    # Also handle ArgoCD Application CRD
   clusterRoleBinding:
     enabled: true
 command:
@@ -38,19 +39,28 @@ command:
   - |
     set -e
 
-    echo "Discovering Supabase databases..."
+    echo "Discovering Supabase databases from ArgoCD Applications..."
     SUCCESSES=0
     FAILURES=0
 
-    # List secrets with supabase: 'true' and extract POSTGRES_CONNECTION_STRING
-    while IFS=$'\t' read -r service_name db_url_b64; do
-      [ -z "$db_url_b64" ] && continue
+    # Find ArgoCD Apps with supabase: 'true', extract app name + destination namespace
+    while IFS=$'\t' read -r app_name app_ns; do
+      [ -z "$app_name" ] && continue
+      [ -z "$app_ns" ] && continue
 
-      db_url=$(echo "$db_url_b64" | base64 -d)
-      name=$(echo "$service_name" | cut -d'/' -f2)
+      # The database secret name follows the supabase operator naming convention
+      db_secret="supabase-${app_name}-database-credentials"
 
-      echo "Backing up '$name' ($db_url)..."
-      BACKUP_FILE="/backups/${name}-$(date +%Y-%m-%d).dump"
+      # Fetch the POSTGRES_CONNECTION_STRING from the secret in the destination namespace
+      db_url=$(kubectl get secret "$db_secret" -n "$app_ns" -o jsonpath='{.data.POSTGRES_CONNECTION_STRING}')
+      if [ -z "$db_url" ]; then
+        echo "Skipping '$app_name': secret '$db_secret' not found or missing POSTGRES_CONNECTION_STRING"
+        continue
+      fi
+
+      db_url=$(echo "$db_url" | base64 -d)
+      echo "Backing up '$app_name' ($db_url)..."
+      BACKUP_FILE="/backups/${app_name}-$(date +%Y-%m-%d).dump"
 
       if pg_dump "$db_url" --format=custom --no-owner --no-privileges -f "$BACKUP_FILE"; then
         echo "  -> $BACKUP_FILE"
@@ -59,10 +69,8 @@ command:
         echo "  -> FAILED"
         FAILURES=$((FAILURES + 1))
       fi
-    done < <(kubectl get secrets \
-      --all-namespaces \
-      -l supabase='true' \
-      -o jsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}{"\t"}{.data.POSTGRES_CONNECTION_STRING}{"\n"}{end}')
+    done < <(kubectl get applications -A -l supabase='true' \
+      -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.destination.namespace}{"\n"}{end}')
 
     # Cleanup old backups (90 days)
     find /backups -name '*.dump' -mtime +90 -delete

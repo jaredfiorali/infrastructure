@@ -4,7 +4,7 @@ metadata:
   name: supabase-backup
   namespace: argocd
   labels:
-    supabase: 'true'
+    fiorali: 'true'
 spec:
   destination:
     namespace: supabase
