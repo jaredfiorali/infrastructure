@@ -91,6 +91,8 @@ volumeMounts:
   mountPath: /backups
 - name: tmp
   mountPath: /tmp
+- name: tmp
+  mountPath: /var/log
 
 volumes:
 - name: backups
