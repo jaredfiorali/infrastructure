@@ -16,10 +16,15 @@ configuration.yaml: |
     auto_purge: true
     exclude:
       entity_globs:
-        - sensor.*_power
-        - sensor.*_current
-        - sensor.*_voltage
-        - sensor.*_power_factor
+        - sensor.power_bar_*
+        - sensor.garage_switch_*
+        - sensor.office_switch_*
+        - sensor.family_room_switch_*
+        - sensor.theatre_switch_*
+        - sensor.workshop_*
+        - sensor.sawmill_*
+        - sensor.grizzl_e_charger_rssi
+        - sensor.grizzl_e_charger_session_time
       entities:
         - media_player.family_room
   prometheus:
