@@ -23,6 +23,8 @@ configuration.yaml: |
         - sensor.theatre_switch_*
         - sensor.workshop_*
         - sensor.sawmill_*
+        - sensor.*_cpu_utilization
+        - sensor.*_memory_utilization
         - sensor.grizzl_e_charger_rssi
         - sensor.grizzl_e_charger_session_time
       entities:
