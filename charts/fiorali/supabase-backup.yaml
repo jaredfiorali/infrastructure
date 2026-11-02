@@ -10,8 +10,12 @@ service:
 podDisruptionBudget:
   enabled: false
 resources:
-  limits: {}
-  requests: {}
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 125Mi
 cronjob:
   enabled: true
   schedule: "0 3 * * *"
@@ -136,6 +140,19 @@ volumeMounts:
   mountPath: /backups
 - name: work
   mountPath: /work
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
 
 volumes:
 - name: backups

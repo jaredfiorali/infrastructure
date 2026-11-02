@@ -176,7 +176,7 @@ configMap:
             cronjobs:
               instances:
                 - labels:
-                    app: [popeye, git-sync, kometa]
+                    app: [popeye, git-sync, kometa, supabase-backup]
                   codes: [1501] # => Cronjob not ready
                 - containers: [kometa-init, home-assistant-init]
                   codes: [101] # => Image tagged 'latest' in use
@@ -242,7 +242,7 @@ configMap:
                     app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
                   codes: [306] # => Container could be running as root user. Check SecurityContext/Image
                 - labels:
-                    app: [popeye, git-sync, kometa] # Exclude codes for any pods with specified labels
+                    app: [popeye, git-sync, kometa, supabase-backup] # Exclude codes for any pods with specified labels
                   codes: [203, 206, 207] # => Pod is waiting, Pod missing Pdb, Pod is unhappy
                 - labels:
                     app: [radarr, sonarr, prowlarr, transmission] # Exclude codes for any pods with specified labels
