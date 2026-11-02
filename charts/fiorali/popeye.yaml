@@ -204,7 +204,7 @@ configMap:
             ingresses:
               instances:
                 - labels:
-                    app.kubernetes.io/name: [grafana, headlamp, kubeview]
+                    app.kubernetes.io/name: [grafana, kubeview]
                   codes: [1403] # Ingress backend uses a port#, prefer a named port
             serviceaccounts:
               instances:
@@ -219,12 +219,17 @@ configMap:
                 - labels:
                     app: [git-sync, kometa]
                   codes: [400] # Unable to locate resource reference
+            persistentvolumeclaims:
+              instances:
+                - labels:
+                    app: [supabase-backup]
+                  codes: [400] # Unable to locate resource reference
             networkpolicies:
               instances:
                 # - fqns: [rx:^downloader]
                 #   codes: [1207, 1206]
                 - labels:
-                    app: [git-sync, kometa, popeye]
+                    app: [git-sync, kometa, popeye, supabase-backup]
                   codes: [1200] # => No pods match network policy
                 - labels:
                     app: [home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller, tdarr, postgres, gatus]
@@ -251,8 +256,6 @@ configMap:
                   codes: [101] # => Image tagged 'latest' in use
                 - containers: [kubeview]
                   codes: [101, 105, 105, 206, 306, 302, 110]
-                - containers: [headlamp]
-                  codes: [106, 301]
                 - containers: [grafana-operator]
                   codes: [106, 105, 105, 206, 301]
                 - containers: [grafana]
@@ -261,7 +264,7 @@ configMap:
               instances:
                 - containers: [flaresolverr-init, home-assistant-init, gatus-init, kubeview]
                   codes: [101] # => Image tagged 'latest' in use
-                - containers: [headlamp, grafana-operator, grafana]
+                - containers: [grafana-operator, grafana]
                   codes: [106]
         resources:
           # Configure node resources.
