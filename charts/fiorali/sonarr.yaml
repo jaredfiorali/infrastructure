@@ -63,7 +63,7 @@ env:
 - name: SONARR__APP__LAUNCHBROWSER
   value: "false"
 - name: SONARR__AUTH__METHOD
-  value: "Forms"
+  value: "External"
 - name: SONARR__AUTH__REQUIRED
   value: "DisabledForLocalAddresses"
 - name: SONARR__UPDATE__MECHANISM

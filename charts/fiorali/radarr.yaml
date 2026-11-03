@@ -64,7 +64,7 @@ env:
 - name: RADARR__APP__LAUNCHBROWSER
   value: "false"
 - name: RADARR__AUTH__METHOD
-  value: "Forms"
+  value: "External"
 - name: RADARR__AUTH__REQUIRED
   value: "DisabledForLocalAddresses"
 - name: RADARR__UPDATE__MECHANISM
