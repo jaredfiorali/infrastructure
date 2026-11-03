@@ -1,8 +1,9 @@
 name: supabase-backup
-namespace: supabase
+namespace: postgres
 image:
   repository: docker.io/postgres
   tag: 17-alpine@sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b
+  pullPolicy: IfNotPresent
 deployment:
   enabled: false
 service:
@@ -36,14 +37,13 @@ clusterRole:
     - apiGroups: ["", "argoproj.io"]
       resources: ["secrets", "applications"]
       verbs: ["get", "list", "watch"]
-
 clusterRoleBinding:
   enabled: true
 initContainers:
   enabled: true
   containers:
     - name: discover
-      image: docker.io/alpine/k8s:1.37.1@sha256:712dc5385d1c1a3f83b747fa9e40f64d433a97f72ff42f9755ff7dd1f62846e4
+      image: docker.io/alpine/k8s:1.37.1@sha256:dcb7185e112a453aa72f426754849a97357727ef8f40168fb208c8cf59952042
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -125,29 +125,69 @@ command:
       ok=0; fail=0
       while IFS="$TAB" read -r app url; do
         [ -z "$app" ] && continue
-        f="/backups/${app}-$(date +%F).dump"
-        echo "Backing up '$app'..."
-        if pg_dump "$url" --format=custom --no-owner --no-privileges -f "$f.tmp" \
-           && pg_restore --list "$f.tmp" > /dev/null; then
-          mv "$f.tmp" "$f"; ok=$((ok+1))
-        else
-          rm -f "$f.tmp"; echo "  -> FAILED"; fail=$((fail+1))
+        dump="/scratch/${app}.dump"
+        live="bak_${app}"
+        stage="bak_${app}_new"
+        echo "Syncing '$app' -> '$live'..."
+
+        # 1) Dump the source and verify the file is readable. Nothing local is touched yet.
+        if ! pg_dump "$url" --format=custom --no-owner --no-privileges \
+              -f "$dump" 2> /work/err.log \
+           || ! pg_restore --list "$dump" > /dev/null 2>> /work/err.log; then
+          echo "  -> DUMP failed: $(cat /work/err.log)"
+          rm -f "$dump"; fail=$((fail+1)); continue
         fi
+
+        # 2) Restore into a staging database
+        if ! psql -v ON_ERROR_STOP=1 --no-history -q \
+              -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" \
+              -c "CREATE DATABASE \"${stage}\";" 2> /work/err.log \
+           || ! pg_restore --no-owner --no-privileges --exit-on-error \
+              -d "$stage" "$dump" 2>> /work/err.log; then
+          echo "  -> RESTORE failed (existing '$live' left untouched): $(tail -3 /work/err.log)"
+          psql --no-history -q -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" 2> /dev/null
+          rm -f "$dump"; fail=$((fail+1)); continue
+        fi
+
+        # 3) Swap: only now replace the previous copy
+        if ! psql -v ON_ERROR_STOP=1 --no-history -q \
+              -c "DROP DATABASE IF EXISTS \"${live}\" WITH (FORCE);" \
+              -c "ALTER DATABASE \"${stage}\" RENAME TO \"${live}\";" 2> /work/err.log; then
+          echo "  -> SWAP failed: $(cat /work/err.log)"
+          rm -f "$dump"; fail=$((fail+1)); continue
+        fi
+
+        rm -f "$dump"
+        echo "  -> '$live' updated"; ok=$((ok+1))
       done < /work/targets.tsv
-      rm -f /work/targets.tsv
-      find /backups -name '*.dump' -mtime +90 -delete
-      echo "Done: $ok succeeded, $fail failed."
+      rm -f /work/targets.tsv /work/err.log
+      echo "Done: $ok synced, $fail failed."
       [ "$fail" -eq 0 ]
 env:
 - name: TZ
   value: "UTC"
-
+- name: HOME
+  value: "/work"
+- name: TMPDIR
+  value: "/scratch"
+- name: PGHOST
+  value: "postgres.postgres"
+- name: PGPORT
+  value: "5432"
+- name: PGUSER
+  value: "postgres"
+- name: PGDATABASE
+  value: "postgres"
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: postgres-credentials
+      key: POSTGRES_PASSWORD
 volumeMounts:
-- name: backups
-  mountPath: /backups
 - name: work
   mountPath: /work
-
+- name: scratch
+  mountPath: /scratch
 containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -160,19 +200,13 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1000
   runAsGroup: 1000
-
 volumes:
-- name: backups
-  persistentVolumeClaim:
-    claimName: supabase-backup
 - name: work
   emptyDir:
     medium: Memory
-
-volume:
-  enabled: true
-  size: "5368709120"
-
+- name: scratch
+  emptyDir:
+    sizeLimit: 2Gi
 imageUpdater:
   enabled: true
   rootImageTag: "17-alpine"
