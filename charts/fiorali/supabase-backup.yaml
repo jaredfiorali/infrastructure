@@ -19,7 +19,7 @@ resources:
     memory: 125Mi
 cronjob:
   enabled: true
-  schedule: "0 3 * * *"
+  schedule: "0 3 1 * *"
   suspend: false
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 2
@@ -139,18 +139,18 @@ command:
         fi
 
         # 2) Restore into a staging database
-        if ! psql -v ON_ERROR_STOP=1 --no-history -q \
+        if ! psql -v ON_ERROR_STOP=1 --no-psqlrc -q \
               -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" \
               -c "CREATE DATABASE \"${stage}\";" 2> /work/err.log \
            || ! pg_restore --no-owner --no-privileges --exit-on-error \
               -d "$stage" "$dump" 2>> /work/err.log; then
           echo "  -> RESTORE failed (existing '$live' left untouched): $(tail -3 /work/err.log)"
-          psql --no-history -q -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" 2> /dev/null
+          psql --no-psqlrc -q -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" 2> /dev/null
           rm -f "$dump"; fail=$((fail+1)); continue
         fi
 
         # 3) Swap: only now replace the previous copy
-        if ! psql -v ON_ERROR_STOP=1 --no-history -q \
+        if ! psql -v ON_ERROR_STOP=1 --no-psqlrc -q \
               -c "DROP DATABASE IF EXISTS \"${live}\" WITH (FORCE);" \
               -c "ALTER DATABASE \"${stage}\" RENAME TO \"${live}\";" 2> /work/err.log; then
           echo "  -> SWAP failed: $(cat /work/err.log)"
