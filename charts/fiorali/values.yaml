@@ -13,7 +13,7 @@ daemonSet:
 
 name: ""
 namespace: ""
-replicaCount: 0
+replicaCount: 1
 strategyType: Recreate
 
 podAnnotations: {}
