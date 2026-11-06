@@ -1,7 +1,7 @@
 ---
 # Per-node steps, included once per node (run serial: 1).
-# Ordering: cordon -> drain -> confirm empty -> k3sup upgrade -> (rollback on fail)
-#           -> wait Ready -> Longhorn check -> uncordon.
+# Ordering: cordon -> drain -> confirm empty -> no attached Longhorn volumes ->
+#           k3sup upgrade -> (rollback on fail) -> wait Ready -> uncordon.
 #
 # The upgrade and the readiness-wait each live in a block whose rescue rolls the
 # node back and then `fail:`s. In Ansible, a block whose rescue ends in a failing
@@ -37,6 +37,27 @@
       {{ inventory_hostname }} was not fully drained. Stranded pods:
       {{ upgrade_remaining_pods.stdout }}
     success_msg: "{{ inventory_hostname }} drained cleanly — no workloads remain."
+
+- name: Check for Longhorn volumes still attached to this node
+  command: >-
+    kubectl get -n longhorn-system volume
+    -o jsonpath='{.items[?(@.status.nodeID=="{{ inventory_hostname }}")].metadata.name}'
+  register: upgrade_attached_volumes
+  delegate_to: localhost
+  changed_when: false
+  failed_when: false   # CRD may be absent on clusters without Longhorn
+
+- name: Fail if any Longhorn volume is still attached to this node
+  assert:
+    that:
+      - "upgrade_attached_volumes.rc == 0"
+      - "upgrade_attached_volumes.stdout | trim == ''"
+    fail_msg: >-
+      {{ inventory_hostname }} still has Longhorn volumes attached:
+      {{ upgrade_attached_volumes.stdout | trim }}.
+      Reschedule the workload so the volume detaches, then re-run.
+    success_msg: "{{ inventory_hostname }} has no attached Longhorn volumes."
+  when: upgrade_attached_volumes.rc == 0   # skip validation if the CRD is absent
 
 - name: Build the k3sup upgrade command (placeholder version token)
   set_fact:

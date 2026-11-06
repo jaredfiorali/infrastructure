@@ -11,7 +11,8 @@
 #   Play 1 (no serial)  - pre-flight: probe the CURRENT version once and capture it
 #                          as the rollback baseline, validate inputs, require k3sup.
 #   Play 2 (serial: 1)  - per node, one at a time: cordon -> drain -> confirm empty ->
-#                          k3sup upgrade -> wait Ready -> Longhorn check -> uncordon.
+#                          confirm no attached Longhorn volumes -> k3sup upgrade ->
+#                          wait Ready -> uncordon.
 #                          On any failure: roll that node back, then stop the play.
 #   Play 3 (no serial)  - post-flight: probe the NEW version once and record success.
 #

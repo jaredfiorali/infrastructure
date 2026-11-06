@@ -48,7 +48,8 @@ For each node it:
 
 1. **cordon** → **drain** → confirm the node is empty (no stranded workloads);
 2. runs **k3sup** to apply the new version;
-3. waits for the node to be **Ready** and checks Longhorn is healthy;
+3. confirms no Longhorn volumes are still attached to the node, then waits for it
+   to be **Ready**;
 4. **uncordon**s it.
 
 If anything fails on a node, that node is **rolled back** to the recorded
