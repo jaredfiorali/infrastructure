@@ -1,0 +1,7 @@
+# k3s upgrade version record — auto-managed by upgrade-k3s.yml
+# last_known_good_version : version rollback uses if an upgrade fails
+# target_version          : version targeted this run
+# recorded_at             : UTC ISO-8601 timestamp of this record write
+last_known_good_version: v1.37.1+k3s1
+target_version: v1.38.0+k3s1
+recorded_at: "2026-11-06T15:50:27Z"

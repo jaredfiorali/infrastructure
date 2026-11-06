@@ -1,0 +1,176 @@
+---
+# Guarded k3s upgrade — one node at a time, drain + validate around the upgrade,
+# with version-recorded rollback (k3s-upgrade.lock, git-tracked). Serial: 1 so etcd
+# quorum and Longhorn replicas are never dropped at once. Masters before workers.
+#
+# It reuses the cluster's REAL upgrade path (k3sup install/join + the fixed
+# --k3s-extra-args set from other/scripts/upgrade-k3s-cluster.sh) so no custom
+# k3s-server flag is silently dropped.
+#
+# The run is three plays:
+#   Play 1 (no serial)  - pre-flight: probe the CURRENT version once and capture it
+#                          as the rollback baseline, validate inputs, require k3sup.
+#   Play 2 (serial: 1)  - per node, one at a time: cordon -> drain -> confirm empty ->
+#                          k3sup upgrade -> wait Ready -> Longhorn check -> uncordon.
+#                          On any failure: roll that node back, then stop the play.
+#   Play 3 (no serial)  - post-flight: probe the NEW version once and record success.
+#
+# Why three plays? On this Ansible build `run_once` is per-batch under `serial` and
+# pre/post_tasks run per host, so a single serial play would re-probe the version on
+# every node — seeing an already-upgraded node and wrongly refusing to continue (and
+# writing the "success" lock after the first node). Capturing the baseline in a
+# no-serial play (run_once => once per play) avoids all of that.
+#
+#   k3s-upgrade.lock is written twice:
+#     - Play 1: last_known_good_version = current version (the rollback baseline)
+#     - Play 3: last_known_good_version = new version, status: success
+#
+# kubectl and k3sup run from the operator's machine (localhost). `become: false`
+# overrides any `-b` on the CLI so nothing tries to sudo on the Mac.
+#
+# Set the target version with -e (shell inline env assignment does NOT reach
+# lookup('env') on this build):
+#   ansible-playbook upgrade-k3s.yml -i inventory/hosts.yml -e "upgrade_k3s_version=v1.38.0+k3s1"
+
+- name: "Play 1 - pre-flight (probe current version, validate, require tools)"
+  hosts: k3s
+  gather_facts: false
+  become: false
+  vars:
+    # Target version, e.g. v1.38.0+k3s1. Prefer -e on the CLI (see header).
+    upgrade_k3s_version: "{{ lookup('env', 'UPGRADE_K3S_VERSION') | default('', true) }}"
+
+  tasks:
+    - name: "Resolve the primary/initial server master (marked k3s_server: true)"
+      set_fact:
+        primary_host: "{{ item }}"
+      loop: "{{ groups['masters'] }}"
+      when: hostvars[item]['k3s_server'] | default(false) | bool
+
+    - name: Fall back to the first master if none is marked k3s_server
+      set_fact:
+        primary_host: "{{ groups['masters'][0] }}"
+      when: primary_host is not defined
+
+    - name: Require a target version
+      fail:
+        msg: >-
+          No target version. Re-run with:
+          ansible-playbook upgrade-k3s.yml -i inventory/hosts.yml
+          -e "upgrade_k3s_version=v1.38.0+k3s1"
+      run_once: true
+      when: upgrade_k3s_version | trim == ''
+
+    - name: Validate target version format (vX.Y.Z+k3sN)
+      fail:
+        msg: "Bad target version '{{ upgrade_k3s_version }}' — expected e.g. v1.38.0+k3s1"
+      run_once: true
+      when: not (upgrade_k3s_version | regex_search('^v[0-9]+\\.[0-9]+\\.[0-9]+\\+k3s[0-9]+$'))
+
+    - name: Probe the currently-installed k3s version (read-only, from the Mac)
+      command: kubectl get nodes -o jsonpath='{.items[0].status.nodeInfo.kubeletVersion}'
+      register: k3s_probe
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+
+    - name: Capture the current version as the rollback baseline (fact for all nodes)
+      set_fact:
+        initial_k3s_version: "{{ k3s_probe.stdout | trim }}"
+
+    - name: Record last-known-good version to the git-tracked lock file
+      copy:
+        dest: "{{ playbook_dir }}/k3s-upgrade.lock"
+        content: |-
+          # k3s upgrade version record — auto-managed by upgrade-k3s.yml
+          # last_known_good_version : version rollback uses if an upgrade fails
+          # target_version          : version targeted this run
+          # recorded_at             : UTC ISO-8601 timestamp of this record write
+          last_known_good_version: {{ k3s_probe.stdout | trim }}
+          target_version: {{ upgrade_k3s_version }}
+          recorded_at: "{{ lookup('pipe', 'date -u +%Y-%m-%dT%H:%M:%SZ') }}"
+      delegate_to: localhost
+      run_once: true
+
+    - name: Refuse to upgrade to the version already running
+      fail:
+        msg: >-
+          Cluster is already on {{ k3s_probe.stdout | trim }};
+          upgrade_k3s_version = {{ upgrade_k3s_version }}. Nothing to do.
+      run_once: true
+      when: k3s_probe.stdout | trim == upgrade_k3s_version
+
+    - name: Require k3sup on the operator machine
+      command: command -v k3sup
+      register: k3sup_present
+      delegate_to: localhost
+      run_once: true
+      failed_when: k3sup_present.rc != 0
+      changed_when: false
+
+- name: "Play 2 - upgrade one node at a time (serial: 1)"
+  hosts: k3s
+  gather_facts: false
+  become: false
+  serial: 1
+  vars:
+    upgrade_k3s_version: "{{ lookup('env', 'UPGRADE_K3S_VERSION') | default('', true) }}"
+    # Fixed k3s-server flags this cluster was built with. Preserved on every node
+    # (install + master-join); workers join without them. Source of truth:
+    #   other/scripts/upgrade-k3s-cluster.sh -> K3S_EXTRA_ARGS
+    k3s_extra_args: >-
+      --disable servicelb
+      --etcd-expose-metrics=true
+      --kube-proxy-arg metrics-bind-address=0.0.0.0
+      --kube-controller-manager-arg bind-address=0.0.0.0
+      --kube-scheduler-arg bind-address=0.0.0.0
+    # Derived from primary_host (resolved in Play 1).
+    is_primary_server: "{{ inventory_hostname == primary_host }}"
+    is_master: "{{ inventory_hostname in groups['masters'] }}"
+
+  tasks:
+    - name: State what will happen to this node
+      debug:
+        msg: >-
+          {{ inventory_hostname }} ({{ 'primary/initial server' if is_primary_server else ('master' if is_master else 'worker') }}):
+          cordon -> drain -> k3sup upgrade to {{ upgrade_k3s_version }} -> wait Ready -> uncordon
+          {% if is_primary_server or is_master %}(preserving --k3s-extra-args){% endif %}
+
+    - name: Upgrade this node (drain + validate around the k3sup upgrade)
+      include_tasks: tasks/upgrade-node.yml
+
+- name: "Play 3 - post-flight (record success, report cluster status)"
+  hosts: k3s
+  gather_facts: false
+  become: false
+  vars:
+    upgrade_k3s_version: "{{ lookup('env', 'UPGRADE_K3S_VERSION') | default('', true) }}"
+
+  tasks:
+    - name: Probe the post-upgrade cluster version (read-only, from the Mac)
+      command: kubectl get nodes -o jsonpath='{.items[0].status.nodeInfo.kubeletVersion}'
+      register: upgrade_final_version
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+
+    - name: Write the successfully-applied version back to the lock file
+      copy:
+        dest: "{{ playbook_dir }}/k3s-upgrade.lock"
+        content: |-
+          # k3s upgrade version record — auto-managed by upgrade-k3s.yml
+          # last_known_good_version : the version now running (new rollback baseline)
+          # target_version          : version applied this run
+          # recorded_at             : UTC ISO-8601 timestamp of this record write
+          # status                  : success
+          last_known_good_version: {{ upgrade_final_version.stdout | trim }}
+          target_version: {{ upgrade_k3s_version }}
+          recorded_at: "{{ lookup('pipe', 'date -u +%Y-%m-%dT%H:%M:%SZ') }}"
+          status: success
+      delegate_to: localhost
+      run_once: true
+
+    - name: Print final cluster node status
+      command: kubectl get node -o wide
+      delegate_to: localhost
+      run_once: true

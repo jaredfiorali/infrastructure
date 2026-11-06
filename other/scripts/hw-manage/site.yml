@@ -1,127 +1,79 @@
 ---
-# Site-wide management: apt + firmware + k3s + reboot
-# Run all maintenance in a single pass
+# ── 1. k3s version status (read-only audit) ─────────────────────────────────
+#    Prints the latest k3s release once, then for each node whether it is on
+#    that version. Never changes anything — report only, so it can never break
+#    the apt maintenance that follows. Everything is failed_when: false.
 
-- name: Full hardware maintenance
+- name: Report k3s version status
   hosts: k3s
-  become: true
-  gather_facts: true
-  serial: 1  # One node at a time for safety
-  tags: [site]
-  vars:
-    upgrade_log_dir: /var/log/hw-manage
-    firmware_channel: stable
-    k3s_extra_args: "--disable servicelb --etcd-expose-metrics=true --kube-proxy-arg metrics-bind-address=0.0.0.0 --kube-controller-manager-arg bind-address=0.0.0.0 --kube-scheduler-arg bind-address=0.0.0.0"
+  gather_facts: false
+  become: false   # never sudo: this play only runs curl on localhost and `k3s --version`
+                  # (which needs no root). This matters when you pass `-b` on the CLI.
 
   pre_tasks:
-    - name: Ensure log directory exists
-      ansible.builtin.file:
-        path: "{{ upgrade_log_dir }}"
-        state: directory
-        mode: '0755'
-
-    - name: Log start of maintenance
-      ansible.builtin.command:
-        cmd: "sh -c 'echo \"{{ inventory_hostname }}: maintenance start $(date -Iseconds)\" >> {{ upgrade_log_dir }}/site.log'"
+    - name: Determine the latest k3s release (best-effort, network dependent)
+      ansible.builtin.shell: |-
+        curl -sfL https://latest.k3s.io 2>/dev/null \
+        || curl -sfL https://api.github.com/repos/k3s-io/k3s/releases/latest 2>/dev/null \
+        | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+\+k3s[0-9]+' | head -1
+      register: k3s_latest
       changed_when: false
+      failed_when: false
+      run_once: true
+      delegate_to: localhost
 
-    - name: Show disk usage before
-      ansible.builtin.shell:
-        cmd: df -h / | tail -1
-      register: disk_before
-      changed_when: false
+    - name: Print the latest k3s release
+      ansible.builtin.debug:
+        msg: "Latest k3s release: {{ (k3s_latest.stdout | trim) | default('<could not determine — offline?>', true) }}"
+      run_once: true
 
   tasks:
-    # Package upgrade
-    - name: Update apt cache
+    - name: Get the installed k3s version
+      ansible.builtin.shell: |-
+        k3s --version 2>/dev/null \
+        | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+\+k3s[0-9]+' | head -1
+      register: k3s_installed
+      changed_when: false
+      failed_when: false
+
+    - name: Report node k3s version status
+      ansible.builtin.debug:
+        msg: >-
+          {{ inventory_hostname }}:
+          {% set latest = (hostvars['localhost']['k3s_latest'].stdout | default('', true)) | trim %}
+          {% set installed = (k3s_installed.stdout) | trim %}
+          {% if latest == '' %}
+            k3s: check skipped (latest unavailable — offline?)
+          {% elif installed == '' %}
+            k3s: not installed
+          {% elif installed == latest %}
+            k3s: up to date ({{ installed }})
+          {% else %}
+            k3s: OUT OF DATE — installed {{ installed }}, latest {{ latest }}
+          {% endif %}
+
+# ── 2. apt maintenance ──────────────────────────────────────────────────────
+
+- name: apt maintenance
+  hosts: k3s
+  become: true
+  serial: 1
+
+  tasks:
+    - name: Update apt package cache
       ansible.builtin.apt:
         update_cache: true
+        cache_valid_time: 3600   # skip re-running apt-get update within the last hour
 
-    - name: Upgrade packages
+    - name: Upgrade all packages
       ansible.builtin.apt:
-        upgrade: dist
-      register: apt_result
+        upgrade: dist            # full upgrade. Use "minimal" for strictly non-destructive (bare 'apt upgrade')
 
-    - name: Autoremove
+    - name: Remove unused dependencies
       ansible.builtin.apt:
         autoremove: true
 
-    # Firmware (Raspberry Pi specific)
-    - name: Check firmware version (RPi)
-      ansible.builtin.shell:
-        cmd: "cat /boot/firmware/VERSION.txt 2>/dev/null || echo 'unknown'"
-      register: firmware_version
-      changed_when: false
-      ignore_errors: true
-
-    - name: Upgrade firmware (RPi)
-      ansible.builtin.shell:
-        cmd: "apt install -y rpi-update && rpi-update"
-      when:
-        - "'masters' in group_names"
-        - ansible_facts.get_distribution_name | default('') in ['Raspbian', 'Debian', 'Ubuntu']
-      register: firmware_upgrade
-      retries: 2
-      delay: 10
-      ignore_errors: true
-
-    # K3s upgrade (skip if environment variable not set)
-    - name: Check k3s upgrade needed
+    - name: Clean apt cache to reclaim space
       ansible.builtin.command:
-        cmd: "k3s --version | head -1"
-      register: current_k3s
+        cmd: apt clean
       changed_when: false
-
-    - name: Upgrade k3s on master (if K3S_VERSION set)
-      ansible.builtin.shell:
-        cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ k3s_version }} sh -s - server {{ k3s_extra_args }}"
-      when:
-        - k3s_version is defined
-        - current_k3s.stdout | trim != k3s_version | trim
-        - "'masters' in group_names"
-      register: k3s_upgrade
-      retries: 3
-      delay: 10
-
-    - name: Upgrade k3s on worker (if K3S_VERSION set)
-      ansible.builtin.shell:
-        cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION={{ k3s_version }} sh -s - agent"
-      when:
-        - k3s_version is defined
-        - current_k3s.stdout | trim != k3s_version | trim
-        - "'workers' in group_names"
-      register: k3s_upgrade
-      retries: 3
-      delay: 10
-
-    - name: Log upgrade results
-      ansible.builtin.command:
-        cmd: "sh -c 'echo \"{{ inventory_hostname }}: apt={{ apt_result.changed }} firmware={{ firmware_upgrade.changed | default(false) }} k3s={{ k3s_upgrade.changed | default(false) }}\" >> {{ upgrade_log_dir }}/site.log'"
-      changed_when: false
-
-  post_tasks:
-    - name: Show disk usage after
-      ansible.builtin.shell:
-        cmd: df -h / | tail -1
-      register: disk_after
-      changed_when: false
-
-    - name: Check reboot requirement
-      ansible.builtin.stat:
-        path: /var/run/reboot-required
-      register: reboot_needed
-
-    - name: Set upgrade flag
-      ansible.builtin.set_fact:
-        upgrade_occurred: true
-      when:
-        - (firmware_upgrade | default) | bool or (k3s_upgrade | default) | bool
-
-    - name: Log end of maintenance
-      ansible.builtin.command:
-        cmd: "sh -c 'echo \"{{ inventory_hostname }}: reboot={{ reboot_needed.stat.exists }}\" >> {{ upgrade_log_dir }}/site.log'"
-      changed_when: false
-
-    - name: Print reboot status
-      ansible.builtin.debug:
-        msg: "Reboot: {{ 'YES' if reboot_needed.stat.exists else 'no' }}"

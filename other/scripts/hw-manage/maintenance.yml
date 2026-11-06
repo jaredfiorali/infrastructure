@@ -1,0 +1,115 @@
+---
+# Safely take a cluster node out for maintenance (reboot), Longhorn-aware.
+#
+# One node at a time (serial: 1), so you never drop k3s quorum or all replicas at once:
+#   1. cordon            — stop scheduling new pods
+#   2. drain             — evict workloads; Longhorn re-replicates to healthy nodes
+#   3. reboot (optional) — reboot the node, wait for it to come back
+#   4. validate          — node is Ready again, no workloads stranded
+#   5. uncordon          — allow scheduling again
+#
+# Nothing here upgrades k3s or manually scales anything — drain + ArgoCD handle the
+# workloads, so there is no git commit and nothing to "scale back up".
+#
+# kubectl runs from the operator's machine (localhost has ~/.kube/config).
+# The reboot itself runs over SSH. ansible.cfg already connects as root on the nodes,
+# so become is intentionally NOT set (keep it off and the localhost kubectl tasks
+# stay passwordless).
+
+- name: Take nodes out for maintenance
+  hosts: k3s
+  gather_facts: false
+  become: false   # override any `-b` on the CLI: kubectl runs on localhost (no sudo on the Mac)
+  serial: 1
+  vars:
+    # Reboot the node by default. Set maintenance_reboot=false to relocate workloads
+    # without rebooting (e.g. to inspect the node while powered off, then power on).
+    maintenance_reboot: true
+    # Where kubectl talks to the cluster. localhost = your Mac's ~/.kube/config.
+    maintenance_kubectl_host: localhost
+
+  pre_tasks:
+    - name: State what's about to happen
+      ansible.builtin.debug:
+        msg: >-
+          {{ inventory_hostname }}: cordon → drain →
+          {{ 'reboot' if maintenance_reboot | bool else 'no reboot' }}
+          → validate → uncordon
+
+  tasks:
+    - name: Cordon the node
+      ansible.builtin.command:
+        cmd: "kubectl cordon {{ inventory_hostname }}"
+      delegate_to: "{{ maintenance_kubectl_host }}"
+      changed_when: false
+
+    - name: Drain the node (evict workloads, keep daemonsets)
+      ansible.builtin.command:
+        cmd: >-
+          kubectl drain {{ inventory_hostname }}
+          --ignore-daemonsets --delete-emptydir-data
+          --timeout=180s
+      delegate_to: "{{ maintenance_kubectl_host }}"
+
+    - name: Confirm no workloads are left on the node
+      ansible.builtin.command:
+        cmd: >-
+          kubectl get pods -A
+          --field-selector spec.nodeName={{ inventory_hostname }},status.phase!=Terminating
+          -o name
+      delegate_to: "{{ maintenance_kubectl_host }}"
+      register: maintenance_remaining_pods
+      changed_when: false
+
+    - name: Fail if any workload is still scheduled on the node
+      ansible.builtin.assert:
+        that:
+          - "maintenance_remaining_pods.stdout == ''"
+        fail_msg: >-
+          {{ inventory_hostname }} was not fully drained. Stranded pods:
+          {{ maintenance_remaining_pods.stdout }}
+        success_msg: "{{ inventory_hostname }} drained cleanly — no workloads remain."
+
+    - name: Reboot the node
+      ansible.builtin.reboot:
+        msg: "hw-manage: rebooting for maintenance"
+        connect_timeout: 10
+        reboot_timeout: 600
+        test_command: uptime
+      when: maintenance_reboot | bool
+
+    - name: Wait for the node to report Ready in the cluster (poll up to 5 min)
+      ansible.builtin.command:
+        cmd: "kubectl get node {{ inventory_hostname }} -o jsonpath='{.status.conditions[?(@.type==\"Ready\")].status}'"
+      delegate_to: "{{ maintenance_kubectl_host }}"
+      register: maintenance_node_ready
+      changed_when: false
+      retries: 30
+      delay: 10
+      until: maintenance_node_ready.stdout == 'True'
+      when: maintenance_reboot | bool
+
+    - name: Report Longhorn volume health (informational)
+      ansible.builtin.command:
+        cmd: "kubectl get -n longhorn-system volume -o wide 2>/dev/null || echo 'Longhorn volume CRD not queryable here — check the Longhorn UI'"
+      delegate_to: localhost
+      register: maintenance_longhorn_volumes
+      changed_when: false
+      when: maintenance_reboot | bool
+
+    - name: Summarize Longhorn volume health
+      ansible.builtin.debug:
+        msg: "- Longhorn volumes: {{ maintenance_longhorn_volumes.stdout | trim | default('(none)', true) }}"
+      when: maintenance_reboot | bool
+
+    - name: Uncordon the node
+      ansible.builtin.command:
+        cmd: "kubectl uncordon {{ inventory_hostname }}"
+      delegate_to: "{{ maintenance_kubectl_host }}"
+      changed_when: false
+
+    - name: Print cluster node status
+      ansible.builtin.command:
+        cmd: "kubectl get node -o wide"
+      delegate_to: localhost
+      run_once: true
