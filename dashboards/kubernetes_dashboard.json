@@ -6017,9 +6017,9 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "-sum(rate(node_disk_reads_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "expr": "rate(node_network_receive_bytes_total{instance=\"192.168.15.4:9100\", device=\"en0\"}[$__rate_interval])*8",
                         "interval": "$resolution",
-                        "legendFormat": "Reads",
+                        "legendFormat": "Receive",
                         "range": true
                       },
                       "version": "v0"
@@ -6040,9 +6040,9 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "sum(rate(node_disk_writes_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "expr": "-rate(node_network_transmit_bytes_total{instance=\"192.168.15.4:9100\", device=\"en0\"}[$__rate_interval])*8",
                         "interval": "$resolution",
-                        "legendFormat": "Write",
+                        "legendFormat": "Transmit",
                         "range": true
                       },
                       "version": "v0"
@@ -6058,7 +6058,7 @@
           "description": "",
           "id": 767,
           "links": [],
-          "title": "Memory Utilization",
+          "title": "Network Utilization",
           "vizConfig": {
             "group": "timeseries",
             "kind": "VizConfig",
@@ -6116,7 +6116,7 @@
                       }
                     ]
                   },
-                  "unit": "iops"
+                  "unit": "bytes"
                 },
                 "overrides": []
               },
@@ -6360,6 +6360,153 @@
                     ]
                   },
                   "unit": "bytes"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-769": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "-sum(rate(node_disk_reads_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "interval": "$resolution",
+                        "legendFormat": "Reads",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "sum(rate(node_disk_writes_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "interval": "$resolution",
+                        "legendFormat": "Write",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "F"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 769,
+          "links": [],
+          "title": "Memory Utilization",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": true,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 50,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 2,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "iops"
                 },
                 "overrides": []
               },
@@ -7210,11 +7357,24 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-767"
+                          "name": "panel-769"
                         },
                         "height": 5,
                         "width": 6,
                         "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-767"
+                        },
+                        "height": 5,
+                        "width": 6,
+                        "x": 18,
                         "y": 0
                       }
                     }
