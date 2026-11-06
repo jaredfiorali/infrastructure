@@ -1,6 +1,6 @@
 ---
 # Per-node steps, included once per node (run serial: 1).
-# Ordering: cordon -> drain -> confirm empty -> no attached Longhorn volumes ->
+# Ordering: cordon -> drain -> confirm empty -> all Longhorn volumes Detached ->
 #           k3sup upgrade -> (rollback on fail) -> wait Ready -> uncordon.
 #
 # The upgrade and the readiness-wait each live in a block whose rescue rolls the
@@ -38,26 +38,26 @@
       {{ upgrade_remaining_pods.stdout }}
     success_msg: "{{ inventory_hostname }} drained cleanly — no workloads remain."
 
-- name: Check for Longhorn volumes still attached to this node
+- name: Check for Longhorn volumes not fully detached from this node
   command: >-
     kubectl get -n longhorn-system volume
-    -o jsonpath='{.items[?(@.status.nodeID=="{{ inventory_hostname }}")].metadata.name}'
-  register: upgrade_attached_volumes
+    -o jsonpath='{.items[?(@.status.nodeID=="{{ inventory_hostname }}" && @.status.state != "Detached")].metadata.name}'
+  register: upgrade_detaching_volumes
   delegate_to: localhost
   changed_when: false
   failed_when: false   # CRD may be absent on clusters without Longhorn
 
-- name: Fail if any Longhorn volume is still attached to this node
+- name: Fail if any Longhorn volume is not fully detached from this node
   assert:
     that:
-      - "upgrade_attached_volumes.rc == 0"
-      - "upgrade_attached_volumes.stdout | trim == ''"
+      - "upgrade_detaching_volumes.rc == 0"
+      - "upgrade_detaching_volumes.stdout | trim == ''"
     fail_msg: >-
-      {{ inventory_hostname }} still has Longhorn volumes attached:
-      {{ upgrade_attached_volumes.stdout | trim }}.
-      Reschedule the workload so the volume detaches, then re-run.
-    success_msg: "{{ inventory_hostname }} has no attached Longhorn volumes."
-  when: upgrade_attached_volumes.rc == 0   # skip validation if the CRD is absent
+      {{ inventory_hostname }} still has Longhorn volumes not detached:
+      {{ upgrade_detaching_volumes.stdout | trim }}.
+      Wait for them to reach Detached (or reschedule the workload), then re-run.
+    success_msg: "{{ inventory_hostname }} has no Longhorn volumes attached or mid-migration."
+  when: upgrade_detaching_volumes.rc == 0   # skip validation if the CRD is absent
 
 - name: Build the k3sup upgrade command (placeholder version token)
   set_fact:
@@ -132,10 +132,11 @@
           Rolled back to {{ initial_k3s_version }}.
 
 - name: Report Longhorn volume health (informational)
-  command: "kubectl get -n longhorn-system volume -o wide 2>/dev/null || echo 'Longhorn volume CRD not queryable here — check the Longhorn UI'"
+  command: "kubectl get -n longhorn-system volume -o wide"
   delegate_to: localhost
   register: upgrade_longhorn_volumes
   changed_when: false
+  failed_when: false   # cluster may not have Longhorn; this is display-only
 
 - name: Summarize Longhorn volume health
   debug:
