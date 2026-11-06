@@ -6407,7 +6407,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "-sum(rate(node_disk_reads_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "expr": "sum(rate(node_disk_reads_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
                         "interval": "$resolution",
                         "legendFormat": "Reads",
                         "range": true
@@ -6430,7 +6430,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "sum(rate(node_disk_writes_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "expr": "-sum(rate(node_disk_writes_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
                         "interval": "$resolution",
                         "legendFormat": "Write",
                         "range": true
