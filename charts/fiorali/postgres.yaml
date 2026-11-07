@@ -3,8 +3,8 @@ namespace: postgres
 deployment:
   enabled: true
 image:
-  repository: docker.io/postgis/postgis
-  tag: 17-3.7-alpine@sha256:e22fcf43400b73d58a5de44b5434e5c8e17531a04d88c7274b073d4938533ea8
+  repository: docker.io/imresamu/postgis
+  tag: latest@sha256:b5766ee720aca09c61b9a868abefbf273348a4b90ad4cf146b4f8c9ac85d48e4
 containerPorts:
 - containerPort: 5432
   name: postgres
