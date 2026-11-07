@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - dawarich-sidekiq.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.131'
+    targetRevision: '0.3.132'
   syncPolicy:
     automated:
       enabled: true
