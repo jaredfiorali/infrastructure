@@ -3,8 +3,8 @@ namespace: postgres
 deployment:
   enabled: true
 image:
-  repository: docker.io/postgis/postgis
-  tag: 17-3.7-alpine@sha256:e22fcf43400b73d58a5de44b5434e5c8e17531a04d88c7274b073d4938533ea8
+  repository: docker.io/imresamu/postgis
+  tag: 17-3.5-alpine@sha256:7f25892b7cb34c2bbb33e597b24430957da748a14ce1a4821a28d8c2935c9758
 containerPorts:
 - containerPort: 5432
   name: postgres
@@ -34,6 +34,8 @@ ingress:
   enabled: true
   portName: postgrest
 env:
+- name: PGDATA
+  value: /var/lib/postgresql/data/pgdata
 - name: POSTGRES_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -66,16 +68,15 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   privileged: false
 podSecurityContext:
-  fsGroup: 1000
+  fsGroup: 70
   runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
+  runAsUser: 70
+  runAsGroup: 70
 volume:
   enabled: true
   size: "1073741824"
 imageUpdater:
   enabled: true
-  rootImageTag: "alpine"
 externalSecrets:
 - name: postgres-credentials
   data:
