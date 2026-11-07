@@ -434,7 +434,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -565,7 +565,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -726,7 +726,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -872,7 +872,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1005,7 +1005,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1132,7 +1132,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1559,7 +1559,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1690,7 +1690,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1827,7 +1827,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -1910,7 +1910,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -2046,7 +2046,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -2178,7 +2178,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -2379,7 +2379,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -2527,7 +2527,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -2678,7 +2678,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -3086,7 +3086,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -3246,7 +3246,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -3355,7 +3355,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -3460,7 +3460,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -3584,7 +3584,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4179,10 +4179,11 @@
                     "desc": true,
                     "displayName": "CPU"
                   }
-                ]
+                ],
+                "zebraStriping": false
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4274,6 +4275,7 @@
                 "showFieldSelector": false,
                 "showLabels": true,
                 "showLevel": true,
+                "showLogAttributes": true,
                 "showTime": true,
                 "sortOrder": "Descending",
                 "timestampResolution": "ms",
@@ -4281,7 +4283,7 @@
                 "wrapLogMessage": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4384,7 +4386,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4513,7 +4515,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4696,7 +4698,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4872,7 +4874,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -4981,242 +4983,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
-          }
-        }
-      },
-      "panel-755": {
-        "kind": "Panel",
-        "spec": {
-          "data": {
-            "kind": "QueryGroup",
-            "spec": {
-              "queries": [
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "bf97cjlrdkkxsb"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "editorMode": "code",
-                        "exemplar": false,
-                        "expr": "sum by (node) (rate((coredns_cache_requests_total{container=\"cloudflared\"}[1m]))\n  * on(namespace, pod)\n    group_left(node)\n    kube_pod_info)*60",
-                        "format": "time_series",
-                        "instant": false,
-                        "interval": "$resolution",
-                        "intervalFactor": 1,
-                        "legendFormat": "{{node}}",
-                        "range": true
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "A"
-                  }
-                },
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "bf97cjlrdkkxsb"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum(rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"REFUSED\"}[$__rate_interval]))\n/\nsum(rate(coredns_dns_responses_total{container=\"cloudflared\"}[$__rate_interval]))",
-                        "instant": false,
-                        "interval": "$resolution",
-                        "legendFormat": "Block Rate",
-                        "range": true
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "B"
-                  }
-                },
-                {
-                  "kind": "PanelQuery",
-                  "spec": {
-                    "hidden": false,
-                    "query": {
-                      "datasource": {
-                        "name": "bf97cjlrdkkxsb"
-                      },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
-                      "spec": {
-                        "editorMode": "code",
-                        "expr": "sum(rate(coredns_dns_responses_total{container=\"cloudflared\", rcode=\"SERVFAIL\"}[$__rate_interval]))\n/\nsum(rate(coredns_dns_responses_total{container=\"cloudflared\"}[$__rate_interval]))",
-                        "instant": false,
-                        "interval": "$resolution",
-                        "legendFormat": "Error Rate",
-                        "range": true
-                      },
-                      "version": "v0"
-                    },
-                    "refId": "C"
-                  }
-                }
-              ],
-              "queryOptions": {
-                "interval": "$resolution"
-              },
-              "transformations": []
-            }
-          },
-          "description": "",
-          "id": 755,
-          "links": [],
-          "title": "CloudFlare DNS Usage",
-          "vizConfig": {
-            "group": "timeseries",
-            "kind": "VizConfig",
-            "spec": {
-              "fieldConfig": {
-                "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
-                  "custom": {
-                    "axisBorderShow": false,
-                    "axisCenteredZero": false,
-                    "axisColorMode": "text",
-                    "axisLabel": "",
-                    "axisPlacement": "auto",
-                    "barAlignment": 0,
-                    "barWidthFactor": 0.6,
-                    "drawStyle": "bars",
-                    "fillOpacity": 100,
-                    "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
-                    },
-                    "insertNulls": false,
-                    "lineInterpolation": "linear",
-                    "lineWidth": 1,
-                    "pointSize": 5,
-                    "scaleDistribution": {
-                      "type": "linear"
-                    },
-                    "showPoints": "never",
-                    "showValues": false,
-                    "spanNulls": false,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
-                    },
-                    "thresholdsStyle": {
-                      "mode": "off"
-                    }
-                  },
-                  "decimals": 1,
-                  "thresholds": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": 0
-                      }
-                    ]
-                  },
-                  "unit": "reqpm"
-                },
-                "overrides": [
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Block Rate"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.axisPlacement",
-                        "value": "right"
-                      },
-                      {
-                        "id": "custom.drawStyle",
-                        "value": "line"
-                      },
-                      {
-                        "id": "custom.fillOpacity",
-                        "value": 10
-                      },
-                      {
-                        "id": "unit",
-                        "value": "percentunit"
-                      },
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "green",
-                          "mode": "fixed"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "matcher": {
-                      "id": "byName",
-                      "options": "Error Rate"
-                    },
-                    "properties": [
-                      {
-                        "id": "custom.axisPlacement",
-                        "value": "right"
-                      },
-                      {
-                        "id": "unit",
-                        "value": "percentunit"
-                      },
-                      {
-                        "id": "color",
-                        "value": {
-                          "fixedColor": "semi-dark-red",
-                          "mode": "fixed"
-                        }
-                      },
-                      {
-                        "id": "custom.drawStyle",
-                        "value": "line"
-                      },
-                      {
-                        "id": "custom.fillOpacity",
-                        "value": 10
-                      }
-                    ]
-                  }
-                ]
-              },
-              "options": {
-                "alertThreshold": true,
-                "annotations": {
-                  "clustering": -1,
-                  "multiLane": false
-                },
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "table",
-                  "enableFacetedFilter": false,
-                  "overflow": "ellipsis",
-                  "placement": "right",
-                  "showLegend": false
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "multi",
-                  "sort": "none"
-                }
-              }
-            },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -5314,10 +5081,11 @@
                 },
                 "showUnfilled": true,
                 "sizing": "auto",
+                "textMode": "auto",
                 "valueMode": "color"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -5417,10 +5185,11 @@
                 },
                 "showUnfilled": true,
                 "sizing": "auto",
+                "textMode": "auto",
                 "valueMode": "color"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -5541,7 +5310,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -5927,7 +5696,7 @@
                 "textMode": "auto"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -6088,7 +5857,678 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-766": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "sum by (mode) (rate(node_cpu_seconds_total{instance=\"192.168.15.4:9100\", mode !=\"idle\"}[$__rate_interval])) / 16",
+                        "interval": "$resolution",
+                        "legendFormat": "{{mode}}",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 766,
+          "links": [],
+          "title": "CPU Utilization",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "axisSoftMax": 1,
+                    "axisSoftMin": 0,
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "area"
+                    }
+                  },
+                  "decimals": 0,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      },
+                      {
+                        "color": "yellow",
+                        "value": 0.5
+                      },
+                      {
+                        "color": "red",
+                        "value": 0.7
+                      }
+                    ]
+                  },
+                  "unit": "percentunit"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-767": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "rate(node_network_receive_bytes_total{instance=\"192.168.15.4:9100\", device=\"en0\"}[$__rate_interval])*8",
+                        "interval": "$resolution",
+                        "legendFormat": "Receive",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "-rate(node_network_transmit_bytes_total{instance=\"192.168.15.4:9100\", device=\"en0\"}[$__rate_interval])*8",
+                        "interval": "$resolution",
+                        "legendFormat": "Transmit",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "F"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 767,
+          "links": [],
+          "title": "Network Utilization",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": true,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "bytes"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-768": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_free_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Free",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_inactive_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Inactive",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "B"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_purgeable_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Purgeable",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "C"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_active_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Active",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "D"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_wired_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Wired",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "E"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "node_memory_compressed_bytes{instance=\"192.168.15.4:9100\"}",
+                        "interval": "$resolution",
+                        "legendFormat": "Compressed",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "F"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 768,
+          "links": [],
+          "title": "Memory Utilization",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "percent"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 0,
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "bytes"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
+          }
+        }
+      },
+      "panel-769": {
+        "kind": "Panel",
+        "spec": {
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "sum(rate(node_disk_reads_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "interval": "$resolution",
+                        "legendFormat": "Reads",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "A"
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "hidden": false,
+                    "query": {
+                      "datasource": {
+                        "name": "bf97cjlrdkkxsb"
+                      },
+                      "group": "prometheus",
+                      "kind": "DataQuery",
+                      "spec": {
+                        "editorMode": "code",
+                        "exemplar": true,
+                        "expr": "-sum(rate(node_disk_writes_completed_total{instance=\"192.168.15.4:9100\"}[$__rate_interval])) by (instance)",
+                        "interval": "$resolution",
+                        "legendFormat": "Write",
+                        "range": true
+                      },
+                      "version": "v0"
+                    },
+                    "refId": "F"
+                  }
+                }
+              ],
+              "queryOptions": {},
+              "transformations": []
+            }
+          },
+          "description": "",
+          "id": 769,
+          "links": [],
+          "title": "Disk Utilization",
+          "vizConfig": {
+            "group": "timeseries",
+            "kind": "VizConfig",
+            "spec": {
+              "fieldConfig": {
+                "defaults": {
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": true,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 10,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "normal"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "decimals": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  "unit": "iops"
+                },
+                "overrides": []
+              },
+              "options": {
+                "annotations": {
+                  "clustering": -1,
+                  "multiLane": false
+                },
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "overflow": "ellipsis",
+                  "placement": "right",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              }
+            },
+            "version": "13.3.0"
           }
         }
       },
@@ -6230,10 +6670,11 @@
                 },
                 "showUnfilled": true,
                 "sizing": "auto",
+                "textMode": "auto",
                 "valueMode": "color"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -6376,10 +6817,11 @@
                 "showUnfilled": true,
                 "sizing": "auto",
                 "text": {},
+                "textMode": "auto",
                 "valueMode": "color"
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -6509,7 +6951,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -6637,7 +7079,7 @@
                 }
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       },
@@ -6721,7 +7163,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.2"
+            "version": "13.3.0"
           }
         }
       }
@@ -6860,25 +7302,12 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
-                          "name": "panel-755"
-                        },
-                        "height": 5,
-                        "width": 24,
-                        "x": 0,
-                        "y": 7
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
                           "name": "panel-746"
                         },
                         "height": 6,
                         "width": 24,
                         "x": 0,
-                        "y": 12
+                        "y": 7
                       }
                     }
                   ]
@@ -6900,9 +7329,75 @@
                       "spec": {
                         "element": {
                           "kind": "ElementReference",
+                          "name": "panel-766"
+                        },
+                        "height": 5,
+                        "width": 6,
+                        "x": 0,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-768"
+                        },
+                        "height": 5,
+                        "width": 6,
+                        "x": 6,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-769"
+                        },
+                        "height": 5,
+                        "width": 6,
+                        "x": 12,
+                        "y": 0
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-767"
+                        },
+                        "height": 5,
+                        "width": 6,
+                        "x": 18,
+                        "y": 0
+                      }
+                    }
+                  ]
+                }
+              },
+              "title": "Mac Studio"
+            }
+          },
+          {
+            "kind": "RowsLayoutRow",
+            "spec": {
+              "collapse": false,
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
                           "name": "panel-732"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 6,
                         "x": 0,
                         "y": 0
@@ -6915,7 +7410,7 @@
                           "kind": "ElementReference",
                           "name": "panel-733"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 6,
                         "x": 6,
                         "y": 0
@@ -6928,7 +7423,7 @@
                           "kind": "ElementReference",
                           "name": "panel-734"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 6,
                         "x": 12,
                         "y": 0
@@ -6941,7 +7436,7 @@
                           "kind": "ElementReference",
                           "name": "panel-737"
                         },
-                        "height": 6,
+                        "height": 5,
                         "width": 6,
                         "x": 18,
                         "y": 0
@@ -6957,7 +7452,7 @@
                         "height": 5,
                         "width": 6,
                         "x": 0,
-                        "y": 6
+                        "y": 5
                       }
                     },
                     {
@@ -6970,7 +7465,7 @@
                         "height": 5,
                         "width": 6,
                         "x": 6,
-                        "y": 6
+                        "y": 5
                       }
                     },
                     {
@@ -6983,7 +7478,7 @@
                         "height": 5,
                         "width": 6,
                         "x": 12,
-                        "y": 6
+                        "y": 5
                       }
                     },
                     {
@@ -6996,7 +7491,7 @@
                         "height": 5,
                         "width": 6,
                         "x": 18,
-                        "y": 6
+                        "y": 5
                       }
                     }
                   ]
