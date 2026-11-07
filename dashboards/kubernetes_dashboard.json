@@ -6314,8 +6314,6 @@
                     "axisColorMode": "text",
                     "axisLabel": "",
                     "axisPlacement": "auto",
-                    "axisSoftMax": 1,
-                    "axisSoftMin": 0,
                     "barAlignment": 0,
                     "barWidthFactor": 0.9,
                     "drawStyle": "line",
@@ -6341,14 +6339,14 @@
                     "spanNulls": false,
                     "stacking": {
                       "group": "A",
-                      "mode": "normal"
+                      "mode": "percent"
                     },
                     "thresholdsStyle": {
                       "mode": "off"
                     }
                   },
                   "decimals": 0,
-                  "max": 69000000000,
+                  "max": 1,
                   "min": 0,
                   "thresholds": {
                     "mode": "absolute",
@@ -6448,7 +6446,7 @@
           "description": "",
           "id": 769,
           "links": [],
-          "title": "Memory Utilization",
+          "title": "Disk Utilization",
           "vizConfig": {
             "group": "timeseries",
             "kind": "VizConfig",
