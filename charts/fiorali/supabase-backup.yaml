@@ -2,7 +2,7 @@ name: supabase-backup
 namespace: postgres
 image:
   repository: docker.io/imresamu/postgis
-  tag: 17-master@sha256:9347ff269f3dd56d0fa4189a55414ffbf9db80bee23aa91479ea616073dea43d
+  tag: 17-3.5-alpine@sha256:7f25892b7cb34c2bbb33e597b24430957da748a14ce1a4821a28d8c2935c9758
   pullPolicy: IfNotPresent
 deployment:
   enabled: false
@@ -242,4 +242,4 @@ volumes:
     sizeLimit: 2Gi
 imageUpdater:
   enabled: true
-  rootImageTag: 17-master
+  rootImageTag: 17-3.5-alpine
