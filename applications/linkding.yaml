@@ -21,7 +21,7 @@ spec:
       - values.yaml
       - linkding.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.128'
+    targetRevision: '0.3.130'
   syncPolicy:
     automated:
       enabled: true
