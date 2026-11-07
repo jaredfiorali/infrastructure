@@ -1,8 +1,8 @@
 name: supabase-backup
 namespace: postgres
 image:
-  repository: docker.io/postgis/postgis
-  tag: 17-3.7-alpine@sha256:e22fcf43400b73d58a5de44b5434e5c8e17531a04d88c7274b073d4938533ea8
+  repository: docker.io/imresamu/postgis
+  tag: 17-3.5-alpine@sha256:7f25892b7cb34c2bbb33e597b24430957da748a14ce1a4821a28d8c2935c9758
   pullPolicy: IfNotPresent
 deployment:
   enabled: false
@@ -131,6 +131,7 @@ command:
         echo "Syncing '$app' -> '$live'..."
 
         # 1) Dump the source (public schema only) and verify the file is readable.
+        echo "Dumping the source schema..."
         if ! pg_dump "$url" --format=custom --no-owner --no-privileges -n public \
               -f "$dump" 2> /work/err.log \
            || ! pg_restore --list "$dump" > /dev/null 2>> /work/err.log; then
@@ -139,6 +140,7 @@ command:
         fi
 
         # 2) Ask the source which extensions (and schemas) it uses, skipping Supabase-only ones
+        echo "Validating source extensions..."
         : > /work/exts.tsv
         psql "$url" -X -At -F "$TAB" -c "
           SELECT e.extname, n.nspname
@@ -149,6 +151,7 @@ command:
           || echo "  -> note: could not read extension list: $(cat /work/err.log)"
 
         # 3) Create the staging database and install the same extensions
+        echo "Creating staging database..."
         if ! psql -v ON_ERROR_STOP=1 -X -q \
               -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" \
               -c "CREATE DATABASE \"${stage}\";" 2> /work/err.log; then
@@ -168,14 +171,18 @@ command:
         done < /work/exts.tsv
 
         # 4) Restore into staging
+        echo "Restoring into staging..."
+        pg_restore --list "$dump" | grep -v -E ' SCHEMA - public( |$)' > /scratch/restore.list
         if ! pg_restore --no-owner --no-privileges --exit-on-error \
-              -d "$stage" "$dump" 2> /work/err.log; then
+              -L /scratch/restore.list -d "$stage" "$dump" 2> /work/err.log; then
           echo "  -> RESTORE failed (existing '$live' left untouched): $(tail -8 /work/err.log)"
           psql -X -q -c "DROP DATABASE IF EXISTS \"${stage}\" WITH (FORCE);" 2> /dev/null
-          rm -f "$dump"; fail=$((fail+1)); continue
+          rm -f "$dump" /scratch/restore.list; fail=$((fail+1)); continue
         fi
+        rm -f /scratch/restore.list
 
         # 5) Swap: only now replace the previous copy
+        echo "Replacing old dump..."
         if ! psql -v ON_ERROR_STOP=1 -X -q \
               -c "DROP DATABASE IF EXISTS \"${live}\" WITH (FORCE);" \
               -c "ALTER DATABASE \"${stage}\" RENAME TO \"${live}\";" 2> /work/err.log; then
@@ -235,4 +242,3 @@ volumes:
     sizeLimit: 2Gi
 imageUpdater:
   enabled: true
-  rootImageTag: "17-alpine"

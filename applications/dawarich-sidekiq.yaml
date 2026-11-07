@@ -3,7 +3,6 @@ kind: Application
 metadata:
   labels:
     fiorali: 'true'
-    supabase: 'true'
   name: dawarich-sidekiq
   namespace: argocd
 spec:
