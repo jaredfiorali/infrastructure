@@ -4,7 +4,7 @@ deployment:
   enabled: true
 image:
   repository: docker.io/imresamu/postgis
-  tag: 17-3.5-alpine@sha256:7f25892b7cb34c2bbb33e597b24430957da748a14ce1a4821a28d8c2935c9758
+  tag: 17-3.5-alpine@sha256:c7e4985375d8a9583e9bbdb33d0182138fa9a24d22ba9d7cc19362c4827b9038
 containerPorts:
 - containerPort: 5432
   name: postgres
