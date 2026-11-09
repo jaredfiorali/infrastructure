@@ -56,15 +56,24 @@ fi
 chart_file="${chart_file:-$CD/Chart.yaml}"
 [[ -f "$chart_file" ]] || { echo "No Chart.yaml found at $chart_file"; exit 1; }
 
-# Pre-pull: save the commit we're bumping FROM
-pre_pull=$(git rev-parse HEAD)
 echo "Current version: $(grep '^version:' "$chart_file" | awk '{print $2}')"
 echo "Pulling from remote..."
 git pull
 
-# Find changed chart files between pre-pull and current HEAD
-changed=$(git diff --name-only "$pre_pull"..HEAD \
-  | grep -E 'charts/fiorali/[^/]+\.yaml' \
+# Baseline = the last chart bump (the most recent commit that changed Chart.yaml).
+# Everything changed since then is a service that belongs in this bump.
+# Recomputed AFTER the pull so a bump pushed by someone else on remote is respected.
+last_bump=$(git log -1 --format=%H -- "$chart_file")
+if [[ -z "$last_bump" ]]; then
+  echo "WARNING: no prior Chart.yaml commit found; listing all service files."
+  last_bump=$(git rev-list --max-parents=0 HEAD)
+fi
+
+# Diff against the working tree (not just HEAD) so locally-edited, uncommitted
+# services are included. Chart.yaml itself is filtered out below.
+changed=$(git diff --name-only "$last_bump" -- \
+    charts/fiorali/ \
+  | grep -E '^charts/fiorali/[^/]+\.yaml$' \
   | grep -v 'Chart\.yaml' \
   | sort || true)
 

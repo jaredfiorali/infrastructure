@@ -14,7 +14,7 @@ resources:
     cpu: 1500m
     memory: 2Gi
   requests:
-    cpu: 1000m
+    cpu: 100m
     memory: 1Gi
 probes:
   exec:

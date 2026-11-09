@@ -18,8 +18,8 @@ resources:
     cpu: 1
     memory: 1Gi
   requests:
-    cpu: 500m
-    memory: 500Mi
+    cpu: 50m
+    memory: 256Mi
 probes:
   httpGet:
     path: /

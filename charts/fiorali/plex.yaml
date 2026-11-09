@@ -14,8 +14,8 @@ resources:
     cpu: '3'
     memory: 4Gi
   requests:
-    cpu: '1'
-    memory: 3Gi
+    cpu: 100m
+    memory: 512Mi
 probes:
   httpGet:
     path: /identity

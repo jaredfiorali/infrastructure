@@ -19,8 +19,8 @@ resources:
     cpu: 500m
     memory: 500Mi
   requests:
-    cpu: 250m
-    memory: 250Mi
+    cpu: 50m
+    memory: 128Mi
 probes:
   httpGet:
     path: /healthz

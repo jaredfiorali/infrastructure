@@ -19,8 +19,8 @@ resources:
     cpu: '1'
     memory: 100Mi
   requests:
-    cpu: 500m
-    memory: 50Mi
+    cpu: 100m
+    memory: 64Mi
 probes:
   httpGet:
     path: /health

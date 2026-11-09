@@ -20,8 +20,8 @@ resources:
     cpu: '1'
     memory: 2Gi
   requests:
-    cpu: 500m
-    memory: 1500Mi
+    cpu: 100m
+    memory: 1Gi
 probes:
   httpGet:
     path: /manifest.json

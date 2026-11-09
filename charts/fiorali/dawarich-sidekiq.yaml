@@ -18,8 +18,8 @@ resources:
     cpu: '1'
     memory: 1G
   requests:
-    cpu: 500m
-    memory: 500Mi
+    cpu: 125m
+    memory: 384Mi
 probes:
   exec:
     command: ["sh", "-c", "if [[ $(pgrep sidekiq | wc -l) -ne 1 ]]; then exit 1; fi"]
