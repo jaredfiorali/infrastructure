@@ -2070,7 +2070,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": true,
-                        "expr": "sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) by (instance)",
+                        "expr": "sum(node_memory_MemTotal_bytes{instance=~\"rpi.*\"} - node_memory_MemAvailable_bytes{instance=~\"rpi.*\"}) by (instance)",
                         "interval": "$resolution",
                         "legendFormat": "{{ node}}",
                         "range": true
@@ -2129,7 +2129,7 @@
                     "spanNulls": false,
                     "stacking": {
                       "group": "A",
-                      "mode": "normal"
+                      "mode": "percent"
                     },
                     "thresholdsStyle": {
                       "mode": "off"
@@ -2374,7 +2374,7 @@
                 "tooltip": {
                   "hideZeros": false,
                   "maxHeight": 600,
-                  "mode": "single",
+                  "mode": "multi",
                   "sort": "none"
                 }
               }
@@ -2522,7 +2522,7 @@
                 "tooltip": {
                   "hideZeros": false,
                   "maxHeight": 600,
-                  "mode": "single",
+                  "mode": "multi",
                   "sort": "none"
                 }
               }
