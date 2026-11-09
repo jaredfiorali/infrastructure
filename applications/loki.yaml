@@ -138,10 +138,14 @@ spec:
         value: 'false'
       - name: singleBinary.replicas
         value: '1'
+      - name: singleBinary.resources.limits.cpu
+        value: 500m
       - name: singleBinary.resources.limits.memory
-        value: 4Gi
+        value: 1536Mi
+      - name: singleBinary.resources.requests.cpu
+        value: 250m
       - name: singleBinary.resources.requests.memory
-        value: 2Gi
+        value: 1Gi
       - name: test.enabled
         value: 'false'
       - name: write.replicas

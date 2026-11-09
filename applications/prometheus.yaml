@@ -13,7 +13,7 @@ spec:
   sources:
   - chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: '*'
+    targetRevision: 92.22.0
     helm:
       parameters:
       # alertmanager
@@ -98,17 +98,17 @@ spec:
       - name: prometheus.prometheusSpec.walCompression
         value: "true"
 
-      # resources — tightened from 4G limit
+      # resources — raised from 3G/2G; peak mem was 2.97Gi (limit was ~1% headroom)
       - name: prometheus.prometheusSpec.resources.limits.cpu
         value: "3"
         forceString: true
       - name: prometheus.prometheusSpec.resources.limits.memory
-        value: 3G
+        value: 4G
       - name: prometheus.prometheusSpec.resources.requests.cpu
         value: "2"
         forceString: true
       - name: prometheus.prometheusSpec.resources.requests.memory
-        value: 2G
+        value: 3G
 
       # node selection — prefer Pi 4s with usb storage
       - name: prometheus.prometheusSpec.nodeSelector.storage-tier
