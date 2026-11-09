@@ -4,7 +4,7 @@ metadata:
   labels:
     fiorali: 'true'
     supabase: 'true'
-  name: dawarich
+  name: dawarich-app
   namespace: argocd
 spec:
   destination:
