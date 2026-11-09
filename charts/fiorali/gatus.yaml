@@ -88,7 +88,7 @@ serviceMonitor:
   port: "gatus"
   interval: "5m"
 prometheusRules:
-  enabled: true
+  enabled: false
   rules:
   - alert: GatusEndpointStale
     expr: time() - max(gatus_results_duration_seconds > 0) > 600
