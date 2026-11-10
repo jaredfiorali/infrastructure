@@ -159,7 +159,7 @@ configMap:
             annotations:
               fred: [blee, duh] # => exclude any resources with annotations matching either fred=blee or fred=duh
             # => exclude specified codes (https://popeyecli.io/docs/codes.html)
-            codes: ["1109", "406"] # => Only one Pod associated with this endpoint, K8s version OK
+            codes: ["110", "1109", "406"] # => Memory request limits, Only one Pod associated with this endpoint, K8s version OK
           # Configure individual resource linters
           linters:
             clusterrolebindings:
