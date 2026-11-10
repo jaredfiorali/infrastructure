@@ -2,7 +2,7 @@ name: dawarich-sidekiq
 namespace: dawarich
 deployment:
   enabled: true
-replicaCount: 1
+replicaCount: 2
 image:
   repository: docker.io/freikin/dawarich
   tag: latest@sha256:b8ee8d9fdff92a9d6ca570f98e0e875624f4bfb24b61363f8246bba124d5849d
