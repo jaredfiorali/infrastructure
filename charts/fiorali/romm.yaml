@@ -16,7 +16,7 @@ resources:
     memory: 2G
   requests:
     cpu: 100m
-    memory: 256Mi
+    memory: 1Gi
 probes:
   httpGet:
     path: /api/heartbeat
@@ -67,6 +67,8 @@ env:
         key: DB_PORT
   - name: DB_POOL_RECYCLE_SECONDS
     value: '180'
+  - name: DISABLE_USERPASS_LOGIN
+    value: 'true'
   # --- Redis/Valkey: external instance, required for multi-replica pubsub ---
   - name: REDIS_HOST
     value: romm-redis
@@ -130,7 +132,7 @@ volumeMounts:
   # Reuses the existing `roms` volume that emulatorjs also reads.
   - name: library
     mountPath: /romm/library
-    # readOnly: true
+    readOnly: true
   # IGDB covers/screenshots fetched at scan time (multi-writer with RWM).
   - name: romm-persistent-storage
     mountPath: /romm/resources
