@@ -21,6 +21,21 @@ probes:
   httpGet:
     path: /api/heartbeat
     port: romm
+  startupProbe:
+    failureThreshold: 15
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  livenessProbe:
+    failureThreshold: 3
+    periodSeconds: 120
+    successThreshold: 1
+    timeoutSeconds: 5
+  readinessProbe:
+    failureThreshold: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 5
 containerSecurityContext:
   enabled: false
 service:
@@ -67,8 +82,8 @@ env:
         key: DB_PORT
   - name: DB_POOL_RECYCLE_SECONDS
     value: '180'
-  # - name: DISABLE_USERPASS_LOGIN
-  #   value: 'true'
+  - name: DISABLE_USERPASS_LOGIN
+    value: 'true'
   # --- Redis/Valkey: external instance, required for multi-replica pubsub ---
   - name: REDIS_HOST
     value: romm-redis
