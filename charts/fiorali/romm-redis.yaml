@@ -1,0 +1,78 @@
+name: romm-redis
+namespace: romm
+deployment:
+  enabled: true
+replicaCount: 1
+image:
+  repository: docker.io/valkey/valkey
+  tag: 7-alpine@sha256:f8c1a646f4b31ae4dc3980ff06723a20b533ea1123b9796d450d78ed53ad6d3e
+containerPorts:
+  - containerPort: 6379
+    name: redis
+    protocol: TCP
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+probes:
+  exec:
+    command: ["sh", "-c", "valkey-cli ping"]
+  startupProbe:
+    failureThreshold: 15
+    periodSeconds: 10
+  livenessProbe:
+    failureThreshold: 3
+    periodSeconds: 30
+  readinessProbe:
+    failureThreshold: 2
+    periodSeconds: 10
+service:
+  enabled: true
+  ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: redis
+# No auth, matching the existing dawarich-redis pattern. RomM does not require a
+# Redis password (REDIS_PASSWORD is optional). Add REDIS_PASSWORD + --requirepass
+# if you want auth.
+volumeMounts:
+  - name: data
+    mountPath: /data
+  - name: tmp
+    mountPath: /tmp
+  - name: run
+    mountPath: /run
+volumes:
+  - name: data
+    emptyDir: {}
+  - name: tmp
+    emptyDir: {}
+  - name: run
+    emptyDir: {}
+# uid 999 matches the proven dawarich-redis (Redis/Valkey-compatible) image.
+podSecurityContext:
+  fsGroup: 999
+  runAsNonRoot: true
+  runAsUser: 999
+  runAsGroup: 999
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+nodeSelector: {}
+tolerations: []
+affinity: {}
+networkpolicy:
+  podSelector: true
+  ingress:
+    allowAll: true
+imageUpdater:
+  enabled: true
+  rootImageTag: "7-alpine"
