@@ -19,7 +19,7 @@ resources:
     memory: 256Mi
 probes:
   httpGet:
-    path: /
+    path: /api/heartbeat
     port: romm
 containerSecurityContext:
   enabled: false
