@@ -37,7 +37,17 @@ probes:
     successThreshold: 1
     timeoutSeconds: 5
 containerSecurityContext:
-  enabled: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  privileged: false
+podSecurityContext:
+  fsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
 service:
   enabled: true
   ports:
