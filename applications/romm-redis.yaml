@@ -17,7 +17,7 @@ spec:
       - values.yaml
       - romm-redis.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.143'
+    targetRevision: '0.3.144'
   syncPolicy:
     automated:
       enabled: true
