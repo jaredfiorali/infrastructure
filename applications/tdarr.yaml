@@ -18,7 +18,7 @@ spec:
       - values.yaml
       - tdarr.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.146'
+    targetRevision: '0.3.147'
   syncPolicy:
     automated:
       enabled: true
