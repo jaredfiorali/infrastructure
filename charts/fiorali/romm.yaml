@@ -22,10 +22,10 @@ probes:
     path: /api/heartbeat
     port: romm
   startupProbe:
-    failureThreshold: 15
+    failureThreshold: 30
     periodSeconds: 10
     successThreshold: 1
-    timeoutSeconds: 15
+    timeoutSeconds: 30
   livenessProbe:
     failureThreshold: 3
     periodSeconds: 120
