@@ -158,6 +158,11 @@ volumeMounts:
   - name: library
     mountPath: /romm/library
     readOnly: true
+  # # NFS destination for the ROM library migration (writable). Once the copy
+  # # from /romm/library/roms completes and verifies, this becomes the library
+  # # root and the read-only `roms` mount can be swapped out.
+  # - name: romm-nfs
+  #   mountPath: /romm/library-nfs
   # IGDB covers/screenshots fetched at scan time (multi-writer with RWM).
   - name: romm-persistent-storage
     mountPath: /romm/resources
@@ -170,16 +175,23 @@ volumeMounts:
     mountPath: /tmp
   - name: run
     mountPath: /run
+  - name: nginx-conf
+    mountPath: /etc/nginx/conf.d/
 volumes:
   - name: library
     persistentVolumeClaim:
       claimName: roms
+  # - name: romm-nfs
+  #   persistentVolumeClaim:
+  #     claimName: romm-nfs
   - name: romm-persistent-storage
     persistentVolumeClaim:
       claimName: romm
   - name: tmp
     emptyDir: {}
   - name: run
+    emptyDir: {}
+  - name: nginx-conf
     emptyDir: {}
 ingress:
   enabled: true
