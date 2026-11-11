@@ -67,8 +67,8 @@ env:
         key: DB_PORT
   - name: DB_POOL_RECYCLE_SECONDS
     value: '180'
-  - name: DISABLE_USERPASS_LOGIN
-    value: 'true'
+  # - name: DISABLE_USERPASS_LOGIN
+  #   value: 'true'
   # --- Redis/Valkey: external instance, required for multi-replica pubsub ---
   - name: REDIS_HOST
     value: romm-redis
