@@ -163,7 +163,7 @@ volumeMounts:
   # # root and the read-only `roms` mount can be swapped out.
   # - name: romm-nfs
   #   mountPath: /romm/library-nfs
-  # IGDB covers/screenshots fetched at scan time (multi-writer with RWM).
+  # IGDB covers/screenshots fetched at scan time (multi-writer with RWM)
   - name: romm-persistent-storage
     mountPath: /romm/resources
     subPath: resources
