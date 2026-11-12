@@ -56,11 +56,6 @@ service:
       protocol: TCP
       targetPort: romm
 env:
-  # Kubernetes auto-injects ROMM_PORT=tcp://<clusterip>:8080 for the `romm`
-  # service (service-discovery env vars). RomM feeds this raw value into the
-  # bundled nginx `listen` directive, where the tcp:// scheme is invalid and
-  # crashes nginx on startup. Override it with the bare port RomM expects
-  # (its default is 8080). Explicit container env vars win over the injected ones.
   - name: ROMM_PORT
     value: '8080'
   - name: ROMM_DB_DRIVER
@@ -94,29 +89,19 @@ env:
     value: '180'
   - name: DISABLE_USERPASS_LOGIN
     value: 'true'
-  # --- Redis/Valkey: external instance, required for multi-replica pubsub ---
   - name: REDIS_HOST
     value: romm-redis
   - name: REDIS_PORT
     value: '6379'
-  # --- Behaviour ---
   - name: SCAN_WORKERS
     value: '4'
   - name: WEB_SERVER_CONCURRENCY
     value: '4'
-  # Required secret key for JWT session/auth signing (openssl rand -hex 32).
   - name: ROMM_AUTH_SECRET_KEY
     valueFrom:
       secretKeyRef:
         name: romm-auth
         key: ROMM_AUTH_SECRET_KEY
-  # --- Optional: public URL once the ingress route is confirmed (needed for
-  #      correct asset URLs and OIDC/OAuth redirects). Leave unset until then. ---
-  # - name: ROMM_BASE_URL
-  #   value: https://romm.fiora.li
-  # --- Metadata provider keys (populated via the `romm-metadata` external secret) ---
-  # IGDB is the primary source: box art, descriptions, ratings, release dates.
-  # Get a free Twitch developer app at https://dev.twitch.tv/settings/apps
   - name: IGDB_CLIENT_ID
     valueFrom:
       secretKeyRef:
@@ -127,47 +112,13 @@ env:
       secretKeyRef:
         name: romm-metadata
         key: IGDB_CLIENT_SECRET
-  # SteamGridDB complements IGDB with higher-quality grid/logo art where IGDB is thin.
-  # Free API key at https://www.steamgodb.com/accounts/settings/updates
-  # - name: STEAMGRIDDB_API_KEY
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: romm-metadata
-  #       key: STEAMGRIDDB_API_KEY
-  # Optional extras (uncomment if desired):
-  # - name: HASHEOUS_API_ENABLED
-  #   value: 'true'
-  # - name: RETROACHIEVEMENTS_API_KEY
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: romm-metadata
-  #       key: RETROACHIEVEMENTS_API_KEY
-  # - name: SCREENSCRAPER_USER
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: romm-metadata
-  #       key: SCREENSCRAPER_USER
-  # - name: SCREENSCRAPER_PASSWORD
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: romm-metadata
-  #       key: SCREENSCRAPER_PASSWORD
 volumeMounts:
-  # ROMs library (read-only: RomM stores metadata in Postgres, not on the library).
-  # Reuses the existing `roms` volume that emulatorjs also reads.
-  - name: library
+  - name: romm-nfs
     mountPath: /romm/library
     readOnly: true
-  # # NFS destination for the ROM library migration (writable). Once the copy
-  # # from /romm/library/roms completes and verifies, this becomes the library
-  # # root and the read-only `roms` mount can be swapped out.
-  # - name: romm-nfs
-  #   mountPath: /romm/library-nfs
-  # IGDB covers/screenshots fetched at scan time (multi-writer with RWM)
   - name: romm-persistent-storage
     mountPath: /romm/resources
     subPath: resources
-  # Uploaded saves/states (multi-writer with RWM).
   - name: romm-persistent-storage
     mountPath: /romm/assets
     subPath: assets
@@ -178,9 +129,6 @@ volumeMounts:
   - name: nginx-conf
     mountPath: /etc/nginx/conf.d/
 volumes:
-  - name: library
-    persistentVolumeClaim:
-      claimName: roms
   - name: romm-nfs
     persistentVolumeClaim:
       claimName: romm-nfs
@@ -241,6 +189,3 @@ externalSecrets:
       - secretKey: IGDB_CLIENT_SECRET
         remoteRef:
           key: /homelab/romm/IGDB_CLIENT_SECRET
-      # - secretKey: STEAMGRIDDB_API_KEY
-      #   remoteRef:
-      #     key: /homelab/romm/STEAMGRIDDB_API_KEY
