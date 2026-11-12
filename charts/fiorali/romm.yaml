@@ -181,9 +181,9 @@ volumes:
   - name: library
     persistentVolumeClaim:
       claimName: roms
-  # - name: romm-nfs
-  #   persistentVolumeClaim:
-  #     claimName: romm-nfs
+  - name: romm-nfs
+    persistentVolumeClaim:
+      claimName: romm-nfs
   - name: romm-persistent-storage
     persistentVolumeClaim:
       claimName: romm
