@@ -37,12 +37,12 @@ Each deployed service has its own YAML file in `charts/fiorali/` (e.g., `plex.ya
 **Chart version drives deployment**: ArgoCD watches the chart version, not git commits. To deploy:
 
 1. Make your changes to charts/fiorali/ files
-2. Update `/Users/jared/Documents/infrastructure/charts/fiorali/Chart.yaml` - increment the version on line 18 (e.g., `0.2.170` → `0.2.171`)
+2. Update `~/Documents/infrastructure/charts/fiorali/Chart.yaml` - increment the version on line 18 (e.g., `0.2.170` → `0.2.171`)
 3. Commit and push to `main`
 
 ### Kubernetes Commands and kubectl usage
 
-All kubectl commands can be run in terminal sessions. The kubeconfig is at `/Users/jared/Documents/infrastructure/kubeconfig`.
+All kubectl commands can be run in terminal sessions. The kubeconfig is at `~/Documents/infrastructure/kubeconfig`.
 
 ```bash
 # Check ArgoCD status

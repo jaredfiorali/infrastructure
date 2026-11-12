@@ -18,7 +18,7 @@ This is a GitOps setup where deployment is triggered by **bumping the Chart.yaml
 ### Standard deploy workflow
 
 ```bash
-cd /Users/jared/Documents/infrastructure
+cd ~/Documents/infrastructure
 
 # 1. Check what changed
 git status

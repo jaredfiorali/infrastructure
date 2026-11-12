@@ -12,7 +12,7 @@ Services are updated by editing their override file (`charts/fiorali/<service>.y
 
 1. Edit the service's override file:
    ```bash
-   cd /Users/jared/Documents/infrastructure
+   cd ~/Documents/infrastructure
    # Edit image tag, version, or configuration
    vim charts/fiorali/<service>.yaml
    ```

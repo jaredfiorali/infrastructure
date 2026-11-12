@@ -17,7 +17,7 @@ description: Add a new service to the Fiorali k3s homelab via a per-service Helm
 - 26 active namespaces; services hosted in `downloader`, `monitoring`, `loki`, `longhorn-system`, etc.
 
 **Prerequisites:** 
-- Access to `/Users/jared/Documents/infrastructure`
+- Access to `~/Documents/infrastructure`
 - Understanding of the service requirements (containers, ports, storage, env vars)
 
 ## Workflow
@@ -26,15 +26,15 @@ description: Add a new service to the Fiorali k3s homelab via a per-service Helm
 
 For new services, create a dedicated namespace:
 ```bash
-kubectl create namespace <service-name> --kubeconfig=/Users/jared/Documents/infrastructure/kubeconfig
+kubectl create namespace <service-name> --kubeconfig=~/Documents/infrastructure/kubeconfig
 ```
 
 ### 2. Create the Service Override File
 
-Create a new YAML file in `/Users/jared/Documents/infrastructure/charts/fiorali/` named after the service:
+Create a new YAML file in `~/Documents/infrastructure/charts/fiorali/` named after the service:
 
 ```bash
-cd /Users/jared/Documents/infrastructure/charts/fiorali/
+cd ~/Documents/infrastructure/charts/fiorali/
 touch new-service.yaml
 ```
 
@@ -97,7 +97,7 @@ ingress:
 
 ### 6. Bump Chart Version
 
-Edit `/Users/jared/Documents/infrastructure/charts/fiorali/Chart.yaml` and increment the version:
+Edit `~/Documents/infrastructure/charts/fiorali/Chart.yaml` and increment the version:
 
 ```yaml
 version: 0.2.171  # increment from current
@@ -106,7 +106,7 @@ version: 0.2.171  # increment from current
 ### 7. Commit and Push
 
 ```bash
-cd /Users/jared/Documents/infrastructure
+cd ~/Documents/infrastructure
 git add charts/fiorali/new-service.yaml charts/fiorali/Chart.yaml
 git commit -m "Add new-service to fleet"
 git push origin main
