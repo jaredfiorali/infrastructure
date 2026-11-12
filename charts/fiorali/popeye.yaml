@@ -235,16 +235,16 @@ configMap:
                     app: [home-assistant, influxdb, linkding, scrypted, sillytavern, unifi-poller, tdarr, postgres, gatus]
                   codes: [1206] # => Can't match 192.168.0.0/16 (ingress)
                 - labels:
-                    app: [git-sync, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli, tdarr, gatus]
+                    app: [git-sync, romm, kometa, linkding, cloudflared, dawarich-app, dawarich-sidekiq, grafana, plex, prowlarr, flaresolverr, radarr, ssh, sonarr, transmission, tautulli, tdarr, gatus]
                   codes: [1207] # => Can't match 192.168.0.0/16 (egress)
             # Configure the pods linter for v1/pods.
             pods:
               instances:
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, plex, transmission] # Exclude codes for any pods with specified labels
                   codes: [302] # => Pod could be running as root user. Check SecurityContext/Image
                 - labels:
-                    app: [dawarich-app, emulatorjs, plex, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
+                    app: [dawarich-app, plex, transmission, gluetun, ping] # Exclude codes for any pods with specified labels
                   codes: [306] # => Container could be running as root user. Check SecurityContext/Image
                 - labels:
                     app: [popeye, git-sync, kometa, supabase-backup] # Exclude codes for any pods with specified labels
