@@ -176,3 +176,54 @@ config.yaml: |
       group: infrastructure
       interval: 30s
       conditions: ["[CONNECTED] == true"]
+    # Kubernetes cluster nodes (10x Raspberry Pi, Servers VLAN 192.168.20.x)
+    - name: rpi5-node-3
+      url: "icmp://192.168.20.12"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi5-node-1
+      url: "icmp://192.168.20.10"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi5-node-2
+      url: "icmp://192.168.20.11"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi5-node-4
+      url: "icmp://192.168.20.13"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi5-node-5
+      url: "icmp://192.168.20.14"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi4-node-1
+      url: "icmp://192.168.20.2"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi4-node-2
+      url: "icmp://192.168.20.3"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi4-node-3
+      url: "icmp://192.168.20.4"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi4-node-4
+      url: "icmp://192.168.20.5"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]
+    - name: rpi4-node-5
+      url: "icmp://192.168.20.6"
+      group: infrastructure
+      interval: 30s
+      conditions: ["[CONNECTED] == true"]

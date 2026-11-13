@@ -100,16 +100,6 @@ containerSecurityContext:
 prometheusRules:
   enabled: true
   rules:
-  - alert: PlexHighRemoteLatency
-    expr: gatus_results_duration_seconds{key="media-management_plex(remote)"} > 5000
-    for: 10m
-    labels:
-      severity: warning
-      component: plex
-      namespace: monitoring
-    annotations:
-      summary: "Plex remote latency high: {{ $value | humanizeDuration }}"
-      description: "External Plex check latency is above 5s."
   - alert: PlexBufferDurationHigh
     expr: fiorali_plex{event="buffer"} > 300
     for: 15m

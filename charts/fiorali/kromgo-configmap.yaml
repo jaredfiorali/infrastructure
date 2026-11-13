@@ -89,14 +89,6 @@ config.yaml: |-
       query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex"}[30d]) * 1000, 1)
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
-    - name: plex_remote_uptime
-      query: round(sum(increase(gatus_results_total{key="media-management_plex(remote)", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_plex(remote)"}[30d])) * 100, 1)
-      suffix: "%"
-      colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
-    - name: media-management_plex(remote)
-      query: round(avg_over_time(gatus_results_duration_seconds{key="media-management_plex(remote)"}[30d]) * 1000, 1)
-      suffix: "ms"
-      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: prowlarr_uptime
       query: round(sum(increase(gatus_results_total{key="media-management_prowlarr", success="true"}[30d])) / sum(increase(gatus_results_total{key="media-management_prowlarr"}[30d])) * 100, 1)
       suffix: "%"
@@ -193,14 +185,6 @@ config.yaml: |-
       query: round(avg_over_time(gatus_results_duration_seconds{key="other_dawarich"}[30d]) * 1000, 1)
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
-    - name: emulatorjs_uptime
-      query: round(sum(increase(gatus_results_total{key="other_emulatorjs", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_emulatorjs"}[30d])) * 100, 1)
-      suffix: "%"
-      colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
-    - name: other_emulatorjs
-      query: round(avg_over_time(gatus_results_duration_seconds{key="other_emulatorjs"}[30d]) * 1000, 1)
-      suffix: "ms"
-      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: influxdb_uptime
       query: round(sum(increase(gatus_results_total{key="other_influxdb", success="true"}[30d])) / sum(increase(gatus_results_total{key="other_influxdb"}[30d])) * 100, 1)
       suffix: "%"
@@ -245,10 +229,6 @@ config.yaml: |-
       query: max(avg_over_time(metallb_bgp_session_up[24h]) * 100)
       suffix: "%"
       colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
-    - name: monitoring_metallb
-      query: round(avg_over_time(gatus_results_duration_seconds{key="metallb"}[30d]) * 1000, 1)
-      suffix: "ms"
-      colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: alloy_uptime
       query: round(avg_over_time(up{job="alloy"}[7d]) * 100, 1)
       suffix: "%"
