@@ -5109,7 +5109,7 @@
                       "spec": {
                         "editorMode": "code",
                         "exemplar": false,
-                        "expr": "sum by (project) (\n  increase(supavisor_client_network_send[24h])*8\n) * 30",
+                        "expr": "sum by (project) (\n  increase(supavisor_client_network_send[24h])\n) * 30",
                         "instant": false,
                         "interval": "$resolution",
                         "legendFormat": "{{ job }}",
