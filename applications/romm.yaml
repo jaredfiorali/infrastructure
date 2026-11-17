@@ -3,6 +3,7 @@ kind: Application
 metadata:
   labels:
     fiorali: 'true'
+    longhorn-pv: 'true'
     supabase: 'true'
   name: romm
   namespace: argocd
@@ -18,7 +19,7 @@ spec:
       - values.yaml
       - romm.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.158'
+    targetRevision: '0.3.159'
   syncPolicy:
     automated:
       enabled: true
