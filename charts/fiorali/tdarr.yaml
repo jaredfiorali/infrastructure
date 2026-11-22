@@ -5,7 +5,7 @@ deployment:
 strategyType: Recreate
 image:
   repository: ghcr.io/haveagitgat/tdarr
-  tag: latest@sha256:84743e5ae433a5b49cb463b2dff2679eb02f0cac24fb88c830f49bf8aa9f1c04
+  tag: latest@sha256:5d340a7a603a9d1f55904ebca481fff5bb6222e741b636f798106a12ffd1f2ba
 containerPorts:
 - containerPort: 8265
   name: tdarr
