@@ -6,7 +6,7 @@ replicaCount: 1
 strategyType: RollingUpdate
 image:
   repository: ghcr.io/twin/gatus
-  tag: latest@sha256:57d38cf7ddeeeb33b8767c60a82dbe4457f182ce805171d7a98ef8501975703c
+  tag: latest@sha256:03c2b3c0f0ac1ae921f513fb882a7694c0f275563919919ce7294c5462b7266b
 containerPorts:
 - containerPort: 8080
   name: gatus
