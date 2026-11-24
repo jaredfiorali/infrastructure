@@ -23,6 +23,12 @@ spec:
         value: 'true'
       - name: frrk8s.enabled
         value: 'true'
+      - name: frr-k8s.prometheus.serviceMonitor.enabled
+        value: 'true'
+      # The frr-k8s SM already scrapes frrmetricshttps/9141 (frrk8s_bgp_session_up)
+      # but lacks Prometheus's selector label; add it (same as the other metallb SMs).
+      - name: frr-k8s.prometheus.serviceMonitor.additionalLabels.release
+        value: prometheus
       - name: speaker.frr.enabled
         value: 'false'
     repoURL: https://metallb.github.io/metallb
@@ -33,7 +39,7 @@ spec:
       - values.yaml
       - metallb.yaml
     repoURL: ghcr.io/jaredfiorali/helm-charts
-    targetRevision: '0.3.164'
+    targetRevision: '0.3.166'
   syncPolicy:
     automated:
       enabled: true

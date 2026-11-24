@@ -226,7 +226,7 @@ config.yaml: |-
       suffix: "ms"
       colors: [{color: "green", min: 0, max: 150}, {color: "orange", min: 151, max: 400}, {color: "red", min: 401, max: 999999}]
     - name: metallb_uptime
-      query: max(avg_over_time(metallb_bgp_session_up[24h]) * 100)
+      query: max(avg_over_time(frrk8s_bgp_session_up[24h]) * 100)
       suffix: "%"
       colors: [{color: "green", min: 99, max: 100}, {color: "orange", min: 95, max: 98.99}, {color: "red", min: 0, max: 94.99}]
     - name: alloy_uptime
