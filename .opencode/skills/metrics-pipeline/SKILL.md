@@ -84,3 +84,33 @@ Badges stay "unknown" until the change is deployed:
 **Ordering caveat:** Gatus must come up first so the Gatus key exists. Until it does, Kromgo's query and git-sync's fetch return empty for that service.
 
 **Timing:** git-sync runs on a cron (`5 23 * * *`, ~23:05 UTC daily), so badges populate at the next run after deploy.
+
+## Gotchas (learned the hard way)
+
+### Verify the metric exists before writing the query
+The metric name you *expect* may not exist in the service's current mode. metallb runs FRR-K8s mode, where the obvious `metallb_bgp_session_up` is absent; the real metric is `frrk8s_bgp_session_up`, served by the frr-k8s `frr-metrics` container on port **9141** (HTTPS + SA token). Always confirm the real name and scrape target with Prometheus before wiring the Kromgo query:
+```bash
+# Does the metric exist and is it being scraped?
+kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090 &
+curl -s -H "Authorization: Bearer $(kubectl get secret prometheus-...-token -n monitoring -o jsonpath='{.data.token}' | base64 -d)" \
+  "http://localhost:9090/api/v1/query?query=count(frrk8s_bgp_session_up)"
+```
+
+### A ServiceMonitor can scrape but be invisible to Prometheus
+An SM may already hit the right endpoint yet never be scraped because it lacks Prometheus's selector label. Prometheus selects SMs by `serviceMonitorSelector: {release: prometheus}` (namespace selector `{}` = all namespaces). If a metric is missing, check the SM's labels first — the fix is often just adding the label, not a new template:
+```yaml
+# via the chart's helm params in the app that renders the workload:
+frr-k8s.prometheus.serviceMonitor.additionalLabels.release=prometheus
+```
+For metallb this param belongs in `applications/metallb.yaml` (the standalone `chart: metallb` ArgoCD source). fiorali is **not** a Helm umbrella — it only renders metallb CRDs (pools/peers/bfd/ads) — so the controller/speaker/frr-k8s workloads and their SMs come from that separate app, not fiorali's metallb.yaml.
+
+### Confirm the deployed object, not just the chart, changed
+A chart version change does not reach a running app until that app's `targetRevision` is bumped and it re-syncs (see `deploy.md` → "every app that renders the changed object must be bumped"). Verify the live ConfigMap/query after deploy:
+```bash
+kubectl get configmap kromgo-configmap -n monitoring -o yaml | grep -A1 "name: <metric>"
+```
+And confirm Kromgo actually returns a value, not just that Prometheus does:
+```bash
+kubectl port-forward -n monitoring svc/kromgo 8080:8080 &
+curl -s http://localhost:8080/metallb_uptime   # Kromgo serves by metric name
+```

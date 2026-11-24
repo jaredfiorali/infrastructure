@@ -11,6 +11,13 @@ description: Deploy homelab changes by bumping the Fiorali chart version and pus
 ## When to use
 When the user wants to deploy changes, trigger a rollout, or check deployment status of the homelab infrastructure.
 
+## Review gate (do not skip — repo-wide)
+Never commit or push anything without the user reviewing first. This is not specific to deploys.
+1. Make changes, then run `git status` and `git diff` and show them to the user.
+2. Wait for explicit approval before `git commit` or `git push`.
+3. Hold amendments, history rewrites, and force-pushes until confirmed too.
+4. Deploy mechanics (bump version, ArgoCD sync checks) may proceed after review, but the commit/push itself waits for the go-ahead.
+
 ## How deployment works in this repo
 
 This is a GitOps setup where deployment is triggered by **bumping the Chart.yaml version**, not by commit hash. ArgoCD watches the chart version on GitHub Pages.
@@ -39,6 +46,27 @@ Pushing to `main` triggers the GitHub Actions workflow which:
 3. Deploys to GitHub Pages
 
 ArgoCD then detects the new chart version and syncs.
+
+### Gotcha: every app that renders the changed object must be bumped
+Bumping `Chart.yaml` only redeploys apps whose `targetRevision` points at the new version. Many apps pin a specific version in `applications/<app>.yaml`:
+```yaml
+    targetRevision: '0.3.164'   # pins this app to that chart version
+```
+If the change you made lives in a ConfigMap/ServiceMonitor/etc. that a *different* app deploys, bumping the chart version does nothing for that app. Find which ArgoCD app owns the object, then bump **its** `targetRevision` to match:
+```bash
+# Who owns this object?
+kubectl get configmap kromgo-configmap -n monitoring -o yaml | grep tracking-id
+# Which app pins the version?
+grep -rn targetRevision applications/
+```
+Then bump that app's `applications/<app>.yaml` `targetRevision` to the new chart version and commit it in the same commit. After pushing, force the app-of-apps to pick it up:
+```bash
+kubectl patch application app-of-apps -n argocd -p '{"operation":{"sync":{"revision":"HEAD"}}}' --type merge
+```
+Verify the *deployed* object actually changed (not just the chart) before declaring success:
+```bash
+kubectl get configmap kromgo-configmap -n monitoring -o yaml | grep -A1 "name: <metric>"
+```
 
 ### Checking deployment status
 ```bash
