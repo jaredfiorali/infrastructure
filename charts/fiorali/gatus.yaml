@@ -14,10 +14,10 @@ containerPorts:
 resources:
   limits:
     cpu: 250m
-    memory: 50Mi
+    memory: 256Mi
   requests:
     cpu: 50m
-    memory: 25Mi
+    memory: 128Mi
 probes:
   httpGet:
     path: /

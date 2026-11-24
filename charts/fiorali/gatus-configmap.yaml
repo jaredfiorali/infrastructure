@@ -3,9 +3,8 @@ config.yaml: |
   web:
     panel-time-range-seconds: 86400
   storage:
-    type: postgres
-    path: "${POSTGRES_CONNECTION_STRING}"
-    caching: true
+    type: memory
+    expire: 72h
   skip-invalid-config-update: true
   connectivity:
     checker:
