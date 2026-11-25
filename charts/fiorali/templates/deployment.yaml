@@ -147,6 +147,10 @@ spec:
         nameservers:
           {{- toYaml .Values.dnsConfig.nameservers | nindent 10 }}
       {{- end }}
+      {{- if .Values.volume.enabled }}
+      nodeSelector:
+        node.longhorn.io/enabled: "true"
+      {{- end }}
       {{- if or (gt (int .Values.replicaCount) 1) .Values.podAntiAffinity }}
       affinity:
         podAntiAffinity:

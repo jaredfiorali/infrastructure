@@ -77,3 +77,6 @@ prometheusRules:
 imageUpdater:
   enabled: true
   rootImageTag: "alpine"
+volume:
+  enabled: true
+  size: "524288000"
