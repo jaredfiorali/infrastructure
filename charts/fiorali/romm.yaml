@@ -188,3 +188,6 @@ externalSecrets:
       - secretKey: IGDB_CLIENT_SECRET
         remoteRef:
           key: /homelab/romm/IGDB_CLIENT_SECRET
+volume:
+  enabled: true
+  size: "2147483648"
