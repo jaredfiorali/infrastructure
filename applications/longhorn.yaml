@@ -45,6 +45,8 @@ spec:
       - name: longhornUI.nodeSelector.node\.longhorn\.io/enabled
         value: 'true'
         forceString: true
+      - name: defaultSettings.systemManagedComponentsNodeSelector
+        value: 'node.longhorn.io/enabled:true'
       - name: networkPolicies.restrictInternalTraffic
         value: 'false'
     repoURL: https://charts.longhorn.io
