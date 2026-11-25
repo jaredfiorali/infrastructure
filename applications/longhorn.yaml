@@ -36,8 +36,15 @@ spec:
         value: '2'
       - name: csi.resizerReplicaCount
         value: '2'
-      - name: systemManagedComponentsNodeSelector
-        value: storage-tier:ssd
+      - name: longhornManager.nodeSelector.node\.longhorn\.io/enabled
+        value: 'true'
+        forceString: true
+      - name: longhornDriver.nodeSelector.node\.longhorn\.io/enabled
+        value: 'true'
+        forceString: true
+      - name: longhornUI.nodeSelector.node\.longhorn\.io/enabled
+        value: 'true'
+        forceString: true
       - name: networkPolicies.restrictInternalTraffic
         value: 'false'
     repoURL: https://charts.longhorn.io
