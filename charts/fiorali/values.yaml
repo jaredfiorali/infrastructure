@@ -260,3 +260,9 @@ grafana:
 
 postsyncMetallbRestart:
   enabled: false
+# Base default so the postsync template renders cleanly for EVERY app. ArgoCD
+# renders this whole chart once per app with a different values file; apps that
+# don't define postsyncHomeAssistantReload must still see a safe `enabled: false`.
+# home-assistant.yaml flips it on.
+postsyncHomeAssistantReload:
+  enabled: false

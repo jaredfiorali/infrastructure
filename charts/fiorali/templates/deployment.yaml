@@ -21,7 +21,9 @@ spec:
         # Only hash configuration.yaml: it is the one entry-point file that requires
         # a pod restart. Edits to automations/scripts/scenes are hot-reloaded by the
         # postsync hook instead, so they must NOT change this checksum (no restart).
-        checksum/config: {{ (index ($.Files.Get .Values.configMap.valueFile | fromYaml) "configuration.yaml") | sha256sum }}
+        # Apps whose configMap isn't HA-style (no "configuration.yaml" key) fall back
+        # to hashing the whole valueFile, preserving the original restart-on-any-edit.
+        checksum/config: {{ default ($.Files.Get .Values.configMap.valueFile) (index ($.Files.Get .Values.configMap.valueFile | fromYaml) "configuration.yaml") | sha256sum }}
         {{- end }}
       labels:
         app: {{ .Values.name }}
