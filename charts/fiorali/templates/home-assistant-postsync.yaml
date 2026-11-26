@@ -1,0 +1,71 @@
+{{- if .Values.postsyncHomeAssistantReload.enabled -}}
+# Runs after every ArgoCD sync. The ConfigMap (cm/) is already updated and the
+# pod is still up (configuration.yaml-only edits are the only thing that restarts
+# it), so this reloads the changed YAML into the running HA with zero downtime.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.name }}-postsync
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.name }}-postsync-reload
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      serviceAccountName: {{ .Values.name }}-postsync
+      restartPolicy: OnFailure
+      containers:
+        - name: reload
+          image: {{ .Values.postsyncHomeAssistantReload.image | default "curlimages/curl:latest" }}
+          command: ["sh", "-c"]
+          env:
+            - name: HA_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.name }}-credentials
+                  key: HA_API_TOKEN
+            - name: HA_URL
+              value: {{ .Values.postsyncHomeAssistantReload.url | default (printf "http://%s:8123/api/services/homeassistant/reload_all" .Values.name) | quote }}
+            - name: MAX_ATTEMPTS
+              value: {{ .Values.postsyncHomeAssistantReload.maxAttempts | default 30 | quote }}
+            - name: RETRY_DELAY
+              value: {{ .Values.postsyncHomeAssistantReload.retryDelay | default 5 | quote }}
+          args:
+            - |
+              set -eu
+              code="000"
+              i=1
+              while [ "$i" -le "$MAX_ATTEMPTS" ]; do
+                # On connection failure curl exits non-zero; capture that separately
+                # so code holds a clean HTTP code (000 = could not connect).
+                if code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization: Bearer ${HA_TOKEN}" "${HA_URL}"); then
+                  :
+                else
+                  code="000"
+                fi
+                if [ "${code}" = "200" ]; then
+                  echo "reload_all succeeded (HTTP 200)"
+                  exit 0
+                fi
+                echo "attempt ${i}/${MAX_ATTEMPTS} failed (HTTP ${code}); retrying in ${RETRY_DELAY}s"
+                sleep "${RETRY_DELAY}"
+                i=$((i + 1))
+              done
+              echo "reload_all failed after ${MAX_ATTEMPTS} attempts (last HTTP ${code})"
+              exit 1
+{{- end }}
