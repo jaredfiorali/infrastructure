@@ -11,6 +11,11 @@ Per-node maintenance and version upgrades for the k3s cluster (5 RPi5 masters, 5
 - `maintenance.yml` — safely take a node out for a reboot, Longhorn-aware.
   Cordon → drain → reboot → validate Ready → uncordon, one node at a time
   (`serial: 1`), so k3s quorum and Longhorn replicas are never dropped at once.
+- `power-down.yml` — power down the **whole** cluster (e.g. to upgrade the network
+  switch), canary-first. Reboot one node first (the primary server by default, since
+  it holds etcd quorum) and confirm it returns before shutting everything down;
+  workers go down first, servers last. It is a separate file from `maintenance.yml`
+  because its end-state is "everything off", not "cluster still running".
 - `upgrade-k3s.yml` — guardedly upgrade the k3s **version** on every node, one at a
   time. Drain + validate around the upgrade, quorum-safe ordering, with
   version-recorded rollback. See [Upgrading k3s](#upgrading-k3s).
@@ -30,6 +35,15 @@ ansible-playbook site.yml -i inventory/hosts.yml -b
 
 # Reboot a node for maintenance, one at a time (Longhorn-aware)
 ansible-playbook maintenance.yml -i inventory/hosts.yml
+
+# Power down the whole cluster for switch/firmware work — reboot one node first
+# (the primary server), confirm it returns, then shut everything down (workers
+# first, servers last). Press Enter at the prompt to continue, Ctrl+C to abort.
+ansible-playbook power-down.yml -i inventory/hosts.yml
+
+# Skip the confirmation prompt (automation), or pick a different canary node:
+POWER_DOWN_AUTO=1 ansible-playbook power-down.yml -i inventory/hosts.yml
+ansible-playbook power-down.yml -i inventory/hosts.yml -e canary_host=rpi4-node-2
 
 # Dry run (ansible --check) — see what would change without changing anything
 ansible-playbook site.yml -i inventory/hosts.yml -b --check
@@ -77,6 +91,78 @@ Notes:
   On failure it keeps the previous last-known-good version (no `status:` line).
 - After fixing the cause, just re-run the same command — it re-probes, re-validates,
   and continues from where it stopped.
+
+## Powering down the cluster
+
+`power-down.yml` takes the **entire** cluster offline — for example to upgrade the
+network switch the nodes plug into. It is canary-first: before trusting that
+everything will come back, it cycles one node and confirms it rejoins the cluster.
+
+The run is five plays:
+
+1. **Canary** — cordon → drain → reboot one node → wait for it to be **Ready** →
+   uncordon. The canary is the primary server by default (`rpi5-node-3`, the node
+   marked `k3s_server: true`, which holds etcd quorum) — the safest node to test
+   first. If it does not come back, the playbook **stops** and nothing else is shut
+   down; the problem is the node or its link, not the switch. Override with
+   `-e canary_host=<hostname>`.
+2. **Scale down** — scales every Longhorn-backed workload to **0 replicas** by
+   patching its Argo Application's inline `helm.values.replicaCount` to `0`. An inline
+   value overrides the git valueFile, so it survives Argo's continuous sync / drift
+   detection, and the Deployment dropping to 0 replicas is what cleanly detaches the
+   Longhorn volume (the official detach method). Run from your machine; see
+   "Detaching Longhorn volumes cleanly" below.
+3. **Confirm** — waits until every Longhorn volume reports state **detached** (the
+   playbook aborts if any stays attached), then a single prompt (on your machine) to
+   abort before the irreversible step. Press Enter to continue, Ctrl+C to stop, or set
+   `POWER_DOWN_AUTO=1` to skip.
+4. **Workers** — power off every worker. Workers hold no quorum, so this never
+   threatens the cluster.
+5. **Servers** — power off every server, one at a time, **last**, keeping etcd
+   quorum alive until the very end so the cluster stays manageable right up to the
+   final node.
+
+Why separate worker and server plays? A single `hosts: [...]` list does not preserve
+group order, so two plays are the only reliable way to guarantee workers go down
+before servers.
+
+Each node is powered off with a graceful `shutdown -h now`, which lets systemd stop
+k3s cleanly (graceful etcd shutdown) before the power drops. The plays deliberately
+do **not** cordon/drain: with every node going down there is nowhere to move
+workloads, so the kubelet terminates pods during the graceful shutdown instead.
+
+### Detaching Longhorn volumes cleanly
+
+Cordon/drain detaches Longhorn volumes by moving their workloads to a *healthy* node —
+but in a full shutdown there is nowhere healthy to move them, so that trick does not
+apply. Instead, the playbook detaches them by **scaling the workloads to 0**:
+
+1. **The apps are labelled** `longhorn-pv=true` on their Argo Application
+   (`kubectl get applications -A -l longhorn-pv=true`). That now covers all nine
+   Longhorn-backed apps, including `postgres` and `romm` (which were missing the label
+   and have been added to `applications/`). Play 2 scales exactly these apps down.
+2. **Play 2 patches each app's inline** `helm.values.replicaCount: 0`. This is
+   Argo-native: an inline value overrides the git valueFile, so it survives continuous
+   sync and drift detection (git still says `1`, but the inline value wins), and the
+   Deployment dropping to 0 replicas is what cleanly unmounts and detaches the
+   Longhorn volume — the official detach method. You don't touch git or pause
+   Applications by hand.
+3. **Play 3 waits** for every Longhorn volume to reach state `detached` (polling up to
+   ~5 min) and **aborts** the shutdown if any stays attached, listing the offenders.
+4. **Power back up** — servers first (a few seconds apart so etcd can re-form quorum),
+   then workers — and **reverse Play 2** by setting each app's inline `replicaCount`
+   back to `1`:
+
+   `kubectl patch application.argoproj.io <name> -n argocd -p '{"spec":{"source":{"helm":{"values":{"replicaCount":1}}}}}' --type merge`
+
+   Argo re-scales the Deployments and Longhorn reattaches each volume from the preserved
+   replica data, no rebuild.
+
+The `longhorn-pv` label lives on the Argo Application (from the `applications/*.yaml`
+manifests in this repo), so after editing it you must **commit and push** so Argo syncs
+the change to the live Application. `kubectl drain` of every node is impossible here (the
+last node has nowhere to evict to), and `shutdown -h now` alone does *not* guarantee a
+clean detach — so treat a Longhorn **backup/snapshot** as your safety net regardless.
 
 ## Notes
 

@@ -1,0 +1,224 @@
+---
+# Power down the whole cluster (e.g. to upgrade the network switch) — canary first.
+#
+# Before taking EVERY node down, cycle ONE node and confirm it comes back healthy.
+# If it doesn't, the problem is the node or its network/link — not the switch — and
+# taking the rest down would just leave you blind, with nothing left to manage it.
+#
+# The run is five plays:
+#
+#   Play 1 (canary)  - cordon -> drain -> reboot ONE node -> wait Ready -> uncordon.
+#                      The canary is the first master by default (rpi5-node-3, the
+#                      primary server that holds etcd quorum) — the safest node to
+#                      test first. If it does NOT come back, the playbook STOPS here
+#                      and nothing else is shut down. Pick a different node with
+#                      -e canary_host=<hostname>.
+#
+#   Play 2 (scale)   - scales DOWN every Longhorn-backed workload to 0 replicas by
+#                      patching its Argo Application's inline helm.values.replicaCount
+#                      to 0. An inline value overrides the git valueFile, so this
+#                      survives Argo's continuous sync / drift detection, and the
+#                      Deployment going to 0 replicas is what cleanly detaches the
+#                      Longhorn volume (the official detach method). Runs on localhost
+#                      (kubectl from the operator's machine).
+#
+#   Play 3 (confirm) - waits until EVERY Longhorn volume reports state 'detached'
+#                      (aborting the shutdown if any stays attached), then a one-shot
+#                      pause to abort before the irreversible step. Runs on localhost
+#                      (its own play, no serial) so the pause prompts exactly once —
+#                      run_once under serial:1 would otherwise fire per node.
+#
+#   Play 4 (workers) - power off every WORKER (they hold no quorum, so this never
+#                      threatens the cluster).
+#
+#   Play 5 (servers) - power off every SERVER, one at a time, LAST — keeping etcd
+#                      quorum alive until the very end so the cluster stays manageable
+#                      right up to the last node.
+#
+# Servers and workers are separate plays on purpose: a single `hosts: [...]` list does
+# NOT preserve group order, so this is the only reliable way to guarantee workers go
+# down before servers.
+#
+# We deliberately do NOT cordon/drain in the shutdown plays: with every node going
+# down there is nowhere to move workloads, so the kubelet cleanly terminates pods
+# during the graceful `shutdown -h now`. kubectl runs from the operator's machine
+# (localhost).
+#
+#   To bring it back up, reverse Play 2 FIRST — set each Application's inline
+#   replicaCount back to 1 (see "Detaching Longhorn volumes cleanly" in the README).
+#   Argo re-scales the Deployments and Longhorn reattaches each volume from the
+#   preserved replica data, no rebuild. The volumes stay put while the nodes are off;
+#   only the workloads are scaled down. Then power the nodes back on.
+#
+#   ansible.cfg connects as root on the nodes, so become is intentionally NOT set
+#   (keeps the localhost kubectl tasks passwordless).
+#
+#   Skip the Play 3 confirmation prompt for automation:
+#     POWER_DOWN_AUTO=1 ansible-playbook power-down.yml -i inventory/hosts.yml
+
+- name: "Play 1 - canary: reboot one node and confirm it returns"
+  hosts: "{{ canary_host | default('masters', true) }}"
+  gather_facts: false
+  become: false
+  serial: 1
+
+  pre_tasks:
+    - name: State what's about to happen to the canary node
+      debug:
+        msg: >-
+          {{ inventory_hostname }} (canary): cordon -> drain -> reboot -> wait Ready
+          -> uncordon. If it does NOT come back, this playbook STOPS here and nothing
+          else is shut down.
+
+  tasks:
+    - name: Cordon the node
+      command: kubectl cordon {{ inventory_hostname }}
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Drain the node (evict workloads, keep daemonsets)
+      command: >-
+        kubectl drain {{ inventory_hostname }}
+        --ignore-daemonsets --delete-emptydir-data --timeout=180s
+      delegate_to: localhost
+
+    - name: Confirm no workloads remain on the node
+      command: >-
+        kubectl get pods -A
+        --field-selector spec.nodeName={{ inventory_hostname }},status.phase!=Terminating
+        -o name
+      register: canary_remaining_pods
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Fail if any workload is still scheduled on the node
+      assert:
+        that:
+          - "canary_remaining_pods.stdout == ''"
+        fail_msg: >-
+          {{ inventory_hostname }} was not fully drained. Stranded pods:
+          {{ canary_remaining_pods.stdout }}
+        success_msg: "{{ inventory_hostname }} drained cleanly — no workloads remain."
+
+    - name: Reboot the node
+      reboot:
+        msg: "power-down: canary reboot"
+        connect_timeout: 10
+        reboot_timeout: 600
+        test_command: uptime
+
+    - name: Wait for the node to report Ready in the cluster (poll up to 5 min)
+      command: >-
+        kubectl get node {{ inventory_hostname }}
+        -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}'
+      delegate_to: localhost
+      register: canary_node_ready
+      changed_when: false
+      retries: 30
+      delay: 10
+      until: canary_node_ready.stdout == 'True'
+
+    - name: Uncordon the node
+      command: kubectl uncordon {{ inventory_hostname }}
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Success — canary is back
+      debug:
+        msg: >-
+          {{ inventory_hostname }} is Ready again. Play 2 will scale down the
+          Longhorn-backed apps and Play 3 will ask you to confirm before shutting
+          everything down.
+
+- name: "Play 2 - scale down every Longhorn-backed workload"
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Identify Argo Applications that back a Longhorn volume
+      command: >-
+        kubectl get applications.argoproj.io -n argocd
+        -l longhorn-pv=true -o jsonpath='{.items[*].metadata.name}'
+      register: longhorn_apps
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Scale each workload to 0 replicas (detaches its Longhorn volume)
+      command: >-
+        kubectl patch application.argoproj.io {{ item }} -n argocd
+        -p '{"spec":{"source":{"helm":{"values":{"replicaCount":0}}}}}'
+        --type merge
+      loop: "{{ longhorn_apps.stdout | split }}"
+      loop_control:
+        label: "{{ item }}"
+      delegate_to: localhost
+      when: longhorn_apps.stdout | trim != ''
+
+    - name: Report which apps were scaled down
+      debug:
+        msg: >-
+          Scaled {{ longhorn_apps.stdout | split | length }} Longhorn-backed app(s)
+          to 0 replicas: {{ longhorn_apps.stdout | trim }}
+
+- name: "Play 3 - confirm before shutting everything down"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    # Skip the confirmation prompt when automating: POWER_DOWN_AUTO=1 ansible-playbook ...
+    powerdown_auto: "{{ lookup('env', 'POWER_DOWN_AUTO') | default('', true) | trim | bool }}"
+
+  tasks:
+    - name: Wait for every Longhorn volume to detach (poll every 10s, up to ~5 min)
+      command: >-
+        kubectl get volumes.longhorn.io -n longhorn-system
+        -o jsonpath='{.items[?(@.status.state!="detached")].metadata.name}'
+      register: longhorn_attached_volumes
+      delegate_to: localhost
+      changed_when: false
+      failed_when: false
+      retries: 30
+      delay: 10
+      until: longhorn_attached_volumes.stdout | default('') | trim == ''
+
+    - name: Abort shutdown if any Longhorn volume is still attached
+      assert:
+        that:
+          - "longhorn_attached_volumes.stdout | default('') | trim == ''"
+        fail_msg: >-
+          Aborting before shutdown. These Longhorn volumes are still attached and were
+          not detached by the scale-down:
+          {{ longhorn_attached_volumes.stdout | trim }}
+          A detached volume means its workload is safely at 0 replicas. If one is
+          stuck, investigate before powering down — scaling its Deployment to 0
+          should detach it. See "Detaching Longhorn volumes cleanly" in the README.
+        success_msg: "All Longhorn volumes are detached — safe to power down."
+
+    - name: Ask to confirm the canary came back before proceeding
+      pause:
+        prompt: >-
+          The canary node came back healthy and all Longhorn volumes are detached.
+          The next plays will power down ALL nodes (they stay off until you power them
+          back on). Press Enter to continue, or Ctrl+C to abort now — no other node
+          will be shut down.
+          (Set POWER_DOWN_AUTO=1 to skip this prompt.)
+      when: not powerdown_auto
+
+- name: "Play 4 - power down all workers"
+  hosts: workers
+  gather_facts: false
+  become: false
+  serial: 1
+
+  tasks:
+    - name: Power off this worker (graceful shutdown, k3s stops cleanly)
+      include_tasks: tasks/powerdown-node.yml
+
+- name: "Play 5 - power down all servers (last, to preserve etcd quorum)"
+  hosts: masters
+  gather_facts: false
+  become: false
+  serial: 1
+
+  tasks:
+    - name: Power off this server (graceful shutdown, k3s stops cleanly)
+      include_tasks: tasks/powerdown-node.yml

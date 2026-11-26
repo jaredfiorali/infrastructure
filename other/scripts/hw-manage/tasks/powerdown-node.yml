@@ -1,0 +1,17 @@
+---
+# Per-node shutdown, included once per node (serial: 1) by power-down.yml.
+#
+# Ordering: workers include this first (Play 2), servers after (Play 3), so etcd
+# quorum survives as long as possible — if you abort mid-shutdown, the servers are
+# still up to manage the recovery.
+#
+# We do NOT cordon/drain: with every node going down there is nowhere to move
+# workloads, so the kubelet cleanly terminates pods during the graceful shutdown
+# instead. The node is powered off with `shutdown -h now`, which lets systemd stop
+# k3s-server/k3s-agent cleanly (graceful etcd shutdown) before the power drops.
+
+- name: Gracefully power off the node (shutdown -h now stops k3s cleanly via systemd)
+  command: shutdown -h now
+  register: powerdown_node
+  changed_when: true
+  failed_when: false   # node is powering down; the SSH link may drop as it does
