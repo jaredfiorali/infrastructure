@@ -1008,3 +1008,123 @@ secrets.yaml: |
   # Use this file to store secrets like usernames and passwords.
   # Learn more at https://www.home-assistant.io/docs/configuration/secrets/
   some_password: welcome
+README.md: |
+  # Home Assistant Config — Operator & LLM Guide
+
+  ## What this is
+  This ConfigMap defines Home Assistant's runtime configuration. It is deployed to
+  namespace `home-assistant` and mounted into the pod at `/config/cm` as a directory
+  that updates live. HA version ~2026.11.x. This README.md is documentation only;
+  HA ignores it.
+
+  ## Files in this ConfigMap (the keys below)
+  - configuration.yaml : HA core config. Entry-point file. Editing it RESTARTS the pod.
+  - automations.yaml     : automations. Edits HOT-RELOAD (no restart).
+  - scripts.yaml         : scripts. Edits HOT-RELOAD. (currently empty)
+  - scenes.yaml          : scenes. Edits HOT-RELOAD. (currently empty)
+  - secrets.yaml         : PLACEHOLDER ONLY. Do not use !secret. Use !env_var (see below).
+
+  ## The reload model — READ BEFORE EDITING
+  - automations.yaml, scripts.yaml and scenes.yaml are included live via
+    `!include cm/...` in configuration.yaml, so they are read fresh from /config/cm.
+  - After every ArgoCD sync, a PostSync hook calls the HA `reload_all` service. This
+    hot-reloads automations/scripts/scenes with ZERO downtime.
+  - configuration.yaml is mounted read-only as a subPath. Editing it changes the pod's
+    `checksum/config` annotation, which RESTARTS the pod. Core-config changes need a
+    restart; automation/script/scene changes do not.
+  - Practical rule: put new/changed automations, scripts and scenes in their own files.
+    Do not put automation logic into configuration.yaml.
+
+  ## Discovering entities & building powerful automations
+  To author a new automation, inspect the live HA state first — never guess entity IDs,
+  attributes, or service fields. The REST API is the source of truth.
+
+  Get API access (the token lives in the K8s secret; it is intentionally NOT in the HA
+  container env). Run from the host:
+    TOKEN=$(kubectl get secret home-assistant-credentials -n home-assistant \
+             -o jsonpath='{.data.HA_API_TOKEN}' | base64 -d)
+    kubectl port-forward --namespace home-assistant service/home-assistant 8123:8123 &
+    # then curl http://127.0.0.1:8123/api/... with -H "Authorization: Bearer $TOKEN"
+  (Or generate a fresh token in HA: Profile -> Security -> Long-Live Access Tokens.)
+
+  Useful endpoints:
+    GET /api/states                       — every entity as {entity_id, state,
+                                            attributes, device_id}. Filter by the
+                                            entity_id prefix: light.*, sensor.*,
+                                            binary_sensor.*, cover.*, switch.*,
+                                            media_player.*, device_tracker.*, climate.*,
+                                            vacuum.*, lock.*, fan.*.
+    GET /api/states/<entity_id>           — one entity's FULL attribute set. This is where
+                                            the power is: brightness, current_position,
+                                            options, device_class, battery_level, etc.
+                                            Inspect before writing a condition/action.
+    GET /api/devices                      — device registry: device_id, identifiers,
+                                            platform, name. Use device_id for device
+                                            triggers and device-targeted actions.
+    GET /api/services                     — every service + the exact fields it accepts
+                                            (required/example/selector). Generate action
+                                            calls from this so they validate.
+
+  Quick lookups (after port-forward):
+    # all sensor entity_ids:
+    curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states \
+      | python3 -c 'import sys,json;[print(s["entity_id"]) for s in json.load(sys.stdin) if s["entity_id"].startswith("sensor.")]'
+    # full attributes of one entity:
+    curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states/light.<id>
+
+  Turn that data into an automation:
+    - Triggers: prefer device triggers (need device_id + entity_id + type/subtype — find
+      them on the entity's state object or via /api/devices). For state/numeric_state/
+      sun/time triggers, use the real entity_id from /api/states.
+    - Conditions: read an entity's attributes (e.g. brightness below X, cover position
+      not Y) from /api/states/<entity_id> so thresholds match reality.
+    - Actions: call services with fields copied from /api/services (correct field names,
+      types, targets). Use target.entity_id / device_id from the registry.
+    - Always give a fresh unique id; keep device_id / webhook_id references stable.
+
+  ## How to add a new automation (most common task)
+  1. Edit `automations.yaml` in this ConfigMap. Append a new list item; keep 2-space
+     indent — the whole file is a YAML block scalar.
+  2. Give it a fresh, unique `id` (13-digit epoch-millis style is used here).
+  3. Include: alias, description, triggers, conditions, actions, mode.
+  4. Use `!env_var KEY` for any secret value — never `!secret`.
+  5. Validate before committing: in HA go to Services -> homeassistant.check_config, or
+     run `homeassistant check`. `reload_all` also validates and aborts on error.
+  6. Commit. ArgoCD syncs, the PostSync hook calls reload_all, and the automation loads.
+  7. If the hook fails the sync is marked failed — check
+     `kubectl logs job/home-assistant-postsync-reload -n home-assistant`.
+
+  ## Scripts and scenes
+  - scripts.yaml and scenes.yaml are currently empty (`""`). Add YAML lists the same way.
+
+  ## Adding a new secret key
+  - Secrets come from AWS SSM via ExternalSecrets into the K8s secret
+    `home-assistant-credentials`, then as container env, referenced with `!env_var KEY`.
+  - To add a key named MY_KEY:
+      1. Add SSM parameter /homelab/home-assistant/MY_KEY.
+      2. Add to home-assistant.yaml under externalSecrets[].data:
+           - secretKey: MY_KEY
+             remoteRef: { key: /homelab/home-assistant/MY_KEY }
+      3. Reference it in config as `!env_var MY_KEY`.
+  - A new `!env_var` key must exist in SSM + the ExternalSecret before HA starts, or
+    config validation fails. New env vars also need a pod restart to be injected.
+  - Existing keys: SIREN_API_KEY, DAWARICH_API_KEY, WEBHOOK_GARAGE_SIREN,
+    POSTGRES_CONNECTION_STRING, HA_API_TOKEN (used by the reload hook).
+
+  ## What persists vs what is ephemeral (volumes)
+  - PVC `home-assistant` (longhorn) — only these three are mounted back into /config:
+      - .storage            : HA state, registries, auth. MUST persist.
+      - custom_components   : integration code (greenbutton, grizzl_e). MUST persist.
+      - deps                : pip dependencies. MUST persist.
+  - Everything else under /config is an emptyDir (wiped on restart): go2rtc-* caches,
+    backups/, logs (home-assistant.log*), psnawp-* caches, tts/, www/, image/, blueprints/.
+  - WARNING: backups/ is ephemeral — HA restore points are lost on pod loss.
+  - Recorder uses Postgres (db_url: !env_var POSTGRES_CONNECTION_STRING), not local SQLite.
+    The old home-assistant_v2.db was purged; do not recreate it.
+
+  ## Gotchas
+  - `!env_var KEY` fails config load if KEY is unset — add the SSM key first.
+  - Keep webhook_id values and device_id/entity_id references stable; they are used in
+    URLs and device links elsewhere.
+  - Keep correct indentation inside the block scalars; a broken indent fails validation.
+  - configuration.yaml edits restart the pod automatically; the others do not.
