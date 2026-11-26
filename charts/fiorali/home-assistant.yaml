@@ -76,21 +76,59 @@ env:
     secretKeyRef:
       name: home-assistant-credentials
       key: POSTGRES_CONNECTION_STRING
+- name: SIREN_API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: home-assistant-credentials
+      key: SIREN_API_KEY
+- name: DAWARICH_API_KEY
+  valueFrom:
+    secretKeyRef:
+      name: home-assistant-credentials
+      key: DAWARICH_API_KEY
 ingress:
   enabled: true
 hostNetwork: true
 volumeMounts:
-- name: home-assistant-persistent-storage
+# Ephemeral backing for /config: go2rtc-* caches, backups, logs, the old sqlite
+# dbs, psnawp caches, tts/www/image/blueprints. Wiped on every pod restart.
+- name: home-assistant-config
   mountPath: /config
+# Persist across restarts — mounted as subPaths of the PVC so only these three
+# trees survive. Everything else under /config lives on the emptyDir above.
+- name: home-assistant-persistent-storage
+  mountPath: /config/.storage
+  subPath: .storage
+- name: home-assistant-persistent-storage
+  mountPath: /config/custom_components
+  subPath: custom_components
+- name: home-assistant-persistent-storage
+  mountPath: /config/deps
+  subPath: deps
+# ConfigMap mounted as a directory so kubelet's ..data symlink swap propagates
+# edits to automations/scripts/scenes without a pod restart.
+- name: home-assistant-configmap
+  mountPath: /config/cm
+  readOnly: true
+# configuration.yaml and secrets.yaml are entry-point files that only change on
+# a restart, so they stay as subPath mounts (subPath never propagates updates).
 - name: home-assistant-configmap
   mountPath: /config/configuration.yaml
   subPath: configuration.yaml
+  readOnly: true
+- name: home-assistant-configmap
+  mountPath: /config/secrets.yaml
+  subPath: secrets.yaml
   readOnly: true
 - name: tmp
   mountPath: /tmp
 - name: run
   mountPath: /run
 volumes:
+# Backing for the ephemeral part of /config.
+- name: home-assistant-config
+  emptyDir: {}
+# Holds only .storage, custom_components and deps.
 - name: home-assistant-persistent-storage
   persistentVolumeClaim:
     claimName: home-assistant
@@ -183,6 +221,13 @@ configMap:
 volume:
   enabled: true
   size: "5368709120"
+postsyncHomeAssistantReload:
+  enabled: true
+  image: curlimages/curl:latest
+  # Defaults to http://home-assistant:8123/api/services/homeassistant/reload_all
+  url: ""
+  maxAttempts: 30
+  retryDelay: 5
 imageUpdater:
   enabled: true
 externalSecrets:
@@ -194,3 +239,12 @@ externalSecrets:
   - secretKey: POSTGRES_CONNECTION_STRING
     remoteRef:
       key: /homelab/home-assistant/POSTGRES_CONNECTION_STRING
+  - secretKey: SIREN_API_KEY
+    remoteRef:
+      key: /homelab/home-assistant/SIREN_API_KEY
+  - secretKey: DAWARICH_API_KEY
+    remoteRef:
+      key: /homelab/home-assistant/DAWARICH_API_KEY
+  - secretKey: HA_API_TOKEN
+    remoteRef:
+      key: /homelab/home-assistant/HA_API_TOKEN

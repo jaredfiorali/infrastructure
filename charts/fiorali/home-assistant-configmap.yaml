@@ -4,9 +4,9 @@ configuration.yaml: |
   # Load frontend themes from the themes folder
   frontend:
     themes: !include_dir_merge_named themes
-  automation: !include automations.yaml
-  script: !include scripts.yaml
-  scene: !include scenes.yaml
+  automation: !include cm/automations.yaml
+  script: !include cm/scripts.yaml
+  scene: !include cm/scenes.yaml
   zeroconf:
   recorder:
     db_url: !env_var POSTGRES_CONNECTION_STRING
@@ -139,3 +139,872 @@ configuration.yaml: |
       verify_ssl: false
       headers:
         X-API-KEY: '{{ api_key }}'
+automations.yaml: |
+  - id: '1731167635717'
+    alias: Theatre TV - On
+    description: ''
+    triggers:
+    - type: connected
+      device_id: 00a95650417963d923cd14b57012a395
+      entity_id: d6ba2e200458c8efa4250b77ef94310f
+      domain: binary_sensor
+      trigger: device
+    conditions: []
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.theatre_tv
+    mode: single
+  - id: '1731167674161'
+    alias: Theatre TV - Off
+    description: ''
+    triggers:
+    - type: not_connected
+      device_id: 00a95650417963d923cd14b57012a395
+      entity_id: d6ba2e200458c8efa4250b77ef94310f
+      domain: binary_sensor
+      trigger: device
+    conditions: []
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.theatre_tv
+    mode: single
+  - id: '1731186821906'
+    alias: Alarm Trigger - Away
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-inside-motion-all-rC40y8gPO_yncDVcM5LN3Txv
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-person-outside-cooPtD9zpNbaQX_UiOMLKyXI
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-open-door-aJENtOAScj16X6MuJJAOgpjS
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_system
+      state: armed_away
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state: 'off'
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.trigger_alarm_away
+    - action: rest_command.trigger_garage_siren
+      data:
+        api_key: !env_var SIREN_API_KEY
+    mode: single
+  - id: '1731186908188'
+    alias: Alarm Trigger - Night
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-open-door-aJENtOAScj16X6MuJJAOgpjS
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-person-outside-cooPtD9zpNbaQX_UiOMLKyXI
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_system
+      state: armed_night
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state: 'off'
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.trigger_alarm
+    - action: rest_command.trigger_garage_siren
+      data:
+        api_key: !env_var SIREN_API_KEY
+    mode: single
+  - id: '1731195850316'
+    alias: Outdoor Lights - On
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-outdoor-detection-LOnH9LLEuGSLjBFxKiAeN-BJ
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-open-door-aJENtOAScj16X6MuJJAOgpjS
+    conditions:
+    - condition: sun
+      after: sunset
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.side_door_lights
+    - action: timer.start
+      metadata: {}
+      data:
+        duration:
+          hours: 0
+          minutes: 2
+          seconds: 0
+      target:
+        entity_id: timer.outdoor_lights_timer
+    mode: single
+  - id: '1731426735875'
+    alias: Outdoor Lights - Off
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - timer.outdoor_lights_timer
+      to: idle
+      from: active
+    conditions: []
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.side_door_lights
+    mode: single
+  - id: '1731697356355'
+    alias: Alarm Arm - Away
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.alarm_away_arm
+      from:
+      to: 'on'
+    conditions: []
+    actions:
+    - action: alarm_control_panel.alarm_arm_away
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+        - input_boolean.alarm_home_arm
+        - input_boolean.alarm_night_arm
+        - input_boolean.alarm_disarm_arm
+    - type: turn_on
+      device_id: e67da51d75dd42bf9dc5e311285e2df7
+      entity_id: 8845cf8f77eb7d67487e40a164d88e32
+      domain: switch
+    - sequence:
+      - type: turn_on
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_on
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_on
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_on
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_on
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1731697393466'
+    alias: Alarm Arm - Home
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.alarm_home_arm
+      from:
+      to: 'on'
+    conditions: []
+    actions:
+    - action: alarm_control_panel.alarm_arm_home
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+        - input_boolean.alarm_away_arm
+        - input_boolean.alarm_night_arm
+        - input_boolean.alarm_disarm_arm
+    - type: turn_off
+      device_id: e67da51d75dd42bf9dc5e311285e2df7
+      entity_id: 8845cf8f77eb7d67487e40a164d88e32
+      domain: switch
+    - sequence:
+      - type: turn_off
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_off
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_off
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_off
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_off
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1731697425297'
+    alias: Alarm Arm - Night
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.alarm_night_arm
+      from:
+      to: 'on'
+    conditions: []
+    actions:
+    - action: alarm_control_panel.alarm_arm_night
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+        - input_boolean.alarm_away_arm
+        - input_boolean.alarm_home_arm
+        - input_boolean.alarm_disarm_arm
+    - type: turn_on
+      device_id: e67da51d75dd42bf9dc5e311285e2df7
+      entity_id: 8845cf8f77eb7d67487e40a164d88e32
+      domain: switch
+    - sequence:
+      - type: turn_off
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_off
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_off
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_off
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_off
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1731703507323'
+    alias: Alarm Trigger - Home
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-outdoor-detection-LOnH9LLEuGSLjBFxKiAeN-BJ
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.alarm_system
+      state: armed_home
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    mode: single
+  - id: '1731703616379'
+    alias: Alarm Arm - Disarm
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.alarm_disarm_arm
+      from:
+      to: 'on'
+    conditions: []
+    actions:
+    - action: alarm_control_panel.alarm_disarm
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+        - input_boolean.alarm_home_arm
+        - input_boolean.alarm_night_arm
+        - input_boolean.alarm_away_arm
+    - type: turn_off
+      device_id: e67da51d75dd42bf9dc5e311285e2df7
+      entity_id: 8845cf8f77eb7d67487e40a164d88e32
+      domain: switch
+    - sequence:
+      - type: turn_off
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_off
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_off
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_off
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_off
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1736372942808'
+    alias: Start Theatre Lights Timer
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.theatre_tv
+      from:
+      to: 'off'
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: basement-lights-on-uTZd_tXScRzzGvbbInfIbZdj
+    conditions: []
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.theatre_lights_timer_switch
+    - action: timer.start
+      metadata: {}
+      data:
+        duration:
+          hours: 0
+          minutes: 2
+          seconds: 0
+      target:
+        entity_id: timer.theatre_timer
+    mode: single
+  - id: '1736373187582'
+    alias: Theatre Lights - Stop Timer
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - timer.theatre_timer
+      from: active
+      to: idle
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state:
+      - 'off'
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.theatre_lights_timer_switch
+    mode: single
+  - id: '1738200587586'
+    alias: Trigger - Kid
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: false
+      webhook_id: security-inside-motion-kids-ddeEGYntBhw_tjOEu5jFsVs5
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.kid_alarm
+      state: armed_home
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state: 'off'
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.kid_alarm
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.trigger_kid
+    mode: single
+  - id: '1738338762448'
+    alias: Trigger - Kid (Away)
+    description: ''
+    triggers:
+    - trigger: webhook
+      allowed_methods:
+      - POST
+      - PUT
+      local_only: true
+      webhook_id: security-inside-motion-all-rC40y8gPO_yncDVcM5LN3Txv
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.kid_alarm
+      state: armed_away
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state: 'off'
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.kid_alarm
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.trigger_kid
+    mode: single
+  - id: '1742178674799'
+    alias: Guest Mode - Timer Start
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.alarm_guest_mode
+      to: 'on'
+    conditions: []
+    actions:
+    - action: timer.start
+      metadata: {}
+      data: {}
+      target:
+        entity_id: timer.guest_mode_timer
+    mode: single
+  - id: '1742178766853'
+    alias: Guest Mode - Stop Timer
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - timer.guest_mode_timer
+      to: idle
+      from: active
+    conditions: []
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.alarm_guest_mode
+    mode: single
+  - id: '1745160483742'
+    alias: Push Jared's iphone position to dawarich
+    description: ''
+    triggers:
+    - entity_id:
+      - device_tracker.jared_s_phone
+      trigger: state
+    - entity_id:
+      - device_tracker.jared_s_phone
+      attribute: latitude
+      trigger: state
+    conditions: []
+    actions:
+    - data:
+        api_key: !env_var DAWARICH_API_KEY
+        latitude: '{{ state_attr(''device_tracker.jared_s_phone'',''latitude'') }}'
+        longitude: '{{ state_attr(''device_tracker.jared_s_phone'',''longitude'') }}'
+        speed: '{{ iif(state_attr(''device_tracker.jared_s_phone'', ''speed'') is none,
+          ''0'', state_attr(''device_tracker.jared_s_phone'', ''speed'')) }}'
+        altitude: '{{ iif(state_attr(''device_tracker.jared_s_phone'', ''altitude'')
+          is none, ''300'', state_attr(''device_tracker.jared_s_phone'', ''altitude''))
+          }}'
+        vertical_accuracy: '{{ iif(state_attr(''device_tracker.jared_s_phone'', ''vertical_accuracy'')
+          is none, ''0'', state_attr(''device_tracker.jared_s_phone'', ''vertical_accuracy''))
+          }}'
+        activity: '{{ states(''sensor.jared_s_phone_detected_activity'') }}'
+        device_id: jareds_iphone
+        battery_level: '{{ states(''sensor.jared_s_phone_battery_level'') }}'
+      action: rest_command.push_position_to_dawarich
+    mode: single
+  - id: '1748369424166'
+    alias: Arm Home (Kid)
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - alarm_control_panel.kid_alarm
+      from:
+      to: armed_home
+    conditions: []
+    actions:
+    - sequence:
+      - type: turn_off
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_off
+        device_id: 49e4f93c45fad5e041a8aec7dae4a138
+        entity_id: a7f8b406a3d95c3642a4aa1037aeb226
+        domain: switch
+      - type: turn_off
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_off
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_on
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_off
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1748461076658'
+    alias: Arm Away (Kid)
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - alarm_control_panel.kid_alarm
+      from:
+      to: armed_away
+    conditions: []
+    actions:
+    - sequence:
+      - type: turn_on
+        device_id: f1da1c13a7f7ed87a7d9782142ad0d7d
+        entity_id: f410eef1b00e2650a1e4eef952487a5a
+        domain: switch
+      - type: turn_on
+        device_id: 49e4f93c45fad5e041a8aec7dae4a138
+        entity_id: a7f8b406a3d95c3642a4aa1037aeb226
+        domain: switch
+      - type: turn_on
+        device_id: 646e65a15b52fdb9481c00bae7ef490a
+        entity_id: 95f876fd5823100f0376ee6d8388627e
+        domain: switch
+      - type: turn_on
+        device_id: 54bb3804c042a2908d5143ff7850ed11
+        entity_id: 7745032be0894ea82b47a43bc0852f8a
+        domain: switch
+      - type: turn_on
+        device_id: ed642feaf7515a2de15b084a82e9edd0
+        entity_id: 28fe10a9b8e703f929a8d25a23a08ab4
+        domain: switch
+      - type: turn_on
+        device_id: 992c06ce340768363600ba13858ec76d
+        entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
+        domain: switch
+    mode: single
+  - id: '1769969615803'
+    alias: Kids Routine - Start (Guest Mode Off)
+    description: ''
+    triggers:
+    - trigger: time
+      at: '19:30:00'
+      weekday:
+      - sun
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state:
+      - 'off'
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      target:
+        entity_id: input_boolean.kids_lights_on
+      data: {}
+    mode: single
+  - id: '1769969629811'
+    alias: Kids Routine - Start (Guest Mode On)
+    description: ''
+    triggers:
+    - trigger: time
+      at: '20:00:00'
+      weekday:
+      - sun
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state:
+      - 'on'
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      target:
+        entity_id: input_boolean.kids_lights_on
+      data: {}
+    mode: single
+  - id: '1769969787340'
+    alias: Kids Routine - End (Guest Mode Off)
+    description: ''
+    triggers:
+    - trigger: time
+      at: '20:00:00'
+      weekday:
+      - sun
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state:
+      - 'off'
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      target:
+        entity_id: input_boolean.kids_lights_on
+      data: {}
+    mode: single
+  - id: '1769969842337'
+    alias: Kids Routine - End (Guest Mode On)
+    description: ''
+    triggers:
+    - trigger: time
+      at: '20:30:00'
+      weekday:
+      - sun
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+    conditions:
+    - condition: state
+      entity_id: input_boolean.alarm_guest_mode
+      state:
+      - 'on'
+    actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      target:
+        entity_id: input_boolean.kids_lights_on
+      data: {}
+    mode: single
+  - id: '1773262689802'
+    alias: Indoor Lights - On
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+      - sensor.average_indoor_illuminance
+      for:
+        hours: 0
+        minutes: 30
+        seconds: 0
+      below: 100
+    conditions:
+    - condition: sun
+      after: sunset
+      after_offset: -02:00:00
+      before: sunset
+      before_offset: 02:00:00
+      enabled: false
+    actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      target:
+        entity_id: input_boolean.indoor_lights
+      data: {}
+    mode: single
+  - id: '1773263461378'
+    alias: Indoor Lights - Off
+    description: ''
+    triggers:
+    - trigger: numeric_state
+      entity_id:
+      - sensor.average_indoor_illuminance
+      above: 75
+      for:
+        minutes: 30
+    - trigger: time
+      at: 07:35:00
+    conditions:
+    - condition: numeric_state
+      entity_id: sensor.average_indoor_illuminance
+      above: 75
+    - condition: time
+      after: 07:30:00
+      before: '23:59:00'
+    actions:
+    - action: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.indoor_lights
+    mode: single
+  - id: '1782507356648'
+    alias: Trigger - Door Left Open
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - alarm_control_panel.alarm_system
+      to:
+      - arming
+    conditions:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.side_door_contact
+        state:
+        - 'on'
+      - condition: state
+        entity_id: binary_sensor.garage_door_contact
+        state:
+        - 'on'
+      - condition: state
+        entity_id: binary_sensor.front_door_contact
+        state:
+        - 'on'
+      - condition: state
+        entity_id: binary_sensor.kitchen_contact
+        state:
+        - 'on'
+    actions:
+    - action: alarm_control_panel.alarm_trigger
+      metadata: {}
+      data: {}
+      target:
+        entity_id: alarm_control_panel.alarm_system
+    mode: single
+  - id: '1795478883592'
+    alias: Family Room Receiver - Raise Volume
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.family_room_receiver_volume_up
+      to:
+      - 'on'
+    conditions: []
+    actions:
+    - action: media_player.volume_set
+      metadata: {}
+      target:
+        device_id: d90af89c4263c0b47dbf246cdf8ad2c0
+      data:
+        volume_level: 0.85
+    mode: single
+  - id: '1795478921525'
+    alias: Family Room Receiver - Lower Volume
+    description: ''
+    triggers:
+    - trigger: state
+      entity_id:
+      - input_boolean.family_room_receiver_volume_up
+      to:
+      - 'off'
+    conditions: []
+    actions:
+    - action: media_player.volume_set
+      metadata: {}
+      target:
+        device_id: d90af89c4263c0b47dbf246cdf8ad2c0
+      data:
+        volume_level: 0.45
+    mode: single
+scripts.yaml: ""
+scenes.yaml: ""
+secrets.yaml: |
+  # Use this file to store secrets like usernames and passwords.
+  # Learn more at https://www.home-assistant.io/docs/configuration/secrets/
+  some_password: welcome
