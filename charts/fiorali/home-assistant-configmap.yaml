@@ -786,7 +786,7 @@ automations.yaml: |
       - '19:30:00'
       - '20:00:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% set t = now().strftime('%H:%M') %}{% if (t == '19:30' and states.input_boolean.alarm_guest_mode.state == 'off') or (t == '20:00' and states.input_boolean.alarm_guest_mode.state == 'on') %}true{% endif %}
     actions:
@@ -805,7 +805,7 @@ automations.yaml: |
       - '20:00:00'
       - '20:30:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% set t = now().strftime('%H:%M') %}{% if (t == '20:00' and states.input_boolean.alarm_guest_mode.state == 'off') or (t == '20:30' and states.input_boolean.alarm_guest_mode.state == 'on') %}true{% endif %}
     actions:
@@ -943,7 +943,7 @@ automations.yaml: |
     - trigger: time
       at: '08:00:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% set low = [] %}{% for s in states.sensor if s.attributes.get('device_class')=='battery' and s.state not in ('unknown','unavailable') %}{% if (s.state|float(0)) < 25 %}{% set _ = low.append(1) %}{% endif %}{% endfor %}{% if low|length > 0 %}true{% endif %}
     actions:
@@ -961,7 +961,7 @@ automations.yaml: |
     - trigger: time
       at: '08:05:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% set ago = now() - timedelta(hours=1) %}{% set off = [] %}{% for s in states if s.state in ('unavailable','unknown') and s.last_changed and s.last_changed < ago and s.attributes.get('device_class') in ['temperature','humidity','illuminance','light_level','carbon_dioxide','air_quality','aqi','battery','pm2_5','pm10','pressure','gas','smoke','co','water','motion','contact','door','window','opening','occupancy','tamper','vibration'] %}{% set _ = off.append(1) %}{% endfor %}{% if off|length > 0 %}true{% endif %}
     actions:
@@ -1010,7 +1010,7 @@ automations.yaml: |
     - trigger: time
       at: '08:10:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% set L=[] %}{% for s in states.sensor %}{% if s.attributes.get('device_class')=='humidity' and 'door' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>60 or s.state|float(0)<25) %}{% set _ = L.append(1) %}{% endif %}{% if s.attributes.get('device_class')=='carbon_dioxide' and (s.state|float(0)>1000) %}{% set _ = L.append(1) %}{% endif %}{% if s.attributes.get('device_class')=='temperature' and 'door' not in s.entity_id and 'closet' not in s.entity_id and 'grizzl_e' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>27 or s.state|float(0)<15) %}{% set _ = L.append(1) %}{% endif %}{% endfor %}{% if L|length > 0 %}true{% endif %}
     actions:
@@ -1028,7 +1028,7 @@ automations.yaml: |
     - trigger: time
       at: '07:00:00'
     conditions:
-    - condition: jinja
+    - condition: template
       value_template: >-
         {% if states('sensor.grizzl_e_charger_pilot_state') != 'ev_connected' %}true{% endif %}
     actions:
