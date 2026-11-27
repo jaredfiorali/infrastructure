@@ -590,7 +590,7 @@ automations.yaml: |
       allowed_methods:
       - POST
       - PUT
-      local_only: false
+      local_only: true
       webhook_id: security-inside-motion-kids-ddeEGYntBhw_tjOEu5jFsVs5
     conditions:
     - condition: state
@@ -777,25 +777,18 @@ automations.yaml: |
         entity_id: afdc0cafa6638fa4fcd5de3d9d60dbcb
         domain: switch
     mode: single
-  - id: '1769969615803'
-    alias: Kids Routine - Start (Guest Mode Off)
-    description: ''
+  - id: '1795790200010'
+    alias: Kids Routine - Start
+    description: Turn on kids lights at 19:30 (guest mode off) or 20:00 (guest mode on)
     triggers:
     - trigger: time
-      at: '19:30:00'
-      weekday:
-      - sun
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
+      at:
+      - '19:30:00'
+      - '20:00:00'
     conditions:
-    - condition: state
-      entity_id: input_boolean.alarm_guest_mode
-      state:
-      - 'off'
+    - condition: jinja
+      value_template: >-
+        {% set t = now().strftime('%H:%M') %}{% if (t == '19:30' and states.input_boolean.alarm_guest_mode.state == 'off') or (t == '20:00' and states.input_boolean.alarm_guest_mode.state == 'on') %}true{% endif %}
     actions:
     - action: input_boolean.turn_on
       metadata: {}
@@ -803,77 +796,18 @@ automations.yaml: |
         entity_id: input_boolean.kids_lights_on
       data: {}
     mode: single
-  - id: '1769969629811'
-    alias: Kids Routine - Start (Guest Mode On)
-    description: ''
+  - id: '1795790200011'
+    alias: Kids Routine - End
+    description: Turn off kids lights at 20:00 (guest mode off) or 20:30 (guest mode on)
     triggers:
     - trigger: time
-      at: '20:00:00'
-      weekday:
-      - sun
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
+      at:
+      - '20:00:00'
+      - '20:30:00'
     conditions:
-    - condition: state
-      entity_id: input_boolean.alarm_guest_mode
-      state:
-      - 'on'
-    actions:
-    - action: input_boolean.turn_on
-      metadata: {}
-      target:
-        entity_id: input_boolean.kids_lights_on
-      data: {}
-    mode: single
-  - id: '1769969787340'
-    alias: Kids Routine - End (Guest Mode Off)
-    description: ''
-    triggers:
-    - trigger: time
-      at: '20:00:00'
-      weekday:
-      - sun
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-    conditions:
-    - condition: state
-      entity_id: input_boolean.alarm_guest_mode
-      state:
-      - 'off'
-    actions:
-    - action: input_boolean.turn_off
-      metadata: {}
-      target:
-        entity_id: input_boolean.kids_lights_on
-      data: {}
-    mode: single
-  - id: '1769969842337'
-    alias: Kids Routine - End (Guest Mode On)
-    description: ''
-    triggers:
-    - trigger: time
-      at: '20:30:00'
-      weekday:
-      - sun
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-      - sat
-    conditions:
-    - condition: state
-      entity_id: input_boolean.alarm_guest_mode
-      state:
-      - 'on'
+    - condition: jinja
+      value_template: >-
+        {% set t = now().strftime('%H:%M') %}{% if (t == '20:00' and states.input_boolean.alarm_guest_mode.state == 'off') or (t == '20:30' and states.input_boolean.alarm_guest_mode.state == 'on') %}true{% endif %}
     actions:
     - action: input_boolean.turn_off
       metadata: {}
@@ -1002,6 +936,109 @@ automations.yaml: |
       data:
         volume_level: 0.45
     mode: single
+  - id: '1795790200000'
+    alias: Alert - Low Battery
+    description: Daily 08:00 notify if any battery sensor drops below 25%
+    triggers:
+    - trigger: time
+      at: '08:00:00'
+    conditions:
+    - condition: jinja
+      value_template: >-
+        {% set low = [] %}{% for s in states.sensor if s.attributes.get('device_class')=='battery' and s.state not in ('unknown','unavailable') %}{% if (s.state|float(0)) < 25 %}{% set _ = low.append(1) %}{% endif %}{% endfor %}{% if low|length > 0 %}true{% endif %}
+    actions:
+    - action: notify.jared_s_phone
+      metadata: {}
+      data:
+        title: 'Low Battery'
+        message: >-
+          {% set low = [] %}{% for s in states.sensor if s.attributes.get('device_class')=='battery' and s.state not in ('unknown','unavailable') %}{% if (s.state|float(0)) < 25 %}{% set _ = low.append(s.entity_id ~ ' ' ~ s.state ~ '%') %}{% endif %}{% endfor %}{{ ('Low battery (' ~ low|length ~ '): ' ~ (low|join(', '))) if low|length else 'All battery sensors OK' }}
+    mode: single
+  - id: '1795790200001'
+    alias: Alert - Sensor Offline
+    description: Daily 08:05 notify if a real sensor (by device class) has been offline > 1h
+    triggers:
+    - trigger: time
+      at: '08:05:00'
+    conditions:
+    - condition: jinja
+      value_template: >-
+        {% set ago = now() - timedelta(hours=1) %}{% set off = [] %}{% for s in states if s.state in ('unavailable','unknown') and s.last_changed and s.last_changed < ago and s.attributes.get('device_class') in ['temperature','humidity','illuminance','light_level','carbon_dioxide','air_quality','aqi','battery','pm2_5','pm10','pressure','gas','smoke','co','water','motion','contact','door','window','opening','occupancy','tamper','vibration'] %}{% set _ = off.append(1) %}{% endfor %}{% if off|length > 0 %}true{% endif %}
+    actions:
+    - action: notify.jared_s_phone
+      metadata: {}
+      data:
+        title: 'Sensor Offline (>1h)'
+        message: >-
+          {% set ago = now() - timedelta(hours=1) %}{% set off = [] %}{% for s in states if s.state in ('unavailable','unknown') and s.last_changed and s.last_changed < ago and s.attributes.get('device_class') in ['temperature','humidity','illuminance','light_level','carbon_dioxide','air_quality','aqi','battery','pm2_5','pm10','pressure','gas','smoke','co','water','motion','contact','door','window','opening','occupancy','tamper','vibration'] %}{% set _ = off.append(s.entity_id ~ ' (' ~ s.state ~ ')') %}{% endfor %}{{ off|length ~ ' sensor(s) offline >1h: ' ~ (off|join('\n')) }}
+    mode: single
+  - id: '1795790200002'
+    alias: Alert - Door Left Open
+    description: Notify if an outdoor door stays open 15 min while the system is not armed away/night
+    triggers:
+    - trigger: state
+      entity_id:
+      - binary_sensor.front_door_contact
+      - binary_sensor.garage_door_contact
+      - binary_sensor.side_door_contact
+      - binary_sensor.kitchen_contact
+      from: 'off'
+      to: 'on'
+      for:
+        minutes: 15
+    conditions:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: alarm_control_panel.alarm_system
+        state:
+        - armed_away
+        - armed_night
+        - arming
+    actions:
+    - action: notify.jared_s_phone
+      metadata: {}
+      data:
+        title: 'Door Left Open'
+        message: >-
+          {% set doors = ['binary_sensor.front_door_contact','binary_sensor.garage_door_contact','binary_sensor.side_door_contact','binary_sensor.kitchen_contact'] %}{% set open = [] %}{% for s in states.binary_sensor if s.entity_id in doors and s.state == 'on' %}{% set _ = open.append(s.entity_id) %}{% endfor %}{{ 'An outdoor door has been open 15+ minutes: ' ~ (open|join(', ')) }}
+    mode: single
+  - id: '1795790200003'
+    alias: Alert - Indoor Air & Climate
+    description: Daily 08:10 notify if indoor humidity, temperature, or CO2 is out of comfort range
+    triggers:
+    - trigger: time
+      at: '08:10:00'
+    conditions:
+    - condition: jinja
+      value_template: >-
+        {% set L=[] %}{% for s in states.sensor %}{% if s.attributes.get('device_class')=='humidity' and 'door' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>60 or s.state|float(0)<25) %}{% set _ = L.append(1) %}{% endif %}{% if s.attributes.get('device_class')=='carbon_dioxide' and (s.state|float(0)>1000) %}{% set _ = L.append(1) %}{% endif %}{% if s.attributes.get('device_class')=='temperature' and 'door' not in s.entity_id and 'closet' not in s.entity_id and 'grizzl_e' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>27 or s.state|float(0)<15) %}{% set _ = L.append(1) %}{% endif %}{% endfor %}{% if L|length > 0 %}true{% endif %}
+    actions:
+    - action: notify.jared_s_phone
+      metadata: {}
+      data:
+        title: 'Indoor Air & Climate'
+        message: >-
+          {% set L=[] %}{% for s in states.sensor %}{% if s.attributes.get('device_class')=='humidity' and 'door' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>60) %}{% set _ = L.append('High humidity: ' ~ s.entity_id ~ ' ' ~ s.state ~ '%') %}{% endif %}{% if s.attributes.get('device_class')=='humidity' and 'door' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)<25) %}{% set _ = L.append('Low humidity: ' ~ s.entity_id ~ ' ' ~ s.state ~ '%') %}{% endif %}{% if s.attributes.get('device_class')=='temperature' and 'door' not in s.entity_id and 'closet' not in s.entity_id and 'grizzl_e' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)>27) %}{% set _ = L.append('High temp: ' ~ s.entity_id ~ ' ' ~ s.state ~ 'C') %}{% endif %}{% if s.attributes.get('device_class')=='temperature' and 'door' not in s.entity_id and 'closet' not in s.entity_id and 'grizzl_e' not in s.entity_id and 'mississauga' not in s.entity_id and (s.state|float(0)<15) %}{% set _ = L.append('Low temp: ' ~ s.entity_id ~ ' ' ~ s.state ~ 'C') %}{% endif %}{% if s.attributes.get('device_class')=='carbon_dioxide' and (s.state|float(0)>1000) %}{% set _ = L.append('High CO2: ' ~ s.entity_id ~ ' ' ~ s.state ~ 'ppm') %}{% endif %}{% endfor %}{{ L|join('\n') }}
+    mode: single
+  - id: '1795790200005'
+    alias: Alert - EV Not Charged Overnight
+    description: Morning notify if the EV charger is not plugged in (may also fire when the car is away)
+    triggers:
+    - trigger: time
+      at: '07:00:00'
+    conditions:
+    - condition: jinja
+      value_template: >-
+        {% if states('sensor.grizzl_e_charger_pilot_state') != 'ev_connected' %}true{% endif %}
+    actions:
+    - action: notify.jared_s_phone
+      metadata: {}
+      data:
+        title: 'EV Not Charged Overnight'
+        message: >-
+          {% if states('sensor.grizzl_e_charger_pilot_state') != 'ev_connected' %}The EV charger is not plugged in (pilot_state: {{ states('sensor.grizzl_e_charger_pilot_state') }}). The car may not have charged overnight.{% endif %}
+    mode: single
 scripts.yaml: ""
 scenes.yaml: ""
 secrets.yaml: |
@@ -1071,6 +1108,20 @@ README.md: |
       | python3 -c 'import sys,json;[print(s["entity_id"]) for s in json.load(sys.stdin) if s["entity_id"].startswith("sensor.")]'
     # full attributes of one entity:
     curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states/light.<id>
+
+  Full inventory & live config (review before ideating new automations):
+    # Dump EVERY entity as "<entity_id> | <state> | <domain>" -> /tmp/ha_entities.txt
+    curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states | python3 -c 'import sys,json;[print(s["entity_id"]+" | "+s["state"]+" | "+s["entity_id"].split(".")[0]) for s in json.load(sys.stdin)]' > /tmp/ha_entities.txt
+    # Filter to one domain (replace "sensor" with light, binary_sensor, cover, switch,
+    #   media_player, device_tracker, climate, vacuum, lock, fan, input_boolean, automation):
+    curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states | python3 -c 'import sys,json;[print(s["entity_id"]+" => "+s["state"]) for s in json.load(sys.stdin) if s["entity_id"].startswith("sensor.")]'
+    # Which automations are loaded & enabled (state on = enabled; attrs also expose id, last_triggered, mode):
+    curl -s -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8123/api/states | python3 -c 'import sys,json;[print(s["entity_id"]+" => "+s["state"]) for s in json.load(sys.stdin) if s["entity_id"].startswith("automation.")]'
+    # Full automation / script / scene DEFINITIONS (the resolved YAML HA runs today) — read them
+    #   straight from the running pod; the deploy selector stays stable across restarts:
+    kubectl exec deploy/home-assistant -n home-assistant -- cat /config/cm/automations.yaml > /tmp/ha_automations.yaml
+    kubectl exec deploy/home-assistant -n home-assistant -- cat /config/cm/scripts.yaml    > /tmp/ha_scripts.yaml
+    kubectl exec deploy/home-assistant -n home-assistant -- cat /config/cm/scenes.yaml    > /tmp/ha_scenes.yaml
 
   Turn that data into an automation:
     - Triggers: prefer device triggers (need device_id + entity_id + type/subtype — find
